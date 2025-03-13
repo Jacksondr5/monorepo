@@ -1,9 +1,18 @@
 {
   "name": "@j5/monorepo",
   "version": "0.0.0",
-  "license": "MIT",
-  "scripts": {},
   "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {},
+  "dependencies": {
+    "@t3-oss/env-core": "^0.12.0",
+    "@t3-oss/env-nextjs": "^0.12.0",
+    "next": "~15.1.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "zod": "^3.24.2"
+  },
   "devDependencies": {
     "@nx/esbuild": "20.5.0",
     "@nx/eslint": "20.5.0",
@@ -42,11 +51,5 @@
     "vite": "^6.0.0",
     "vitest": "^3.0.0"
   },
-  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0",
-  "dependencies": {
-    "@t3-oss/env-nextjs": "^0.12.0",
-    "next": "~15.1.4",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
-  }
+  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0"
 }
