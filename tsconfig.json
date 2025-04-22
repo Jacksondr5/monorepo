@@ -8,6 +8,18 @@
     },
     {
       "path": "./libs/test2"
+    },
+    {
+      "path": "./libs/test1/apps/test-next-e2e"
+    },
+    {
+      "path": "./libs/test1/apps/test-next"
+    },
+    {
+      "path": "./apps/test-next-e2e"
+    },
+    {
+      "path": "./apps/test-next"
     }
   ]
 }

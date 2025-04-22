@@ -1,0 +1,10 @@
+{
+  "name": "@j5/test-next-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@j5/test-next"
+    ]
+  }
+}

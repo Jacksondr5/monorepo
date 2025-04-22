@@ -81,7 +81,18 @@
       "inputs": ["production", "^production"]
     },
     "test": {
-      "dependsOn": ["^build", "^build", "^build"]
+      "dependsOn": ["^build"]
+    },
+    "e2e-ci--**/*": {
+      "dependsOn": ["^build"]
+    }
+  },
+  "generators": {
+    "@nx/next": {
+      "application": {
+        "style": "tailwind",
+        "linter": "eslint"
+      }
     }
   }
 }
