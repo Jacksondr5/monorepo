@@ -4,9 +4,6 @@
   "files": [],
   "references": [
     {
-      "path": "./apps/certificate-rotater"
-    },
-    {
       "path": "./libs/test1"
     },
     {
