@@ -5,6 +5,12 @@
   "references": [
     {
       "path": "./apps/certificate-rotater"
+    },
+    {
+      "path": "./libs/test1"
+    },
+    {
+      "path": "./libs/test2"
     }
   ]
 }

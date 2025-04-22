@@ -81,7 +81,7 @@
       "inputs": ["production", "^production"]
     },
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build", "^build", "^build"]
     }
   }
 }
