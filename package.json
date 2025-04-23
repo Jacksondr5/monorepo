@@ -53,11 +53,11 @@
     "@vitest/ui": "3.0.0",
     "autoprefixer": "10.4.21",
     "esbuild": "0.19.2",
-    "eslint": "8.57.0",
+    "eslint": "8.57.1",
     "eslint-config-next": "14.2.16",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-import": "2.31.0",
-    "eslint-plugin-jsx-a11y": "6.10.1",
+    "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-playwright": "1.6.2",
     "eslint-plugin-react": "7.35.0",
     "eslint-plugin-react-hooks": "5.0.0",
@@ -76,5 +76,5 @@
     "vite": "6.0.0",
     "vitest": "3.0.0"
   },
-  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0"
+  "packageManager": "pnpm@10.9.0+sha512.0486e394640d3c1fb3c9d43d49cf92879ff74f8516959c235308f5a8f62e2e19528a65cdc2a3058f587cde71eba3d5b56327c8c33a97e4c4051ca48a10ca2d5f"
 }
