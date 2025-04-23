@@ -1,0 +1,24 @@
+{
+  "name": "@j5/component-library",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@radix-ui/react-separator": "1.1.4",
+    "clsx": "2.1.1",
+    "react": "19.1.0",
+    "tailwind-merge": "3.2.0",
+    "tslib": "^2.3.0"
+  }
+}

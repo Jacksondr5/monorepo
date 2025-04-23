@@ -1,5 +1,12 @@
 packages:
-  - "apps/*"
-  - "packages/*"
-  - "libs/*"
-  - "libs/test1/apps/*"
+  - apps/*
+  - packages/*
+  - libs/*
+
+onlyBuiltDependencies:
+  - "@parcel/watcher"
+  - "@swc/core"
+  - esbuild
+  - nx
+  - sharp
+  - unrs-resolver

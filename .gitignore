@@ -52,3 +52,5 @@ vitest.config.*.timestamp*
 out
 
 test-output
+
+storybook-static
