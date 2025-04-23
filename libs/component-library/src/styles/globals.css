@@ -1,0 +1,105 @@
+@import "tailwindcss";
+/*
+  ---break---
+*/
+@custom-variant dark (&:is(.dark *));
+
+@plugin 'tailwindcss-animate';
+
+@variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --color-grass-1: #0e1511;
+  --color-grass-2: #141a15;
+  --color-grass-3: #1b2a1e;
+  --color-grass-4: #1d3a24;
+  --color-grass-5: #25482d;
+  --color-grass-6: #2d5736;
+  --color-grass-7: #366740;
+  --color-grass-8: #3e7949;
+  --color-grass-9: #46a758;
+  --color-grass-10: #53b365;
+  --color-grass-11: #71d083;
+  --color-grass-12: #c2f0c2;
+
+  --color-olive-1: #111210;
+  --color-olive-2: #181917;
+  --color-olive-3: #212220;
+  --color-olive-4: #282a27;
+  --color-olive-5: #2f312e;
+  --color-olive-6: #383a36;
+  --color-olive-7: #454843;
+  --color-olive-8: #5c625b;
+  --color-olive-9: #687066;
+  --color-olive-10: #767d74;
+  --color-olive-11: #afb5ad;
+  --color-olive-12: #eceeec;
+
+  --color-red-2: #201314;
+  --color-red-3: #3b1219;
+  --color-red-5: #611623;
+  --color-red-6: #72232d;
+  --color-red-7: #8c333a;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
+
+/*
+  ---break---
+*/
+
+@theme inline {
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  /*
+  ---break---
+*/
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  /*
+  ---break---
+*/
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
