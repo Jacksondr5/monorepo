@@ -42,7 +42,7 @@
     "@swc/core": "1.11.9",
     "@swc/helpers": "0.5.11",
     "@testing-library/dom": "10.4.0",
-    "@testing-library/react": "16.1.0",
+    "@testing-library/react": "16.3.0",
     "@types/node": "22.13.10",
     "@types/react": "19.1.2",
     "@types/react-dom": "19.1.2",
