@@ -2,18 +2,5 @@
   "extends": "./tsconfig.base.json",
   "compileOnSave": false,
   "files": [],
-  "references": [
-    {
-      "path": "./libs/test1"
-    },
-    {
-      "path": "./libs/test2"
-    },
-    {
-      "path": "./apps/test-next-e2e"
-    },
-    {
-      "path": "./apps/test-next"
-    }
-  ]
+  "references": []
 }
