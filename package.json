@@ -29,7 +29,7 @@
     "@nx/storybook": "20.8.0",
     "@nx/vite": "20.8.0",
     "@nx/web": "20.8.0",
-    "@playwright/test": "1.36.0",
+    "@playwright/test": "1.52.0",
     "@storybook/addon-essentials": "8.4.6",
     "@storybook/addon-interactions": "8.4.6",
     "@storybook/core-server": "8.4.6",
