@@ -44,9 +44,6 @@ jobs:
       - name: Set Shas
         uses: nrwl/nx-set-shas@v4
 
-      - name: Format Check
-        run: npx nx-cloud record -- nx format:check
-
       # Nx Affected runs only tasks affected by the changes in this PR/commit. Learn more: https://nx.dev/ci/features/affected
       - name: Run Affected Tasks
-        run: pnpm exec nx affected -t lint test build
+        run: pnpm exec nx affected -t lint test build format:check
