@@ -21,6 +21,13 @@
       "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
+    },
+    {
+      "matchCurrentVersion": "/^0/",
+      "dependencyDashboardApproval": true,
+      "groupName": "all v0 dependencies",
+      "matchPackageNames": ["*"],
+      "matchUpdateTypes": ["major"]
     }
   ],
   "schedule": ["* 0-3 * * 1"],
