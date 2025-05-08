@@ -1,0 +1,73 @@
+{
+  "name": "@j5/certificate-rotater",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "nx": {
+    "targets": {
+      "build": {
+        "executor": "@nx/esbuild:esbuild",
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "defaultConfiguration": "production",
+        "options": {
+          "platform": "node",
+          "outputPath": "apps/certificate-rotater/dist",
+          "format": [
+            "cjs"
+          ],
+          "bundle": false,
+          "main": "apps/certificate-rotater/src/main.ts",
+          "tsConfig": "apps/certificate-rotater/tsconfig.app.json",
+          "assets": [
+            "apps/certificate-rotater/src/assets"
+          ],
+          "esbuildOptions": {
+            "sourcemap": true,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        },
+        "configurations": {
+          "development": {},
+          "production": {
+            "esbuildOptions": {
+              "sourcemap": false,
+              "outExtension": {
+                ".js": ".js"
+              }
+            }
+          }
+        }
+      },
+      "serve": {
+        "executor": "@nx/js:node",
+        "defaultConfiguration": "development",
+        "dependsOn": [
+          "build"
+        ],
+        "options": {
+          "buildTarget": "@j5/certificate-rotater:build",
+          "runBuildTargetDependencies": false
+        },
+        "configurations": {
+          "development": {
+            "buildTarget": "@j5/certificate-rotater:build:development"
+          },
+          "production": {
+            "buildTarget": "@j5/certificate-rotater:build:production"
+          }
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "node-forge": "^1.3.1",
+    "playwright": "^1.51.0"
+  },
+  "devDependencies": {
+    "@types/node-forge": "^1.3.11"
+  }
+}
