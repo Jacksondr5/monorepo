@@ -1,3 +1,3 @@
-export * from "./input";
-export * from "./separator";
-export * from "./textarea";
+export * from "./ui/input";
+export * from "./ui/separator";
+export * from "./ui/textarea";
