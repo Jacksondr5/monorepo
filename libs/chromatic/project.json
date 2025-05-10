@@ -1,0 +1,16 @@
+{
+  "name": "@j5/chromatic",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/chromatic/src",
+  "targets": {
+    "chromatic": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "chromatic"
+      },
+      "dependsOn": ["build-storybook"]
+    }
+  },
+  "tags": []
+}
