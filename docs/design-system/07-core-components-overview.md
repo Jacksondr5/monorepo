@@ -2,6 +2,8 @@
 
 This document provides a high-level overview of the essential UI components for the J5 design system. It outlines their general style and interaction characteristics, guided by our established design principles (Brand Vibe, Colors, Typography, Spacing, Border Radii) and consideration for different density profiles. Lucide Icons ([https://lucide.dev/](https://lucide.dev/)) will be the primary icon library.
 
+**Color Application Note:** All component colors should strictly adhere to the 12-step Radix Color scales defined in `02-colors.md`. Refer to that document and the official Radix UI documentation for guidance on selecting appropriate shades for backgrounds, text, borders, and states to ensure consistency and accessibility.
+
 ## 1. Buttons
 
 - **General Style:**
@@ -14,7 +16,7 @@ This document provides a high-level overview of the essential UI components for 
 - **Variants:**
   - **Primary:**
     - Background: `bg-grass-9`
-    - Text: `text-grass-1` or a high-contrast dark neutral on `bg-grass-9`.
+    - Text: `text-grass-1` or `text-slate-12` (ensure AA/AAA contrast).
     - Hover: `hover:bg-grass-10`
   - **Secondary (Outline/Subtle):**
     - Background: `bg-olive-3` or `bg-transparent`.
@@ -38,7 +40,7 @@ This document provides a high-level overview of the essential UI components for 
   - **Font:** `font-sans` (Geist Sans), `font-normal`.
   - **Background:** `bg-olive-2` or `bg-slate-2`.
   - **Border:** `border border-olive-6` or `border border-slate-6`.
-  - **Focus State:** `focus:border-blue-8` or `focus:border-grass-8`, subtle `focus:ring-2 focus:ring-blue-8/50` (example).
+  - **Focus State:** `focus:border-grass-8`, subtle `focus:ring-2 focus:ring-grass-8/50` (example).
   - **Text Color:** `text-slate-12`. Placeholder: `placeholder-slate-9`.
   - **Padding:** Consistent internal padding (e.g., `px-3 py-2` - `px-space-sm py-space-xs`).
   - **Border Radius:** `rounded-md`.
@@ -67,13 +69,13 @@ This document provides a high-level overview of the essential UI components for 
   - **Border Radius:** `rounded` (8px) or `rounded-lg` (12px).
   - **Border (Optional):** Subtle `border border-olive-4` or `border border-slate-4`.
   - **Padding:** Generous internal padding (e.g., `p-4` or `p-6` - `p-space-lg` or `p-space-xl`), can be adjusted for density.
-  - **Shadow (Subtle):** Optional, for visual lift (e.g., `shadow-md` or custom dark shadow).
+  - **Shadow (Subtle):** Optional, for visual lift (e.g., `shadow-md`).
 
 ## 5. Modals/Dialogs
 
 - **Purpose:** Focused tasks, critical information.
 - **General Style:**
-  - **Overlay:** Dark semi-transparent background (e.g., `bg-black/50` or `bg-olive-a9` if defined).
+  - **Overlay:** Dark semi-transparent background (`bg-olive-a9`).
   - **Content Container:**
     - Background: `bg-olive-3` or `bg-slate-3`.
     - Border Radius: `rounded-lg`.

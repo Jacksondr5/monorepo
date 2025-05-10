@@ -9,7 +9,11 @@ When applying specific shades from these scales, refer to the Radix UI documenta
 ### 1. Primary Brand Color
 
 - **Scale:** Radix `Grass` (Dark Scale)
-- **Purpose:** The main identifying color for the J5 brand. Used for prominent UI elements, active states, accents, and potentially for solid backgrounds where a strong brand presence is desired.
+- **Purpose:** The main identifying color for the J5 brand. Used for prominent UI elements, active states, and accents.
+  - **Solid Backgrounds:** While the primary neutral (`Olive`) is preferred for general solid backgrounds, `Grass` may be used for solid backgrounds on specific, contained elements that need to stand out, such as:
+    - Login/registration form containers (when small relative to the overall page background).
+    - Modals or drawers.
+    - Toasts or other prominent notifications.
 - **CSS Prefix:** `--color-grass-*`
 
 ### 2. Neutral Colors
