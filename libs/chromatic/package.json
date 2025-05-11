@@ -16,5 +16,17 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "8.6.12",
+    "@storybook/addon-interactions": "8.6.12",
+    "@storybook/core-server": "8.6.12",
+    "@storybook/jest": "^0.2.3",
+    "@storybook/react": "8.6.12",
+    "@storybook/react-vite": "8.6.12",
+    "@storybook/test": "^8.6.12",
+    "@storybook/test-runner": "0.22.0",
+    "@storybook/testing-library": "0.2.2",
+    "storybook": "8.6.12"
   }
 }

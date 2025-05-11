@@ -16,6 +16,13 @@
       "options": {
         "command": "git fetch --unshallow"
       }
+    },
+    "build-storybook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm storybook build --stats-json",
+        "cwd": "libs/chromatic"
+      }
     }
   },
   "tags": []
