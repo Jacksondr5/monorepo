@@ -14,7 +14,7 @@
     "chromatic:fetch": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "git fetch"
+        "command": "git fetch --unshallow"
       }
     }
   },
