@@ -9,7 +9,13 @@
       "options": {
         "command": "chromatic"
       },
-      "dependsOn": ["build-storybook"]
+      "dependsOn": ["build-storybook", "chromatic:fetch"]
+    },
+    "chromatic:fetch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "git fetch"
+      }
     }
   },
   "tags": []
