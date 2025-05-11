@@ -1,32 +1,11 @@
 {
   "name": "@j5/chromatic",
-  "version": "0.0.1",
   "private": true,
   "type": "module",
   "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
-    }
-  },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "dependencies": {
-    "tslib": "^2.3.0"
+    "./package.json": "./package.json"
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "8.6.12",
-    "@storybook/addon-interactions": "8.6.12",
-    "@storybook/core-server": "8.6.12",
-    "@storybook/jest": "^0.2.3",
-    "@storybook/react": "8.6.12",
-    "@storybook/react-vite": "8.6.12",
-    "@storybook/test": "^8.6.12",
-    "@storybook/test-runner": "0.22.0",
-    "@storybook/testing-library": "0.2.2",
     "storybook": "8.6.12"
   }
 }

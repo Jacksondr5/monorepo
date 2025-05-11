@@ -1,7 +1,3 @@
-# chromatic
+This project houses the monorepo-wide Chromatic Storybook. It's meant to make it easier to view and decision visual changes across the monorepo.
 
-This library was generated with [Nx](https://nx.dev).
-
-## Building
-
-Run `nx build chromatic` to build the library.
+https://www.chromatic.com/docs/monorepos/

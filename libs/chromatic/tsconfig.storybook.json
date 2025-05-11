@@ -25,9 +25,4 @@
     ".storybook/*.js",
     ".storybook/*.ts"
   ],
-  "references": [
-    {
-      "path": "./tsconfig.lib.json"
-    }
-  ]
 }
