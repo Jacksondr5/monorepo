@@ -5,7 +5,10 @@ import { mergeConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 const config: StorybookConfig = {
-  stories: ["../src/**/*.@(mdx|stories.@(js|jsx|ts|tsx))"],
+  stories: [
+    "../src/lib/**/*.@(mdx|stories.@(js|jsx|ts|tsx))",
+    "../../component-library/src/**/*.stories.@(js|jsx|ts|tsx|mdx)",
+  ],
   addons: ["@storybook/addon-essentials", "@storybook/addon-interactions"],
   framework: {
     name: "@storybook/react-vite",
@@ -19,7 +22,3 @@ const config: StorybookConfig = {
 };
 
 export default config;
-
-// To customize your Vite configuration you can use the viteFinal field.
-// Check https://storybook.js.org/docs/react/builders/vite#configuration
-// and https://nx.dev/recipes/storybook/custom-builder-configs
