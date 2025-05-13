@@ -7,9 +7,9 @@
     "chromatic": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "chromatic"
+        "commands": ["git fetch --unshallow", "chromatic"]
       },
-      "dependsOn": ["build-storybook", "chromatic:fetch"]
+      "dependsOn": ["build-storybook"]
     },
     "chromatic:fetch": {
       "executor": "nx:run-commands",
