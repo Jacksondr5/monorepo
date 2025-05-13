@@ -253,6 +253,9 @@ importers:
 
   libs/chromatic:
     devDependencies:
+      '@j5/component-library':
+        specifier: workspace:*
+        version: link:../component-library
       storybook:
         specifier: 8.6.12
         version: 8.6.12(prettier@3.5.3)
