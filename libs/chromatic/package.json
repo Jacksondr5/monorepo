@@ -6,7 +6,7 @@
     "./package.json": "./package.json"
   },
   "devDependencies": {
-    "storybook": "8.6.12",
-    "@j5/component-library": "workspace:*"
+    "@j5/component-library": "workspace:*",
+    "storybook": "8.6.12"
   }
 }
