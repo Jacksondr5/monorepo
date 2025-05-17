@@ -14,7 +14,8 @@
           }
         ],
         "cwd": "libs/component-library"
-      }
+      },
+      "outputs": ["{projectRoot}/dist/styles"]
     },
     "build": {
       "dependsOn": [
