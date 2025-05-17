@@ -11,6 +11,12 @@
     },
     {
       "path": "./libs/chromatic"
+    },
+    {
+      "path": "./libs/config"
+    },
+    {
+      "path": "./libs/config"
     }
   ],
   "ts-node": {

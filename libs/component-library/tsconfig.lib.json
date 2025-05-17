@@ -17,7 +17,11 @@
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "references": [],
+  "references": [
+    {
+      "path": "../config/tsconfig.lib.json"
+    }
+  ],
   "exclude": [
     "**/*.stories.ts",
     "**/*.stories.js",

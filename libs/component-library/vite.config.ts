@@ -1,7 +1,8 @@
-import { defineConfig } from "vite";
-import tailwindcss from "@tailwindcss/vite";
-import tsconfigPaths from "vite-tsconfig-paths";
+import { generateViteConfig } from "@j5/config";
 
-export default defineConfig({
-  plugins: [tailwindcss(), tsconfigPaths()],
-});
+export default generateViteConfig({
+  name: "component-library",
+  dirName: __dirname,
+  entry: ["src/index.ts", "src/preview-config.ts"],
+  tsconfigTarget: "tsconfig.storybook.json",
+})();

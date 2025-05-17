@@ -4,13 +4,10 @@
   "include": [],
   "references": [
     {
-      "path": "../config"
+      "path": "./tsconfig.lib.json"
     },
     {
-      "path": "../component-library"
-    },
-    {
-      "path": "./tsconfig.storybook.json"
+      "path": "./tsconfig.spec.json"
     }
   ]
 }

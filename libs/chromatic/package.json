@@ -7,6 +7,7 @@
   },
   "devDependencies": {
     "@j5/component-library": "workspace:*",
+    "@j5/config": "workspace:*",
     "storybook": "8.6.12"
   }
 }

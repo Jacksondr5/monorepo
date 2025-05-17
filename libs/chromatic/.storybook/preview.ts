@@ -1,7 +1,14 @@
-import { previewConfig } from "@j5/component-library";
+import type { Preview } from "@storybook/react";
+import previewConfig from "@j5/component-library";
 import "../src/globals.css"; // Keep chromatic specific global styles if any
 
-// Re-export the shared configuration
-export const parameters = previewConfig.parameters;
-export const decorators = previewConfig.decorators;
-export const globalTypes = previewConfig.globalTypes;
+const preview: Preview = {
+  parameters: {
+    ...previewConfig.parameters,
+    docs: {
+      theme: "light",
+    },
+  },
+};
+
+export default preview;

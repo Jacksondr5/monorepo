@@ -1,12 +1,13 @@
 packages:
-  - "apps/*"
-  - "packages/*"
-  - "libs/*"
-  - "libs"
+  - apps/*
+  - packages/*
+  - libs/*
+  - libs
 onlyBuiltDependencies:
-  - "@parcel/watcher"
-  - "@swc/core"
-  - "esbuild"
-  - "nx"
-  - "sharp"
-  - "unrs-resolver"
+  - '@parcel/watcher'
+  - '@swc/core'
+  - '@tailwindcss/oxide'
+  - esbuild
+  - nx
+  - sharp
+  - unrs-resolver
