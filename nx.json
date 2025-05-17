@@ -95,10 +95,10 @@
     "test": {
       "dependsOn": ["^build"]
     },
-    "e2e-ci--**/*": {
+    "e2e-ci--**/**": {
       "dependsOn": ["^build"]
     },
-    "e2e-ci--**/**": {
+    "build-storybook": {
       "dependsOn": ["^build"]
     }
   },

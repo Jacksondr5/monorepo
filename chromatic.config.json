@@ -1,0 +1,11 @@
+{
+  "diagnosticsFile": "chromatic-diagnostics.json",
+  "exitOnceUploaded": true,
+  "exitZeroOnChanges": "!(main)",
+  "onlyChanged": true,
+  "skipUpdateCheck": true,
+  "storybookBaseDir": "libs/chromatic",
+  "storybookBuildDir": "libs/chromatic/storybook-static",
+  "projectId": "681fbb84f73182f1bcb12de4",
+  "zip": true
+}

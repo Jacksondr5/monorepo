@@ -2,10 +2,11 @@ packages:
   - apps/*
   - packages/*
   - libs/*
-
+  - libs
 onlyBuiltDependencies:
-  - "@parcel/watcher"
-  - "@swc/core"
+  - '@parcel/watcher'
+  - '@swc/core'
+  - '@tailwindcss/oxide'
   - esbuild
   - nx
   - sharp

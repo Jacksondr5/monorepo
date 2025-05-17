@@ -1,0 +1,12 @@
+{
+  "name": "@j5/chromatic",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json"
+  },
+  "devDependencies": {
+    "@j5/component-library": "workspace:*",
+    "storybook": "8.6.12"
+  }
+}

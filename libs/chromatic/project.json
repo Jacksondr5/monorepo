@@ -1,0 +1,31 @@
+{
+  "name": "@j5/chromatic",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/chromatic/src",
+  "targets": {
+    "chromatic": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["git fetch --unshallow", "chromatic"]
+      },
+      "dependsOn": ["build-storybook"]
+    },
+    "chromatic:fetch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "git fetch --unshallow"
+      }
+    },
+    "build-storybook": {
+      "cache": true,
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm storybook build --stats-json",
+        "cwd": "libs/chromatic"
+      },
+      "outputs": ["{projectRoot}/storybook-static"]
+    }
+  },
+  "tags": []
+}
