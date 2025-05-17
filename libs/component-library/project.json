@@ -5,6 +5,7 @@
   "sourceRoot": "libs/component-library/src",
   "targets": {
     "copy-assets": {
+      "cache": true,
       "executor": "nx:run-commands",
       "options": {
         "commands": [
