@@ -6,8 +6,8 @@
     "outDir": "dist",
     "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
     "emitDeclarationOnly": false,
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "forceConsistentCasingInFileNames": true,
     "types": ["node"],
     "jsx": "preserve",
@@ -16,12 +16,12 @@
       "~/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "references": [],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.css"],
   "exclude": [
     "**/*.stories.ts",
     "**/*.stories.js",
     "**/*.stories.jsx",
     "**/*.stories.tsx"
-  ]
+  ],
+  "references": []
 }

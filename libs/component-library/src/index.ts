@@ -1,3 +1,3 @@
-export * from "./components";
-export * from "./lib/utils";
-export * from "./preview-config"; // Add export for preview config
+export * from "./components/index.js";
+export * from "./lib/utils.js";
+export * from "./preview-config.js"; // Add export for preview config
