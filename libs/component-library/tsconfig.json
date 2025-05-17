@@ -10,11 +10,6 @@
       "path": "./tsconfig.storybook.json"
     }
   ],
-  "compilerOptions": {
-    "paths": {
-      "~/*": ["./src/*"]
-    }
-  },
   "nx": {
     "addTypecheckTarget": false
   }

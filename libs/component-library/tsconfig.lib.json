@@ -11,10 +11,7 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["node"],
     "jsx": "preserve",
-    "lib": ["dom", "dom.iterable", "ES2022"],
-    "paths": {
-      "~/*": ["./src/*"]
-    }
+    "lib": ["dom", "dom.iterable", "ES2022"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.css"],
   "exclude": [
