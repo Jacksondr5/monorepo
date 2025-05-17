@@ -4,6 +4,9 @@
   "include": [],
   "references": [
     {
+      "path": "../component-library"
+    },
+    {
       "path": "./tsconfig.storybook.json"
     }
   ]

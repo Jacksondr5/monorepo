@@ -24,5 +24,10 @@
     "src/**/*.stories.mdx",
     ".storybook/*.js",
     ".storybook/*.ts"
+  ],
+  "references": [
+    {
+      "path": "../component-library"
+    }
   ]
 }
