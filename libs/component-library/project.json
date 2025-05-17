@@ -1,0 +1,28 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "@j5/component-library",
+  "projectType": "library",
+  "sourceRoot": "libs/component-library/src",
+  "targets": {
+    "copy-assets": {
+      "cache": true,
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "rm -rf dist/styles && mkdir -p dist/styles && cp -r src/styles/* dist/styles/"
+          }
+        ],
+        "cwd": "libs/component-library"
+      }
+    },
+    "build": {
+      "dependsOn": [
+        {
+          "target": "copy-assets",
+          "projects": "self"
+        }
+      ]
+    }
+  }
+}

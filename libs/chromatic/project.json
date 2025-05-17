@@ -18,11 +18,13 @@
       }
     },
     "build-storybook": {
+      "cache": true,
       "executor": "nx:run-commands",
       "options": {
         "command": "pnpm storybook build --stats-json",
         "cwd": "libs/chromatic"
-      }
+      },
+      "outputs": ["{projectRoot}/storybook-static"]
     }
   },
   "tags": []

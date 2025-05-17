@@ -97,6 +97,9 @@
     },
     "e2e-ci--**/*": {
       "dependsOn": ["^build"]
+    },
+    "build-storybook": {
+      "dependsOn": ["^build"]
     }
   },
   "generators": {
