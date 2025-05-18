@@ -63,7 +63,7 @@
       "plugin": "@nx/next/plugin",
       "options": {
         "startTargetName": "start",
-        "buildTargetName": "build",
+        "buildTargetName": "build-next",
         "devTargetName": "dev",
         "serveStaticTargetName": "serve-static",
         "buildDepsTargetName": "build-deps",
@@ -95,7 +95,7 @@
     "test": {
       "dependsOn": ["^build"]
     },
-    "e2e-ci--**/*": {
+    "e2e-ci--**/**": {
       "dependsOn": ["^build"]
     },
     "build-storybook": {
