@@ -6,7 +6,7 @@ import { ConvexReactClient } from "convex/react";
 import { env } from "../env";
 import { useAuth } from "@clerk/nextjs";
 
-const convex = new ConvexReactClient(env.NEXT_PUBLIC_CONVEX_URL as string);
+const convex = new ConvexReactClient(env.NEXT_PUBLIC_CONVEX_URL);
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (

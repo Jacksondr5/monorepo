@@ -47,23 +47,23 @@ Each Company will manage its own set of the following:
   - _(Linkages below are to other company-specific entities)_
 - **Roles (Job Titles):**
   - User-defined job titles specific to the company (e.g., "Senior Software Engineer", "Product Manager").
-  - Can be created, edited, deleted, and ordered by Company Admins.
+  - Roles can be created, edited, deleted, and ordered by Company Admins.
   - Candidates are assigned a Role from this company-specific list.
 - **Seniority Levels:**
   - User-defined seniority levels specific to the company (e.g., "Intern", "Lead").
-  - Can be created, edited, deleted, and ordered by Company Admins.
+  - Seniority levels can be created, edited, deleted, and ordered by Company Admins.
   - Candidates are assigned a Seniority from this company-specific list.
 - **Sources:**
   - User-defined candidate sources specific to the company (e.g., "Company LinkedIn", "Employee Referral Program").
-  - Can be created, edited, deleted, and ordered by Company Admins.
+  - Sources can be created, edited, deleted, and ordered by Company Admins.
   - Candidates are assigned a Source from this company-specific list.
 - **Kanban Stages (Statuses):**
   - User-defined stages for the company's hiring pipeline.
-  - Can be created, edited, deleted, and ordered by Company Admins.
+  - Kanban stages can be created, edited, deleted, and ordered by Company Admins.
   - Candidates are assigned a Status representing their current stage.
 - **Interview Note Templates:**
   - Structured templates for interview notes, specific to the company.
-  - Can be created and managed by Company Admins.
+  - Templates can be created and managed by Company Admins.
   - Used to guide interview feedback for candidates within that company.
 - **Interviews:**
   - Records of each interview conducted for a Company's candidate.

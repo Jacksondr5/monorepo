@@ -35,7 +35,7 @@ export const CompanySchema = z.object({
   name: nonEmptyString,
   owner_profile_id: nonEmptyString, // Foreign key to ProfileSchema.id (Clerk User ID of the creator/initial owner)
   created_at: z.date().default(() => new Date()),
-  avatar_url: z.string(), // Uploadthing
+  avatar_url: z.string().url(), // Uploadthing
   updated_at: z
     .date()
     .default(() => new Date())

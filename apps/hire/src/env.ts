@@ -1,6 +1,17 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
+/**
+ * Environment variables for the hire application
+ *
+ * Required variables:
+ * - CONVEX_DEPLOYMENT: Convex deployment identifier (server-only)
+ * - NEXT_PUBLIC_CLERK_ISSUER_URL: Clerk issuer URL for authentication
+ * - NEXT_PUBLIC_CONVEX_URL: Convex API URL for client-side queries
+ * - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: Clerk publishable key for auth components
+ *
+ * Set these in a .env.local file at the root of the hire app
+ */
 export const env = createEnv({
   server: {
     CONVEX_DEPLOYMENT: z.string().min(1),
