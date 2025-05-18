@@ -5,8 +5,8 @@ import { type Metadata } from "next";
 import { Providers } from "./Providers";
 
 export const metadata: Metadata = {
-  title: "Coming Soon",
-  description: "This app is still under construction",
+  title: "J5 Hire",
+  description: "Manage your hiring process",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
