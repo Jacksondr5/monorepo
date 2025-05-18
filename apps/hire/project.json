@@ -1,0 +1,14 @@
+{
+  "name": "@j5/hire",
+  "projectType": "application",
+  "sourceRoot": "apps/hire/src",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["next dev --turbo"],
+        "cwd": "apps/hire"
+      }
+    }
+  }
+}

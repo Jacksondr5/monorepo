@@ -10,6 +10,12 @@
       "path": "./apps/coming-soon"
     },
     {
+      "path": "./apps/hire-e2e"
+    },
+    {
+      "path": "./apps/hire"
+    },
+    {
       "path": "./libs/chromatic"
     }
   ],
