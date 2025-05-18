@@ -21,7 +21,7 @@ try {
     stdio: "inherit",
   });
   console.log(`Command finished with exit code ${result.status}`);
-  exitCode = result.status || 1;
+  exitCode = result.status ?? 1;
 } catch (error) {
   console.error(error);
   console.log(`Caught error, exiting with code 1`);
