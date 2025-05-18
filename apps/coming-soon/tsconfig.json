@@ -32,7 +32,8 @@
     "src/**/*.jsx",
     "src/**/*.ts",
     "src/**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "../hire/src/env.ts"
   ],
   "exclude": [
     "out-tsc",
