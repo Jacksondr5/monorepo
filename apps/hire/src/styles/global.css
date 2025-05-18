@@ -1,4 +1,2 @@
 @import "tailwindcss";
-
-@source "../../../../libs/component-library";
 @import "../../../../libs/component-library/src/styles/globals.css";

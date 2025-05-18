@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "@clerk/nextjs": "^6.19.4",
     "@j5/component-library": "workspace:*",
     "@t3-oss/env-nextjs": "0.13.4",
     "convex": "^1.24.1",
