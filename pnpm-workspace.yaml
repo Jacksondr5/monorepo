@@ -4,6 +4,7 @@ packages:
   - libs/*
   - libs
 onlyBuiltDependencies:
+  - "@clerk/shared"
   - "@parcel/watcher"
   - "@swc/core"
   - "@tailwindcss/oxide"

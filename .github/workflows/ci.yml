@@ -66,7 +66,7 @@ jobs:
         run: |
           if pnpm dlx nx-ignore @j5/chromatic; then
             echo "chromatic is unaffected, skipping"
-            pnpm nx run @j5/chromatic:chromatic --skip
+            pnpm dlx nx run @j5/chromatic:chromatic --skip
           else
             echo "chromatic is affected, running"
           fi
