@@ -2,6 +2,7 @@ import { spawnSync } from "child_process";
 
 const cwd = process.cwd();
 process.chdir("../../");
+let exitCode = 1;
 try {
   const packageArg = process.argv[2];
   if (!packageArg) {
@@ -10,10 +11,14 @@ try {
     );
     process.exit(1);
   }
-  spawnSync("pnpm", ["dlx", "nx-ignore", packageArg], { stdio: "inherit" });
+  const result = spawnSync("pnpm", ["dlx", "nx-ignore", packageArg], {
+    stdio: "inherit",
+  });
+  exitCode = result.status || 1;
 } catch (error) {
   console.error(error);
-  process.exit(1);
+  exitCode = 1;
 } finally {
   process.chdir(cwd);
 }
+process.exit(exitCode);
