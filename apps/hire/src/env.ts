@@ -13,9 +13,7 @@ import { z } from "zod";
  * Set these in a .env.local file at the root of the hire app
  */
 export const env = createEnv({
-  server: {
-    CONVEX_DEPLOYMENT: z.string().min(1),
-  },
+  server: {},
   client: {
     NEXT_PUBLIC_CLERK_ISSUER_URL: z.string().min(1),
     NEXT_PUBLIC_CONVEX_URL: z.string().min(1),
@@ -23,7 +21,6 @@ export const env = createEnv({
   },
   // If you're using Next.js < 13.4.4, you'll need to specify the runtimeEnv manually
   runtimeEnv: {
-    CONVEX_DEPLOYMENT: process.env.CONVEX_DEPLOYMENT,
     NEXT_PUBLIC_CONVEX_URL: process.env.NEXT_PUBLIC_CONVEX_URL,
     NEXT_PUBLIC_CLERK_ISSUER_URL: process.env.NEXT_PUBLIC_CLERK_ISSUER_URL,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
