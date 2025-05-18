@@ -95,7 +95,7 @@
     "test": {
       "dependsOn": ["^build"]
     },
-    "e2e-ci--**/**": {
+    "e2e-ci--**/*": {
       "dependsOn": ["^build"]
     },
     "build-storybook": {
