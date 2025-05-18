@@ -3,7 +3,7 @@
 import "~/styles/global.css";
 
 import { GeistSans } from "geist/font/sans";
-import { type Metadata } from "next";
+// import { type Metadata } from "next";
 import { ConvexClientProvider } from "./ConvexClientProvider";
 import { ClerkProvider, useAuth } from "@clerk/nextjs";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
