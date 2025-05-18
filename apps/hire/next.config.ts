@@ -1,8 +1,5 @@
 import { composePlugins, withNx } from "@nx/next";
 import { NextConfig } from "next";
-// Importing the file to validate env during build
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { env } from "./src/env";
 
 const nextConfig = {
   nx: {
