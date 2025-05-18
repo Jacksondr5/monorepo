@@ -63,7 +63,7 @@
       "plugin": "@nx/next/plugin",
       "options": {
         "startTargetName": "start",
-        "buildTargetName": "build",
+        "buildTargetName": "build-next",
         "devTargetName": "dev",
         "serveStaticTargetName": "serve-static",
         "buildDepsTargetName": "build-deps",
