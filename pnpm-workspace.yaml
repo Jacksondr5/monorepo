@@ -4,10 +4,10 @@ packages:
   - libs/*
   - libs
 onlyBuiltDependencies:
-  - '@clerk/shared'
-  - '@parcel/watcher'
-  - '@swc/core'
-  - '@tailwindcss/oxide'
+  - "@clerk/shared"
+  - "@parcel/watcher"
+  - "@swc/core"
+  - "@tailwindcss/oxide"
   - esbuild
   - nx
   - sharp
