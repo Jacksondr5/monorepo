@@ -248,7 +248,7 @@ importers:
   apps/hire:
     dependencies:
       '@clerk/nextjs':
-        specifier: ^6.19.4
+        specifier: 6.19.4
         version: 6.19.4(next@15.3.0(@babel/core@7.26.10)(@playwright/test@1.52.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.85.1))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@j5/component-library':
         specifier: workspace:*
@@ -257,7 +257,7 @@ importers:
         specifier: 0.13.4
         version: 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.24.4)
       convex:
-        specifier: ^1.24.1
+        specifier: 1.24.1
         version: 1.24.1(@clerk/clerk-react@5.31.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       next:
         specifier: 15.3.0

@@ -79,7 +79,7 @@ Each Company will manage its own set of the following:
 
 - **Frontend:** React, Next.js
 - **Styling:** Tailwind CSS
-- **Backend/Database:** Supabase
+- **Backend/Database:** Convex
 - **Authentication:** Clerk (for master user identity)
 - **File Uploads:** UploadThing (for resumes)
 - **End-to-End Testing:** Playwright

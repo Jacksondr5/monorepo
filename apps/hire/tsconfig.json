@@ -8,7 +8,6 @@
     "module": "esnext",
     "resolveJsonModule": true,
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
@@ -22,14 +21,13 @@
     },
     "outDir": "dist",
     "rootDir": "src",
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
+    "allowJs": true
   },
   "include": [
     "../../apps/hire/.next/types/**/*.ts",
     "../../dist/apps/hire/.next/types/**/*.ts",
     "next-env.d.ts",
-    "src/**/*.js",
-    "src/**/*.jsx",
     "src/**/*.ts",
     "src/**/*.tsx",
     ".next/types/**/*.ts"

@@ -1,6 +1,6 @@
 # Database Schema: Candidate Management System (Zod Schemas)
 
-This document defines the database schema for the Candidate Management System using Zod. These schemas will guide the structure of our Supabase tables.
+This document defines the database schema for the Candidate Management System using Zod. These schemas will guide the structure of our Convex tables.
 
 ```typescript
 import { z } from "zod";

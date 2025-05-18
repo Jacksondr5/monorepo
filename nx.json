@@ -100,11 +100,6 @@
     },
     "build-storybook": {
       "dependsOn": ["^build"]
-    },
-    "@nx/next:dev": {
-      "options": {
-        "turbo": true
-      }
     }
   },
   "generators": {
