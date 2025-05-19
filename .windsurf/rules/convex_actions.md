@@ -10,7 +10,8 @@ description: when defining and using Convex actions
 - Always add `"use node";` to the top of files containing actions that use Node.js built-in modules.
 - Never use `ctx.db` inside of an action. Actions don't have access to the database.
 - Below is an example of the syntax for an action:
-  ```ts
+
+  ````ts
   import { action } from "./\_generated/server";
 
                     export const exampleAction = action({
@@ -22,3 +23,4 @@ description: when defining and using Convex actions
                         },
                     });
                     ```
+  ````

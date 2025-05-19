@@ -12,7 +12,8 @@ description: when scheduling tasks with cron and managing files in Convex storag
 - Only use the `crons.interval` or `crons.cron` methods to schedule cron jobs. Do NOT use the `crons.hourly`, `crons.daily`, or `crons.weekly` helpers.
 - Both cron methods take in a FunctionReference. Do NOT try to pass the function directly into one of these methods.
 - Define crons by declaring the top-level `crons` object, calling some methods on it, and then exporting it as default. For example,
-  ```ts
+
+  ````ts
   import { cronJobs } from "convex/server";
   import { internal } from "./\_generated/api";
   import { internalAction } from "./\_generated/server";
@@ -32,6 +33,8 @@ description: when scheduling tasks with cron and managing files in Convex storag
 
                             export default crons;
                             ```
+
+  ````
 
 - You can register Convex functions within `crons.ts` just like any other file.
 - If a cron calls an internal function, always import the `internal` object from '\_generated/api`, even if the internal function is registered in the same file.

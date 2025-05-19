@@ -25,28 +25,26 @@ export function SourcesTab() {
     setLocalSources(sources);
   }, [sources]);
 
-  console.log(localSources);
+  const handleAddSource = () => {
+    if (!sourceName.trim()) return;
+    addSource({ name: sourceName.trim(), orgId });
+    setSourceName("");
+  };
+
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Candidate Sources</h2>
+      <p className="text-muted-foreground text-sm">
+        Define the sources for your candidates
+      </p>
       <div className="flex items-center justify-between gap-4">
         <Input
           placeholder="New source name"
           value={sourceName}
           onChange={(e) => setSourceName(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              addSource({ name: sourceName, orgId });
-              setSourceName("");
-            }
-          }}
+          onKeyDown={(e) => e.key === "Enter" && handleAddSource()}
         />
-        <Button
-          onClick={() => {
-            addSource({ name: sourceName, orgId });
-            setSourceName("");
-          }}
-        >
+        <Button onClick={handleAddSource} disabled={!sourceName.trim()}>
           Add Source
         </Button>
       </div>
@@ -57,14 +55,13 @@ export function SourcesTab() {
             []
           }
           onTagsSorted={(newSources) => {
-            setLocalSources(
-              newSources.map(({ id, value }, i) => ({
-                _id: id,
-                name: value,
-                order: i,
-              })),
-            );
-            reorderSources({ sourceIds: newSources.map((s) => s.id) });
+            const updatedSources = newSources.map(({ id, value }, i) => ({
+              _id: id,
+              name: value,
+              order: i,
+            }));
+            setLocalSources(updatedSources);
+            reorderSources({ sourceIds: updatedSources.map((s) => s._id) });
           }}
           onTagDeleted={(tagId) => deleteSource({ orgId, _id: tagId })}
         />

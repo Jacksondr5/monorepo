@@ -11,7 +11,8 @@ description: when using Convex
 
 - You can use the helper typescript type `Id` imported from './\_generated/dataModel' to get the type of the id for a given table. For example if there is a table called 'users' you can use `Id<'users'>` to get the type of the id for that table.
 - If you need to define a `Record` make sure that you correctly provide the type of the key and value in the type. For example a validator `v.record(v.id('users'), v.string())` would have the type `Record<Id<'users'>, string>`. Below is an example of using `Record` with an `Id` type in a query:
-  ```ts
+
+  ````ts
   import { query } from "./\_generated/server";
   import { Doc, Id } from "./\_generated/dataModel";
 
@@ -31,6 +32,8 @@ description: when using Convex
                         },
                     });
                     ```
+
+  ````
 
 - Be strict with types, particularly around id's of documents. For example, if a function takes in an id for a document in the 'users' table, take in `Id<'users'>` rather than `string`.
 - Always use `as const` for string literals in discriminated union types.

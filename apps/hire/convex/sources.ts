@@ -23,11 +23,10 @@ export const getSources = query({
     const sources = (
       await ctx.db
         .query("sources")
-        .filter((q) => q.eq(q.field("companyId"), company._id))
+        .withIndex("by_company_order", (q) => q.eq("companyId", company._id))
+        .order("asc")
         .collect()
-    )
-      .sort((a, b) => a.order - b.order)
-      .map(({ companyId, _creationTime, ...rest }) => rest);
+    ).map(({ companyId, _creationTime, ...rest }) => rest);
     return sources;
   },
 });
@@ -43,32 +42,6 @@ export const addSource = mutation({
       name,
       order: (await ctx.db.query("sources").collect()).length + 1,
       companyId: company._id,
-    });
-  },
-});
-
-export const updateSource = mutation({
-  args: {
-    orgId: v.string(),
-    _id: v.id("sources"),
-    name: v.string(),
-    order: v.number(),
-  },
-  handler: async (ctx, { orgId, _id, name, order }) => {
-    const company = await getCompany(ctx, orgId);
-    const source = await ctx.db
-      .query("sources")
-      .filter((q) => q.eq(q.field("_id"), _id))
-      .first();
-    if (!source) {
-      throw new Error("Source not found");
-    }
-    if (source.companyId !== company._id) {
-      throw new Error("Source does not belong to this company");
-    }
-    await ctx.db.patch(_id, {
-      name,
-      order,
     });
   },
 });
