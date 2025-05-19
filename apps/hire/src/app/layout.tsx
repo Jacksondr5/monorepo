@@ -1,8 +1,9 @@
-import "~/styles/global.css";
+import "../styles/global.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { Providers } from "./Providers";
+import { OrganizationSwitcher } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "J5 Hire",
@@ -15,8 +16,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      <body>
-        <Providers>{children}</Providers>
+      <body className="bg-slate-1 text-slate-12">
+        <Providers>
+          <OrganizationSwitcher hidePersonal />
+          {children}
+        </Providers>
       </body>
     </html>
   );

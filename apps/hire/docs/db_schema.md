@@ -53,11 +53,6 @@ export const SourceSchema = z.object({
   companyId: z.string().uuid(), // Foreign key to CompanySchema.id
   name: nonEmptyString, // e.g., "LinkedIn", "Referral"
   order: z.number().int().positive().default(1),
-  createdAt: z.date().default(() => new Date()),
-  updatedAt: z
-    .date()
-    .default(() => new Date())
-    .optional(),
 });
 
 /**
