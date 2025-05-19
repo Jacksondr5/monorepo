@@ -50,22 +50,19 @@ export function SeniorityTab() {
       <div className="rounded-lg border p-4">
         <SortableTagList
           initialTags={
-            localSeniorities?.map(({ _id, name }) => ({
+            localSeniorities?.map(({ _id, name, ...rest }) => ({
               value: name,
               id: _id,
+              ...rest,
             })) || []
           }
           onTagsSorted={(newSeniorities) => {
-            // Find the original seniority to get all required fields
             const updatedSeniorities = newSeniorities.map(
-              ({ id, value }, i) => {
-                const originalSeniority = localSeniorities.find(
-                  (s) => s._id === id,
-                );
+              ({ id, value, ...rest }, i) => {
                 return {
-                  ...originalSeniority!,
                   _id: id,
                   name: value,
+                  ...rest,
                   order: i,
                 };
               },

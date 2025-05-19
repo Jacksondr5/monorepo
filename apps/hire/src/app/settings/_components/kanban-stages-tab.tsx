@@ -50,17 +50,18 @@ export function KanbanStagesTab() {
       <div className="rounded-lg border p-4">
         <SortableTagList
           initialTags={
-            localStages?.map(({ _id, name }) => ({ value: name, id: _id })) ||
-            []
+            localStages?.map(({ _id, name, ...rest }) => ({
+              value: name,
+              id: _id,
+              ...rest,
+            })) || []
           }
           onTagsSorted={(newStages) => {
-            // Find the original stage to get all required fields
-            const updatedStages = newStages.map(({ id, value }, i) => {
-              const originalStage = localStages.find((s) => s._id === id);
+            const updatedStages = newStages.map(({ id, value, ...rest }, i) => {
               return {
-                ...originalStage!,
                 _id: id,
                 name: value,
+                ...rest,
                 order: i,
               };
             });

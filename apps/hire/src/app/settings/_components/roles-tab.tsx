@@ -50,16 +50,18 @@ export function RolesTab() {
       <div className="rounded-lg border p-4">
         <SortableTagList
           initialTags={
-            localRoles?.map(({ _id, name }) => ({ value: name, id: _id })) || []
+            localRoles?.map(({ _id, name, ...rest }) => ({
+              value: name,
+              id: _id,
+              ...rest,
+            })) || []
           }
           onTagsSorted={(newRoles) => {
-            // Find the original role to get all required fields
-            const updatedRoles = newRoles.map(({ id, value }, i) => {
-              const originalRole = localRoles.find((r) => r._id === id);
+            const updatedRoles = newRoles.map(({ id, value, ...rest }, i) => {
               return {
-                ...originalRole!,
                 _id: id,
                 name: value,
+                ...rest,
                 order: i,
               };
             });

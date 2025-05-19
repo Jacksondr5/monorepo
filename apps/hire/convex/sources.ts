@@ -38,9 +38,16 @@ export const addSource = mutation({
   },
   handler: async (ctx, { orgId, name }) => {
     const company = await getCompany(ctx, orgId);
+    const highestOrder = await ctx.db
+      .query("sources")
+      .withIndex("by_company_order", (q) => q.eq("companyId", company._id))
+      .order("desc")
+      .first()
+      .then((source) => (source ? source.order + 1 : 0));
+
     await ctx.db.insert("sources", {
       name,
-      order: (await ctx.db.query("sources").collect()).length + 1,
+      order: highestOrder,
       companyId: company._id,
     });
   },

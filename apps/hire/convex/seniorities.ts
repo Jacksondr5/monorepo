@@ -29,7 +29,7 @@ export const getSeniorities = query({
     const company = await getCompany(ctx, orgId);
     return await ctx.db
       .query("seniorities")
-      .withIndex("by_company_order", (q: any) => q.eq("companyId", company._id))
+      .withIndex("by_company_order", (q) => q.eq("companyId", company._id))
       .order("asc")
       .collect();
   },
@@ -39,16 +39,17 @@ export const addSeniority = mutation({
   args: { orgId: v.string(), name: v.string() },
   handler: async (ctx, { orgId, name }) => {
     const company = await getCompany(ctx, orgId);
-    const count = await ctx.db
+    const highestOrder = await ctx.db
       .query("seniorities")
       .withIndex("by_company_order", (q) => q.eq("companyId", company._id))
-      .collect()
-      .then((seniorities) => seniorities.length);
+      .order("desc")
+      .first()
+      .then((seniority) => (seniority ? seniority.order + 1 : 0));
 
     return await ctx.db.insert("seniorities", {
       companyId: company._id,
       name,
-      order: count,
+      order: highestOrder,
     });
   },
 });

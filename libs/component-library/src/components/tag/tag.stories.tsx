@@ -149,7 +149,6 @@ export const TestDismissible: Story = {
   },
   play: async ({ args, canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const tag = canvas.getByText("Click X to remove");
     const dismissButton = canvas.getByRole("button", {
       name: "Remove tag",
     });

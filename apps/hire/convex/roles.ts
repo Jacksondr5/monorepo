@@ -29,7 +29,7 @@ export const getRoles = query({
     const company = await getCompany(ctx, orgId);
     return await ctx.db
       .query("roles")
-      .withIndex("by_company_order", (q: any) => q.eq("companyId", company._id))
+      .withIndex("by_company_order", (q) => q.eq("companyId", company._id))
       .order("asc")
       .collect();
   },
@@ -39,16 +39,17 @@ export const addRole = mutation({
   args: { orgId: v.string(), name: v.string() },
   handler: async (ctx, { orgId, name }) => {
     const company = await getCompany(ctx, orgId);
-    const count = await ctx.db
+    const highestOrder = await ctx.db
       .query("roles")
       .withIndex("by_company_order", (q) => q.eq("companyId", company._id))
-      .collect()
-      .then((roles) => roles.length);
+      .order("desc")
+      .first()
+      .then((role) => (role ? role.order + 1 : 0));
 
     return await ctx.db.insert("roles", {
       companyId: company._id,
       name,
-      order: count,
+      order: highestOrder,
     });
   },
 });
