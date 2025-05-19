@@ -13,6 +13,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as companies from "../companies.js";
 import type * as sources from "../sources.js";
 
 /**
@@ -24,6 +25,7 @@ import type * as sources from "../sources.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  companies: typeof companies;
   sources: typeof sources;
 }>;
 export declare const api: FilterApi<

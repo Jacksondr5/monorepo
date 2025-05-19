@@ -1,11 +1,11 @@
 "use client";
 
-import { Button, Input, Tag } from "@j5/component-library";
+import { Button, Input } from "@j5/component-library";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useOrganization } from "@clerk/nextjs";
-import { SortableList } from "@j5/component-library";
+import { SortableTagList } from "./sortable-tag-list";
 
 export function SourcesTab() {
   const { organization, isLoaded } = useOrganization();
@@ -14,23 +14,32 @@ export function SourcesTab() {
   const sources = useQuery(api.sources.getSources, {
     orgId,
   });
-  const [sourceIds, setSourceIds] = useState(
-    sources?.map((s) => ({ id: s._id })) || [],
-  );
+  const [localSources, setLocalSources] = useState(sources);
   const addSource = useMutation(api.sources.addSource);
-  const updateSource = useMutation(api.sources.updateSource);
+  const reorderSources = useMutation(api.sources.reorderSources);
   const deleteSource = useMutation(api.sources.deleteSource);
 
   const [sourceName, setSourceName] = useState("");
 
+  useEffect(() => {
+    setLocalSources(sources);
+  }, [sources]);
+
+  console.log(localSources);
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Candidate Sources</h2>
       <div className="flex items-center justify-between gap-4">
         <Input
-          placeholder="Source name"
+          placeholder="New source name"
           value={sourceName}
           onChange={(e) => setSourceName(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              addSource({ name: sourceName, orgId });
+              setSourceName("");
+            }
+          }}
         />
         <Button
           onClick={() => {
@@ -41,21 +50,23 @@ export function SourcesTab() {
           Add Source
         </Button>
       </div>
-      <div className="flex flex-col gap-2 rounded-lg border p-4">
-        <SortableList
-          items={sourceIds}
-          // strategy={verticalListSortingStrategy}
-          onChange={setSourceIds}
-          renderItem={(item) =>
-            item.map(({ id, name }) => (
-              <SortableList.Item key={id} id={id}>
-                <Tag onDismiss={() => deleteSource({ orgId, _id: id })}>
-                  <SortableList.DragHandle />
-                  {name}
-                </Tag>
-              </SortableList.Item>
-            ))
+      <div className="rounded-lg border p-4">
+        <SortableTagList
+          initialTags={
+            localSources?.map(({ _id, name }) => ({ value: name, id: _id })) ||
+            []
           }
+          onTagsSorted={(newSources) => {
+            setLocalSources(
+              newSources.map(({ id, value }, i) => ({
+                _id: id,
+                name: value,
+                order: i,
+              })),
+            );
+            reorderSources({ sourceIds: newSources.map((s) => s.id) });
+          }}
+          onTagDeleted={(tagId) => deleteSource({ orgId, _id: tagId })}
         />
       </div>
     </div>

@@ -1,15 +1,17 @@
-import { AnyDataModel, GenericQueryCtx } from "convex/server";
+import { GenericQueryCtx } from "convex/server";
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { DataModel } from "./_generated/dataModel";
 
-const getCompany = async (
-  ctx: GenericQueryCtx<AnyDataModel>,
-  orgId: string,
-) => {
-  return ctx.db
+const getCompany = async (ctx: GenericQueryCtx<DataModel>, orgId: string) => {
+  const company = await ctx.db
     .query("companies")
     .filter((q) => q.eq(q.field("clerkOrganizationId"), orgId))
     .first();
+  if (!company) {
+    throw new Error("Company not found");
+  }
+  return company;
 };
 
 export const getSources = query({
@@ -18,12 +20,15 @@ export const getSources = query({
   },
   handler: async (ctx, { orgId }) => {
     const company = await getCompany(ctx, orgId);
-    return (
+    const sources = (
       await ctx.db
         .query("sources")
         .filter((q) => q.eq(q.field("companyId"), company._id))
         .collect()
-    ).sort((a, b) => a.order - b.order);
+    )
+      .sort((a, b) => a.order - b.order)
+      .map(({ companyId, _creationTime, ...rest }) => rest);
+    return sources;
   },
 });
 
@@ -55,6 +60,9 @@ export const updateSource = mutation({
       .query("sources")
       .filter((q) => q.eq(q.field("_id"), _id))
       .first();
+    if (!source) {
+      throw new Error("Source not found");
+    }
     if (source.companyId !== company._id) {
       throw new Error("Source does not belong to this company");
     }
@@ -62,6 +70,19 @@ export const updateSource = mutation({
       name,
       order,
     });
+  },
+});
+
+export const reorderSources = mutation({
+  args: {
+    sourceIds: v.array(v.id("sources")),
+  },
+  handler: async (ctx, { sourceIds }) => {
+    for (let i = 0; i < sourceIds.length; i++) {
+      await ctx.db.patch(sourceIds[i], {
+        order: i,
+      });
+    }
   },
 });
 
@@ -76,6 +97,9 @@ export const deleteSource = mutation({
       .query("sources")
       .filter((q) => q.eq(q.field("_id"), _id))
       .first();
+    if (!source) {
+      throw new Error("Source not found");
+    }
     if (source.companyId !== company._id) {
       throw new Error("Source does not belong to this company");
     }
