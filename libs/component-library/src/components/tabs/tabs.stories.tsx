@@ -182,7 +182,6 @@ export const TestKeyboardNavigation: Story = {
     // Focus the first tab
     const accountTab = canvas.getByRole("tab", { name: /account/i });
     await userEvent.tab();
-    // fireEvent.focus(accountTab);
     expect(accountTab).toHaveFocus();
 
     // Test right arrow key
