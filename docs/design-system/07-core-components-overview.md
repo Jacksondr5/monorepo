@@ -91,16 +91,31 @@ This document provides a high-level overview of the essential UI components for 
   - **Shadow:** `shadow-lg` on the edge facing the main content.
   - **Padding:** Appropriate internal padding (e.g., `p-4` or `p-6`).
 
-## 7. Badges/Tags
+## 7. Badges
 
-- **Purpose:** Status indicators, keywords, counts.
+- **Purpose:** Static status indicators, counts, or concise information snippets.
 - **General Style:**
-  - **Font:** `font-sans` (Geist Sans), `font-medium` or `font-semibold`, `text-xs` or `text-sm`.
+  - **Font:** `font-sans` (Geist Sans), `font-medium`, `text-xs`.
   - **Padding:** Tight (e.g., `py-0.5 px-2` - `py-space-xxs px-space-xs`).
-  - **Border Radius:** `rounded-sm` or `rounded-full` for pill shape.
-  - **Colors:** Use semantic colors (e.g., `bg-green-3 text-green-11`, `bg-red-3 text-red-11`) or neutral grays (`bg-olive-3 text-olive-11`, `bg-slate-3 text-slate-11`).
+  - **Border Radius:** `rounded-sm` (default) or `rounded-full` for pill shape.
+  - **Colors:** Use semantic colors (e.g., `bg-green-3 text-green-11` for success, `bg-red-3 text-red-11` for error) or neutral grays (`bg-olive-3 text-olive-11`, `bg-slate-3 text-slate-11`).
+  - **Interaction:** None. No interactive states (hover, focus, active). Tooltips may be used for truncated text.
 
-## 8. Alerts/Notifications
+## 8. Tags
+
+- **Purpose:** Interactive elements for keywords, filtering, selection, or dismissible items.
+- **General Style:**
+  - **Font:** `font-sans` (Geist Sans), `font-medium`, `text-sm`.
+  - **Padding:** Slightly more generous to ensure good tap/click targets (e.g., `py-1 px-2.5` or `py-1 px-3` - translating to `py-space-xxs px-space-sm` or `py-space-xxs px-space-md-(sm)`).
+  - **Border Radius:** `rounded-md` (consistent with buttons/inputs) or `rounded-full`.
+  - **Colors:** Use semantic colors, neutral grays, or brand accent colors. Can have distinct visual styles for selected/active states.
+  - **Interaction:**
+    - **Hover State:** Subtle background change (e.g., `hover:bg-olive-5`, `hover:bg-grass-5`).
+    - **Focus State:** Clear focus indicator (e.g., `focus:ring-2 focus:ring-blue-7/50`).
+    - **Dismissible:** May include a small 'x' icon (Lucide `x` or `x-circle`) for removal, with its own hover/focus states.
+    - **Selectable:** If used for selection (e.g., in a multi-select filter), should have clear `aria-pressed` or `aria-selected` states with distinct styling (e.g., stronger background, border, or an adjacent checkmark icon).
+
+## 9. Alerts/Notifications
 
 - **Purpose:** System messages, success, error, warning, info.
 - **General Style:**
@@ -111,7 +126,7 @@ This document provides a high-level overview of the essential UI components for 
   - **Padding:** `p-4` (`p-space-md`).
   - **Border Radius:** `rounded` (8px).
 
-## 9. Tooltips
+## 10. Tooltips
 
 - **Purpose:** Brief contextual help.
 - **General Style:**
@@ -121,7 +136,7 @@ This document provides a high-level overview of the essential UI components for 
   - **Border Radius:** `rounded-sm`.
   - **Arrow:** Pointing to the target element (often achieved with pseudo-elements or a library).
 
-## 10. Navigation (Menus, Tabs)
+## 11. Navigation (Menus, Tabs)
 
 - **Menus (Dropdowns, Side Nav):**
   - **Item Padding:** Adjust for density (e.g., `px-3 py-2`).
@@ -131,14 +146,14 @@ This document provides a high-level overview of the essential UI components for 
   - **Active Tab:** Clear visual distinction (e.g., `bg-olive-3 border-b-2 border-grass-9`).
   - **Inactive Tabs:** Subtle text color (`text-slate-9`).
 
-## 11. Tables
+## 12. Tables
 
 - **Focus:** Clarity for dense data.
 - **Row Spacing:** Adequate padding within cells (e.g., `px-3 py-2` - `px-space-sm py-space-xs`).
 - **Borders:** Subtle row separators (`border-b border-olive-4` or `border-b border-slate-4`). Header separator stronger.
 - **Header:** `font-semibold`, slightly different background (`bg-olive-3`).
 
-## 12. Iconography
+## 13. Iconography
 
 - **Library:** Lucide Icons ([https://lucide.dev/](https://lucide.dev/)).
 - **Default Size:** `w-4 h-4` (16px) or `w-5 h-5` (20px), can be scaled.

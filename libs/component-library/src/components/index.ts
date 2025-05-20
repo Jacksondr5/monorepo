@@ -7,3 +7,6 @@ export * from "./card/card";
 export * from "./dialog/dialog";
 export * from "./ui/separator";
 export * from "./ui/textarea";
+export * from "./tabs/tabs";
+export * from "./tag/tag";
+export * from "./sortable-list/sortable-list";

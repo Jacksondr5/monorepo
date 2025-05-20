@@ -2,6 +2,8 @@
 
 This document defines the database schema for the Candidate Management System using Zod. These schemas will guide the structure of our Convex tables.
 
+Note that Convex has an implicit `_id` field for each table, which is a UUID. We do not need to define it explicitly.
+
 ```typescript
 import { z } from "zod";
 import { randomUUID } from "crypto"; // Or use a library like `uuid`
@@ -28,18 +30,8 @@ export const ProfileSchema = z.object({
  * Represents an organization or workspace that owns sets of hiring data.
  */
 export const CompanySchema = z.object({
-  id: z
-    .string()
-    .uuid()
-    .default(() => randomUUID()),
+  clerkOrganizationId: nonEmptyString,
   name: nonEmptyString,
-  owner_profile_id: nonEmptyString, // Foreign key to ProfileSchema.id (Clerk User ID of the creator/initial owner)
-  created_at: z.date().default(() => new Date()),
-  avatar_url: z.string().url(), // Uploadthing
-  updated_at: z
-    .date()
-    .default(() => new Date())
-    .optional(),
 });
 
 /**
@@ -47,14 +39,10 @@ export const CompanySchema = z.object({
  * Links Profiles to Companies and defines their role within that company.
  */
 export const CompanyMemberSchema = z.object({
-  id: z
-    .string()
-    .uuid()
-    .default(() => randomUUID()),
-  company_id: z.string().uuid(), // Foreign key to CompanySchema.id
-  profile_id: nonEmptyString, // Foreign key to ProfileSchema.id (Clerk User ID)
+  companyId: z.string().uuid(), // Foreign key to CompanySchema.id
+  profileId: nonEmptyString, // Foreign key to ProfileSchema.id (Clerk User ID)
   role: CompanyRoleEnum,
-  created_at: z.date().default(() => new Date()),
+  createdAt: z.date().default(() => new Date()),
 });
 
 /**
@@ -62,18 +50,9 @@ export const CompanyMemberSchema = z.object({
  * Manages the list of candidate sources for a specific company.
  */
 export const SourceSchema = z.object({
-  id: z
-    .string()
-    .uuid()
-    .default(() => randomUUID()),
-  company_id: z.string().uuid(), // Foreign key to CompanySchema.id
+  companyId: z.string().uuid(), // Foreign key to CompanySchema.id
   name: nonEmptyString, // e.g., "LinkedIn", "Referral"
   order: z.number().int().positive().default(1),
-  created_at: z.date().default(() => new Date()),
-  updated_at: z
-    .date()
-    .default(() => new Date())
-    .optional(),
 });
 
 /**
@@ -81,15 +60,11 @@ export const SourceSchema = z.object({
  * Manages the list of user-defined seniority levels for a specific company.
  */
 export const SenioritySchema = z.object({
-  id: z
-    .string()
-    .uuid()
-    .default(() => randomUUID()),
-  company_id: z.string().uuid(), // Foreign key to CompanySchema.id
+  companyId: z.string().uuid(), // Foreign key to CompanySchema.id
   name: nonEmptyString, // e.g., "Intern", "Senior Engineer"
   order: z.number().int().positive().default(1),
-  created_at: z.date().default(() => new Date()),
-  updated_at: z
+  createdAt: z.date().default(() => new Date()),
+  updatedAt: z
     .date()
     .default(() => new Date())
     .optional(),
@@ -100,15 +75,11 @@ export const SenioritySchema = z.object({
  * Manages the list of user-defined hiring stages for a specific company.
  */
 export const StatusSchema = z.object({
-  id: z
-    .string()
-    .uuid()
-    .default(() => randomUUID()),
-  company_id: z.string().uuid(), // Foreign key to CompanySchema.id
+  companyId: z.string().uuid(), // Foreign key to CompanySchema.id
   name: nonEmptyString, // e.g., "Applied", "Technical Interview"
   order: z.number().int().positive().default(1),
-  created_at: z.date().default(() => new Date()),
-  updated_at: z
+  createdAt: z.date().default(() => new Date()),
+  updatedAt: z
     .date()
     .default(() => new Date())
     .optional(),
@@ -119,15 +90,11 @@ export const StatusSchema = z.object({
  * Manages the list of user-defined job roles for a specific company.
  */
 export const RoleSchema = z.object({
-  id: z
-    .string()
-    .uuid()
-    .default(() => randomUUID()),
-  company_id: z.string().uuid(), // Foreign key to CompanySchema.id
+  companyId: z.string().uuid(), // Foreign key to CompanySchema.id
   name: nonEmptyString, // e.g., "Software Engineer", "Product Manager"
   order: z.number().int().positive().default(1),
-  created_at: z.date().default(() => new Date()),
-  updated_at: z
+  createdAt: z.date().default(() => new Date()),
+  updatedAt: z
     .date()
     .default(() => new Date())
     .optional(),
@@ -138,11 +105,7 @@ export const RoleSchema = z.object({
  * Central table for all candidate information, scoped to a company.
  */
 export const CandidateSchema = z.object({
-  id: z
-    .string()
-    .uuid()
-    .default(() => randomUUID()),
-  company_id: z.string().uuid(), // Foreign key to CompanySchema.id
+  companyId: z.string().uuid(), // Foreign key to CompanySchema.id
   name: nonEmptyString,
   email: z
     .string()
@@ -160,12 +123,12 @@ export const CandidateSchema = z.object({
   role_id: z.string().uuid(), // Foreign key to RoleSchema.id
   seniority_id: z.string().uuid(), // Foreign key to SenioritySchema.id
   status_id: z.string().uuid(), // Foreign key to StatusSchema.id
-  salary_expectations: z.string().optional().nullable(),
-  next_steps: z.string().optional().nullable(),
-  source_id: z.string().uuid().optional().nullable(), // Foreign key to SourceSchema.id
-  added_by_profile_id: nonEmptyString, // Clerk User ID of the user who added the candidate
-  created_at: z.date().default(() => new Date()),
-  updated_at: z
+  salaryExpectations: z.string().optional().nullable(),
+  nextSteps: z.string().optional().nullable(),
+  sourceId: z.string().uuid().optional().nullable(), // Foreign key to SourceSchema.id
+  addedByProfileId: nonEmptyString, // Clerk User ID of the user who added the candidate
+  createdAt: z.date().default(() => new Date()),
+  updatedAt: z
     .date()
     .default(() => new Date())
     .optional(),
@@ -176,15 +139,11 @@ export const CandidateSchema = z.object({
  * Stores structured templates for interview notes, scoped to a company.
  */
 export const InterviewNoteTemplateSchema = z.object({
-  id: z
-    .string()
-    .uuid()
-    .default(() => randomUUID()),
-  company_id: z.string().uuid(), // Foreign key to CompanySchema.id
+  companyId: z.string().uuid(), // Foreign key to CompanySchema.id
   name: nonEmptyString, // e.g., "Technical Interview Template"
-  template_fields: z.record(z.string(), z.any()).default({}),
-  created_at: z.date().default(() => new Date()),
-  updated_at: z
+  templateFields: z.record(z.string(), z.any()).default({}),
+  createdAt: z.date().default(() => new Date()),
+  updatedAt: z
     .date()
     .default(() => new Date())
     .optional(),
@@ -196,19 +155,15 @@ export const InterviewNoteTemplateSchema = z.object({
  * Implicitly scoped to a company via candidate_id.
  */
 export const InterviewSchema = z.object({
-  id: z
-    .string()
-    .uuid()
-    .default(() => randomUUID()),
-  candidate_id: z.string().uuid(), // Foreign key to CandidateSchema.id
-  interview_type: z.string().optional().nullable(),
-  interview_date: z.date().optional().nullable(),
+  candidateId: z.string().uuid(), // Foreign key to CandidateSchema.id
+  interviewType: z.string().optional().nullable(),
+  interviewDate: z.date().optional().nullable(),
   interviewers: z.array(nonEmptyString).default([]),
-  assigned_template_id: z.string().uuid().optional().nullable(),
-  notes_content: z.record(z.string(), z.any()).optional().nullable(),
-  recorded_by_profile_id: nonEmptyString, // Clerk User ID of user who recorded the interview
-  created_at: z.date().default(() => new Date()),
-  updated_at: z
+  assignedTemplateId: z.string().uuid().optional().nullable(),
+  notesContent: z.record(z.string(), z.any()).optional().nullable(),
+  recordedByProfileId: nonEmptyString, // Clerk User ID of user who recorded the interview
+  createdAt: z.date().default(() => new Date()),
+  updatedAt: z
     .date()
     .default(() => new Date())
     .optional(),
@@ -217,11 +172,11 @@ export const InterviewSchema = z.object({
 
 ## Notes:
 
-- **Multi-Tenancy:** The application now supports multiple companies. Most data is scoped using `company_id`.
+- **Multi-Tenancy:** The application now supports multiple companies. Most data is scoped using `companyId`.
 - **User Identity:** `ProfileSchema` (using Clerk User ID) is the central identity. `CompanyMemberSchema` links Profiles to Companies with specific roles (`ADMIN`, `MEMBER`).
 - **Company-Specific Resources:** `Sources`, `Seniorities`, `Statuses` (Kanban stages), `Roles` (job titles), and `InterviewNoteTemplates` are now managed per company.
-- **Candidate and Interview Ownership:** `CandidateSchema` now includes `added_by_profile_id` and `InterviewSchema` includes `recorded_by_profile_id` to track which user performed the action.
-- **Resume Handling:** `resume_url` in `CandidateSchema` will store the URL from UploadThing.
+- **Candidate and Interview Ownership:** `CandidateSchema` now includes `addedByProfileId` and `InterviewSchema` includes `recordedByProfileId` to track which user performed the action.
+- **Resume Handling:** `resumeUrl` in `CandidateSchema` will store the URL from UploadThing.
 - **Orderable Lists:** `SourceSchema`, `SenioritySchema`, `StatusSchema`, and `RoleSchema` include an `order` field.
 - **Timestamps & UUIDs:** Maintained as before.
 - **Interview Templates:** `template_fields` and `notes_content` remain flexible for now.
