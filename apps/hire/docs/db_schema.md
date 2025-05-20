@@ -74,7 +74,7 @@ export const SenioritySchema = z.object({
  * Statuses Table (Kanban Stages)
  * Manages the list of user-defined hiring stages for a specific company.
  */
-export const StatusSchema = z.object({
+export const KanbanStageSchema = z.object({
   companyId: z.string().uuid(), // Foreign key to CompanySchema.id
   name: nonEmptyString, // e.g., "Applied", "Technical Interview"
   order: z.number().int().positive().default(1),
@@ -113,21 +113,20 @@ export const CandidateSchema = z.object({
     .optional()
     .nullable(),
   phone: z.string().optional().nullable(),
-  linkedin_profile: z
+  linkedinProfile: z
     .string()
     .url({ message: "Invalid URL" })
     .optional()
     .nullable(),
-  resume_url: z.string().url({ message: "Invalid URL" }).optional().nullable(), // URL from UploadThing (@https://uploadthing.com/)
-  target_team: z.string().optional().nullable(),
-  role_id: z.string().uuid(), // Foreign key to RoleSchema.id
-  seniority_id: z.string().uuid(), // Foreign key to SenioritySchema.id
-  status_id: z.string().uuid(), // Foreign key to StatusSchema.id
+  resumeUrl: z.string().url({ message: "Invalid URL" }).optional().nullable(), // URL from UploadThing (@https://uploadthing.com/)
+  targetTeam: z.string().optional().nullable(),
+  roleId: z.string().uuid(), // Foreign key to RoleSchema.id
+  seniorityId: z.string().uuid(), // Foreign key to SenioritySchema.id
+  kanbanStageId: z.string().uuid(), // Foreign key to KanbanStageSchema.id
   salaryExpectations: z.string().optional().nullable(),
   nextSteps: z.string().optional().nullable(),
   sourceId: z.string().uuid().optional().nullable(), // Foreign key to SourceSchema.id
   addedByProfileId: nonEmptyString, // Clerk User ID of the user who added the candidate
-  createdAt: z.date().default(() => new Date()),
   updatedAt: z
     .date()
     .default(() => new Date())
