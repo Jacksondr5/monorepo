@@ -1,10 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { expect, userEvent, within } from "@storybook/test";
 import { useState } from "react";
 import { Tag, TagProps } from "../tag/tag";
 import { SortableList } from "./sortable-list";
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
-import { arrayMove } from "@dnd-kit/sortable";
 
 const meta: Meta<typeof SortableList> = {
   title: "Components/Data Display/SortableList",

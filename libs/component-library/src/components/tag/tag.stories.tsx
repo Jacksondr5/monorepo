@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import type { Meta, StoryObj } from "@storybook/react";
 import { Tag, TagProps } from "./tag";
-import { Check, AlertCircle, Info, X } from "lucide-react";
-import { userEvent, within, expect, fn } from "@storybook/test";
+import { Check, AlertCircle, Info } from "lucide-react";
+import { userEvent, within, expect } from "@storybook/test";
+import { fn } from "@storybook/test";
 
 const meta: Meta<typeof Tag> = {
   title: "Components/Tag",
@@ -38,6 +39,9 @@ const meta: Meta<typeof Tag> = {
     onDismiss: {
       action: "onDismiss",
     },
+  },
+  args: {
+    onDismiss: fn(),
   },
 };
 
