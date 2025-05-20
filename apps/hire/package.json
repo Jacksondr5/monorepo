@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@clerk/nextjs": "6.19.4",
+    "@clerk/nextjs": "6.19.5",
     "@dnd-kit/core": "6.3.1",
     "@dnd-kit/sortable": "10.0.0",
     "@dnd-kit/utilities": "3.2.2",
@@ -13,7 +13,7 @@
     "next": "15.3.2",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "zod": "3.24.4"
+    "zod": "3.25.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.1.7",
