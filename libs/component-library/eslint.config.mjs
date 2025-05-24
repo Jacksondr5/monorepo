@@ -3,6 +3,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import js from "@eslint/js";
 import baseConfig from "../../eslint.config.mjs";
+import jsonc from "jsonc-eslint-parser";
 
 const compat = new FlatCompat({
   baseDirectory: dirname(fileURLToPath(import.meta.url)),
@@ -22,7 +23,7 @@ export default [
       ],
     },
     languageOptions: {
-      parser: await import("jsonc-eslint-parser"),
+      parser: jsonc,
     },
   },
 ];
