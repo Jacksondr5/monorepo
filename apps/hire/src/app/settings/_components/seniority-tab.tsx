@@ -4,16 +4,10 @@ import { Button, Input } from "@j5/component-library";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useEffect, useState } from "react";
-import { useOrganization } from "@clerk/nextjs";
 import { SortableTagList } from "./sortable-tag-list";
 
-export function SeniorityTab() {
-  const { organization, isLoaded } = useOrganization();
+export function SeniorityTab({ orgId }: { orgId: string }) {
   const [seniorityName, setSeniorityName] = useState("");
-
-  if (!isLoaded || !organization) return null;
-
-  const orgId = organization.id;
   const seniorities = useQuery(api.seniorities.getSeniorities, { orgId }) || [];
   const [localSeniorities, setLocalSeniorities] = useState(seniorities);
   const addSeniority = useMutation(api.seniorities.addSeniority);
