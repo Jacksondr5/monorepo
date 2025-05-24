@@ -8,13 +8,12 @@ import { useOrganization } from "@clerk/nextjs";
 import { SortableTagList } from "./sortable-tag-list";
 
 export function SeniorityTab() {
-  const { organization, isLoaded } = useOrganization();
+  const { organization } = useOrganization();
   const [seniorityName, setSeniorityName] = useState("");
 
-  if (!isLoaded || !organization) return null;
-
-  const orgId = organization.id;
-  const seniorities = useQuery(api.seniorities.getSeniorities, { orgId }) || [];
+  const orgId = organization?.id;
+  const seniorities =
+    useQuery(api.seniorities.getSeniorities, orgId ? { orgId } : "skip") || [];
   const [localSeniorities, setLocalSeniorities] = useState(seniorities);
   const addSeniority = useMutation(api.seniorities.addSeniority);
   const reorderSeniorities = useMutation(api.seniorities.reorderSeniorities);
@@ -23,6 +22,8 @@ export function SeniorityTab() {
   useEffect(() => {
     setLocalSeniorities(seniorities);
   }, [seniorities]);
+
+  if (!orgId) return null;
 
   const handleAddSeniority = () => {
     if (!seniorityName.trim()) return;

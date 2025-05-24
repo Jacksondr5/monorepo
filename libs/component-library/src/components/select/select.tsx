@@ -6,9 +6,9 @@ import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 
 import { cn } from "../../lib/utils";
 
-function Select({
-  ...props
-}: React.ComponentProps<typeof SelectPrimitive.Root>) {
+export type SelectProps = React.ComponentProps<typeof SelectPrimitive.Root>;
+
+function Select({ ...props }: SelectProps) {
   return <SelectPrimitive.Root data-slot="select" {...props} />;
 }
 
@@ -38,7 +38,7 @@ function SelectTrigger({
       data-size={size}
       className={cn(
         // Design system: border, bg, radius, font, padding, states
-        "bg-olive-2 border-olive-6 text-slate-12 placeholder-slate-9 shadow-xs focus:border-grass-8 focus:ring-grass-8/50 disabled:bg-olive-1 disabled:text-slate-8 disabled:border-olive-4 aria-invalid:border-red-7 aria-invalid:ring-red-7/20 flex w-fit items-center justify-between gap-2 whitespace-nowrap rounded-md border px-3 py-2 font-sans text-sm font-normal outline-none transition-[color,box-shadow] focus:ring-2 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "bg-olive-2 border-olive-6 text-slate-12 shadow-xs focus:border-grass-8 focus:ring-grass-8/50 disabled:bg-olive-1 disabled:text-slate-8 disabled:border-olive-4 aria-invalid:border-red-7 aria-invalid:ring-red-7/20 flex w-full items-center justify-between gap-2 whitespace-nowrap rounded-md border px-3 py-2 font-sans text-sm font-normal outline-none transition-[color,box-shadow] focus:ring-2 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       {...props}

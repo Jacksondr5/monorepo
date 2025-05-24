@@ -31,6 +31,7 @@
     "@nx/next": "21.0.3",
     "@nx/node": "21.0.3",
     "@nx/playwright": "21.0.3",
+    "@nx/react": "21.0.3",
     "@nx/storybook": "21.0.3",
     "@nx/vite": "21.0.3",
     "@nx/web": "21.0.3",

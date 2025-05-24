@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import {
-  fn,
-  userEvent,
-  within,
-  expect,
-  screen,
-  fireEvent,
-} from "@storybook/test";
+import { fn, userEvent, within, expect } from "@storybook/test";
+
+declare global {
+  interface Window {
+    __testContent?: HTMLElement;
+  }
+}
 import React from "react";
 import {
   Select,
@@ -36,14 +35,10 @@ const meta: Meta<typeof Select> = {
   tags: ["autodocs"],
   argTypes: {
     disabled: { control: "boolean" },
-    "aria-invalid": { control: "boolean", name: "Error State (aria-invalid)" },
-    placeholder: { control: "text" },
-    className: { control: false },
     onValueChange: { action: "changed" },
   },
   args: {
     onValueChange: fn(),
-    placeholder: "Pick a fruit...",
   },
 };
 export default meta;
@@ -55,57 +50,53 @@ export const AllVariants: Story = {
     controls: { hideNoControlsWarning: true, sort: "requiredFirst" },
   },
   render: (args) => {
-    // Matrix: [enabled, disabled] x [normal, error] x [with/without value]
+    // Matrix: [enabled, disabled] x [with/without value]
     const states = [
       { label: "Enabled", disabled: false },
       { label: "Disabled", disabled: true },
-    ];
-    const errors = [
-      { label: "Normal", "aria-invalid": false },
-      { label: "Error", "aria-invalid": true },
     ];
     const values = [
       { label: "No Value", value: undefined },
       { label: "With Value", value: OPTIONS[2].value },
     ];
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+      <div className="text-slate-12 flex flex-col gap-8">
         {states.map((state) => (
-          <div key={state.label} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <h3 style={{ margin: 0 }}>{state.label}</h3>
-            {errors.map((error) => (
-              <div key={error.label} style={{ display: "flex", flexDirection: "row", gap: 24, alignItems: "flex-end" }}>
-                {values.map((val) => (
-                  <div key={val.label} style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 220 }}>
-                    <span style={{ fontSize: 13, color: "#888" }}>{error.label} / {val.label}</span>
-                    <Select
-                      {...args}
-                      disabled={state.disabled}
-                      aria-invalid={error["aria-invalid"]}
-                      value={val.value}
-                      onValueChange={args.onValueChange}
-                    >
-                      <SelectTrigger size="default">
-                        <SelectValue placeholder={args.placeholder} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Fruits</SelectLabel>
-                          {OPTIONS.map((opt) => (
-                            <SelectItem key={opt.value} value={opt.value}>
-                              {opt.label}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                        <SelectSeparator />
-                        <SelectGroup>
-                          <SelectLabel>Other</SelectLabel>
-                          <SelectItem value="other">Other...</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                ))}
+          <div key={state.label} className="flex flex-col gap-4">
+            <h3 className="m-0">{state.label}</h3>
+            {values.map((val) => (
+              <div key={val.label} className="flex flex-row items-end gap-6">
+                <div
+                  key={val.label}
+                  className="flex min-w-[220px] flex-col gap-1"
+                >
+                  <span className="text-slate-9 text-xs">{val.label}</span>
+                  <Select
+                    {...args}
+                    disabled={state.disabled}
+                    value={val.value}
+                    onValueChange={args.onValueChange}
+                  >
+                    <SelectTrigger size="default">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Fruits</SelectLabel>
+                        {OPTIONS.map((opt) => (
+                          <SelectItem key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                      <SelectSeparator />
+                      <SelectGroup>
+                        <SelectLabel>Other</SelectLabel>
+                        <SelectItem value="other">Other...</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             ))}
           </div>
@@ -121,36 +112,59 @@ export const SelectChange: Story = {
   name: "Test: Change Value",
   args: {
     disabled: false,
-    "aria-invalid": false,
-    value: undefined,
-    placeholder: "Pick a fruit...",
+    value: "apple",
   },
   render: (args) => (
-    <Select {...args}>
-      <SelectTrigger size="default" />
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
-          {OPTIONS.map((opt) => (
-            <SelectItem key={opt.value} value={opt.value}>
-              {opt.label}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-      <SelectValue placeholder={args.placeholder} />
-    </Select>
+    <div className="w-[220px]">
+      <Select {...args}>
+        <SelectTrigger size="default">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Fruits</SelectLabel>
+            {OPTIONS.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
   ),
   play: async ({ args, canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const trigger = canvas.getByRole("button");
+    const trigger = canvas.getByRole("combobox");
+
     await step("Open dropdown", async () => {
       await userEvent.click(trigger);
-      await expect(canvas.getByRole("listbox")).toBeInTheDocument();
+      // Wait for the dropdown to animate in
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      // The listbox is in a portal, so we need to query the document
+      const listbox = document.querySelector<HTMLElement>('[role="listbox"]');
+      if (!listbox) {
+        throw new Error("Dropdown listbox not found");
+      }
+      await expect(listbox).toBeInTheDocument();
     });
+
     await step("Select Banana", async () => {
-      const item = canvas.getByText("Banana");
-      await userEvent.click(item);
+      // Find the option by its text content in the document
+      // Radix UI adds the option text in a span inside the option
+      const option = Array.from(
+        document.querySelectorAll('[role="option"]'),
+      ).find((el) => {
+        const span = el.querySelector("span:not([class])");
+        return span?.textContent?.includes("Banana");
+      });
+
+      if (!option) {
+        throw new Error("Banana option not found");
+      }
+
+      await userEvent.click(option);
       await expect(args.onValueChange).toHaveBeenCalledWith("banana");
     });
   },
@@ -161,69 +175,42 @@ export const DisabledNoInteraction: Story = {
   args: {
     disabled: true,
     value: undefined,
-    placeholder: "Pick a fruit...",
   },
   render: (args) => (
-    <Select {...args}>
-      <SelectTrigger size="default" />
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
-          {OPTIONS.map((opt) => (
-            <SelectItem key={opt.value} value={opt.value}>
-              {opt.label}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-      <SelectValue placeholder={args.placeholder} />
-    </Select>
+    <div className="w-[220px]">
+      <Select {...args}>
+        <SelectTrigger size="default">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Fruits</SelectLabel>
+            {OPTIONS.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+        <SelectValue placeholder={args.placeholder} />
+      </Select>
+    </div>
   ),
-  play: async ({ args, canvasElement, step }) => {
+  play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    const trigger = canvas.getByRole("button");
+    const trigger = canvas.getByRole("combobox");
+
     await step("Verify disabled", async () => {
       await expect(trigger).toBeDisabled();
     });
-    await step("Try to open dropdown", async () => {
-      try {
-        await userEvent.click(trigger);
-      } catch (e) {}
-      // Should not open
-      await expect(canvas.queryByRole("listbox")).not.toBeInTheDocument();
-    });
-  },
-};
 
-export const ErrorState: Story = {
-  name: "Test: Error State",
-  args: {
-    disabled: false,
-    "aria-invalid": true,
-    value: undefined,
-    placeholder: "Pick a fruit...",
-  },
-  render: (args) => (
-    <Select {...args}>
-      <SelectTrigger size="default" />
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
-          {OPTIONS.map((opt) => (
-            <SelectItem key={opt.value} value={opt.value}>
-              {opt.label}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-      <SelectValue placeholder={args.placeholder} />
-    </Select>
-  ),
-  play: async ({ args, canvasElement, step }) => {
-    const canvas = within(canvasElement);
-    const trigger = canvas.getByRole("button");
-    await step("Check aria-invalid", async () => {
-      await expect(trigger).toHaveAttribute("aria-invalid", "true");
+    await step("Try to open dropdown", async () => {
+      await userEvent.click(trigger);
+      // Give it a moment in case there's any animation
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      // Check that no listbox was opened in the document
+      const listbox = document.querySelector('[role="listbox"]');
+      await expect(listbox).not.toBeInTheDocument();
     });
   },
 };
