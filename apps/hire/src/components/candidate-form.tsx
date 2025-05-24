@@ -9,54 +9,55 @@ import {
 } from "@j5/component-library";
 import { Button } from "@j5/component-library";
 import { Card } from "@j5/component-library";
-import { Doc } from "../../convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { useOrganization } from "@clerk/nextjs";
-import { CandidateSchema } from "../server/zod/candidate";
-
-type Candidate = Omit<Doc<"candidates">, "_id" | "_creationTime">;
+import {
+  CreateCandidateSchema,
+  ZodCreateCandidate,
+} from "../server/zod/candidate";
 
 export type CandidateFormProps = {
-  initialData?: Candidate;
-  onSubmit: (data: Candidate) => Promise<void> | void;
+  initialData?: ZodCreateCandidate;
+  onSubmit: (data: ZodCreateCandidate) => Promise<void> | void;
   isSubmitting?: boolean;
+  organizationId: string;
 };
 
 export function CandidateForm({
   initialData,
   onSubmit,
   isSubmitting = false,
+  organizationId,
 }: CandidateFormProps) {
-  const { organization } = useOrganization();
-
   const form = useAppForm({
     defaultValues: initialData,
     validators: {
-      // onChange: (value) => {
-      //   const results = CandidateSchema.safeParse(value);
-      //   if (!results.success) {
-      //     console.log(results.error.flatten().fieldErrors);
-      //     return results.error.flatten().fieldErrors;
-      //   }
-      //   return undefined;
-      // },
-      onChange: CandidateSchema,
+      onChange: ({ value }) => {
+        console.log(value);
+        const results = CreateCandidateSchema.safeParse({
+          ...value,
+          organizationId,
+        });
+        if (!results.success) {
+          console.log(results.error.flatten().fieldErrors);
+          return results.error.flatten().fieldErrors;
+        }
+        return undefined;
+      },
     },
     onSubmit: async ({ value }) => {
       await onSubmit(value);
     },
   });
 
-  const orgId = organization?.id;
   const seniorities =
-    useQuery(api.seniorities.getSeniorities, orgId ? { orgId } : "skip") || [];
+    useQuery(api.seniorities.getSeniorities, { orgId: organizationId }) || [];
   const sources =
-    useQuery(api.sources.getSources, orgId ? { orgId } : "skip") || [];
+    useQuery(api.sources.getSources, { orgId: organizationId }) || [];
   const kanbanStages =
-    useQuery(api.kanbanStages.getKanbanStages, orgId ? { orgId } : "skip") ||
-    [];
-  const roles = useQuery(api.roles.getRoles, orgId ? { orgId } : "skip") || [];
+    useQuery(api.kanbanStages.getKanbanStages, { orgId: organizationId }) || [];
+  const roles = useQuery(api.roles.getRoles, { orgId: organizationId }) || [];
 
   return (
     <Card className="w-full max-w-2xl p-6">
@@ -92,7 +93,7 @@ export function CandidateForm({
                 </SelectTrigger>
                 <SelectContent>
                   {seniorities.map((seniority) => (
-                    <SelectItem key={seniority.id} value={seniority.id}>
+                    <SelectItem key={seniority._id} value={seniority._id}>
                       {seniority.name}
                     </SelectItem>
                   ))}
@@ -109,7 +110,7 @@ export function CandidateForm({
                 </SelectTrigger>
                 <SelectContent>
                   {sources.map((source) => (
-                    <SelectItem key={source.id} value={source.id}>
+                    <SelectItem key={source._id} value={source._id}>
                       {source.name}
                     </SelectItem>
                   ))}
@@ -126,7 +127,7 @@ export function CandidateForm({
                 </SelectTrigger>
                 <SelectContent>
                   {kanbanStages.map((kanbanStage) => (
-                    <SelectItem key={kanbanStage.id} value={kanbanStage.id}>
+                    <SelectItem key={kanbanStage._id} value={kanbanStage._id}>
                       {kanbanStage.name}
                     </SelectItem>
                   ))}
@@ -157,7 +158,7 @@ export function CandidateForm({
                 </SelectTrigger>
                 <SelectContent>
                   {roles.map((role) => (
-                    <SelectItem key={role.id} value={role.id}>
+                    <SelectItem key={role._id} value={role._id}>
                       {role.name}
                     </SelectItem>
                   ))}

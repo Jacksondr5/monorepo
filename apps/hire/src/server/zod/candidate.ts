@@ -25,7 +25,11 @@ export const CandidateSchema = z.object({
   updatedAt: z.number(),
 });
 
-export const CreateCandidateSchema = CandidateSchema.omit(baseConvexFieldsOmit);
+export const CreateCandidateSchema = CandidateSchema.omit({
+  ...baseConvexFieldsOmit,
+  companyId: true,
+  updatedAt: true,
+}).extend({ organizationId: z.string() });
 
 export const UpdateCandidateSchema = CandidateSchema.omit({
   _creationTime: true,

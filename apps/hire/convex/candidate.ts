@@ -17,9 +17,13 @@ const candidateMutation = zCustomMutation(mutation, NoOp);
 // --- Create Candidate ---
 export const createCandidate = candidateMutation({
   args: CreateCandidateSchema,
-  handler: async (ctx, args) => {
+  handler: async (ctx, { organizationId, ...args }) => {
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: organizationId,
+    });
     await ctx.db.insert("candidates", {
       ...args,
+      companyId,
       updatedAt: Date.now(),
     });
   },
