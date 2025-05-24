@@ -4,16 +4,10 @@ import { Button, Input } from "@j5/component-library";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useEffect, useState } from "react";
-import { useOrganization } from "@clerk/nextjs";
 import { SortableTagList } from "./sortable-tag-list";
 
-export function RolesTab() {
-  const { organization, isLoaded } = useOrganization();
+export function RolesTab({ orgId }: { orgId: string }) {
   const [roleName, setRoleName] = useState("");
-
-  if (!isLoaded || !organization) return null;
-
-  const orgId = organization.id;
   const roles = useQuery(api.roles.getRoles, { orgId }) || [];
   const [localRoles, setLocalRoles] = useState(roles);
   const addRole = useMutation(api.roles.addRole);
