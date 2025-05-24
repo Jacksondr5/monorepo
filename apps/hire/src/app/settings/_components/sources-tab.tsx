@@ -4,17 +4,13 @@ import { Button, Input } from "@j5/component-library";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useEffect, useState } from "react";
-import { useOrganization } from "@clerk/nextjs";
 import { SortableTagList } from "./sortable-tag-list";
 import { ZodSource } from "~/server/zod/source";
 
 const stripSourceData = (sources?: ZodSource[]) =>
   sources?.map(({ _creationTime, companyId, ...rest }) => rest);
 
-export function SourcesTab() {
-  const { organization, isLoaded } = useOrganization();
-  if (!isLoaded || !organization) return null;
-  const orgId = organization.id;
+export function SourcesTab({ orgId }: { orgId: string }) {
   const sources = useQuery(api.sources.getSources, {
     orgId,
   });

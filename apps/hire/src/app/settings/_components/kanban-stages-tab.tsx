@@ -4,16 +4,10 @@ import { Button, Input } from "@j5/component-library";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useEffect, useState } from "react";
-import { useOrganization } from "@clerk/nextjs";
 import { SortableTagList } from "./sortable-tag-list";
 
-export function KanbanStagesTab() {
-  const { organization, isLoaded } = useOrganization();
+export function KanbanStagesTab({ orgId }: { orgId: string }) {
   const [stageName, setStageName] = useState("");
-
-  if (!isLoaded || !organization) return null;
-
-  const orgId = organization.id;
   const stages = useQuery(api.kanbanStages.getKanbanStages, { orgId }) || [];
   const [localStages, setLocalStages] = useState(stages);
   const addStage = useMutation(api.kanbanStages.addKanbanStage);
