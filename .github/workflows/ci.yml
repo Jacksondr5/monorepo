@@ -56,7 +56,7 @@ jobs:
         uses: nrwl/nx-set-shas@v4
 
       - name: Check Formatting
-        run: pnpm nx-cloud record -- nx format:check
+        run: pnpm nx-cloud record -- nx --verbose format:check
 
       # Nx Affected runs only tasks affected by the changes in this PR/commit. Learn more: https://nx.dev/ci/features/affected
       - name: Run Affected Tasks

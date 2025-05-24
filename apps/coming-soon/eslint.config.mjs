@@ -19,7 +19,7 @@ export default [
   {
     files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
     rules: {
-      "@next/next/no-html-link-for-pages": ["error", "apps/hire/pages"],
+      "@next/next/no-html-link-for-pages": ["error", "apps/coming-soon/pages"],
     },
   },
   {
