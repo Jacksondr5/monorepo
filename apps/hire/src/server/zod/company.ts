@@ -11,10 +11,5 @@ export const CompanySchema = z.object({
   name: nonEmptyString,
 });
 
-export const CreateCompanySchema = CompanySchema.omit({
-  id: true,
-});
-
 export type CompanyId = z.infer<typeof CompanyIdSchema>;
 export type ZodCompany = z.infer<typeof CompanySchema>;
-export type ZodCreateCompany = z.infer<typeof CreateCompanySchema>;

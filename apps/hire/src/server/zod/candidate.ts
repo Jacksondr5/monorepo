@@ -1,15 +1,16 @@
 // --- Zod schema for validation ---
 import { z } from "zod";
 import { zid } from "convex-helpers/server/zod";
-import { nonEmptyString } from "./utils";
+import { baseConvexFieldsOmit, nonEmptyString } from "./utils";
 import { CompanyIdSchema } from "./company";
+import { baseConvexFields } from "./utils";
 
 export const CandidateIdSchema = zid("candidates");
 
 export const CandidateSchema = z.object({
+  ...baseConvexFields("candidates"),
   companyId: CompanyIdSchema,
   email: z.string().email({ message: "Invalid email address" }).optional(),
-  id: CandidateIdSchema,
   kanbanStageId: zid("kanbanStages"),
   linkedinProfile: z.string().url({ message: "Invalid URL" }).optional(),
   name: nonEmptyString,
@@ -24,13 +25,10 @@ export const CandidateSchema = z.object({
   updatedAt: z.number(),
 });
 
-export const CreateCandidateSchema = CandidateSchema.omit({
-  id: true,
-  updatedAt: true,
-});
+export const CreateCandidateSchema = CandidateSchema.omit(baseConvexFieldsOmit);
 
 export const UpdateCandidateSchema = CandidateSchema.omit({
-  updatedAt: true,
+  _creationTime: true,
 });
 
 export type CandidateId = z.infer<typeof CandidateIdSchema>;

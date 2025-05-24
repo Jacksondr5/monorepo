@@ -61,15 +61,15 @@ export const reorderKanbanStages = kanbanStageMutation({
 
 // --- Delete Kanban Stage ---
 export const deleteKanbanStage = kanbanStageMutation({
-  args: z.object({ orgId: z.string(), id: KanbanStageIdSchema }),
-  handler: async (ctx, { orgId, id }) => {
+  args: z.object({ orgId: z.string(), _id: KanbanStageIdSchema }),
+  handler: async (ctx, { orgId, _id }) => {
     const companyId = await getCompanyIdByClerkOrgId(ctx, {
       clerkOrgId: orgId,
     });
-    const stage = await ctx.db.get(id);
+    const stage = await ctx.db.get(_id);
     if (!stage) throw new Error("Stage not found");
     if (stage.companyId !== companyId)
       throw new Error("Stage does not belong to this company");
-    await ctx.db.delete(id);
+    await ctx.db.delete(_id);
   },
 });

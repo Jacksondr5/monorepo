@@ -7,9 +7,9 @@ import {
   CreateCandidateSchema,
   UpdateCandidateSchema,
 } from "../src/server/zod/candidate";
-import { CompanyIdSchema } from "../src/server/zod/company";
 import z from "zod";
 import { getCandidateById, verifyCandidateExists } from "./model/candidates";
+import { getCompanyIdByClerkOrgId } from "./model/companies";
 
 const candidateQuery = zCustomQuery(query, NoOp);
 const candidateMutation = zCustomMutation(mutation, NoOp);
@@ -27,9 +27,9 @@ export const createCandidate = candidateMutation({
 
 // --- Get Candidate by ID ---
 export const getCandidate = candidateQuery({
-  args: { id: CandidateIdSchema },
-  handler: async (ctx, { id }) => {
-    const candidate = await getCandidateById(ctx, { id });
+  args: { _id: CandidateIdSchema },
+  handler: async (ctx, { _id }) => {
+    const candidate = await getCandidateById(ctx, { _id });
     return CandidateSchema.parse(candidate);
   },
   returns: CandidateSchema,
@@ -37,8 +37,11 @@ export const getCandidate = candidateQuery({
 
 // --- List Candidates by Company ---
 export const listCandidates = candidateQuery({
-  args: { companyId: CompanyIdSchema },
-  handler: async (ctx, { companyId }) => {
+  args: { orgId: z.string() },
+  handler: async (ctx, { orgId }) => {
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: orgId,
+    });
     const candidates = await ctx.db
       .query("candidates")
       .withIndex("by_company", (q) => q.eq("companyId", companyId))
@@ -52,20 +55,20 @@ export const listCandidates = candidateQuery({
 export const updateCandidate = candidateMutation({
   args: UpdateCandidateSchema,
   handler: async (ctx, args) => {
-    await verifyCandidateExists(ctx, { id: args.id });
+    await verifyCandidateExists(ctx, { _id: args._id });
     const patch = {
       ...args,
       updatedAt: Date.now(),
     };
-    await ctx.db.patch(args.id, patch);
+    await ctx.db.patch(args._id, patch);
   },
 });
 
 // --- Delete Candidate ---
 export const deleteCandidate = candidateMutation({
-  args: { id: CandidateIdSchema },
-  handler: async (ctx, { id }) => {
-    await verifyCandidateExists(ctx, { id });
-    await ctx.db.delete(id);
+  args: { _id: CandidateIdSchema },
+  handler: async (ctx, { _id }) => {
+    await verifyCandidateExists(ctx, { _id });
+    await ctx.db.delete(_id);
   },
 });

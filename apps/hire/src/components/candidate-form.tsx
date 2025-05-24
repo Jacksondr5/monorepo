@@ -13,7 +13,7 @@ import { Doc } from "../../convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { useOrganization } from "@clerk/nextjs";
-import { CandidateSchema } from "../../convex/candidate";
+import { CandidateSchema } from "../server/zod/candidate";
 
 type Candidate = Omit<Doc<"candidates">, "_id" | "_creationTime">;
 
@@ -92,7 +92,7 @@ export function CandidateForm({
                 </SelectTrigger>
                 <SelectContent>
                   {seniorities.map((seniority) => (
-                    <SelectItem key={seniority._id} value={seniority._id}>
+                    <SelectItem key={seniority.id} value={seniority.id}>
                       {seniority.name}
                     </SelectItem>
                   ))}
@@ -109,7 +109,7 @@ export function CandidateForm({
                 </SelectTrigger>
                 <SelectContent>
                   {sources.map((source) => (
-                    <SelectItem key={source._id} value={source._id}>
+                    <SelectItem key={source.id} value={source.id}>
                       {source.name}
                     </SelectItem>
                   ))}
@@ -126,7 +126,7 @@ export function CandidateForm({
                 </SelectTrigger>
                 <SelectContent>
                   {kanbanStages.map((kanbanStage) => (
-                    <SelectItem key={kanbanStage._id} value={kanbanStage._id}>
+                    <SelectItem key={kanbanStage.id} value={kanbanStage.id}>
                       {kanbanStage.name}
                     </SelectItem>
                   ))}
@@ -157,7 +157,7 @@ export function CandidateForm({
                 </SelectTrigger>
                 <SelectContent>
                   {roles.map((role) => (
-                    <SelectItem key={role._id} value={role._id}>
+                    <SelectItem key={role.id} value={role.id}>
                       {role.name}
                     </SelectItem>
                   ))}
