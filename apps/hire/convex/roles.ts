@@ -1,79 +1,72 @@
-import { mutation, query } from "./_generated/server";
-import { v } from "convex/values";
-import type { DatabaseReader } from "./_generated/server";
-import type { Id } from "./_generated/dataModel";
+import { zCustomMutation, zCustomQuery } from "convex-helpers/server/zod";
+import { NoOp } from "convex-helpers/server/customFunctions";
+import { RoleIdSchema, RoleSchema } from "../src/server/zod/role";
+import z from "zod";
+import { query, mutation } from "./_generated/server";
+import { getCompanyIdByClerkOrgId } from "./model/companies";
 
-type Company = {
-  _id: Id<"companies">;
-  clerkOrganizationId: string;
-  name: string;
-};
+const roleQuery = zCustomQuery(query, NoOp);
+const roleMutation = zCustomMutation(mutation, NoOp);
 
-async function getCompany(
-  ctx: { db: DatabaseReader },
-  orgId: string,
-): Promise<Company> {
-  const company = await ctx.db
-    .query("companies")
-    .withIndex("by_clerk_org_id", (q) => q.eq("clerkOrganizationId", orgId))
-    .first();
-  if (!company) {
-    throw new Error("Company not found");
-  }
-  return company;
-}
-
-export const getRoles = query({
-  args: { orgId: v.string() },
+// // --- Get Roles ---
+export const getRoles = roleQuery({
+  args: z.object({ orgId: z.string() }),
   handler: async (ctx, { orgId }) => {
-    const company = await getCompany(ctx, orgId);
-    return await ctx.db
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: orgId,
+    });
+    const roles = await ctx.db
       .query("roles")
-      .withIndex("by_company_order", (q) => q.eq("companyId", company._id))
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
       .order("asc")
       .collect();
+    return z.array(RoleSchema).parse(roles);
   },
+  returns: z.array(RoleSchema),
 });
 
-export const addRole = mutation({
-  args: { orgId: v.string(), name: v.string() },
+// --- Add Role ---
+export const addRole = roleMutation({
+  args: z.object({ orgId: z.string(), name: z.string() }),
   handler: async (ctx, { orgId, name }) => {
-    const company = await getCompany(ctx, orgId);
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: orgId,
+    });
     const highestOrder = await ctx.db
       .query("roles")
-      .withIndex("by_company_order", (q) => q.eq("companyId", company._id))
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
       .order("desc")
       .first()
       .then((role) => (role ? role.order + 1 : 0));
-
-    return await ctx.db.insert("roles", {
-      companyId: company._id,
+    await ctx.db.insert("roles", {
+      companyId,
       name,
       order: highestOrder,
     });
   },
 });
 
-export const reorderRoles = mutation({
-  args: { roleIds: v.array(v.id("roles")) },
+// --- Reorder Roles ---
+export const reorderRoles = roleMutation({
+  args: z.object({ roleIds: z.array(RoleIdSchema) }),
   handler: async (ctx, { roleIds }) => {
     await Promise.all(
-      roleIds.map((_id, index) => ctx.db.patch(_id, { order: index })),
+      roleIds.map((id, index) => ctx.db.patch(id, { order: index })),
     );
   },
 });
 
-export const deleteRole = mutation({
-  args: { orgId: v.string(), _id: v.id("roles") },
-  handler: async (ctx, { orgId, _id }) => {
-    const company = await getCompany(ctx, orgId);
-    const role = await ctx.db.get(_id);
-    if (!role) {
-      throw new Error("Role not found");
-    }
-    if (role.companyId !== company._id) {
+// --- Delete Role ---
+export const deleteRole = roleMutation({
+  args: z.object({ orgId: z.string(), id: RoleIdSchema }),
+  handler: async (ctx, { orgId, id }) => {
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: orgId,
+    });
+    const role = await ctx.db.get(id);
+    if (!role) throw new Error("Role not found");
+    if (role.companyId !== companyId)
       throw new Error("Role does not belong to this company");
-    }
-    await ctx.db.delete(_id);
+    await ctx.db.delete(id);
   },
 });

@@ -16,6 +16,8 @@ import type {
 import type * as candidate from "../candidate.js";
 import type * as companies from "../companies.js";
 import type * as kanbanStages from "../kanbanStages.js";
+import type * as model_candidates from "../model/candidates.js";
+import type * as model_companies from "../model/companies.js";
 import type * as roles from "../roles.js";
 import type * as seniorities from "../seniorities.js";
 import type * as sources from "../sources.js";
@@ -32,6 +34,8 @@ declare const fullApi: ApiFromModules<{
   candidate: typeof candidate;
   companies: typeof companies;
   kanbanStages: typeof kanbanStages;
+  "model/candidates": typeof model_candidates;
+  "model/companies": typeof model_companies;
   roles: typeof roles;
   seniorities: typeof seniorities;
   sources: typeof sources;

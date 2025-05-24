@@ -1,5 +1,4 @@
 import { mutation, query } from "./_generated/server";
-import { v } from "convex/values";
 import { zCustomMutation, zCustomQuery } from "convex-helpers/server/zod";
 import { NoOp } from "convex-helpers/server/customFunctions";
 import {
@@ -10,6 +9,7 @@ import {
 } from "../src/server/zod/candidate";
 import { CompanyIdSchema } from "../src/server/zod/company";
 import z from "zod";
+import { getCandidateById, verifyCandidateExists } from "./model/candidates";
 
 const candidateQuery = zCustomQuery(query, NoOp);
 const candidateMutation = zCustomMutation(mutation, NoOp);
@@ -18,23 +18,10 @@ const candidateMutation = zCustomMutation(mutation, NoOp);
 export const createCandidate = candidateMutation({
   args: CreateCandidateSchema,
   handler: async (ctx, args) => {
-    const id = await ctx.db.insert("candidates", {
-      companyId: args.companyId,
-      name: args.name,
-      email: args.email,
-      phone: args.phone,
-      linkedinProfile: args.linkedinProfile,
-      resumeUrl: args.resumeUrl,
-      targetTeam: args.targetTeam,
-      roleId: args.roleId,
-      seniorityId: args.seniorityId,
-      kanbanStageId: args.kanbanStageId,
-      salaryExpectations: args.salaryExpectations,
-      nextSteps: args.nextSteps,
-      sourceId: args.sourceId,
+    await ctx.db.insert("candidates", {
+      ...args,
       updatedAt: Date.now(),
     });
-    return id;
   },
 });
 
@@ -42,10 +29,7 @@ export const createCandidate = candidateMutation({
 export const getCandidate = candidateQuery({
   args: { id: CandidateIdSchema },
   handler: async (ctx, { id }) => {
-    const candidate = await ctx.db.get(id);
-    if (!candidate) {
-      throw new Error("Candidate not found");
-    }
+    const candidate = await getCandidateById(ctx, { id });
     return CandidateSchema.parse(candidate);
   },
   returns: CandidateSchema,
@@ -68,29 +52,20 @@ export const listCandidates = candidateQuery({
 export const updateCandidate = candidateMutation({
   args: UpdateCandidateSchema,
   handler: async (ctx, args) => {
-    const candidate = await ctx.db.get(args.id);
-    if (!candidate) {
-      throw new Error("Candidate not found");
-    }
+    await verifyCandidateExists(ctx, { id: args.id });
     const patch = {
       ...args,
       updatedAt: Date.now(),
     };
     await ctx.db.patch(args.id, patch);
-    return CandidateSchema.parse(await ctx.db.get(args.id));
   },
-  returns: CandidateSchema,
 });
 
 // --- Delete Candidate ---
 export const deleteCandidate = candidateMutation({
   args: { id: CandidateIdSchema },
   handler: async (ctx, { id }) => {
-    const candidate = await ctx.db.get(id);
-    if (!candidate) {
-      throw new Error("Candidate not found");
-    }
+    await verifyCandidateExists(ctx, { id });
     await ctx.db.delete(id);
-    return true;
   },
 });
