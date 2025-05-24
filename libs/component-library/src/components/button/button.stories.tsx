@@ -207,6 +207,7 @@ export const AllVariants: Story = {
 // 2. Functional/Interaction Stories
 
 export const PrimaryClickable: Story = {
+  parameters: { chromatic: { disable: true } },
   name: "Test: Primary Click & Keyboard",
   args: {
     variant: "default",
@@ -265,6 +266,7 @@ export const DestructiveInteraction: Story = {
 };
 
 export const DisabledNoInteraction: Story = {
+  parameters: { chromatic: { disable: true } },
   name: "Test: Disabled Button No Interaction",
   args: {
     variant: "default",
@@ -315,13 +317,18 @@ export const LoadingNoClick: Story = {
 };
 
 export const AsChildLink: Story = {
+  parameters: { chromatic: { disable: true } },
   name: "Test: asChild with Link",
   args: {
     variant: "link",
     size: "default",
     asChild: true,
     children: (
-      <a href="https://storybook.js.org" target="_blank">
+      <a
+        className="text-slate-12 underline underline-offset-4"
+        href="https://storybook.js.org"
+        target="_blank"
+      >
         Visit Storybook
       </a>
     ),

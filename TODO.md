@@ -4,6 +4,7 @@
 - Add proper checks for data ownership when making changes
 - Ensure DB calls are optimized properly per the Convex way of doing things
 - Lint is missing
+- Find a way to handle the fact that organization ID is technically nullable. This causes annoying null checks throughout the app.
 
 # Monorepo
 

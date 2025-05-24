@@ -14,7 +14,12 @@ export function SourcesTab() {
   const sources = useQuery(api.sources.getSources, {
     orgId,
   });
-  const [localSources, setLocalSources] = useState(sources);
+  const filteredSources = sources?.map(
+    ({ _creationTime, companyId, ...rest }) => ({
+      ...rest,
+    }),
+  );
+  const [localSources, setLocalSources] = useState(filteredSources);
   const addSource = useMutation(api.sources.addSource);
   const reorderSources = useMutation(api.sources.reorderSources);
   const deleteSource = useMutation(api.sources.deleteSource);
@@ -22,8 +27,8 @@ export function SourcesTab() {
   const [sourceName, setSourceName] = useState("");
 
   useEffect(() => {
-    setLocalSources(sources);
-  }, [sources]);
+    setLocalSources(filteredSources);
+  }, [filteredSources]);
 
   const handleAddSource = () => {
     if (!sourceName.trim()) return;
@@ -63,7 +68,7 @@ export function SourcesTab() {
             setLocalSources(updatedSources);
             reorderSources({ sourceIds: updatedSources.map((s) => s._id) });
           }}
-          onTagDeleted={(tagId) => deleteSource({ orgId, _id: tagId })}
+          onTagDeleted={(tagId) => deleteSource({ orgId, id: tagId })}
         />
       </div>
     </div>

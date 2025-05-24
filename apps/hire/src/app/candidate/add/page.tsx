@@ -11,14 +11,11 @@ export default function AddCandidatePage() {
   const addCandidateMutation = useMutation(api.candidate.createCandidate);
   const organizationId = organization?.id;
   if (!organizationId) {
-    throw new Error("Organization not found");
+    return null;
   }
 
   const onSubmit = async (data: ZodCreateCandidate) => {
     console.log("Submitting candidate:", data);
-    if (!organizationId) {
-      throw new Error("Organization not found");
-    }
     await addCandidateMutation({
       ...data,
       organizationId,
