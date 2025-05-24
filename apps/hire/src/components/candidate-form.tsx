@@ -33,13 +33,11 @@ export function CandidateForm({
     defaultValues: initialData,
     validators: {
       onChange: ({ value }) => {
-        console.log(value);
         const results = CreateCandidateSchema.safeParse({
           ...value,
           organizationId,
         });
         if (!results.success) {
-          console.log(results.error.flatten().fieldErrors);
           return results.error.flatten().fieldErrors;
         }
         return undefined;
@@ -169,23 +167,19 @@ export function CandidateForm({
 
         <div className="space-y-2">
           <label className="text-slate-12 text-sm font-medium">Resume</label>
-          {/* <div className="flex items-center gap-4">
-            <input
-              type="file"
-              accept=".pdf,.doc,.docx"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  form.setFieldValue("resume", file);
-                }
-              }}
-              className="text-slate-11 file:bg-slate-4 file:text-slate-12 hover:file:bg-slate-5 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium"
-            />
-          </div> */}
+          {/* TODO: Resume upload functionality - planned for future release */}
         </div>
         <div className="flex justify-end gap-3 pt-4">
           <form.AppForm>
-            <Button type="button" variant="outline" disabled={isSubmitting}>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={isSubmitting}
+              onClick={() => {
+                // TODO: implement
+                console.log("cancelled");
+              }}
+            >
               Cancel
             </Button>
             <form.SubmitButton

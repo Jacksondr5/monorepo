@@ -6,6 +6,10 @@ import { api } from "../../../../convex/_generated/api";
 import { useEffect, useState } from "react";
 import { useOrganization } from "@clerk/nextjs";
 import { SortableTagList } from "./sortable-tag-list";
+import { ZodSource } from "~/server/zod/source";
+
+const stripSourceData = (sources?: ZodSource[]) =>
+  sources?.map(({ _creationTime, companyId, ...rest }) => rest);
 
 export function SourcesTab() {
   const { organization, isLoaded } = useOrganization();
@@ -14,12 +18,8 @@ export function SourcesTab() {
   const sources = useQuery(api.sources.getSources, {
     orgId,
   });
-  const filteredSources = sources?.map(
-    ({ _creationTime, companyId, ...rest }) => ({
-      ...rest,
-    }),
-  );
-  const [localSources, setLocalSources] = useState(filteredSources);
+
+  const [localSources, setLocalSources] = useState(stripSourceData(sources));
   const addSource = useMutation(api.sources.addSource);
   const reorderSources = useMutation(api.sources.reorderSources);
   const deleteSource = useMutation(api.sources.deleteSource);
@@ -27,8 +27,8 @@ export function SourcesTab() {
   const [sourceName, setSourceName] = useState("");
 
   useEffect(() => {
-    setLocalSources(filteredSources);
-  }, [filteredSources]);
+    setLocalSources(stripSourceData(sources));
+  }, [sources]);
 
   const handleAddSource = () => {
     if (!sourceName.trim()) return;
@@ -68,7 +68,7 @@ export function SourcesTab() {
             setLocalSources(updatedSources);
             reorderSources({ sourceIds: updatedSources.map((s) => s._id) });
           }}
-          onTagDeleted={(tagId) => deleteSource({ orgId, id: tagId })}
+          onTagDeleted={(tagId) => deleteSource({ orgId, _id: tagId })}
         />
       </div>
     </div>

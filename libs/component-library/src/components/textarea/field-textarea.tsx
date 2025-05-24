@@ -13,7 +13,7 @@ export const FieldTextarea = ({
   const field = useFieldContext<string>();
   return (
     <>
-      {label && <Label htmlFor={field.name}>{label}</Label>}
+      <Label htmlFor={field.name}>{label}</Label>
       <Textarea
         {...props}
         value={field.state.value || ""}

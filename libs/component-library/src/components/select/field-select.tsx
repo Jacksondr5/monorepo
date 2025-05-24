@@ -19,7 +19,7 @@ export const FieldSelect = ({
 
   return (
     <>
-      {label && <Label htmlFor={field.name}>{label}</Label>}
+      <Label htmlFor={field.name}>{label}</Label>
       <Select
         {...props}
         value={field.state.value || ""}

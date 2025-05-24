@@ -8,7 +8,7 @@ import { getCompanyIdByClerkOrgId } from "./model/companies";
 const roleQuery = zCustomQuery(query, NoOp);
 const roleMutation = zCustomMutation(mutation, NoOp);
 
-// // --- Get Roles ---
+// --- Get Roles ---
 export const getRoles = roleQuery({
   args: z.object({ orgId: z.string() }),
   handler: async (ctx, { orgId }) => {
@@ -58,15 +58,15 @@ export const reorderRoles = roleMutation({
 
 // --- Delete Role ---
 export const deleteRole = roleMutation({
-  args: z.object({ orgId: z.string(), id: RoleIdSchema }),
-  handler: async (ctx, { orgId, id }) => {
+  args: z.object({ orgId: z.string(), _id: RoleIdSchema }),
+  handler: async (ctx, { orgId, _id }) => {
     const companyId = await getCompanyIdByClerkOrgId(ctx, {
       clerkOrgId: orgId,
     });
-    const role = await ctx.db.get(id);
+    const role = await ctx.db.get(_id);
     if (!role) throw new Error("Role not found");
     if (role.companyId !== companyId)
       throw new Error("Role does not belong to this company");
-    await ctx.db.delete(id);
+    await ctx.db.delete(_id);
   },
 });

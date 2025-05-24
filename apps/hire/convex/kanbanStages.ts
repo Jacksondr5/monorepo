@@ -20,7 +20,7 @@ export const getKanbanStages = kanbanStageQuery({
     });
     const stages = await ctx.db
       .query("kanbanStages")
-      .withIndex("by_company_order", (q: any) => q.eq("companyId", companyId))
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
       .order("asc")
       .collect();
     return z.array(KanbanStageSchema).parse(stages);
@@ -37,10 +37,10 @@ export const addKanbanStage = kanbanStageMutation({
     });
     const highestOrder = await ctx.db
       .query("kanbanStages")
-      .withIndex("by_company_order", (q: any) => q.eq("companyId", companyId))
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
       .order("desc")
       .first()
-      .then((stage: any) => (stage ? stage.order + 1 : 0));
+      .then((stage) => (stage ? stage.order + 1 : 0));
     await ctx.db.insert("kanbanStages", {
       companyId,
       name,

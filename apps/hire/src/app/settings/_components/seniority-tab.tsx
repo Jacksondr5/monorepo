@@ -73,7 +73,7 @@ export function SeniorityTab() {
               seniorityIds: newSeniorities.map((s) => s.id),
             });
           }}
-          onTagDeleted={(tagId) => deleteSeniority({ orgId, id: tagId })}
+          onTagDeleted={(tagId) => deleteSeniority({ orgId, _id: tagId })}
         />
       </div>
     </div>

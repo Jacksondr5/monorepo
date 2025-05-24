@@ -68,7 +68,7 @@ export function RolesTab() {
             setLocalRoles(updatedRoles);
             reorderRoles({ roleIds: newRoles.map((r) => r.id) });
           }}
-          onTagDeleted={(tagId) => deleteRole({ orgId, id: tagId })}
+          onTagDeleted={(tagId) => deleteRole({ orgId, _id: tagId })}
         />
       </div>
     </div>

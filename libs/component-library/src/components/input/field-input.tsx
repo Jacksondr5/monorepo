@@ -13,7 +13,7 @@ export const FieldInput = ({
   const field = useFieldContext<string>();
   return (
     <>
-      {label && <Label htmlFor={field.name}>{label}</Label>}
+      <Label htmlFor={field.name}>{label}</Label>
       <Input
         {...props}
         value={field.state.value || ""}

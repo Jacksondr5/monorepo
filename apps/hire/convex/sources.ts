@@ -18,7 +18,7 @@ export const getSources = sourceQuery({
     });
     const sources = await ctx.db
       .query("sources")
-      .withIndex("by_company_order", (q: any) => q.eq("companyId", companyId))
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
       .order("asc")
       .collect();
     return z.array(SourceSchema).parse(sources);
@@ -35,10 +35,10 @@ export const addSource = sourceMutation({
     });
     const highestOrder = await ctx.db
       .query("sources")
-      .withIndex("by_company_order", (q: any) => q.eq("companyId", companyId))
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
       .order("desc")
       .first()
-      .then((source: any) => (source ? source.order + 1 : 0));
+      .then((source) => (source ? source.order + 1 : 0));
     await ctx.db.insert("sources", {
       companyId,
       name,
@@ -59,15 +59,15 @@ export const reorderSources = sourceMutation({
 
 // --- Delete Source ---
 export const deleteSource = sourceMutation({
-  args: z.object({ orgId: z.string(), id: SourceIdSchema }),
-  handler: async (ctx, { orgId, id }) => {
+  args: z.object({ orgId: z.string(), _id: SourceIdSchema }),
+  handler: async (ctx, { orgId, _id }) => {
     const companyId = await getCompanyIdByClerkOrgId(ctx, {
       clerkOrgId: orgId,
     });
-    const source = await ctx.db.get(id);
+    const source = await ctx.db.get(_id);
     if (!source) throw new Error("Source not found");
     if (source.companyId !== companyId)
       throw new Error("Source does not belong to this company");
-    await ctx.db.delete(id);
+    await ctx.db.delete(_id);
   },
 });

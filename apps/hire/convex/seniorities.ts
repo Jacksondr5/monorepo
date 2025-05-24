@@ -21,7 +21,7 @@ export const getSeniorities = seniorityQuery({
     });
     const seniorities = await ctx.db
       .query("seniorities")
-      .withIndex("by_company_order", (q: any) => q.eq("companyId", companyId))
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
       .order("asc")
       .collect();
     return z.array(SenioritySchema).parse(seniorities);
@@ -38,10 +38,10 @@ export const addSeniority = seniorityMutation({
     });
     const highestOrder = await ctx.db
       .query("seniorities")
-      .withIndex("by_company_order", (q: any) => q.eq("companyId", companyId))
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
       .order("desc")
       .first()
-      .then((seniority: any) => (seniority ? seniority.order + 1 : 0));
+      .then((seniority) => (seniority ? seniority.order + 1 : 0));
     await ctx.db.insert("seniorities", {
       companyId,
       name,
@@ -62,15 +62,15 @@ export const reorderSeniorities = seniorityMutation({
 
 // --- Delete Seniority ---
 export const deleteSeniority = seniorityMutation({
-  args: z.object({ orgId: z.string(), id: SeniorityIdSchema }),
-  handler: async (ctx, { orgId, id }) => {
+  args: z.object({ orgId: z.string(), _id: SeniorityIdSchema }),
+  handler: async (ctx, { orgId, _id }) => {
     const companyId = await getCompanyIdByClerkOrgId(ctx, {
       clerkOrgId: orgId,
     });
-    const seniority = await ctx.db.get(id);
+    const seniority = await ctx.db.get(_id);
     if (!seniority) throw new Error("Seniority not found");
     if (seniority.companyId !== companyId)
       throw new Error("Seniority does not belong to this company");
-    await ctx.db.delete(id);
+    await ctx.db.delete(_id);
   },
 });

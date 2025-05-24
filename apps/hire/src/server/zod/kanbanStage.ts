@@ -3,7 +3,7 @@ import { z } from "zod";
 import { zid } from "convex-helpers/server/zod";
 import { nonEmptyString } from "./utils";
 import { CompanyIdSchema } from "./company";
-import { baseConvexFields } from "./utils";
+import { baseConvexFields, baseConvexFieldsOmit } from "./utils";
 
 export const KanbanStageIdSchema = zid("kanbanStages");
 
@@ -14,10 +14,8 @@ export const KanbanStageSchema = z.object({
   order: z.number(),
 });
 
-export const CreateKanbanStageSchema = KanbanStageSchema.omit({
-  _id: true,
-  _creationTime: true,
-});
+export const CreateKanbanStageSchema =
+  KanbanStageSchema.omit(baseConvexFieldsOmit);
 
 export type KanbanStageId = z.infer<typeof KanbanStageIdSchema>;
 export type ZodKanbanStage = z.infer<typeof KanbanStageSchema>;

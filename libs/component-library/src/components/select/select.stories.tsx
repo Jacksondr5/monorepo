@@ -1,11 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn, userEvent, within, expect } from "@storybook/test";
+import { fn, userEvent, within, expect, waitFor } from "@storybook/test";
 
-declare global {
-  interface Window {
-    __testContent?: HTMLElement;
-  }
-}
 import React from "react";
 import {
   Select,
@@ -140,7 +135,10 @@ export const SelectChange: Story = {
     await step("Open dropdown", async () => {
       await userEvent.click(trigger);
       // Wait for the dropdown to animate in
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      await waitFor(() => {
+        const listbox = document.querySelector<HTMLElement>('[role="listbox"]');
+        return expect(listbox).toBeInTheDocument();
+      });
 
       // The listbox is in a portal, so we need to query the document
       const listbox = document.querySelector<HTMLElement>('[role="listbox"]');
@@ -180,7 +178,7 @@ export const DisabledNoInteraction: Story = {
     <div className="w-[220px]">
       <Select {...args}>
         <SelectTrigger size="default">
-          <SelectValue />
+          <SelectValue placeholder={args.placeholder} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
@@ -192,7 +190,6 @@ export const DisabledNoInteraction: Story = {
             ))}
           </SelectGroup>
         </SelectContent>
-        <SelectValue placeholder={args.placeholder} />
       </Select>
     </div>
   ),

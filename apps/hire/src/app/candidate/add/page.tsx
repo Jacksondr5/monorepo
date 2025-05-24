@@ -15,11 +15,16 @@ export default function AddCandidatePage() {
   }
 
   const onSubmit = async (data: ZodCreateCandidate) => {
-    console.log("Submitting candidate:", data);
-    await addCandidateMutation({
-      ...data,
-      organizationId,
-    });
+    // TODO: add loading state
+    try {
+      await addCandidateMutation({
+        ...data,
+        organizationId,
+      });
+    } catch (error) {
+      // TODO: replace with toast
+      console.error("Error adding candidate:", error);
+    }
   };
 
   return (

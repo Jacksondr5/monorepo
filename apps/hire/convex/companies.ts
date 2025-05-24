@@ -9,8 +9,7 @@ const companyQuery = zCustomQuery(query, NoOp);
 export const getCompanies = companyQuery({
   handler: async (ctx) => {
     const companies = await ctx.db.query("companies").collect();
-    const thing = z.array(CompanySchema).parse(companies);
-    return thing;
+    return z.array(CompanySchema).parse(companies);
   },
   returns: z.array(CompanySchema),
 });
