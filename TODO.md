@@ -6,7 +6,7 @@
 - Lint is missing
 - Find a way to handle the fact that organization ID is technically nullable. This causes annoying null checks throughout the app.
 - Generally add error handling in the UI and show toast notifications when failures occur
-- Deal with cascading deletion (eg. deleting a kanban stage when there are boards using it)
+- Deal with cascading deletion (e.g. deleting a kanban stage when there are boards using it)
 
 # Component Library
 

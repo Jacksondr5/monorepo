@@ -8,7 +8,9 @@ export default defineSchema({
     name: v.string(),
     order: v.float64(),
     slug: v.string(),
-  }).index("by_company_order", ["companyId", "order"]),
+  })
+    .index("by_company_order", ["companyId", "order"])
+    .index("by_company_slug", ["companyId", "slug"]),
   candidates: defineTable({
     companyId: v.id("companies"),
     email: v.optional(v.string()),

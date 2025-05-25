@@ -8,22 +8,21 @@ export const badgeVariants = {
   variant: {
     // Neutrals
     olive: "bg-olive-3 text-olive-11",
+    oliveOutline: "border border-olive-7 text-olive-11 bg-transparent",
     slate: "bg-slate-3 text-slate-11",
+    slateOutline: "border border-slate-7 text-slate-11 bg-transparent",
     // Brand Accent
     grass: "bg-grass-3 text-grass-11",
+    grassOutline: "border border-grass-7 text-grass-11 bg-transparent",
     // Semantic
     green: "bg-green-3 text-green-11", // Success
+    greenOutline: "border border-green-7 text-green-11 bg-transparent",
     red: "bg-red-3 text-red-11", // Error
+    redOutline: "border border-red-7 text-red-11 bg-transparent",
     amber: "bg-amber-3 text-amber-11", // Warning
+    amberOutline: "border border-amber-7 text-amber-11 bg-transparent",
     blue: "bg-blue-3 text-blue-11", // Info
-    // Outlined variants
-    oliveOutline: "border-olive-7 text-olive-11",
-    slateOutline: "border-slate-7 text-slate-11",
-    grassOutline: "border-grass-7 text-grass-11",
-    greenOutline: "border-green-7 text-green-11",
-    redOutline: "border-red-7 text-red-11",
-    amberOutline: "border-amber-7 text-amber-11",
-    blueOutline: "border-blue-7 text-blue-11",
+    blueOutline: "border border-blue-7 text-blue-11 bg-transparent",
   },
   shape: {
     default: "rounded-sm",

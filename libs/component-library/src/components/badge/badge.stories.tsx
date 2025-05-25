@@ -90,8 +90,7 @@ export const AllVariants: Story = {
   render: (args) => {
     const variants = Object.keys(badgeVariants.variant).filter(
       (variant) => !variant.includes("Outline"),
-    ) as ("olive" | "slate" | "grass" | "green" | "red" | "amber" | "blue")[];
-
+    ) as Array<keyof typeof badgeVariants.variant>;
     return (
       <div className="text-slate-11 flex w-full flex-col items-start gap-10 p-5">
         {variants.map((variant) => (
@@ -103,7 +102,12 @@ export const AllVariants: Story = {
               <VariantDisplay variant={variant} {...args} />
             </div>
             <div className="col-span-1 flex flex-col gap-4">
-              <VariantDisplay variant={`${variant}Outline`} {...args} />
+              <VariantDisplay
+                variant={
+                  `${variant}Outline` as keyof typeof badgeVariants.variant
+                }
+                {...args}
+              />
             </div>
           </div>
         ))}

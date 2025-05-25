@@ -82,6 +82,7 @@ export const deleteCandidate = candidateMutation({
 export const updateCandidateStage = candidateMutation({
   args: UpdateCandidateStageSchema,
   handler: async (ctx, args) => {
+    await verifyCandidateExists(ctx, { _id: args.candidateId });
     await ctx.db.patch(args.candidateId, {
       kanbanStageId: args.kanbanStageId,
       updatedAt: Date.now(),

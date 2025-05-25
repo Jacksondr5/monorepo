@@ -32,16 +32,31 @@ export function KanbanBoard({ organizationId }: { organizationId: string }) {
 
     if (!over || !active) return;
 
-    const candidateId = active.id as Id<"candidates">;
-    const newStageId = over.id as Id<"kanbanStages">;
-
+    // Validate that the dragged item is a candidate
+    const candidateId = active.id;
+    const newStageId = over.id;
+    // Ensure the dragged item is actually a candidate
     const candidate = candidates?.find((c) => c._id === candidateId);
+    if (!candidate) {
+      console.warn("Dragged item is not a valid candidate");
+      return;
+    }
+    // Ensure the drop target is a valid stage
+    const targetStage = stages?.find((s) => s._id === newStageId);
+    if (!targetStage) {
+      console.warn("Drop target is not a valid kanban stage");
+      return;
+    }
+
     if (
       candidate &&
       stages?.some((s) => s._id === newStageId) &&
       candidate.kanbanStageId !== newStageId
     ) {
-      updateCandidateStage({ candidateId, kanbanStageId: newStageId });
+      updateCandidateStage({
+        candidateId: candidateId as Id<"candidates">,
+        kanbanStageId: newStageId as Id<"kanbanStages">,
+      });
     }
   }
 

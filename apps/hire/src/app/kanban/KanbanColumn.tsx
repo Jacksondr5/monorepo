@@ -15,13 +15,19 @@ interface KanbanColumnProps {
   candidates: ZodCandidate[];
 }
 
+const getColumnStyles = (isOver: boolean) => {
+  const baseClasses =
+    "transition-border flex min-w-[250px] max-w-[300px] flex-1 flex-col rounded-md border-2 p-2 shadow-md";
+  const hoverClasses = isOver
+    ? "border-[var(--color-grass-9)] bg-[var(--color-olive-3)]"
+    : "border-[var(--color-slate-7)] bg-[var(--color-olive-2)]";
+  return `${baseClasses} ${hoverClasses}`;
+};
+
 export function KanbanColumn({ id, title, candidates }: KanbanColumnProps) {
   const { setNodeRef, isOver } = useDroppable({ id });
   return (
-    <div
-      ref={setNodeRef}
-      className={`transition-border flex min-w-[250px] max-w-[300px] flex-1 flex-col rounded-md border-2 p-2 shadow-md ${isOver ? "border-[var(--color-grass-9)] bg-[var(--color-olive-3)]" : "border-[var(--color-slate-7)] bg-[var(--color-olive-2)]"} `}
-    >
+    <div ref={setNodeRef} className={getColumnStyles(isOver)}>
       <h2 className="mb-2 text-center text-lg font-bold text-[var(--color-slate-12)]">
         {title}
       </h2>

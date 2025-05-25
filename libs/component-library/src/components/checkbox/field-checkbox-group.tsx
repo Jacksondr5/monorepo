@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import React, { useCallback } from "react";
 import { Checkbox, type CheckboxProps } from "./checkbox";
 import { useFieldContext } from "../form/form-contexts";
 import { Label } from "../label/label";
@@ -45,15 +45,18 @@ export const FieldCheckboxGroup = React.forwardRef<
 
     const fieldItems = field.state.value || [];
 
-    const handleCheckedChange = (itemId: string, checked: boolean) => {
-      let newValue;
-      if (checked) {
-        newValue = [...fieldItems, itemId];
-      } else {
-        newValue = fieldItems.filter((id) => id !== itemId);
-      }
-      field.handleChange(newValue);
-    };
+    const handleCheckedChange = useCallback(
+      (itemId: string, checked: boolean) => {
+        let newValue;
+        if (checked) {
+          newValue = [...fieldItems, itemId];
+        } else {
+          newValue = fieldItems.filter((id) => id !== itemId);
+        }
+        field.handleChange(newValue);
+      },
+      [fieldItems, field.handleChange],
+    );
 
     return (
       <div ref={ref} className={cn("space-y-2", className)} role="group">

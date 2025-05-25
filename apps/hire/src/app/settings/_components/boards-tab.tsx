@@ -38,10 +38,9 @@ export function BoardsTab({ orgId }: { orgId: string }) {
   // Assuming a mutation like addBoard exists in your convex/boards.ts
   const addBoard = useMutation(api.boards.addBoard);
   const deleteBoardMutation = useMutation(api.boards.deleteBoard);
+  // TODO: add reorder functionality
   // Placeholder for future mutations
   // const reorderBoards = useMutation(api.boards.reorderBoards);
-  // const deleteBoard = useMutation(api.boards.deleteBoard);
-  // const updateBoard = useMutation(api.boards.updateBoard);
 
   // Create a map for quick lookup of stage names by ID
   const stageNameMap = useMemo(() => {

@@ -105,4 +105,3 @@ export const updateBoard = boardMutation({
 
 // Placeholder for future mutations if needed
 // export const reorderBoards = mutation({ ... });
-// export const updateBoard = mutation({ ... });

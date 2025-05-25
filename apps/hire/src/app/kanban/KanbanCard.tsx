@@ -1,10 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { memo } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { ZodCandidate } from "~/server/zod/candidate";
 
-export function KanbanCard({ candidate }: { candidate: ZodCandidate }) {
+export const KanbanCard = memo(function KanbanCard({
+  candidate,
+}: {
+  candidate: ZodCandidate;
+}) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({ id: candidate._id });
   const style = {
@@ -12,7 +16,7 @@ export function KanbanCard({ candidate }: { candidate: ZodCandidate }) {
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
       : undefined,
     opacity: isDragging ? 0.5 : 1,
-    cursor: "grab",
+    cursor: isDragging ? "grabbing" : "grab",
   };
   return (
     <div
@@ -27,4 +31,4 @@ export function KanbanCard({ candidate }: { candidate: ZodCandidate }) {
       </span>
     </div>
   );
-}
+});

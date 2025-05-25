@@ -1,4 +1,3 @@
-/* eslint-disable react/no-children-prop */
 "use client";
 
 import * as React from "react";
@@ -47,12 +46,10 @@ export function EditBoardSheet({
       name: board.name,
       slug: board.slug,
       kanbanStageIds: board.kanbanStageIds,
-      order: board.order,
     },
     validators: {
       onChange: ({ value }) => {
         const result = UpdateBoardSchema.omit({ orgId: true }).safeParse(value);
-        console.log(result.error?.flatten().fieldErrors);
         if (!result.success) {
           return result.error.flatten().fieldErrors;
         }
@@ -65,7 +62,7 @@ export function EditBoardSheet({
         onOpenChange(false); // Close sheet on success
       } catch (error) {
         console.error("Failed to update board:", error);
-        // Handle error display to user if necessary
+        // TODO: add toast
       }
     },
   });
@@ -77,7 +74,6 @@ export function EditBoardSheet({
       name: board.name,
       slug: board.slug,
       kanbanStageIds: board.kanbanStageIds,
-      order: board.order,
     });
   }, [board, form]);
 
@@ -99,24 +95,21 @@ export function EditBoardSheet({
           }}
           className="space-y-6 py-6"
         >
-          <form.AppField
-            name="name"
-            children={(field) => <field.FieldInput label="Board Name" />}
-          />
-          <form.AppField
-            name="slug"
-            children={(field) => <field.FieldInput label="Slug" />}
-          />
-          <form.AppField
-            name="kanbanStageIds"
-            children={(field) => (
+          <form.AppField name="name">
+            {(field) => <field.FieldInput label="Board Name" />}
+          </form.AppField>
+          <form.AppField name="slug">
+            {(field) => <field.FieldInput label="Slug" />}
+          </form.AppField>
+          <form.AppField name="kanbanStageIds">
+            {(field) => (
               <field.FieldCheckboxGroup
                 label="Kanban Stages"
                 items={kanbanStageItems}
                 orientation="vertical"
               />
             )}
-          />
+          </form.AppField>
           <SheetFooter className="mt-8">
             <SheetClose asChild>
               <Button type="button" variant="outline">

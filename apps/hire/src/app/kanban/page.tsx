@@ -8,7 +8,11 @@ export default function KanbanPage() {
   const { organization } = useOrganization();
   const organizationId = organization?.id;
   if (!organizationId) {
-    return null;
+    return (
+      <main className="p-6">
+        <div>Loading organization...</div>
+      </main>
+    );
   }
   return (
     <main className="p-6">
