@@ -1,0 +1,9 @@
+{
+  "name": "@j5/packing-list-e2e",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@j5/packing-list"
+    ]
+  }
+}
