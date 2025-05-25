@@ -1,79 +1,76 @@
-import { mutation, query } from "./_generated/server";
-import { v } from "convex/values";
-import type { DatabaseReader } from "./_generated/server";
-import type { Id } from "./_generated/dataModel";
+// --- Seniorities Convex handlers using Zod schemas ---
+import { zCustomMutation, zCustomQuery } from "convex-helpers/server/zod";
+import { NoOp } from "convex-helpers/server/customFunctions";
+import {
+  SeniorityIdSchema,
+  SenioritySchema,
+} from "../src/server/zod/seniority";
+import z from "zod";
+import { query, mutation } from "./_generated/server";
+import { getCompanyIdByClerkOrgId } from "./model/companies";
 
-type Company = {
-  _id: Id<"companies">;
-  clerkOrganizationId: string;
-  name: string;
-};
+const seniorityQuery = zCustomQuery(query, NoOp);
+const seniorityMutation = zCustomMutation(mutation, NoOp);
 
-async function getCompany(
-  ctx: { db: DatabaseReader },
-  orgId: string,
-): Promise<Company> {
-  const company = await ctx.db
-    .query("companies")
-    .withIndex("by_clerk_org_id", (q) => q.eq("clerkOrganizationId", orgId))
-    .first();
-  if (!company) {
-    throw new Error("Company not found");
-  }
-  return company;
-}
-
-export const getSeniorities = query({
-  args: { orgId: v.string() },
+// --- Get Seniorities ---
+export const getSeniorities = seniorityQuery({
+  args: z.object({ orgId: z.string() }),
   handler: async (ctx, { orgId }) => {
-    const company = await getCompany(ctx, orgId);
-    return await ctx.db
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: orgId,
+    });
+    const seniorities = await ctx.db
       .query("seniorities")
-      .withIndex("by_company_order", (q) => q.eq("companyId", company._id))
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
       .order("asc")
       .collect();
+    return z.array(SenioritySchema).parse(seniorities);
   },
+  returns: z.array(SenioritySchema),
 });
 
-export const addSeniority = mutation({
-  args: { orgId: v.string(), name: v.string() },
+// --- Add Seniority ---
+export const addSeniority = seniorityMutation({
+  args: z.object({ orgId: z.string(), name: z.string() }),
   handler: async (ctx, { orgId, name }) => {
-    const company = await getCompany(ctx, orgId);
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: orgId,
+    });
     const highestOrder = await ctx.db
       .query("seniorities")
-      .withIndex("by_company_order", (q) => q.eq("companyId", company._id))
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
       .order("desc")
       .first()
       .then((seniority) => (seniority ? seniority.order + 1 : 0));
-
-    return await ctx.db.insert("seniorities", {
-      companyId: company._id,
+    await ctx.db.insert("seniorities", {
+      companyId,
       name,
       order: highestOrder,
     });
   },
 });
 
-export const reorderSeniorities = mutation({
-  args: { seniorityIds: v.array(v.id("seniorities")) },
+// --- Reorder Seniorities ---
+export const reorderSeniorities = seniorityMutation({
+  args: z.object({ seniorityIds: z.array(SeniorityIdSchema) }),
   handler: async (ctx, { seniorityIds }) => {
     await Promise.all(
-      seniorityIds.map((_id, index) => ctx.db.patch(_id, { order: index })),
+      seniorityIds.map((id, index) => ctx.db.patch(id, { order: index })),
     );
   },
 });
 
-export const deleteSeniority = mutation({
-  args: { orgId: v.string(), _id: v.id("seniorities") },
+// --- Delete Seniority ---
+export const deleteSeniority = seniorityMutation({
+  args: z.object({ orgId: z.string(), _id: SeniorityIdSchema }),
   handler: async (ctx, { orgId, _id }) => {
-    const company = await getCompany(ctx, orgId);
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: orgId,
+    });
     const seniority = await ctx.db.get(_id);
-    if (!seniority) {
-      throw new Error("Seniority not found");
-    }
-    if (seniority.companyId !== company._id) {
+    if (!seniority) throw new Error("Seniority not found");
+    if (seniority.companyId !== companyId)
       throw new Error("Seniority does not belong to this company");
-    }
     await ctx.db.delete(_id);
   },
 });

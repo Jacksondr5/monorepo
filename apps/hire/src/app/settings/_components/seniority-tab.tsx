@@ -18,6 +18,8 @@ export function SeniorityTab({ orgId }: { orgId: string }) {
     setLocalSeniorities(seniorities);
   }, [seniorities]);
 
+  if (!orgId) return null;
+
   const handleAddSeniority = () => {
     if (!seniorityName.trim()) return;
     addSeniority({ name: seniorityName.trim(), orgId });

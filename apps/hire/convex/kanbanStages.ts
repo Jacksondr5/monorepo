@@ -1,79 +1,75 @@
 import { mutation, query } from "./_generated/server";
-import { v } from "convex/values";
-import type { Id } from "./_generated/dataModel";
-import type { DatabaseReader } from "./_generated/server";
+import { zCustomMutation, zCustomQuery } from "convex-helpers/server/zod";
+import { NoOp } from "convex-helpers/server/customFunctions";
+import {
+  KanbanStageIdSchema,
+  KanbanStageSchema,
+} from "../src/server/zod/kanbanStage";
+import z from "zod";
+import { getCompanyIdByClerkOrgId } from "./model/companies";
 
-type Company = {
-  _id: Id<"companies">;
-  clerkOrganizationId: string;
-  name: string;
-};
+const kanbanStageQuery = zCustomQuery(query, NoOp);
+const kanbanStageMutation = zCustomMutation(mutation, NoOp);
 
-async function getCompany(
-  ctx: { db: DatabaseReader },
-  orgId: string,
-): Promise<Company> {
-  const company = await ctx.db
-    .query("companies")
-    .withIndex("by_clerk_org_id", (q) => q.eq("clerkOrganizationId", orgId))
-    .first();
-  if (!company) {
-    throw new Error("Company not found");
-  }
-  return company;
-}
-
-export const getKanbanStages = query({
-  args: { orgId: v.string() },
+// --- Get Kanban Stages ---
+export const getKanbanStages = kanbanStageQuery({
+  args: z.object({ orgId: z.string() }),
   handler: async (ctx, { orgId }) => {
-    const company = await getCompany(ctx, orgId);
-    return await ctx.db
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: orgId,
+    });
+    const stages = await ctx.db
       .query("kanbanStages")
-      .withIndex("by_company_order", (q) => q.eq("companyId", company._id))
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
       .order("asc")
       .collect();
+    return z.array(KanbanStageSchema).parse(stages);
   },
+  returns: z.array(KanbanStageSchema),
 });
 
-export const addKanbanStage = mutation({
-  args: { orgId: v.string(), name: v.string() },
+// --- Add Kanban Stage ---
+export const addKanbanStage = kanbanStageMutation({
+  args: z.object({ orgId: z.string(), name: z.string() }),
   handler: async (ctx, { orgId, name }) => {
-    const company = await getCompany(ctx, orgId);
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: orgId,
+    });
     const highestOrder = await ctx.db
       .query("kanbanStages")
-      .withIndex("by_company_order", (q) => q.eq("companyId", company._id))
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
       .order("desc")
       .first()
       .then((stage) => (stage ? stage.order + 1 : 0));
-
-    return await ctx.db.insert("kanbanStages", {
-      companyId: company._id,
+    await ctx.db.insert("kanbanStages", {
+      companyId,
       name,
       order: highestOrder,
     });
   },
 });
 
-export const reorderKanbanStages = mutation({
-  args: { stageIds: v.array(v.id("kanbanStages")) },
+// --- Reorder Kanban Stages ---
+export const reorderKanbanStages = kanbanStageMutation({
+  args: z.object({ stageIds: z.array(KanbanStageIdSchema) }),
   handler: async (ctx, { stageIds }) => {
     await Promise.all(
-      stageIds.map((_id, index) => ctx.db.patch(_id, { order: index })),
+      stageIds.map((id, index) => ctx.db.patch(id, { order: index })),
     );
   },
 });
 
-export const deleteKanbanStage = mutation({
-  args: { orgId: v.string(), _id: v.id("kanbanStages") },
+// --- Delete Kanban Stage ---
+export const deleteKanbanStage = kanbanStageMutation({
+  args: z.object({ orgId: z.string(), _id: KanbanStageIdSchema }),
   handler: async (ctx, { orgId, _id }) => {
-    const company = await getCompany(ctx, orgId);
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: orgId,
+    });
     const stage = await ctx.db.get(_id);
-    if (!stage) {
-      throw new Error("Stage not found");
-    }
-    if (stage.companyId !== company._id) {
+    if (!stage) throw new Error("Stage not found");
+    if (stage.companyId !== companyId)
       throw new Error("Stage does not belong to this company");
-    }
     await ctx.db.delete(_id);
   },
 });

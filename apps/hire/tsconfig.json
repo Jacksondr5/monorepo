@@ -20,17 +20,16 @@
       "~/*": ["./src/*"]
     },
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": ".",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "allowJs": true
   },
   "include": [
-    "../../apps/hire/.next/types/**/*.ts",
-    "../../dist/apps/hire/.next/types/**/*.ts",
+    ".next/types/**/*.ts",
     "next-env.d.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
-    ".next/types/**/*.ts"
+    "convex/**/*.ts"
   ],
   "exclude": [
     "out-tsc",

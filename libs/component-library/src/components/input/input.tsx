@@ -12,7 +12,7 @@ export const inputVariants = {
 };
 
 const inputClassName = cva(
-  "border-olive-7 shadow-xs file:text-olive-11 placeholder:text-olive-11 focus-visible:ring-olive-7 focus-visible:outline-hidden flex w-full rounded-md border bg-transparent text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+  "border-olive-7 shadow-xs file:text-olive-11 placeholder:text-olive-11 text-slate-12 focus-visible:ring-olive-7 focus-visible:outline-hidden flex w-full rounded-md border bg-transparent text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
   {
     variants: inputVariants,
     defaultVariants: {
