@@ -70,48 +70,14 @@ export const AllVariants: Story = {
     };
 
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "40px",
-          alignItems: "flex-start",
-          padding: "20px",
-          width: "100%",
-        }}
-      >
+      <div className="text-slate-11 flex w-full flex-col items-start gap-10 p-5">
         {variants.map((variant) => (
-          <div
-            key={variant}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
-              alignItems: "flex-start",
-              width: "100%",
-            }}
-          >
-            <h2
-              style={{
-                textTransform: "capitalize",
-                margin: 0,
-                borderBottom: "1px solid #ccc",
-                width: "100%",
-                paddingBottom: "8px",
-              }}
-            >
+          <div key={variant} className="flex w-full flex-col items-start gap-5">
+            <h2 className="m-0 w-full border-b border-gray-300 pb-2 capitalize">
               {variant}
             </h2>
             {/* Sizes */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "16px",
-                alignItems: "center",
-                flexWrap: "wrap",
-              }}
-            >
+            <div className="flex flex-row flex-wrap items-center gap-4">
               {sizes.map((size) => (
                 <Button
                   key={`${variant}-${size}`}
@@ -124,15 +90,7 @@ export const AllVariants: Story = {
               ))}
             </div>
             {/* With Leading Icon */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "16px",
-                alignItems: "center",
-                flexWrap: "wrap",
-              }}
-            >
+            <div className="flex flex-row flex-wrap items-center gap-4">
               {sizes.map((size) => (
                 <Button
                   key={`${variant}-${size}-leading`}
@@ -150,15 +108,7 @@ export const AllVariants: Story = {
               ))}
             </div>
             {/* With Trailing Icon */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "16px",
-                alignItems: "center",
-                flexWrap: "wrap",
-              }}
-            >
+            <div className="flex flex-row flex-wrap items-center gap-4">
               {sizes.map((size) => (
                 <Button
                   key={`${variant}-${size}-trailing`}
@@ -176,15 +126,7 @@ export const AllVariants: Story = {
               ))}
             </div>
             {/* Icon Only Buttons */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "16px",
-                alignItems: "center",
-                flexWrap: "wrap",
-              }}
-            >
+            <div className="flex flex-row flex-wrap items-center gap-4">
               <Button
                 key={`${variant}-icon`}
                 {...args}
@@ -208,25 +150,25 @@ export const AllVariants: Story = {
                 })}
               </Button>
             </div>
+            {/* Loading States */}
+            <h3 className="mb-2.5 mt-5 text-lg">Loading:</h3>
+            <div className="flex flex-row flex-wrap items-center gap-4">
+              {sizes.map((size) => (
+                <Button
+                  key={`${variant}-${size}-loading`}
+                  {...args}
+                  variant={variant}
+                  size={size}
+                  isLoading={true}
+                  disabled
+                >
+                  {size === "sm" ? "Load" : "Loading..."}
+                </Button>
+              ))}
+            </div>
             {/* Disabled States */}
-            <h3
-              style={{
-                marginTop: "20px",
-                marginBottom: "10px",
-                fontSize: "1.1em",
-              }}
-            >
-              Disabled:
-            </h3>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "16px",
-                alignItems: "center",
-                flexWrap: "wrap",
-              }}
-            >
+            <h3 className="mb-2.5 mt-5 text-lg">Disabled:</h3>
+            <div className="flex flex-row flex-wrap items-center gap-4">
               {sizes.map((size) => (
                 <Button
                   key={`${variant}-${size}-disabled`}
@@ -265,6 +207,7 @@ export const AllVariants: Story = {
 // 2. Functional/Interaction Stories
 
 export const PrimaryClickable: Story = {
+  parameters: { chromatic: { disable: true } },
   name: "Test: Primary Click & Keyboard",
   args: {
     variant: "default",
@@ -323,6 +266,7 @@ export const DestructiveInteraction: Story = {
 };
 
 export const DisabledNoInteraction: Story = {
+  parameters: { chromatic: { disable: true } },
   name: "Test: Disabled Button No Interaction",
   args: {
     variant: "default",
@@ -354,14 +298,37 @@ export const DisabledNoInteraction: Story = {
   },
 };
 
+export const LoadingNoClick: Story = {
+  name: "Test: Loading Button No Click",
+  args: {
+    children: "Loading...",
+    isLoading: true,
+    onClick: fn(),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = await canvas.getByRole("button");
+    // Should be disabled
+    expect(button).toBeDisabled();
+    // Should have pointer-events: none
+    const style = window.getComputedStyle(button);
+    expect(style.pointerEvents).toBe("none");
+  },
+};
+
 export const AsChildLink: Story = {
+  parameters: { chromatic: { disable: true } },
   name: "Test: asChild with Link",
   args: {
     variant: "link",
     size: "default",
     asChild: true,
     children: (
-      <a href="https://storybook.js.org" target="_blank">
+      <a
+        className="text-slate-12 underline underline-offset-4"
+        href="https://storybook.js.org"
+        target="_blank"
+      >
         Visit Storybook
       </a>
     ),

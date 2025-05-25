@@ -1,7 +1,7 @@
 import baseConfig from "../../eslint.config.mjs";
 import jsonc from "jsonc-eslint-parser";
 
-export default [
+const config = [
   ...baseConfig,
   {
     files: ["**/*.json"],
@@ -10,3 +10,5 @@ export default [
     },
   },
 ];
+
+export default config;

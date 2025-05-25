@@ -5,12 +5,17 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useEffect, useState } from "react";
 import { SortableTagList } from "./sortable-tag-list";
+import { ZodSource } from "~/server/zod/source";
+
+const stripSourceData = (sources?: ZodSource[]) =>
+  sources?.map(({ _creationTime, companyId, ...rest }) => rest);
 
 export function SourcesTab({ orgId }: { orgId: string }) {
   const sources = useQuery(api.sources.getSources, {
     orgId,
   });
-  const [localSources, setLocalSources] = useState(sources);
+
+  const [localSources, setLocalSources] = useState(stripSourceData(sources));
   const addSource = useMutation(api.sources.addSource);
   const reorderSources = useMutation(api.sources.reorderSources);
   const deleteSource = useMutation(api.sources.deleteSource);
@@ -18,7 +23,7 @@ export function SourcesTab({ orgId }: { orgId: string }) {
   const [sourceName, setSourceName] = useState("");
 
   useEffect(() => {
-    setLocalSources(sources);
+    setLocalSources(stripSourceData(sources));
   }, [sources]);
 
   const handleAddSource = () => {
