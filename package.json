@@ -61,7 +61,7 @@
     "chromatic": "11.28.2",
     "esbuild": "0.25.4",
     "eslint": "9.27.0",
-    "eslint-config-next": "15.3.2",
+    "eslint-config-next": "15.4.0-canary.51",
     "eslint-config-prettier": "10.1.5",
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-jsx-a11y": "6.10.2",
