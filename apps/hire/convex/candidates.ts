@@ -6,6 +6,7 @@ import {
   CandidateSchema,
   CreateCandidateSchema,
   UpdateCandidateSchema,
+  UpdateCandidateStageSchema,
 } from "../src/server/zod/candidate";
 import z from "zod";
 import { getCandidateById, verifyCandidateExists } from "./model/candidates";
@@ -74,5 +75,16 @@ export const deleteCandidate = candidateMutation({
   handler: async (ctx, { _id }) => {
     await verifyCandidateExists(ctx, { _id });
     await ctx.db.delete(_id);
+  },
+});
+
+// Mutation to update a candidate's Kanban stage
+export const updateCandidateStage = candidateMutation({
+  args: UpdateCandidateStageSchema,
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.candidateId, {
+      kanbanStageId: args.kanbanStageId,
+      updatedAt: Date.now(),
+    });
   },
 });

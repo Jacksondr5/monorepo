@@ -1,50 +1,60 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import {
   DndContext,
   closestCenter,
   PointerSensor,
   useSensor,
   useSensors,
+  DragEndEvent,
 } from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
 import { KanbanColumn } from "./KanbanColumn";
+import { useQuery, useMutation } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+import type { Id } from "../../../convex/_generated/dataModel";
 
-// Example candidate data
-const initialCandidates = [
-  { id: "1", name: "Alice Johnson", state: "Applied" },
-  { id: "2", name: "Bob Smith", state: "Interviewing" },
-  { id: "3", name: "Charlie Lee", state: "Offer" },
-  { id: "4", name: "Dana White", state: "Applied" },
-  { id: "5", name: "Evan Green", state: "Hired" },
-];
-
-const STATES = ["Applied", "Interviewing", "Offer", "Hired"];
-
-export function KanbanBoard() {
-  const [candidates, setCandidates] = useState(initialCandidates);
+export function KanbanBoard({ organizationId }: { organizationId: string }) {
+  const stages = useQuery(api.kanbanStages.getKanbanStages, {
+    orgId: organizationId,
+  });
+  const candidates = useQuery(api.candidates.listCandidates, {
+    orgId: organizationId,
+  });
+  const updateCandidateStage = useMutation(api.candidates.updateCandidateStage);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
   );
 
-  function handleDragEnd(event: any) {
+  function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
-    if (!over) return;
-    const activeId = active.id;
-    const overId = over.id;
 
-    // If dropped onto a column, move to that state
-    if (STATES.includes(overId)) {
-      setCandidates((prev) =>
-        prev.map((c) => (c.id === activeId ? { ...c, state: overId } : c)),
-      );
+    if (!over || !active) return;
+
+    const candidateId = active.id as Id<"candidates">;
+    const newStageId = over.id as Id<"kanbanStages">;
+
+    const candidate = candidates?.find((c) => c._id === candidateId);
+    if (
+      candidate &&
+      stages?.some((s) => s._id === newStageId) &&
+      candidate.kanbanStageId !== newStageId
+    ) {
+      updateCandidateStage({ candidateId, kanbanStageId: newStageId });
     }
+  }
+
+  if (stages === undefined || candidates === undefined) {
+    return <div>Loading Kanban board...</div>;
+  }
+
+  if (!stages || stages.length === 0) {
+    return (
+      <div>
+        No Kanban stages found for this organization. Please configure stages.
+      </div>
+    );
   }
 
   return (
@@ -54,12 +64,12 @@ export function KanbanBoard() {
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
       >
-        {STATES.map((state) => (
+        {stages.map((stage) => (
           <KanbanColumn
-            key={state}
-            id={state}
-            title={state}
-            candidates={candidates.filter((c) => c.state === state)}
+            key={stage._id}
+            id={stage._id}
+            title={stage.name}
+            candidates={candidates.filter((c) => c.kanbanStageId === stage._id)}
           />
         ))}
       </DndContext>
