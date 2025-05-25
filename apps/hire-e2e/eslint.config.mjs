@@ -9,7 +9,9 @@ const compat = new FlatCompat({
   recommendedConfig: js.configs.recommended,
 });
 
-export default [
+const config = [
   ...baseConfig,
   ...compat.extends("plugin:playwright/recommended"),
 ];
+
+export default config;

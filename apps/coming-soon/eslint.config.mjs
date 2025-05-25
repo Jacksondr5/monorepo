@@ -9,7 +9,7 @@ const compat = new FlatCompat({
   recommendedConfig: js.configs.recommended,
 });
 
-export default [
+const config = [
   ...baseConfig,
   ...compat.extends(
     "plugin:@nx/react-typescript",
@@ -26,3 +26,5 @@ export default [
     ignores: [".next/**/*"],
   },
 ];
+
+export default config;
