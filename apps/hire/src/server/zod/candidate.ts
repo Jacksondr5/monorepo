@@ -35,6 +35,11 @@ export const UpdateCandidateSchema = CandidateSchema.omit({
   _creationTime: true,
 });
 
+export const UpdateCandidateStageSchema = z.object({
+  candidateId: CandidateIdSchema,
+  kanbanStageId: zid("kanbanStages"),
+});
+
 export type CandidateId = z.infer<typeof CandidateIdSchema>;
 export type ZodCandidate = z.infer<typeof CandidateSchema>;
 export type ZodCreateCandidate = z.infer<typeof CreateCandidateSchema>;

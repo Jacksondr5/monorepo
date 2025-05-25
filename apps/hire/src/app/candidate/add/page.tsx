@@ -8,7 +8,7 @@ import { ZodCreateCandidate } from "../../../server/zod/candidate";
 
 export default function AddCandidatePage() {
   const { organization } = useOrganization();
-  const addCandidateMutation = useMutation(api.candidate.createCandidate);
+  const addCandidateMutation = useMutation(api.candidates.createCandidate);
   const organizationId = organization?.id;
   if (!organizationId) {
     return null;
