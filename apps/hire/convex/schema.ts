@@ -2,6 +2,13 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
+  boards: defineTable({
+    companyId: v.id("companies"),
+    kanbanStageIds: v.array(v.id("kanbanStages")),
+    name: v.string(),
+    order: v.float64(),
+    slug: v.string(),
+  }).index("by_company_order", ["companyId", "order"]),
   candidates: defineTable({
     companyId: v.id("companies"),
     email: v.optional(v.string()),
