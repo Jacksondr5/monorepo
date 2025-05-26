@@ -8,14 +8,12 @@ import {
   UpdateCandidateSchema,
   UpdateCandidateStageSchema,
 } from "../src/server/zod/candidate";
-import z from "zod";
 import { getCandidateById, verifyCandidateExists } from "./model/candidates";
 import { getCompanyIdByClerkOrgId } from "./model/companies";
 
 const candidateQuery = zCustomQuery(query, NoOp);
 const candidateMutation = zCustomMutation(mutation, NoOp);
 
-// --- Create Candidate ---
 export const createCandidate = candidateMutation({
   args: CreateCandidateSchema,
   handler: async (ctx, { organizationId, ...args }) => {
@@ -30,7 +28,6 @@ export const createCandidate = candidateMutation({
   },
 });
 
-// --- Get Candidate by ID ---
 export const getCandidate = candidateQuery({
   args: { _id: CandidateIdSchema },
   handler: async (ctx, { _id }) => {
@@ -40,23 +37,6 @@ export const getCandidate = candidateQuery({
   returns: CandidateSchema,
 });
 
-// --- List Candidates by Company ---
-export const listCandidates = candidateQuery({
-  args: { orgId: z.string() },
-  handler: async (ctx, { orgId }) => {
-    const companyId = await getCompanyIdByClerkOrgId(ctx, {
-      clerkOrgId: orgId,
-    });
-    const candidates = await ctx.db
-      .query("candidates")
-      .withIndex("by_company", (q) => q.eq("companyId", companyId))
-      .collect();
-    return candidates.map((candidate) => CandidateSchema.parse(candidate));
-  },
-  returns: z.array(CandidateSchema),
-});
-
-// --- Update Candidate ---
 export const updateCandidate = candidateMutation({
   args: UpdateCandidateSchema,
   handler: async (ctx, args) => {
@@ -69,7 +49,6 @@ export const updateCandidate = candidateMutation({
   },
 });
 
-// --- Delete Candidate ---
 export const deleteCandidate = candidateMutation({
   args: { _id: CandidateIdSchema },
   handler: async (ctx, { _id }) => {
@@ -78,7 +57,6 @@ export const deleteCandidate = candidateMutation({
   },
 });
 
-// Mutation to update a candidate's Kanban stage
 export const updateCandidateStage = candidateMutation({
   args: UpdateCandidateStageSchema,
   handler: async (ctx, args) => {

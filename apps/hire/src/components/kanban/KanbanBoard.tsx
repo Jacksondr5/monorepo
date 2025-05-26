@@ -10,17 +10,17 @@ import {
   DragEndEvent,
 } from "@dnd-kit/core";
 import { KanbanColumn } from "./KanbanColumn";
-import { useQuery, useMutation } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import type { Id } from "../../../convex/_generated/dataModel";
+import type { CandidateId, ZodCandidate } from "~/server/zod/candidate";
+import { KanbanStageId, ZodKanbanStage } from "~/server/zod/kanbanStage";
 
-export function KanbanBoard({ organizationId }: { organizationId: string }) {
-  const stages = useQuery(api.kanbanStages.getKanbanStages, {
-    orgId: organizationId,
-  });
-  const candidates = useQuery(api.candidates.listCandidates, {
-    orgId: organizationId,
-  });
+interface KanbanBoardProps {
+  stages: ZodKanbanStage[];
+  candidates: ZodCandidate[];
+}
+
+export function KanbanBoard({ stages, candidates }: KanbanBoardProps) {
   const updateCandidateStage = useMutation(api.candidates.updateCandidateStage);
 
   const sensors = useSensors(
@@ -32,39 +32,31 @@ export function KanbanBoard({ organizationId }: { organizationId: string }) {
 
     if (!over || !active) return;
 
-    // Validate that the dragged item is a candidate
-    const candidateId = active.id;
-    const newStageId = over.id;
-    // Ensure the dragged item is actually a candidate
-    const candidate = candidates?.find((c) => c._id === candidateId);
+    const candidateId = active.id as CandidateId;
+    const newStageId = over.id as KanbanStageId;
+
+    const candidate = candidates.find((c) => c._id === candidateId);
     if (!candidate) {
       console.warn("Dragged item is not a valid candidate");
       return;
     }
-    // Ensure the drop target is a valid stage
-    const targetStage = stages?.find((s) => s._id === newStageId);
+
+    const targetStage = stages.find((s) => s._id === newStageId);
     if (!targetStage) {
       console.warn("Drop target is not a valid kanban stage");
       return;
     }
 
-    if (
-      candidate &&
-      stages?.some((s) => s._id === newStageId) &&
-      candidate.kanbanStageId !== newStageId
-    ) {
+    if (candidate.kanbanStageId !== newStageId) {
+      // TODO: Add loading and error state handling
       updateCandidateStage({
-        candidateId: candidateId as Id<"candidates">,
-        kanbanStageId: newStageId as Id<"kanbanStages">,
+        candidateId: candidateId,
+        kanbanStageId: newStageId,
       });
     }
   }
 
-  if (stages === undefined || candidates === undefined) {
-    return <div>Loading Kanban board...</div>;
-  }
-
-  if (!stages || stages.length === 0) {
+  if (stages.length === 0) {
     return (
       <div>
         No Kanban stages found for this organization. Please configure stages.

@@ -53,3 +53,7 @@ const messages = await ctx.db
 q.search("body", "hello hi").eq("channel", "#general"),
 )
 .take(10);
+
+# MCP Server guidelines
+
+When running a Convex MCP tool that requests a "projectDir", be sure to feed it the directory of the app you're working in. This will NEVER be the monorepo root and will usually be a directory inside the "apps" directory (e.g. "apps/hire")

@@ -1,4 +1,3 @@
-// --- Sources Convex handlers using Zod schemas ---
 import { zCustomMutation, zCustomQuery } from "convex-helpers/server/zod";
 import { NoOp } from "convex-helpers/server/customFunctions";
 import { SourceIdSchema, SourceSchema } from "../src/server/zod/source";
@@ -9,7 +8,6 @@ import { getCompanyIdByClerkOrgId } from "./model/companies";
 const sourceQuery = zCustomQuery(query, NoOp);
 const sourceMutation = zCustomMutation(mutation, NoOp);
 
-// --- Get Sources ---
 export const getSources = sourceQuery({
   args: z.object({ orgId: z.string() }),
   handler: async (ctx, { orgId }) => {
@@ -26,7 +24,6 @@ export const getSources = sourceQuery({
   returns: z.array(SourceSchema),
 });
 
-// --- Add Source ---
 export const addSource = sourceMutation({
   args: z.object({ orgId: z.string(), name: z.string() }),
   handler: async (ctx, { orgId, name }) => {
@@ -47,7 +44,6 @@ export const addSource = sourceMutation({
   },
 });
 
-// --- Reorder Sources ---
 export const reorderSources = sourceMutation({
   args: z.object({ sourceIds: z.array(SourceIdSchema) }),
   handler: async (ctx, { sourceIds }) => {
@@ -57,7 +53,6 @@ export const reorderSources = sourceMutation({
   },
 });
 
-// --- Delete Source ---
 export const deleteSource = sourceMutation({
   args: z.object({ orgId: z.string(), _id: SourceIdSchema }),
   handler: async (ctx, { orgId, _id }) => {

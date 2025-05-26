@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn, userEvent, within, expect } from "@storybook/test";
 import { Input, inputVariants } from "./input"; // Added inputVariants import
+import { Search } from "lucide-react"; // Import an icon
 
 const meta: Meta<typeof Input> = {
   title: "Components/Input",
@@ -24,6 +25,13 @@ const meta: Meta<typeof Input> = {
       control: "text",
     },
     onChange: { action: "changed" },
+    icon: {
+      control: false, // Disable direct control for ReactNode in Storybook UI
+    },
+    iconPosition: {
+      control: "radio",
+      options: ["left", "right"],
+    },
   },
   args: {
     onChange: fn(), // Default spy for onChange
@@ -45,47 +53,17 @@ export const AllVariants: Story = {
       inputVariants.size,
     ) as (keyof typeof inputVariants.size)[];
 
+    const iconElement = <Search className="size-4" />;
+
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "40px",
-          alignItems: "flex-start",
-          padding: "20px",
-          minWidth: "400px",
-        }}
-      >
+      <div className="flex min-w-[600px] flex-col items-start gap-10 p-5">
         {sizes.map((size) => (
-          <div
-            key={size}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
-              alignItems: "flex-start",
-              width: "100%",
-            }}
-          >
-            <h2
-              style={{
-                textTransform: "capitalize",
-                margin: 0,
-                borderBottom: "1px solid #ccc",
-                width: "100%",
-                paddingBottom: "8px",
-              }}
-            >
+          <div key={size} className="flex w-full flex-col items-start gap-5">
+            <h2 className="text-slate-12 m-0 mb-4 w-full border-b border-slate-300 pb-2 text-lg font-semibold capitalize">
               Size: {size}
             </h2>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "16px",
-                width: "100%",
-              }}
-            >
+            <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
+              {/* Standard Inputs */}
               <Input
                 {...args}
                 size={size}
@@ -110,15 +88,55 @@ export const AllVariants: Story = {
                 disabled
                 onChange={args.onChange}
               />
+
+              {/* Inputs with Icon Left */}
+              <Input
+                {...args}
+                size={size}
+                icon={iconElement}
+                iconPosition="left"
+                placeholder={`Icon Left (${size})`}
+              />
+              <Input
+                {...args}
+                size={size}
+                icon={iconElement}
+                iconPosition="left"
+                value={`Icon Left Value (${size})`}
+                onChange={args.onChange}
+              />
+
+              {/* Inputs with Icon Right */}
+              <Input
+                {...args}
+                size={size}
+                icon={iconElement}
+                iconPosition="right"
+                placeholder={`Icon Right (${size})`}
+              />
+              <Input
+                {...args}
+                size={size}
+                icon={iconElement}
+                iconPosition="right"
+                value={`Icon Right Value (${size})`}
+                onChange={args.onChange}
+              />
+
+              {/* Disabled Input with Icon */}
+              <Input
+                {...args}
+                size={size}
+                icon={iconElement}
+                iconPosition="left"
+                placeholder={`Disabled Icon Left (${size})`}
+                disabled
+              />
             </div>
           </div>
         ))}
       </div>
     );
-  },
-  args: {
-    // No specific args for the matrix itself, it generates all combinations
-    // onChange spy is inherited from meta.args but we provide no-op for controlled inputs with values here
   },
 };
 

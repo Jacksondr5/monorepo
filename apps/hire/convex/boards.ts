@@ -9,6 +9,8 @@ import {
   DeleteBoardSchema,
   UpdateBoardSchema,
 } from "../src/server/zod/board";
+import { getBoardBySlug } from "./model/boards";
+import { BoardWithDataSchema } from "../src/server/zod/views/board-with-data";
 
 const boardQuery = zCustomQuery(query, NoOp);
 const boardMutation = zCustomMutation(mutation, NoOp);
@@ -29,6 +31,45 @@ export const getBoardsByOrgId = boardQuery({
   returns: z.array(BoardSchema),
 });
 
+export const getBoardWithData = boardQuery({
+  args: { slug: z.string(), orgId: z.string() },
+  async handler(ctx, args) {
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: args.orgId,
+    });
+
+    if (!companyId) return null;
+
+    const board = await getBoardBySlug(ctx, {
+      companyId,
+      slug: args.slug,
+    });
+    if (!board) return null;
+    if (board.companyId !== companyId) {
+      throw new Error(
+        "Permission denied: Board does not belong to this organization.",
+      );
+    }
+    const unfilteredCandidates = await ctx.db
+      .query("candidates")
+      .withIndex("by_company", (q) => q.eq("companyId", companyId))
+      .collect();
+    const candidates = unfilteredCandidates.filter((candidate) =>
+      board.kanbanStageIds.includes(candidate.kanbanStageId),
+    );
+
+    return {
+      board,
+      stages: await ctx.db
+        .query("kanbanStages")
+        .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
+        .collect(),
+      candidates,
+    };
+  },
+  returns: BoardWithDataSchema.nullable(),
+});
+
 export const addBoard = boardMutation({
   args: CreateBoardSchema.extend({ orgId: z.string() }),
   async handler(ctx, args) {
@@ -36,7 +77,6 @@ export const addBoard = boardMutation({
       clerkOrgId: args.orgId,
     });
 
-    // Determine the next order value
     const lastBoard = await ctx.db
       .query("boards")
       .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
@@ -45,18 +85,26 @@ export const addBoard = boardMutation({
 
     const newOrder = lastBoard ? lastBoard.order + 1 : 0;
 
-    // Generate a simple slug
     const slug = args.name
       .toLowerCase()
       .replace(/\s+/g, "-")
       .replace(/[^\w-]+/g, "");
+
+    // Ensure slug is unique
+    const existingBoard = await getBoardBySlug(ctx, {
+      companyId,
+      slug,
+    });
+    if (existingBoard) {
+      throw new Error("Board with this slug already exists.");
+    }
 
     await ctx.db.insert("boards", {
       name: args.name,
       companyId,
       order: newOrder,
       slug: slug,
-      kanbanStageIds: [], // Initialize with empty array
+      kanbanStageIds: [],
     });
   },
 });

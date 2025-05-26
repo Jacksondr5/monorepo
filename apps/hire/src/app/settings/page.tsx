@@ -14,19 +14,20 @@ export default function SettingsPage() {
   if (!isLoaded || !organization) return null;
   const orgId = organization.id;
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 p-6">
+    <div className="mx-auto flex w-full flex-col gap-6 p-6">
       <div className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
         <p className="text-muted-foreground">
           Manage your organization settings and preferences.
         </p>
       </div>
-
-      <SeniorityTab orgId={orgId} />
-      <RolesTab orgId={orgId} />
-      <SourcesTab orgId={orgId} />
-      <KanbanStagesTab orgId={orgId} />
-      <BoardsTab orgId={orgId} />
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
+        <SeniorityTab orgId={orgId} />
+        <RolesTab orgId={orgId} />
+        <SourcesTab orgId={orgId} />
+        <KanbanStagesTab orgId={orgId} />
+        <BoardsTab orgId={orgId} />
+      </div>
     </div>
   );
 }
