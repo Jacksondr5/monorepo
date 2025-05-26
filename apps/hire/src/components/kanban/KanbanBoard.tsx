@@ -32,7 +32,6 @@ export function KanbanBoard({
   organizationId,
 }: KanbanBoardProps) {
   const updateCandidateStage = useMutation(api.candidates.updateCandidateStage);
-  // TODO: Replace with your actual update candidate mutation
   const updateCandidateDetails = useMutation(api.candidates.updateCandidate);
 
   const [selectedCandidateForEdit, setSelectedCandidateForEdit] =
@@ -91,10 +90,10 @@ export function KanbanBoard({
           ...values,
         },
       });
-      handleCloseEditSheet(); // Close sheet on successful update
+      handleCloseEditSheet();
     } catch (error) {
       console.error("Failed to update candidate:", error);
-      // Optionally, provide user feedback (e.g., toast notification)
+      // TODO: Add toast notification
     }
   };
 

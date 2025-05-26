@@ -6,6 +6,7 @@
 - Login page
 - Make target team a select field
 - Finalize candidate fields
+- Basic error handling and toast notifications
 
 ## Soon
 

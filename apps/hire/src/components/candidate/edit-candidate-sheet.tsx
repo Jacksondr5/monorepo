@@ -11,7 +11,6 @@ import {
 import { CandidateForm } from "./candidate-form";
 import {
   ZodCandidate,
-  ZodCreateCandidate,
   ZodUpdateCandidate,
   UpdateCandidateSchema,
 } from "~/server/zod/candidate";
@@ -33,14 +32,14 @@ export function EditCandidateSheet({
 }: EditCandidateSheetProps) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const handleSubmit = async (values: ZodCreateCandidate) => {
+  const handleSubmit = async (values: ZodUpdateCandidate) => {
     setIsSubmitting(true);
     try {
-      await onSubmit({ ...values, _id: candidate._id });
+      await onSubmit(values);
       onOpenChange(false); // Close sheet on successful submit
     } catch (error) {
       console.error("Failed to update candidate:", error);
-      // Handle error appropriately, e.g., show a toast message
+      // TODO: Add toast notification
     } finally {
       setIsSubmitting(false);
     }

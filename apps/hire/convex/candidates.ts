@@ -39,12 +39,14 @@ export const getCandidate = candidateQuery({
 });
 
 export const updateCandidate = candidateMutation({
-  args: {orgId: z.string(), updateCandidate: UpdateCandidateSchema},
-  handler: async (ctx, {orgId, updateCandidate}) => {
+  args: { orgId: z.string(), updateCandidate: UpdateCandidateSchema },
+  handler: async (ctx, { orgId, updateCandidate }) => {
     const companyId = await getCompanyIdByClerkOrgId(ctx, {
       clerkOrgId: orgId,
     });
-    const existingCandidate = await verifyCandidateExists(ctx, { _id: updateCandidate._id });
+    const existingCandidate = await verifyCandidateExists(ctx, {
+      _id: updateCandidate._id,
+    });
     if (existingCandidate.companyId !== companyId) {
       throw new Error("Candidate does not belong to this organization");
     }

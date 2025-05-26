@@ -25,7 +25,12 @@ const getColumnStyles = (isOver: boolean) => {
   return `${baseClasses} ${hoverClasses}`;
 };
 
-export function KanbanColumn({ id, title, candidates, onCardClick }: KanbanColumnProps) {
+export function KanbanColumn({
+  id,
+  title,
+  candidates,
+  onCardClick,
+}: KanbanColumnProps) {
   const { setNodeRef, isOver } = useDroppable({ id });
   return (
     <div ref={setNodeRef} className={getColumnStyles(isOver)}>
@@ -38,7 +43,11 @@ export function KanbanColumn({ id, title, candidates, onCardClick }: KanbanColum
       >
         <div className="flex flex-col gap-2">
           {candidates.map((candidate) => (
-            <KanbanCard key={candidate._id} candidate={candidate} onClick={() => onCardClick(candidate)} />
+            <KanbanCard
+              key={candidate._id}
+              candidate={candidate}
+              onClick={() => onCardClick(candidate)}
+            />
           ))}
         </div>
       </SortableContext>
