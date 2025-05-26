@@ -11,7 +11,6 @@ import { getCompanyIdByClerkOrgId } from "./model/companies";
 const kanbanStageQuery = zCustomQuery(query, NoOp);
 const kanbanStageMutation = zCustomMutation(mutation, NoOp);
 
-// --- Get Kanban Stages ---
 export const getKanbanStages = kanbanStageQuery({
   args: z.object({ orgId: z.string() }),
   handler: async (ctx, { orgId }) => {
@@ -28,7 +27,6 @@ export const getKanbanStages = kanbanStageQuery({
   returns: z.array(KanbanStageSchema),
 });
 
-// --- Add Kanban Stage ---
 export const addKanbanStage = kanbanStageMutation({
   args: z.object({ orgId: z.string(), name: z.string() }),
   handler: async (ctx, { orgId, name }) => {
@@ -49,7 +47,6 @@ export const addKanbanStage = kanbanStageMutation({
   },
 });
 
-// --- Reorder Kanban Stages ---
 export const reorderKanbanStages = kanbanStageMutation({
   args: z.object({ stageIds: z.array(KanbanStageIdSchema) }),
   handler: async (ctx, { stageIds }) => {
@@ -59,7 +56,6 @@ export const reorderKanbanStages = kanbanStageMutation({
   },
 });
 
-// --- Delete Kanban Stage ---
 export const deleteKanbanStage = kanbanStageMutation({
   args: z.object({ orgId: z.string(), _id: KanbanStageIdSchema }),
   handler: async (ctx, { orgId, _id }) => {

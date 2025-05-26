@@ -8,7 +8,6 @@ import { getCompanyIdByClerkOrgId } from "./model/companies";
 const roleQuery = zCustomQuery(query, NoOp);
 const roleMutation = zCustomMutation(mutation, NoOp);
 
-// --- Get Roles ---
 export const getRoles = roleQuery({
   args: z.object({ orgId: z.string() }),
   handler: async (ctx, { orgId }) => {
@@ -25,7 +24,6 @@ export const getRoles = roleQuery({
   returns: z.array(RoleSchema),
 });
 
-// --- Add Role ---
 export const addRole = roleMutation({
   args: z.object({ orgId: z.string(), name: z.string() }),
   handler: async (ctx, { orgId, name }) => {
@@ -46,7 +44,6 @@ export const addRole = roleMutation({
   },
 });
 
-// --- Reorder Roles ---
 export const reorderRoles = roleMutation({
   args: z.object({ roleIds: z.array(RoleIdSchema) }),
   handler: async (ctx, { roleIds }) => {
@@ -56,7 +53,6 @@ export const reorderRoles = roleMutation({
   },
 });
 
-// --- Delete Role ---
 export const deleteRole = roleMutation({
   args: z.object({ orgId: z.string(), _id: RoleIdSchema }),
   handler: async (ctx, { orgId, _id }) => {

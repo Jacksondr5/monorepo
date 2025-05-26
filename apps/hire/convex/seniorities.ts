@@ -1,4 +1,3 @@
-// --- Seniorities Convex handlers using Zod schemas ---
 import { zCustomMutation, zCustomQuery } from "convex-helpers/server/zod";
 import { NoOp } from "convex-helpers/server/customFunctions";
 import {
@@ -12,7 +11,6 @@ import { getCompanyIdByClerkOrgId } from "./model/companies";
 const seniorityQuery = zCustomQuery(query, NoOp);
 const seniorityMutation = zCustomMutation(mutation, NoOp);
 
-// --- Get Seniorities ---
 export const getSeniorities = seniorityQuery({
   args: z.object({ orgId: z.string() }),
   handler: async (ctx, { orgId }) => {
@@ -29,7 +27,6 @@ export const getSeniorities = seniorityQuery({
   returns: z.array(SenioritySchema),
 });
 
-// --- Add Seniority ---
 export const addSeniority = seniorityMutation({
   args: z.object({ orgId: z.string(), name: z.string() }),
   handler: async (ctx, { orgId, name }) => {
@@ -50,7 +47,6 @@ export const addSeniority = seniorityMutation({
   },
 });
 
-// --- Reorder Seniorities ---
 export const reorderSeniorities = seniorityMutation({
   args: z.object({ seniorityIds: z.array(SeniorityIdSchema) }),
   handler: async (ctx, { seniorityIds }) => {
@@ -60,7 +56,6 @@ export const reorderSeniorities = seniorityMutation({
   },
 });
 
-// --- Delete Seniority ---
 export const deleteSeniority = seniorityMutation({
   args: z.object({ orgId: z.string(), _id: SeniorityIdSchema }),
   handler: async (ctx, { orgId, _id }) => {

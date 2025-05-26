@@ -5,6 +5,8 @@ import { KanbanBoard } from "../../../components/kanban/KanbanBoard";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { use } from "react";
+import Link from "next/link";
+import { Button } from "@j5/component-library";
 
 export default function BoardPage({
   params,
@@ -14,27 +16,15 @@ export default function BoardPage({
   const { organization, isLoaded: isOrgLoaded } = useOrganization();
   const organizationId = organization?.id;
   const { slug } = use(params);
-  const board = useQuery(
-    api.boards.getBySlug,
+  const boardWithData = useQuery(
+    api.boards.getBoardWithData,
     organizationId ? { slug, orgId: organizationId } : "skip",
-  );
-
-  const allStages = useQuery(
-    api.kanbanStages.getKanbanStages,
-    organizationId ? { orgId: organizationId } : "skip",
-  );
-
-  const candidates = useQuery(
-    api.candidates.listCandidates,
-    organizationId ? { orgId: organizationId } : "skip",
   );
 
   if (
     !isOrgLoaded ||
     organizationId === undefined ||
-    allStages === undefined ||
-    candidates === undefined ||
-    board === undefined
+    boardWithData === undefined
   ) {
     return (
       <div className="p-6">
@@ -44,16 +34,7 @@ export default function BoardPage({
   }
 
   // Handle case where orgId might be available but stages/candidates are null (e.g. no data for org)
-  if (!allStages || !candidates || !board) {
-    // Check if loading is complete (board !== undefined) and board is null (not found)
-    if (board === null) {
-      return (
-        <div className="p-6">
-          <div>Board not found.</div>
-        </div>
-      );
-    }
-    // Otherwise, it's a general data loading issue for stages/candidates or board still loading
+  if (!boardWithData) {
     return (
       <div className="p-6">
         <div>
@@ -64,8 +45,10 @@ export default function BoardPage({
     );
   }
 
+  const { board, stages, candidates } = boardWithData;
+
   // Filter stages based on the board's configuration
-  const configuredStages = allStages.filter((stage) =>
+  const configuredStages = stages.filter((stage) =>
     board.kanbanStageIds.includes(stage._id),
   );
 
@@ -88,6 +71,11 @@ export default function BoardPage({
         <h1 className="mb-6 text-2xl font-bold">{board.name}</h1>
         <div>This board has no stages configured yet.</div>
         {/* Optionally, add a link/button to configure stages for this board */}
+        <Link href={`/settings`}>
+          <Button variant="default" className="mt-4">
+            Configure Stages
+          </Button>
+        </Link>
       </div>
     );
   }

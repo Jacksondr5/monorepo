@@ -14,7 +14,7 @@ export default defineSchema({
   candidates: defineTable({
     companyId: v.id("companies"),
     email: v.optional(v.string()),
-    kanbanStageId: v.optional(v.id("kanbanStages")),
+    kanbanStageId: v.id("kanbanStages"),
     linkedinProfile: v.optional(v.string()),
     name: v.string(),
     nextSteps: v.optional(v.string()),
@@ -26,9 +26,7 @@ export default defineSchema({
     sourceId: v.optional(v.id("sources")),
     targetTeam: v.optional(v.string()),
     updatedAt: v.number(), // store as timestamp (Date.now())
-  })
-    .index("by_company", ["companyId"])
-    .index("by_role", ["roleId"]),
+  }).index("by_company", ["companyId"]),
   companies: defineTable({
     clerkOrganizationId: v.string(),
     name: v.string(),

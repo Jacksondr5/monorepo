@@ -10,6 +10,7 @@ import {
   UpdateBoardSchema,
 } from "../src/server/zod/board";
 import { getBoardBySlug } from "./model/boards";
+import { BoardWithDataSchema } from "../src/server/zod/views/board-with-data";
 
 const boardQuery = zCustomQuery(query, NoOp);
 const boardMutation = zCustomMutation(mutation, NoOp);
@@ -30,24 +31,43 @@ export const getBoardsByOrgId = boardQuery({
   returns: z.array(BoardSchema),
 });
 
-export const getBySlug = boardQuery({
+export const getBoardWithData = boardQuery({
   args: { slug: z.string(), orgId: z.string() },
   async handler(ctx, args) {
     const companyId = await getCompanyIdByClerkOrgId(ctx, {
       clerkOrgId: args.orgId,
     });
 
-    if (!companyId) {
-      return null;
-    }
+    if (!companyId) return null;
 
     const board = await getBoardBySlug(ctx, {
       companyId,
       slug: args.slug,
     });
-    return board;
+    if (!board) return null;
+    if (board.companyId !== companyId) {
+      throw new Error(
+        "Permission denied: Board does not belong to this organization.",
+      );
+    }
+    const unfilteredCandidates = await ctx.db
+      .query("candidates")
+      .withIndex("by_company", (q) => q.eq("companyId", companyId))
+      .collect();
+    const candidates = unfilteredCandidates.filter((candidate) =>
+      board.kanbanStageIds.includes(candidate.kanbanStageId),
+    );
+
+    return {
+      board,
+      stages: await ctx.db
+        .query("kanbanStages")
+        .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
+        .collect(),
+      candidates,
+    };
   },
-  returns: BoardSchema.nullable(),
+  returns: BoardWithDataSchema.nullable(),
 });
 
 export const addBoard = boardMutation({
