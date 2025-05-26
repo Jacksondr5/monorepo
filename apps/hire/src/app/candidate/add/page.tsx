@@ -1,10 +1,13 @@
 "use client";
 
-import { CandidateForm } from "../../../components/candidate-form";
+import { CandidateForm } from "../../../components/candidate/candidate-form";
 import { useOrganization } from "@clerk/nextjs";
 import { useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { ZodCreateCandidate } from "../../../server/zod/candidate";
+import {
+  CreateCandidateSchema,
+  ZodCreateCandidate,
+} from "../../../server/zod/candidate";
 
 export default function AddCandidatePage() {
   const { organization } = useOrganization();
@@ -18,8 +21,8 @@ export default function AddCandidatePage() {
     // TODO: add loading state
     try {
       await addCandidateMutation({
-        ...data,
-        organizationId,
+        orgId: organizationId,
+        newCandidate: data,
       });
     } catch (error) {
       // TODO: replace with toast
@@ -30,7 +33,11 @@ export default function AddCandidatePage() {
   return (
     <div className="flex flex-col items-center p-6">
       <h1 className="mb-6 text-3xl font-bold">Add a Candidate</h1>
-      <CandidateForm onSubmit={onSubmit} organizationId={organizationId} />
+      <CandidateForm
+        onSubmit={onSubmit}
+        organizationId={organizationId}
+        schema={CreateCandidateSchema}
+      />
     </div>
   );
 }

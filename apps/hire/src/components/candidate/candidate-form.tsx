@@ -10,41 +10,50 @@ import {
 import { Button } from "@j5/component-library";
 import { Card } from "@j5/component-library";
 import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import { api } from "../../../convex/_generated/api";
 import {
   CreateCandidateSchema,
-  ZodCreateCandidate,
-} from "../server/zod/candidate";
+  UpdateCandidateSchema,
+} from "../../server/zod/candidate";
+import { z } from "zod";
 
-export type CandidateFormProps = {
-  initialData?: ZodCreateCandidate;
-  onSubmit: (data: ZodCreateCandidate) => Promise<void> | void;
+type AcceptableSchemas =
+  | typeof CreateCandidateSchema
+  | typeof UpdateCandidateSchema;
+
+export type CandidateFormProps<T extends AcceptableSchemas> = {
+  initialData?: Omit<z.infer<T>, "organizationId">;
+  onSubmit: (data: z.infer<T>) => Promise<void> | void;
   isSubmitting?: boolean;
   organizationId: string;
+  schema: T;
 };
 
-export function CandidateForm({
+export function CandidateForm<T extends AcceptableSchemas>({
   initialData,
   onSubmit,
   isSubmitting = false,
   organizationId,
-}: CandidateFormProps) {
+  schema,
+}: CandidateFormProps<T>) {
   const form = useAppForm({
     defaultValues: initialData,
     validators: {
       onChange: ({ value }) => {
-        const results = CreateCandidateSchema.safeParse({
+        const results = schema.safeParse({
           ...value,
-          organizationId,
         });
         if (!results.success) {
-          return results.error.flatten().fieldErrors;
+          const flatErrors = results.error.flatten().fieldErrors;
+          console.log(flatErrors);
+          return flatErrors;
         }
         return undefined;
       },
     },
     onSubmit: async ({ value }) => {
-      await onSubmit(value);
+      const data = schema.parse(value);
+      await onSubmit(data);
     },
   });
 

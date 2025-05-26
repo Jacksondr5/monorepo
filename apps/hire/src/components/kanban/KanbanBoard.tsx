@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   DndContext,
   closestCenter,
@@ -12,16 +12,31 @@ import {
 import { KanbanColumn } from "./KanbanColumn";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import type { CandidateId, ZodCandidate } from "~/server/zod/candidate";
+import type {
+  CandidateId,
+  ZodCandidate,
+  ZodUpdateCandidate,
+} from "~/server/zod/candidate";
 import { KanbanStageId, ZodKanbanStage } from "~/server/zod/kanbanStage";
+import { EditCandidateSheet } from "../candidate/edit-candidate-sheet";
 
 interface KanbanBoardProps {
   stages: ZodKanbanStage[];
   candidates: ZodCandidate[];
+  organizationId: string;
 }
 
-export function KanbanBoard({ stages, candidates }: KanbanBoardProps) {
+export function KanbanBoard({
+  stages,
+  candidates,
+  organizationId,
+}: KanbanBoardProps) {
   const updateCandidateStage = useMutation(api.candidates.updateCandidateStage);
+  const updateCandidateDetails = useMutation(api.candidates.updateCandidate);
+
+  const [selectedCandidateForEdit, setSelectedCandidateForEdit] =
+    useState<ZodCandidate | null>(null);
+  const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -56,6 +71,32 @@ export function KanbanBoard({ stages, candidates }: KanbanBoardProps) {
     }
   }
 
+  const handleCardClick = (candidate: ZodCandidate) => {
+    setSelectedCandidateForEdit(candidate);
+    setIsEditSheetOpen(true);
+  };
+
+  const handleCloseEditSheet = () => {
+    setIsEditSheetOpen(false);
+  };
+
+  const handleUpdateCandidate = async (values: ZodUpdateCandidate) => {
+    if (!selectedCandidateForEdit) return;
+
+    try {
+      await updateCandidateDetails({
+        orgId: organizationId,
+        updateCandidate: {
+          ...values,
+        },
+      });
+      handleCloseEditSheet();
+    } catch (error) {
+      console.error("Failed to update candidate:", error);
+      // TODO: Add toast notification
+    }
+  };
+
   if (stages.length === 0) {
     return (
       <div>
@@ -77,9 +118,19 @@ export function KanbanBoard({ stages, candidates }: KanbanBoardProps) {
             id={stage._id}
             title={stage.name}
             candidates={candidates.filter((c) => c.kanbanStageId === stage._id)}
+            onCardClick={handleCardClick}
           />
         ))}
       </DndContext>
+      {selectedCandidateForEdit && (
+        <EditCandidateSheet
+          candidate={selectedCandidateForEdit}
+          isOpen={isEditSheetOpen}
+          onOpenChange={handleCloseEditSheet}
+          organizationId={organizationId}
+          onSubmit={handleUpdateCandidate}
+        />
+      )}
     </div>
   );
 }
