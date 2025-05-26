@@ -20,6 +20,12 @@
     },
     {
       "path": "./libs/scripts"
+    },
+    {
+      "path": "./apps/packing-list-e2e"
+    },
+    {
+      "path": "./apps/packing-list"
     }
   ],
   "ts-node": {
