@@ -1,4 +1,3 @@
-/* eslint-disable react/no-children-prop */
 "use client";
 
 import {
@@ -68,23 +67,17 @@ export function CandidateForm({
         className="space-y-6"
       >
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <form.AppField
-            name="name"
-            children={(field) => <field.FieldInput label="Name" />}
-          />
-          <form.AppField
-            name="email"
-            children={(field) => (
-              <field.FieldInput type="email" label="Email" />
-            )}
-          />
-          <form.AppField
-            name="phone"
-            children={(field) => <field.FieldInput type="tel" label="Phone" />}
-          />
-          <form.AppField
-            name="seniorityId"
-            children={(field) => (
+          <form.AppField name="name">
+            {(field) => <field.FieldInput label="Name" />}
+          </form.AppField>
+          <form.AppField name="email">
+            {(field) => <field.FieldInput type="email" label="Email" />}
+          </form.AppField>
+          <form.AppField name="phone">
+            {(field) => <field.FieldInput type="tel" label="Phone" />}
+          </form.AppField>
+          <form.AppField name="seniorityId">
+            {(field) => (
               <field.FieldSelect label="Seniority">
                 <SelectTrigger>
                   <SelectValue placeholder="Select a seniority level" />
@@ -98,10 +91,9 @@ export function CandidateForm({
                 </SelectContent>
               </field.FieldSelect>
             )}
-          />
-          <form.AppField
-            name="sourceId"
-            children={(field) => (
+          </form.AppField>
+          <form.AppField name="sourceId">
+            {(field) => (
               <field.FieldSelect label="Source">
                 <SelectTrigger>
                   <SelectValue placeholder="Select a source" />
@@ -115,10 +107,9 @@ export function CandidateForm({
                 </SelectContent>
               </field.FieldSelect>
             )}
-          />
-          <form.AppField
-            name="kanbanStageId"
-            children={(field) => (
+          </form.AppField>
+          <form.AppField name="kanbanStageId">
+            {(field) => (
               <field.FieldSelect label="Kanban Stage">
                 <SelectTrigger>
                   <SelectValue placeholder="Select a kanban stage" />
@@ -132,24 +123,18 @@ export function CandidateForm({
                 </SelectContent>
               </field.FieldSelect>
             )}
-          />
-          <form.AppField
-            name="salaryExpectations"
-            children={(field) => (
-              <field.FieldInput label="Salary Expectations" />
-            )}
-          />
-          <form.AppField
-            name="nextSteps"
-            children={(field) => <field.FieldInput label="Next Steps" />}
-          />
-          <form.AppField
-            name="targetTeam"
-            children={(field) => <field.FieldInput label="Target Team" />}
-          />
-          <form.AppField
-            name="roleId"
-            children={(field) => (
+          </form.AppField>
+          <form.AppField name="salaryExpectations">
+            {(field) => <field.FieldInput label="Salary Expectations" />}
+          </form.AppField>
+          <form.AppField name="nextSteps">
+            {(field) => <field.FieldInput label="Next Steps" />}
+          </form.AppField>
+          <form.AppField name="targetTeam">
+            {(field) => <field.FieldInput label="Target Team" />}
+          </form.AppField>
+          <form.AppField name="roleId">
+            {(field) => (
               <field.FieldSelect label="Role">
                 <SelectTrigger>
                   <SelectValue placeholder="Select a role" />
@@ -163,7 +148,7 @@ export function CandidateForm({
                 </SelectContent>
               </field.FieldSelect>
             )}
-          />
+          </form.AppField>
         </div>
 
         <div className="space-y-2">
