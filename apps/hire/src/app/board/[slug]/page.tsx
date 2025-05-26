@@ -34,7 +34,7 @@ export default function BoardPage({
   }
 
   // Handle case where orgId might be available but stages/candidates are null (e.g. no data for org)
-  if (!boardWithData) {
+  if (boardWithData === null) {
     return (
       <div className="p-6">
         <div>
