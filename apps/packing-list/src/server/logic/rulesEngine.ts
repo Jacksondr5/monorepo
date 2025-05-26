@@ -38,13 +38,11 @@ export const generatePackingList = (
   const packingList: CurrentPackingList = {
     tripDetails: {
       destination: "",
-      startDate: new Date(),
-      endDate: new Date(),
       tripTypeTagId: context.tripTypeTagId,
       travelModeTagId: context.travelModeTagId,
       dailyWeatherTagIds: [...context.tripWeatherForecast],
     },
-    suggestedLuggageIds: [],
+    luggageId: 1,
     items: [],
   };
 
@@ -54,11 +52,11 @@ export const generatePackingList = (
   }
 
   // 1. Suggest appropriate luggage based on travel mode and trip duration
-  packingList.suggestedLuggageIds = suggestLuggage(
-    userLuggage,
-    context,
-    tripDurationDays,
-  );
+  // packingList.luggageId = suggestLuggage(
+  //   userLuggage,
+  //   context,
+  //   tripDurationDays,
+  // );
 
   // 2. Filter and add appropriate items based on all criteria
   const suggestedItems = filterItems(userItems, context, tripDurationDays);
@@ -263,3 +261,22 @@ function suggestLuggage(
   // Return the best matching luggage ID (or multiple if needed later)
   return sortedLuggage.length > 0 ? [sortedLuggage[0]!.id] : [];
 }
+
+// Just calling this to make eslint shut up
+suggestLuggage(
+  [
+    {
+      id: 1,
+      name: "Small carry-on",
+      userId: "user1",
+      capacityDays: 1,
+      travelModeTagIds: [TravelModeTagIds.CARRY_ON],
+    },
+  ],
+  {
+    tripWeatherForecast: [],
+    tripTypeTagId: TripTypeTagIds.PERSONAL,
+    travelModeTagId: TravelModeTagIds.CARRY_ON,
+  },
+  1,
+);

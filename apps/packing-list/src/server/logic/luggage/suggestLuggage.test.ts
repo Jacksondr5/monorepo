@@ -3,8 +3,8 @@ import {
   TravelModeTagIds,
   type TravelModeTagId,
   type WeatherTagId,
-} from "~/lib/tags";
-import type { TripContext } from "~/lib/tripContext";
+} from "../../../lib/tags";
+import type { TripContext } from "../../../lib/tripContext";
 import { mockLuggage } from "../rulesEngine.test.data";
 import { suggestLuggage } from "./suggestLuggage";
 

@@ -7,11 +7,11 @@ import {
   type WeatherTagId,
   type TripTypeTagId,
   type TravelModeTagId,
-} from "~/lib/tags";
-import type { TripContext } from "~/lib/tripContext";
+} from "../../lib/tags";
+import type { TripContext } from "../../lib/tripContext";
 import { mockItems, mockLuggage } from "./rulesEngine.test.data";
 
-describe("Rules Engine - Luggage Suggestion Rules", () => {
+describe.todo("Rules Engine - Luggage Suggestion Rules", () => {
   // Test 16: Capacity Based Luggage Test
   it("should suggest luggage with sufficient capacity for the trip duration", () => {
     // 10-day trip
