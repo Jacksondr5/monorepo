@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within, expect, waitFor } from "@storybook/test";
+import { userEvent, within } from "@storybook/test";
 import {
   Tooltip,
   TooltipContent,
@@ -12,7 +12,7 @@ import { Aperture } from "lucide-react"; // Icon for icon button trigger
 const meta: Meta<typeof Tooltip> = {
   title: "Components/Tooltip",
   component: Tooltip,
-  subcomponents: { TooltipContent, TooltipProvider, TooltipTrigger },
+  subcomponents: { TooltipContent, TooltipTrigger },
   parameters: {
     layout: "centered",
   },
@@ -31,7 +31,9 @@ const meta: Meta<typeof Tooltip> = {
           justifyContent: "center",
         }}
       >
-        <Story />
+        <TooltipProvider>
+          <Story />
+        </TooltipProvider>
       </div>
     ),
   ],
@@ -51,27 +53,24 @@ const TooltipWrapper = ({
   side,
   align,
   sideOffset = 4,
-  delayDuration = 0,
 }: {
   children: React.ReactNode;
   content: React.ReactNode;
   side?: "top" | "right" | "bottom" | "left";
   align?: "start" | "center" | "end";
   sideOffset?: number;
-  delayDuration?: number;
 }) => (
-  <TooltipProvider delayDuration={delayDuration}>
-    <Tooltip>
-      <TooltipTrigger asChild>{children}</TooltipTrigger>
-      <TooltipContent side={side} align={align} sideOffset={sideOffset}>
-        {content}
-      </TooltipContent>
-    </Tooltip>
-  </TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger asChild>{children}</TooltipTrigger>
+    <TooltipContent side={side} align={align} sideOffset={sideOffset}>
+      {content}
+    </TooltipContent>
+  </Tooltip>
 );
 
 export const AllVariants: Story = {
   parameters: {
+    chromatic: { disable: true },
     controls: { hideNoControlsWarning: true },
   },
   render: () => (

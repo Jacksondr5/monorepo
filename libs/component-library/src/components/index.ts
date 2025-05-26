@@ -18,7 +18,6 @@ export * from "./select/field-select";
 export * from "./sheet/sheet";
 export * from "./checkbox";
 export * from "./sidebar";
-export * from "./sidebar-item/sidebar-item";
 export * from "./skeleton/skeleton";
 export * from "./tooltip/tooltip";
 export * from "./separator/separator";

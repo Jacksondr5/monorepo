@@ -1,6 +1,5 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
 import {
   Home,
   Settings,
@@ -12,17 +11,20 @@ import {
 } from "lucide-react";
 
 import { Sidebar } from "./sidebar";
-import { SidebarItem } from "../sidebar-item/sidebar-item";
 import { Button } from "../button/button";
 import { SidebarProvider } from "./sidebar-provider";
 import { SidebarTrigger } from "./sidebar-trigger";
 import { SidebarInset } from "./sidebar-inset";
 import { SidebarHeader } from "./sidebar-header";
 import { SidebarFooter } from "./sidebar-footer";
-import { SidebarSeparator } from "./sidebar-seperator";
+import { SidebarSeparator } from "./sidebar-separator";
 import { SidebarContent } from "./sidebar-content";
 import { SidebarGroup, SidebarGroupLabel } from "./sidebar-group";
-import { SidebarMenu } from "./sidebar-menu";
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "./sidebar-menu";
 
 const meta: Meta<typeof Sidebar> = {
   title: "Components/Sidebar",
@@ -37,7 +39,6 @@ const meta: Meta<typeof Sidebar> = {
     SidebarTrigger,
     SidebarGroup,
     SidebarGroupLabel,
-    SidebarItem,
     SidebarSeparator,
     SidebarInset,
   },
@@ -72,6 +73,23 @@ const meta: Meta<typeof Sidebar> = {
 export default meta;
 
 type Story = StoryObj<typeof meta>;
+
+const SidebarItem = ({
+  icon,
+  title,
+}: {
+  icon: React.ReactNode;
+  title: string;
+}) => {
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton tooltip={title}>
+        {icon}
+        <span>{title}</span>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  );
+};
 
 const sidebarContentItems = (
   <>

@@ -35,7 +35,6 @@ const meta: Meta<typeof Input> = {
   },
   args: {
     onChange: fn(), // Default spy for onChange
-    iconPosition: "left", // Default icon position for stories
   },
 };
 
@@ -138,10 +137,6 @@ export const AllVariants: Story = {
         ))}
       </div>
     );
-  },
-  args: {
-    // No specific args for the matrix itself, it generates all combinations
-    // onChange spy is inherited from meta.args but we provide no-op for controlled inputs with values here
   },
 };
 

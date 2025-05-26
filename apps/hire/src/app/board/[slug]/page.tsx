@@ -4,14 +4,19 @@ import { useOrganization } from "@clerk/nextjs";
 import { KanbanBoard } from "../../../components/kanban/KanbanBoard";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
+import { use } from "react";
 
-export default function BoardPage({ params }: { params: { slug: string } }) {
+export default function BoardPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { organization, isLoaded: isOrgLoaded } = useOrganization();
   const organizationId = organization?.id;
-
+  const { slug } = use(params);
   const board = useQuery(
     api.boards.getBySlug,
-    organizationId ? { slug: params.slug, orgId: organizationId } : "skip",
+    organizationId ? { slug, orgId: organizationId } : "skip",
   );
 
   const allStages = useQuery(
@@ -41,7 +46,7 @@ export default function BoardPage({ params }: { params: { slug: string } }) {
   // Handle case where orgId might be available but stages/candidates are null (e.g. no data for org)
   if (!allStages || !candidates || !board) {
     // Check if loading is complete (board !== undefined) and board is null (not found)
-    if (board === null && board !== undefined) {
+    if (board === null) {
       return (
         <div className="p-6">
           <div>Board not found.</div>

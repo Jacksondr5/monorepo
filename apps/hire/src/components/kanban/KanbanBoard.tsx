@@ -35,19 +35,20 @@ export function KanbanBoard({ stages, candidates }: KanbanBoardProps) {
     const candidateId = active.id as CandidateId;
     const newStageId = over.id as KanbanStageId;
 
-    const candidate = candidates?.find((c) => c._id === candidateId);
+    const candidate = candidates.find((c) => c._id === candidateId);
     if (!candidate) {
       console.warn("Dragged item is not a valid candidate");
       return;
     }
 
-    const targetStage = stages?.find((s) => s._id === newStageId);
+    const targetStage = stages.find((s) => s._id === newStageId);
     if (!targetStage) {
       console.warn("Drop target is not a valid kanban stage");
       return;
     }
 
     if (candidate.kanbanStageId !== newStageId) {
+      // TODO: Add loading and error state handling
       updateCandidateStage({
         candidateId: candidateId,
         kanbanStageId: newStageId,
@@ -55,7 +56,7 @@ export function KanbanBoard({ stages, candidates }: KanbanBoardProps) {
     }
   }
 
-  if (!stages || stages.length === 0) {
+  if (stages.length === 0) {
     return (
       <div>
         No Kanban stages found for this organization. Please configure stages.

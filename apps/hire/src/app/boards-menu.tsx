@@ -68,7 +68,10 @@ export function BoardsMenu() {
       {boards.map((board) => (
         <SidebarMenuItem key={board._id}>
           <SidebarMenuButton asChild tooltip={board.name} className="gap-x-2">
-            <Link href={`/board/${board.slug}`}>
+            <Link
+              href={`/board/${board.slug}`}
+              aria-label={`Open board ${board.name}`}
+            >
               <Folder size={16} className="shrink-0" />
               <span className="truncate">{board.name}</span>
             </Link>

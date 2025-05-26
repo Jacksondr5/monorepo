@@ -21,7 +21,7 @@ export default function SettingsPage() {
           Manage your organization settings and preferences.
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
         <SeniorityTab orgId={orgId} />
         <RolesTab orgId={orgId} />
         <SourcesTab orgId={orgId} />

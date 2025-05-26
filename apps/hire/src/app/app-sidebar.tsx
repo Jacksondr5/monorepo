@@ -36,7 +36,7 @@ export const AppSidebar = () => {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton tooltip="Settings" asChild>
-                <Link href="/settings">
+                <Link href="/settings" aria-label="Settings">
                   <SettingsIcon />
                   <span>Settings</span>
                 </Link>

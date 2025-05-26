@@ -9,6 +9,7 @@ import {
   DeleteBoardSchema,
   UpdateBoardSchema,
 } from "../src/server/zod/board";
+import { getBoardBySlug } from "./model/boards";
 
 const boardQuery = zCustomQuery(query, NoOp);
 const boardMutation = zCustomMutation(mutation, NoOp);
@@ -40,12 +41,10 @@ export const getBySlug = boardQuery({
       return null;
     }
 
-    const board = await ctx.db
-      .query("boards")
-      .withIndex("by_company_slug", (q) =>
-        q.eq("companyId", companyId).eq("slug", args.slug),
-      )
-      .unique();
+    const board = await getBoardBySlug(ctx, {
+      companyId,
+      slug: args.slug,
+    });
     return board;
   },
   returns: BoardSchema.nullable(),
@@ -70,6 +69,15 @@ export const addBoard = boardMutation({
       .toLowerCase()
       .replace(/\s+/g, "-")
       .replace(/[^\w-]+/g, "");
+
+    // Ensure slug is unique
+    const existingBoard = await getBoardBySlug(ctx, {
+      companyId,
+      slug,
+    });
+    if (existingBoard) {
+      throw new Error("Board with this slug already exists.");
+    }
 
     await ctx.db.insert("boards", {
       name: args.name,
