@@ -6,8 +6,10 @@ import { ZodCandidate } from "~/server/zod/candidate";
 
 export const KanbanCard = memo(function KanbanCard({
   candidate,
+  onClick,
 }: {
   candidate: ZodCandidate;
+  onClick: (candidate: ZodCandidate) => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({ id: candidate._id });
@@ -24,7 +26,8 @@ export const KanbanCard = memo(function KanbanCard({
       style={style}
       {...listeners}
       {...attributes}
-      className="select-none rounded border border-[var(--color-slate-7)] bg-[var(--color-olive-3)] p-3 text-[var(--color-slate-12)] shadow transition-colors hover:border-[var(--color-grass-9)]"
+      onClick={() => onClick(candidate)}
+      className="select-none rounded border border-[var(--color-slate-7)] bg-[var(--color-olive-3)] p-3 text-[var(--color-slate-12)] shadow transition-colors hover:border-[var(--color-grass-9)] cursor-pointer"
     >
       <span className="font-medium text-[var(--color-slate-12)]">
         {candidate.name}

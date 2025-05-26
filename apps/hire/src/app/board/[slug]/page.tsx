@@ -83,7 +83,11 @@ export default function BoardPage({
   return (
     <div className="p-6">
       <h1 className="mb-6 text-2xl font-bold">{board.name}</h1>
-      <KanbanBoard stages={configuredStages} candidates={candidates} />
+      <KanbanBoard
+        stages={configuredStages}
+        candidates={candidates}
+        organizationId={organizationId}
+      />
     </div>
   );
 }

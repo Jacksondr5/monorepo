@@ -14,5 +14,5 @@ export const verifyCandidateExists = async (
   ctx: QueryCtx,
   args: { _id: CandidateId },
 ) => {
-  await getCandidateById(ctx, args);
+  return await getCandidateById(ctx, args);
 };
