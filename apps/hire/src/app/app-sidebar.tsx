@@ -14,7 +14,6 @@ import { SettingsIcon } from "lucide-react";
 import Link from "next/link";
 import { BoardsMenu } from "./boards-menu";
 import {
-  OrganizationSwitcher,
   SignedIn,
   SignedOut,
   SignInButton,

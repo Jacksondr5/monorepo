@@ -38,7 +38,7 @@ export function OrganizationSelect() {
         await setActive({ organization: newOrgId });
       } catch (error) {
         console.error("Failed to switch organization:", error);
-        // Optionally, display an error message to the user
+        // TODO: Show toast notification
       }
     }
   };
