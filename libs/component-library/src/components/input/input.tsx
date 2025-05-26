@@ -9,7 +9,7 @@ export const inputVariants = {
     sm: "h-8 px-2 py-1 text-xs",
     lg: "h-12 px-4 py-2 text-lg",
   },
-  // We might add icon-specific padding variants here if needed, 
+  // We might add icon-specific padding variants here if needed,
   // but for now, dynamic padding in the component is fine.
 };
 
@@ -33,27 +33,42 @@ export interface InputProps
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, size, icon, iconPosition = "left", ...props }, ref) => {
     const hasIcon = Boolean(icon);
-    const iconSpacingClass = size === "sm" ? "pl-7 pr-2" : size === "lg" ? "pl-10 pr-4" : "pl-9 pr-3"; // Default padding for icon on left
-    const iconSpacingClassRight = size === "sm" ? "pr-7 pl-2" : size === "lg" ? "pr-10 pl-4" : "pr-9 pl-3"; // Default padding for icon on right
+    const iconSpacingClass =
+      size === "sm" ? "pl-7 pr-2" : size === "lg" ? "pl-10 pr-4" : "pl-9 pr-3"; // Default padding for icon on left
+    const iconSpacingClassRight =
+      size === "sm" ? "pr-7 pl-2" : size === "lg" ? "pr-10 pl-4" : "pr-9 pl-3"; // Default padding for icon on right
 
     const inputPadding = hasIcon
       ? iconPosition === "left"
-        ? iconSpacingClass.split(' ')[0] // e.g., pl-9
-        : iconSpacingClassRight.split(' ')[0] // e.g., pr-9
+        ? iconSpacingClass.split(" ")[0] // e.g., pl-9
+        : iconSpacingClassRight.split(" ")[0] // e.g., pr-9
       : "";
 
     const iconContainerClasses = cn(
-      "absolute top-1/2 -translate-y-1/2 flex items-center justify-center",
-      iconPosition === "left" ? (size === "sm" ? "left-2" : size === "lg" ? "left-3" : "left-2.5") : (size === "sm" ? "right-2" : size === "lg" ? "right-3" : "right-2.5"),
-      "text-muted-foreground peer-focus:text-foreground"
+      "absolute top-1/2 flex -translate-y-1/2 items-center justify-center",
+      iconPosition === "left"
+        ? size === "sm"
+          ? "left-2"
+          : size === "lg"
+            ? "left-3"
+            : "left-2.5"
+        : size === "sm"
+          ? "right-2"
+          : size === "lg"
+            ? "right-3"
+            : "right-2.5",
+      "text-muted-foreground peer-focus:text-foreground",
     );
 
     if (hasIcon) {
       return (
-        <div className={cn("relative flex w-full items-center", props.disabled && "cursor-not-allowed opacity-50")}>
-          <div className={iconContainerClasses}>
-            {icon}
-          </div>
+        <div
+          className={cn(
+            "relative flex w-full items-center",
+            props.disabled && "cursor-not-allowed opacity-50",
+          )}
+        >
+          <div className={iconContainerClasses}>{icon}</div>
           <input
             type={type}
             data-slot="input"

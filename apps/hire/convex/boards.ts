@@ -43,7 +43,7 @@ export const getBySlug = boardQuery({
     const board = await ctx.db
       .query("boards")
       .withIndex("by_company_slug", (q) =>
-        q.eq("companyId", companyId).eq("slug", args.slug)
+        q.eq("companyId", companyId).eq("slug", args.slug),
       )
       .unique();
     return board;

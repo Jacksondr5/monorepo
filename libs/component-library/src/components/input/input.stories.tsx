@@ -57,22 +57,13 @@ export const AllVariants: Story = {
     const iconElement = <Search className="size-4" />;
 
     return (
-      <div
-        className="flex flex-col items-start gap-10 p-5 min-w-[600px]"
-      >
+      <div className="flex min-w-[600px] flex-col items-start gap-10 p-5">
         {sizes.map((size) => (
-          <div
-            key={size}
-            className="flex flex-col items-start w-full gap-5"
-          >
-            <h2
-              className="w-full m-0 text-lg font-semibold capitalize border-b border-slate-300 pb-2 mb-4 text-slate-12"
-            >
+          <div key={size} className="flex w-full flex-col items-start gap-5">
+            <h2 className="text-slate-12 m-0 mb-4 w-full border-b border-slate-300 pb-2 text-lg font-semibold capitalize">
               Size: {size}
             </h2>
-            <div
-              className="grid w-full grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4"
-            >
+            <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
               {/* Standard Inputs */}
               <Input
                 {...args}
