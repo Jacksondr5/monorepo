@@ -13,7 +13,7 @@ import {
 import Image from "next/image";
 
 const defaultOrganization = {
-  id: "nothing",
+  id: "__default__",
   name: "Select Organization",
   hasImage: false,
   imageUrl: "",

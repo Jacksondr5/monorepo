@@ -6,7 +6,7 @@ import { z } from "zod";
  *
  * Required variables:
  * - CONVEX_DEPLOYMENT: Convex deployment identifier (server-only)
- * - NEXT_PUBLIC_CLERK_FRONTEND_API_URL: Clerk issuer URL for authentication
+ * - NEXT_PUBLIC_CLERK_FRONTEND_API_URL: Clerk frontend API URL for authentication
  * - NEXT_PUBLIC_CONVEX_URL: Convex API URL for client-side queries
  * - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: Clerk publishable key for auth components
  *
