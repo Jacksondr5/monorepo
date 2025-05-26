@@ -29,6 +29,28 @@ export const getBoardsByOrgId = boardQuery({
   returns: z.array(BoardSchema),
 });
 
+export const getBySlug = boardQuery({
+  args: { slug: z.string(), orgId: z.string() },
+  async handler(ctx, args) {
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: args.orgId,
+    });
+
+    if (!companyId) {
+      return null;
+    }
+
+    const board = await ctx.db
+      .query("boards")
+      .withIndex("by_company_slug", (q) =>
+        q.eq("companyId", companyId).eq("slug", args.slug)
+      )
+      .unique();
+    return board;
+  },
+  returns: BoardSchema.nullable(),
+});
+
 export const addBoard = boardMutation({
   args: CreateBoardSchema.extend({ orgId: z.string() }),
   async handler(ctx, args) {
@@ -36,7 +58,6 @@ export const addBoard = boardMutation({
       clerkOrgId: args.orgId,
     });
 
-    // Determine the next order value
     const lastBoard = await ctx.db
       .query("boards")
       .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
@@ -45,7 +66,6 @@ export const addBoard = boardMutation({
 
     const newOrder = lastBoard ? lastBoard.order + 1 : 0;
 
-    // Generate a simple slug
     const slug = args.name
       .toLowerCase()
       .replace(/\s+/g, "-")
@@ -56,7 +76,7 @@ export const addBoard = boardMutation({
       companyId,
       order: newOrder,
       slug: slug,
-      kanbanStageIds: [], // Initialize with empty array
+      kanbanStageIds: [],
     });
   },
 });
