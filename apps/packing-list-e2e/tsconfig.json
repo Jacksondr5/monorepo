@@ -16,6 +16,7 @@
     "src/**/*.d.ts"
   ],
   "exclude": [
+    "node_modules",
     "out-tsc",
     "test-output",
     "eslint.config.js",

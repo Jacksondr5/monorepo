@@ -19,12 +19,12 @@
   },
   "sourceMaps": true,
   "exclude": [
-    "jest.config.ts",
-    ".*\\.spec.tsx?$",
-    ".*\\.test.tsx?$",
-    "./src/jest-setup.ts$",
-    "./**/jest-setup.ts$",
-    ".*.js$",
-    ".*.d.ts$"
+    "**/jest.config.ts",
+    "**/*.spec.{ts,tsx}",
+    "**/*.test.{ts,tsx}",
+    "src/jest-setup.ts",
+    "**/jest-setup.ts",
+    "**/*.js",
+    "**/*.d.ts"
   ]
 }

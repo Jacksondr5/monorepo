@@ -1,5 +1,6 @@
 import type { TripContext } from "~/lib/tripContext";
-import type { PackingList, PackingListItem } from "~/lib/tripContext";
+import type { PackingList } from "~/lib/tripContext";
+import { PackingListItem } from "~/schemas";
 import type { Luggage } from "~/schemas/luggage";
 
 /**

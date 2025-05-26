@@ -1,27 +1,11 @@
-import type {
-  WeatherTagId,
-  TripTypeTagId,
-  TravelModeTagId,
-  TagId,
-} from "./tags";
+import type { WeatherTagId, TripTypeTagId, TravelModeTagId } from "./tags";
+import type { PackingListItem } from "../schemas/items";
 
 // Define the input context for the trip
 export type TripContext = {
   tripWeatherForecast: WeatherTagId[];
   tripTypeTagId: TripTypeTagId;
   travelModeTagId: TravelModeTagId;
-};
-
-export type Item = {
-  id: number;
-  name: string;
-  tagIds: TagId[];
-  userId: string;
-};
-
-export type PackingListItem = Item & {
-  quantity: number;
-  isPacked: boolean;
 };
 
 export type PackingList = {
