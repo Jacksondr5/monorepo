@@ -24,7 +24,7 @@ export default defineSchema({
     salaryExpectations: v.optional(v.string()),
     seniorityId: v.optional(v.id("seniorities")),
     sourceId: v.optional(v.id("sources")),
-    targetTeam: v.optional(v.string()),
+    targetTeamId: v.optional(v.id("targetTeams")),
     updatedAt: v.number(), // store as timestamp (Date.now())
   }).index("by_company", ["companyId"]),
   companies: defineTable({
@@ -47,6 +47,11 @@ export default defineSchema({
     order: v.float64(),
   }).index("by_company_order", ["companyId", "order"]),
   sources: defineTable({
+    companyId: v.id("companies"),
+    name: v.string(),
+    order: v.float64(),
+  }).index("by_company_order", ["companyId", "order"]),
+  targetTeams: defineTable({
     companyId: v.id("companies"),
     name: v.string(),
     order: v.float64(),

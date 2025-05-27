@@ -65,6 +65,10 @@ export const getBoardWithData = boardQuery({
         .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
         .collect(),
       candidates,
+      targetTeams: await ctx.db
+        .query("targetTeams")
+        .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
+        .collect(),
     };
   },
   returns: BoardWithDataSchema.nullable(),

@@ -19,17 +19,20 @@ import type {
 } from "~/server/zod/candidate";
 import { KanbanStageId, ZodKanbanStage } from "~/server/zod/kanbanStage";
 import { EditCandidateSheet } from "../candidate/edit-candidate-sheet";
+import type { TargetTeam } from "~/server/zod/targetTeam";
 
 interface KanbanBoardProps {
   stages: ZodKanbanStage[];
   candidates: ZodCandidate[];
   organizationId: string;
+  targetTeams: TargetTeam[];
 }
 
 export function KanbanBoard({
   stages,
   candidates,
   organizationId,
+  targetTeams,
 }: KanbanBoardProps) {
   const updateCandidateStage = useMutation(api.candidates.updateCandidateStage);
   const updateCandidateDetails = useMutation(api.candidates.updateCandidate);
@@ -119,6 +122,7 @@ export function KanbanBoard({
             title={stage.name}
             candidates={candidates.filter((c) => c.kanbanStageId === stage._id)}
             onCardClick={handleCardClick}
+            targetTeams={targetTeams}
           />
         ))}
       </DndContext>

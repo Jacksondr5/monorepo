@@ -64,6 +64,8 @@ export function CandidateForm<T extends AcceptableSchemas>({
   const kanbanStages =
     useQuery(api.kanbanStages.getKanbanStages, { orgId: organizationId }) || [];
   const roles = useQuery(api.roles.getRoles, { orgId: organizationId }) || [];
+  const targetTeams =
+    useQuery(api.targetTeams.getTargetTeams, { orgId: organizationId }) || [];
 
   return (
     <Card className="w-full max-w-2xl p-6">
@@ -139,8 +141,21 @@ export function CandidateForm<T extends AcceptableSchemas>({
           <form.AppField name="nextSteps">
             {(field) => <field.FieldInput label="Next Steps" />}
           </form.AppField>
-          <form.AppField name="targetTeam">
-            {(field) => <field.FieldInput label="Target Team" />}
+          <form.AppField name="targetTeamId">
+            {(field) => (
+              <field.FieldSelect label="Target Team">
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a target team" />
+                </SelectTrigger>
+                <SelectContent>
+                  {targetTeams.map((team) => (
+                    <SelectItem key={team._id} value={team._id}>
+                      {team.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </field.FieldSelect>
+            )}
           </form.AppField>
           <form.AppField name="roleId">
             {(field) => (

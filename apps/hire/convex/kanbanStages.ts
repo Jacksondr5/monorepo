@@ -48,8 +48,22 @@ export const addKanbanStage = kanbanStageMutation({
 });
 
 export const reorderKanbanStages = kanbanStageMutation({
-  args: z.object({ stageIds: z.array(KanbanStageIdSchema) }),
-  handler: async (ctx, { stageIds }) => {
+  args: z.object({ orgId: z.string(), stageIds: z.array(KanbanStageIdSchema) }),
+  handler: async (ctx, { orgId, stageIds }) => {
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: orgId,
+    });
+
+    // Check that the kanban stages belong to the company
+    const stages = await ctx.db
+      .query("kanbanStages")
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
+      .collect();
+    const stageIdsSet = new Set(stages.map((s) => s._id));
+    if (!stageIds.every((id) => stageIdsSet.has(id))) {
+      throw new Error("Some kanban stages do not belong to this company");
+    }
+
     await Promise.all(
       stageIds.map((id, index) => ctx.db.patch(id, { order: index })),
     );
