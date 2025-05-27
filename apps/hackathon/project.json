@@ -1,0 +1,14 @@
+{
+  "name": "@j5/hackathon",
+  "projectType": "application",
+  "sourceRoot": "apps/hackathon/src",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["next dev --turbo"],
+        "cwd": "apps/hackathon"
+      }
+    }
+  }
+}
