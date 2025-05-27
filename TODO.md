@@ -2,7 +2,6 @@
 
 ## MVP
 
-- Add candidate button
 - Login page
 - Make target team a select field
 - Finalize candidate fields
