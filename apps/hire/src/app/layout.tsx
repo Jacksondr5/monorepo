@@ -4,7 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { Providers } from "./Providers";
 import { AppSidebar } from "./app-sidebar";
-import { SidebarInset } from "@j5/component-library";
+import { SidebarInset, Toaster } from "@j5/component-library";
 
 export const metadata: Metadata = {
   title: "J5 Hire",
@@ -24,6 +24,7 @@ export default function RootLayout({
             <SidebarInset>{children}</SidebarInset>
           </div>
         </Providers>
+        <Toaster />
       </body>
     </html>
   );

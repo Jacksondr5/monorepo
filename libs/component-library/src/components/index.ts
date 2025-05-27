@@ -21,3 +21,4 @@ export * from "./sidebar";
 export * from "./skeleton/skeleton";
 export * from "./tooltip/tooltip";
 export * from "./separator/separator";
+export * from "./sonner/sonner";
