@@ -3,13 +3,16 @@
 import React, { memo } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { ZodCandidate } from "~/server/zod/candidate";
+import type { TargetTeam } from "~/server/zod/targetTeam";
 
 export const KanbanCard = memo(function KanbanCard({
   candidate,
   onClick,
+  targetTeams,
 }: {
   candidate: ZodCandidate;
   onClick: (candidate: ZodCandidate) => void;
+  targetTeams: TargetTeam[];
 }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({ id: candidate._id });
@@ -20,6 +23,11 @@ export const KanbanCard = memo(function KanbanCard({
     opacity: isDragging ? 0.5 : 1,
     cursor: isDragging ? "grabbing" : "grab",
   };
+
+  const targetTeamName = candidate.targetTeamId
+    ? targetTeams.find((tt) => tt._id === candidate.targetTeamId)?.name
+    : null;
+
   return (
     <div
       ref={setNodeRef}
@@ -32,6 +40,11 @@ export const KanbanCard = memo(function KanbanCard({
       <span className="font-medium text-[var(--color-slate-12)]">
         {candidate.name}
       </span>
+      {targetTeamName && (
+        <span className="mt-1 block text-xs text-[var(--color-slate-11)]">
+          {targetTeamName}
+        </span>
+      )}
     </div>
   );
 });
