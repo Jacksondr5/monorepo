@@ -45,7 +45,7 @@ export default function BoardPage({
     );
   }
 
-  const { board, stages, candidates } = boardWithData;
+  const { board, stages, candidates, targetTeams } = boardWithData;
 
   // Filter stages based on the board's configuration
   const configuredStages = stages.filter((stage) =>
@@ -87,6 +87,7 @@ export default function BoardPage({
         stages={configuredStages}
         candidates={candidates}
         organizationId={organizationId}
+        targetTeams={targetTeams}
       />
     </div>
   );

@@ -4,6 +4,7 @@ import { zid } from "convex-helpers/server/zod";
 import { baseConvexFieldsOmit, nonEmptyString } from "./utils";
 import { CompanyIdSchema } from "./company";
 import { baseConvexFields } from "./utils";
+import { TargetTeamIdSchema } from "./targetTeam";
 
 export const CandidateIdSchema = zid("candidates");
 
@@ -21,7 +22,7 @@ export const CandidateSchema = z.object({
   salaryExpectations: z.string().optional(),
   seniorityId: zid("seniorities").optional(),
   sourceId: zid("sources").optional(),
-  targetTeam: z.string().optional(),
+  targetTeamId: TargetTeamIdSchema.optional(),
   updatedAt: z.number(),
 });
 

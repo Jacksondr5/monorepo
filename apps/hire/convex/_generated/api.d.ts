@@ -22,6 +22,7 @@ import type * as model_companies from "../model/companies.js";
 import type * as roles from "../roles.js";
 import type * as seniorities from "../seniorities.js";
 import type * as sources from "../sources.js";
+import type * as targetTeams from "../targetTeams.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -41,6 +42,7 @@ declare const fullApi: ApiFromModules<{
   roles: typeof roles;
   seniorities: typeof seniorities;
   sources: typeof sources;
+  targetTeams: typeof targetTeams;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

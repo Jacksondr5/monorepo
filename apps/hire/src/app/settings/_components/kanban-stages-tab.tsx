@@ -60,7 +60,10 @@ export function KanbanStagesTab({ orgId }: { orgId: string }) {
               };
             });
             setLocalStages(updatedStages);
-            reorderStages({ stageIds: newStages.map((s) => s.id) });
+            reorderStages({
+              orgId,
+              stageIds: newStages.map((s) => s.id),
+            });
           }}
           onTagDeleted={(tagId) => deleteStage({ orgId, _id: tagId })}
         />
