@@ -65,8 +65,10 @@ export function TargetTeamTab({ orgId }: { orgId: string }) {
             });
             setLocalTargetTeams(updatedTeams);
             reorderTargetTeams({
+              orgId,
               targetTeamIds: newTeams.map((t) => t.id),
             });
+            // TODO: Add toast notification on success or failure
           }}
           onTagDeleted={(tagId) => deleteTargetTeam({ orgId, _id: tagId })}
         />

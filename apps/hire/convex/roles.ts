@@ -45,8 +45,22 @@ export const addRole = roleMutation({
 });
 
 export const reorderRoles = roleMutation({
-  args: z.object({ roleIds: z.array(RoleIdSchema) }),
-  handler: async (ctx, { roleIds }) => {
+  args: z.object({ orgId: z.string(), roleIds: z.array(RoleIdSchema) }),
+  handler: async (ctx, { orgId, roleIds }) => {
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: orgId,
+    });
+
+    // Check that the roles belong to the company
+    const roles = await ctx.db
+      .query("roles")
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
+      .collect();
+    const roleIdsSet = new Set(roles.map((r) => r._id));
+    if (!roleIds.every((id) => roleIdsSet.has(id))) {
+      throw new Error("Some roles do not belong to this company");
+    }
+
     await Promise.all(
       roleIds.map((id, index) => ctx.db.patch(id, { order: index })),
     );

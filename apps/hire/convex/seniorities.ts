@@ -48,8 +48,22 @@ export const addSeniority = seniorityMutation({
 });
 
 export const reorderSeniorities = seniorityMutation({
-  args: z.object({ seniorityIds: z.array(SeniorityIdSchema) }),
-  handler: async (ctx, { seniorityIds }) => {
+  args: z.object({ orgId: z.string(), seniorityIds: z.array(SeniorityIdSchema) }),
+  handler: async (ctx, { orgId, seniorityIds }) => {
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: orgId,
+    });
+
+    // Check that the seniorities belong to the company
+    const seniorities = await ctx.db
+      .query("seniorities")
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
+      .collect();
+    const seniorityIdsSet = new Set(seniorities.map((s) => s._id));
+    if (!seniorityIds.every((id) => seniorityIdsSet.has(id))) {
+      throw new Error("Some seniorities do not belong to this company");
+    }
+
     await Promise.all(
       seniorityIds.map((id, index) => ctx.db.patch(id, { order: index })),
     );

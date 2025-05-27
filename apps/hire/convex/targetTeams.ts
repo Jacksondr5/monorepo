@@ -48,8 +48,23 @@ export const addTargetTeam = targetTeamMutation({
 });
 
 export const reorderTargetTeams = targetTeamMutation({
-  args: z.object({ targetTeamIds: z.array(TargetTeamIdSchema) }),
-  handler: async (ctx, { targetTeamIds }) => {
+  args: z.object({
+    orgId: z.string(),
+    targetTeamIds: z.array(TargetTeamIdSchema),
+  }),
+  handler: async (ctx, { orgId, targetTeamIds }) => {
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: orgId,
+    });
+    // Check that the target teams belong to the company
+    const targetTeams = await ctx.db
+      .query("targetTeams")
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
+      .collect();
+    const targetTeamIdsSet = new Set(targetTeams.map((t) => t._id));
+    if (!targetTeamIds.every((id) => targetTeamIdsSet.has(id))) {
+      throw new Error("One or more target teams do not belong to this company");
+    }
     await Promise.all(
       targetTeamIds.map((id, index) => ctx.db.patch(id, { order: index })),
     );
