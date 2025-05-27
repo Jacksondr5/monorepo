@@ -20,6 +20,7 @@ import {
   SignOutButton,
 } from "@clerk/nextjs";
 import { OrganizationSelect } from "~/components/organization-select";
+import { AddCandidateDialog } from "../components/candidate/add-candidate-dialog";
 
 export const AppSidebar = () => {
   return (
@@ -29,6 +30,9 @@ export const AppSidebar = () => {
         <OrganizationSelect />
       </SidebarHeader>
       <SidebarContent>
+        <div className="p-2">
+          <AddCandidateDialog />
+        </div>
         {/* Boards */}
         <BoardsMenu />
 
