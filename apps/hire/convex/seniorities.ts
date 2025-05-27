@@ -48,7 +48,10 @@ export const addSeniority = seniorityMutation({
 });
 
 export const reorderSeniorities = seniorityMutation({
-  args: z.object({ orgId: z.string(), seniorityIds: z.array(SeniorityIdSchema) }),
+  args: z.object({
+    orgId: z.string(),
+    seniorityIds: z.array(SeniorityIdSchema),
+  }),
   handler: async (ctx, { orgId, seniorityIds }) => {
     const companyId = await getCompanyIdByClerkOrgId(ctx, {
       clerkOrgId: orgId,

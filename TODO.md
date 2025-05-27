@@ -14,6 +14,8 @@
   - Storybook
   - Playwright
 - Invites
+- Add resume upload
+- Add interview notes
 
 ## Later
 
