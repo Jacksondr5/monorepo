@@ -52,7 +52,7 @@ export function AddCandidateDialog() {
           <PlusIcon className="mr-2 h-4 w-4" /> Add Candidate
         </Button>
       </DialogTrigger>
-      <DialogContent className="">
+      <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>Add New Candidate</DialogTitle>
           <DialogDescription>
