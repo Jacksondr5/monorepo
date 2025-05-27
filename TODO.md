@@ -2,7 +2,6 @@
 
 ## MVP
 
-- Add candidate button
 - Finalize candidate fields
 - Basic error handling and toast notifications
 
