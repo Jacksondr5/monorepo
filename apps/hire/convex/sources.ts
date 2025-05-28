@@ -45,8 +45,22 @@ export const addSource = sourceMutation({
 });
 
 export const reorderSources = sourceMutation({
-  args: z.object({ sourceIds: z.array(SourceIdSchema) }),
-  handler: async (ctx, { sourceIds }) => {
+  args: z.object({ orgId: z.string(), sourceIds: z.array(SourceIdSchema) }),
+  handler: async (ctx, { orgId, sourceIds }) => {
+    const companyId = await getCompanyIdByClerkOrgId(ctx, {
+      clerkOrgId: orgId,
+    });
+
+    // Check that the sources belong to the company
+    const sources = await ctx.db
+      .query("sources")
+      .withIndex("by_company_order", (q) => q.eq("companyId", companyId))
+      .collect();
+    const sourceIdsSet = new Set(sources.map((s) => s._id));
+    if (!sourceIds.every((id) => sourceIdsSet.has(id))) {
+      throw new Error("Some sources do not belong to this company");
+    }
+
     await Promise.all(
       sourceIds.map((id, index) => ctx.db.patch(id, { order: index })),
     );

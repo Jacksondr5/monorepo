@@ -47,7 +47,7 @@ export function EditCandidateSheet({
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-lg">
+      <SheetContent className="sm:max-w-4xl">
         <SheetHeader>
           <SheetTitle>Edit Candidate</SheetTitle>
           <SheetDescription>

@@ -62,7 +62,10 @@ export function SourcesTab({ orgId }: { orgId: string }) {
               order: i,
             }));
             setLocalSources(updatedSources);
-            reorderSources({ sourceIds: updatedSources.map((s) => s._id) });
+            reorderSources({
+              orgId,
+              sourceIds: updatedSources.map((s) => s._id),
+            });
           }}
           onTagDeleted={(tagId) => deleteSource({ orgId, _id: tagId })}
         />

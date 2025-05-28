@@ -2,10 +2,6 @@
 
 ## MVP
 
-- Add candidate button
-- Login page
-- Make target team a select field
-- Finalize candidate fields
 - Basic error handling and toast notifications
 
 ## Soon
@@ -16,6 +12,8 @@
   - Storybook
   - Playwright
 - Invites
+- Add resume upload
+- Add interview notes
 
 ## Later
 

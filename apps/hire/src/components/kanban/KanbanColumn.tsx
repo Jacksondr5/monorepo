@@ -8,12 +8,14 @@ import {
 } from "@dnd-kit/sortable";
 import { KanbanCard } from "./KanbanCard";
 import { ZodCandidate } from "~/server/zod/candidate";
+import type { TargetTeam } from "~/server/zod/targetTeam";
 
 interface KanbanColumnProps {
   id: string;
   title: string;
   candidates: ZodCandidate[];
   onCardClick: (candidate: ZodCandidate) => void;
+  targetTeams: TargetTeam[];
 }
 
 const getColumnStyles = (isOver: boolean) => {
@@ -30,6 +32,7 @@ export function KanbanColumn({
   title,
   candidates,
   onCardClick,
+  targetTeams,
 }: KanbanColumnProps) {
   const { setNodeRef, isOver } = useDroppable({ id });
   return (
@@ -47,6 +50,7 @@ export function KanbanColumn({
               key={candidate._id}
               candidate={candidate}
               onClick={() => onCardClick(candidate)}
+              targetTeams={targetTeams}
             />
           ))}
         </div>

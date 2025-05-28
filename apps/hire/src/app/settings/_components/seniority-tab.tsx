@@ -65,6 +65,7 @@ export function SeniorityTab({ orgId }: { orgId: string }) {
             );
             setLocalSeniorities(updatedSeniorities);
             reorderSeniorities({
+              orgId,
               seniorityIds: newSeniorities.map((s) => s.id),
             });
           }}
