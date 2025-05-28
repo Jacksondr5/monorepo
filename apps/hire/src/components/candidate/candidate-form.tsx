@@ -17,6 +17,7 @@ import {
   UpdateCandidateSchema,
 } from "../../server/zod/candidate";
 import { z } from "zod";
+import dayjs from "dayjs";
 
 type AcceptableSchemas =
   | typeof CreateCandidateSchema
@@ -30,6 +31,14 @@ export type CandidateFormProps<T extends AcceptableSchemas> = {
   schema: T;
 };
 
+function convertData<T extends AcceptableSchemas>(data: z.infer<T>) {
+  const startDate = data.startDate ? dayjs(data.startDate).unix() : undefined;
+  return {
+    ...data,
+    startDate,
+  };
+}
+
 export function CandidateForm<T extends AcceptableSchemas>({
   initialData,
   onSubmit,
@@ -41,9 +50,7 @@ export function CandidateForm<T extends AcceptableSchemas>({
     defaultValues: initialData,
     validators: {
       onChange: ({ value }) => {
-        const results = schema.safeParse({
-          ...value,
-        });
+        const results = schema.safeParse(value);
         if (!results.success) {
           const flatErrors = results.error.flatten().fieldErrors;
           console.log(flatErrors);
@@ -118,8 +125,8 @@ export function CandidateForm<T extends AcceptableSchemas>({
             </form.AppField>
             <form.AppField name="startDate">
               {(field) => (
-                <field.FieldInput
-                  label="Start Date (YYYY-MM-DD)"
+                <field.FieldDatePicker
+                  label="Start Date"
                   className="col-start-1"
                 />
               )}
