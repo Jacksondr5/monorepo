@@ -7,7 +7,7 @@ import { Button, Skeleton } from "@j5/component-library";
 import { useStoreUserEffect } from "~/hooks/useStoreUserEffect";
 
 export function Header() {
-  const { isLoading, isAuthenticated } = useStoreUserEffect();
+  const { isAuthenticated } = useStoreUserEffect();
   const latestHackathon = useQuery(
     api.hackathonEvents.getLatestHackathonEvent,
     {},
