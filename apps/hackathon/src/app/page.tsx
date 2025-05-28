@@ -10,13 +10,13 @@ export default function HomePage() {
    * Note: The corresponding styles are in the ./index.tailwind file.
    */
   const latestHackathon = useQuery(
-    api.hackathonEvent.getLatestHackathonEvent,
+    api.hackathonEvents.getLatestHackathonEvent,
     {},
   );
 
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-4xl font-bold text-center">
+    <main className="flex min-h-screen flex-col items-center justify-center">
+      <h1 className="text-center text-4xl font-bold">
         {latestHackathon === undefined && "Loading..."}
         {latestHackathon === null && "No hackathon event found"}
         {latestHackathon && latestHackathon.name}

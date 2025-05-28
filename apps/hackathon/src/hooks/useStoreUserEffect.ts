@@ -1,0 +1,43 @@
+import { useUser } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { Id } from "../../convex/_generated/dataModel";
+import { zodCreateUser } from "../server/zod/user";
+
+export function useStoreUserEffect() {
+  const { user, isSignedIn } = useUser();
+  const [userId, setUserId] = useState<Id<"users"> | null>(null);
+  const storeUser = useMutation(api.users.store);
+
+  useEffect(() => {
+    // If the user is not logged in don't do anything
+    if (!isSignedIn || !user) {
+      // TODO: redirect to auth
+      return;
+    }
+    const userData = {
+      clerkUserId: user.id,
+      firstName: user.firstName!,
+      lastName: user.lastName!,
+      avatarUrl: user.imageUrl,
+      role: "USER",
+    } satisfies zodCreateUser;
+    // Store the user in the database.
+    // Recall that `storeUser` gets the user information via the `auth`
+    // object on the server. You don't need to pass anything manually here.
+    async function createUser() {
+      const id = await storeUser({
+        user: userData,
+      });
+      setUserId(id);
+    }
+    createUser();
+    return () => setUserId(null);
+  }, [isSignedIn, storeUser, user?.id]);
+
+  return {
+    isLoading: !isSignedIn || (isSignedIn && userId === null),
+    isAuthenticated: isSignedIn && userId !== null,
+  };
+}

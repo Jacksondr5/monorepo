@@ -1,5 +1,6 @@
 import "./global.css";
 import { Providers } from "./providers";
+import { Header } from "../components/Header";
 
 export const metadata = {
   title: "Welcome to hackathon",
@@ -13,8 +14,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <Providers>{children}</Providers>
+      <body className="bg-slate-1 h-screen">
+        <Providers>
+          <Header />
+          {children}
+        </Providers>
       </body>
     </html>
   );
