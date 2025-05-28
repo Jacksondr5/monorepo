@@ -11,8 +11,6 @@ function Popover({
   return <PopoverPrimitive.Root data-slot="popover" {...props} />;
 }
 
-
-
 function PopoverTrigger({
   ...props
 }: React.ComponentProps<typeof PopoverPrimitive.Trigger>) {
@@ -33,7 +31,7 @@ function PopoverContent({
         sideOffset={sideOffset}
         className={cn(
           // Design system: popover bg, border, radius, shadow, animation
-          "bg-olive-3 border-olive-6 text-slate-12 shadow-md border rounded-md p-4 z-50 w-72 outline-none",
+          "bg-olive-3 border-olive-6 text-slate-12 z-50 w-72 rounded-md border p-4 shadow-md outline-none",
           "data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
           "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",

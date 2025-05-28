@@ -47,6 +47,7 @@ function Calendar({
           buttonClassName({ variant: "ghost" }),
           "size-8 rounded-md p-0 font-normal transition-colors aria-selected:opacity-100",
         ),
+        // TODO: implement later
         // day_range_start:
         //   "day-range-start aria-selected:bg-grass-9 aria-selected:text-grass-1",
         // day_range_end:

@@ -36,7 +36,7 @@ export function DatePicker({
   );
   // Sync controlled value
   React.useEffect(() => {
-    if (value !== undefined) setInternalDate(value);
+    setInternalDate(value);
   }, [value]);
   const handleSelect = (date: Date | undefined) => {
     setInternalDate(date);

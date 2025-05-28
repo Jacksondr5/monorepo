@@ -24,6 +24,7 @@ export const AllVariants: Story = {
       {/* Default Calendar */}
       <h2 className="text-slate-12">Default Calendar</h2>
       <Calendar {...defaultProps} />
+      {/* TODO: implement later */}
       {/* Range Selection */}
       {/* <h2 className="text-slate-12">Range Selection</h2>
       <Calendar

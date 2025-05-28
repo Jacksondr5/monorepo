@@ -25,7 +25,7 @@ export const AllVariants: Story = {
     <div className="flex flex-col gap-8">
       <div>
         <h3 className="text-slate-12">Default (no value)</h3>
-        <DatePicker {...defaultProps} />
+        <DatePicker placeholder="Pick a date" defaultMonth={targetDate} />
       </div>
       <div>
         <h3 className="text-slate-12">With Value</h3>
