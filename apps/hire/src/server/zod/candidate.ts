@@ -15,6 +15,8 @@ export const CandidateSchema = z.object({
   kanbanStageId: zid("kanbanStages"),
   linkedinProfile: z.string().url({ message: "Invalid URL" }).optional(),
   name: nonEmptyString,
+  location: z.string().optional(),
+  startDate: z.number().optional(), // milliseconds from UTC start
   nextSteps: z.string().optional(),
   phone: z.string().optional(),
   resumeUrl: z.string().url({ message: "Invalid URL" }).optional(),

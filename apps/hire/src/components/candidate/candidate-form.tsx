@@ -77,101 +77,142 @@ export function CandidateForm<T extends AcceptableSchemas>({
           void form.handleSubmit();
         }}
       >
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <form.AppField name="name">
-            {(field) => <field.FieldInput label="Name" />}
-          </form.AppField>
-          <form.AppField name="kanbanStageId">
-            {(field) => (
-              <field.FieldSelect label="Kanban Stage">
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a kanban stage" />
-                </SelectTrigger>
-                <SelectContent>
-                  {kanbanStages.map((kanbanStage) => (
-                    <SelectItem key={kanbanStage._id} value={kanbanStage._id}>
-                      {kanbanStage.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </field.FieldSelect>
-            )}
-          </form.AppField>
-          <form.AppField name="email">
-            {(field) => <field.FieldInput type="email" label="Email" />}
-          </form.AppField>
-          <form.AppField name="sourceId">
-            {(field) => (
-              <field.FieldSelect label="Source">
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a source" />
-                </SelectTrigger>
-                <SelectContent>
-                  {sources.map((source) => (
-                    <SelectItem key={source._id} value={source._id}>
-                      {source.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </field.FieldSelect>
-            )}
-          </form.AppField>
-          <form.AppField name="phone">
-            {(field) => <field.FieldInput type="tel" label="Phone" />}
-          </form.AppField>
-          <form.AppField name="roleId">
-            {(field) => (
-              <field.FieldSelect label="Role">
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a role" />
-                </SelectTrigger>
-                <SelectContent>
-                  {roles.map((role) => (
-                    <SelectItem key={role._id} value={role._id}>
-                      {role.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </field.FieldSelect>
-            )}
-          </form.AppField>
+        <div className="flex gap-6">
+          {/* Left column */}
+          <div className="flex w-full flex-col gap-6">
+            <form.AppField name="name">
+              {(field) => (
+                <field.FieldInput label="Name" className="col-start-1" />
+              )}
+            </form.AppField>
+            <form.AppField name="location">
+              {(field) => (
+                <field.FieldInput label="Location" className="col-start-1" />
+              )}
+            </form.AppField>
+            <form.AppField name="email">
+              {(field) => (
+                <field.FieldInput
+                  type="email"
+                  label="Email"
+                  className="col-start-1"
+                />
+              )}
+            </form.AppField>
+            <form.AppField name="phone">
+              {(field) => (
+                <field.FieldInput
+                  type="tel"
+                  label="Phone"
+                  className="col-start-1"
+                />
+              )}
+            </form.AppField>
+            <form.AppField name="salaryExpectations">
+              {(field) => (
+                <field.FieldInput
+                  label="Salary Expectations"
+                  className="col-start-1"
+                />
+              )}
+            </form.AppField>
+            <form.AppField name="startDate">
+              {(field) => (
+                <field.FieldInput
+                  label="Start Date (YYYY-MM-DD)"
+                  className="col-start-1"
+                />
+              )}
+            </form.AppField>
+          </div>
 
-          <form.AppField name="salaryExpectations">
-            {(field) => <field.FieldInput label="Salary Expectations" />}
-          </form.AppField>
-          <form.AppField name="seniorityId">
-            {(field) => (
-              <field.FieldSelect label="Seniority">
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a seniority level" />
-                </SelectTrigger>
-                <SelectContent>
-                  {seniorities.map((seniority) => (
-                    <SelectItem key={seniority._id} value={seniority._id}>
-                      {seniority.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </field.FieldSelect>
-            )}
-          </form.AppField>
+          {/* Right column */}
+          <div className="flex w-full flex-col gap-6">
+            <form.AppField name="kanbanStageId">
+              {(field) => (
+                <field.FieldSelect label="Kanban Stage" className="col-start-2">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a kanban stage" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {kanbanStages.map((kanbanStage) => (
+                      <SelectItem key={kanbanStage._id} value={kanbanStage._id}>
+                        {kanbanStage.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </field.FieldSelect>
+              )}
+            </form.AppField>
 
-          <form.AppField name="targetTeamId">
-            {(field) => (
-              <field.FieldSelect label="Target Team">
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a target team" />
-                </SelectTrigger>
-                <SelectContent>
-                  {targetTeams.map((team) => (
-                    <SelectItem key={team._id} value={team._id}>
-                      {team.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </field.FieldSelect>
-            )}
-          </form.AppField>
+            <form.AppField name="sourceId">
+              {(field) => (
+                <field.FieldSelect label="Source" className="col-start-2">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a source" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {sources.map((source) => (
+                      <SelectItem key={source._id} value={source._id}>
+                        {source.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </field.FieldSelect>
+              )}
+            </form.AppField>
+
+            <form.AppField name="roleId">
+              {(field) => (
+                <field.FieldSelect label="Role" className="col-start-2">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {roles.map((role) => (
+                      <SelectItem key={role._id} value={role._id}>
+                        {role.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </field.FieldSelect>
+              )}
+            </form.AppField>
+
+            <form.AppField name="seniorityId">
+              {(field) => (
+                <field.FieldSelect label="Seniority" className="col-start-2">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a seniority level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {seniorities.map((seniority) => (
+                      <SelectItem key={seniority._id} value={seniority._id}>
+                        {seniority.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </field.FieldSelect>
+              )}
+            </form.AppField>
+
+            <form.AppField name="targetTeamId">
+              {(field) => (
+                <field.FieldSelect label="Target Team" className="col-start-2">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a target team" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {targetTeams.map((team) => (
+                      <SelectItem key={team._id} value={team._id}>
+                        {team.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </field.FieldSelect>
+              )}
+            </form.AppField>
+          </div>
         </div>
         <Separator className="my-6" />
         <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2">
