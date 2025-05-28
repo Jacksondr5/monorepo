@@ -7,7 +7,7 @@ export const UserSchema = z.object({
   ...baseConvexFields("users"),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
-  avatarUrl: z.string().url().optional(),
+  avatarUrl: z.string().url(),
   role: UserRoleSchema.default("USER"),
 });
 

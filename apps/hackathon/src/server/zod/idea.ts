@@ -8,10 +8,6 @@ export const IdeaSchema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().min(1),
   imageUrls: z.array(z.string().url()).optional(),
-  isFinalized: z
-    .boolean()
-    .default(false)
-    .describe("Admin marks if ready for voting"),
   updatedAt: z.date().optional(),
 });
 
