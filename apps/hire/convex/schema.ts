@@ -18,6 +18,8 @@ export default defineSchema({
     linkedinProfile: v.optional(v.string()),
     name: v.string(),
     nextSteps: v.optional(v.string()),
+    location: v.optional(v.string()),
+    startDate: v.optional(v.number()), // milliseconds from UTC start
     phone: v.optional(v.string()),
     resumeUrl: v.optional(v.string()),
     roleId: v.optional(v.id("roles")),
