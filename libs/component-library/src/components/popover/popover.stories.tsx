@@ -68,7 +68,7 @@ export const OpenAndClose: Story = {
     await step("Open popover", async () => {
       await userEvent.click(triggerButton);
       const content = await screen.findByText("Popover test content");
-      await expect(content).toBeVisible();
+      await waitFor(() => expect(content).toBeVisible());
     });
     await step("Close popover with Escape", async () => {
       await userEvent.keyboard("{Escape}");
