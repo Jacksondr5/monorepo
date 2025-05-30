@@ -25,6 +25,7 @@ export const CandidateSchema = z.object({
   seniorityId: zid("seniorities").optional(),
   sourceId: zid("sources").optional(),
   targetTeamId: TargetTeamIdSchema.optional(),
+  type: z.enum(["employee", "contractor"]).optional(),
   updatedAt: z.number(),
 });
 

@@ -48,7 +48,7 @@ export function DatePicker({
         <Button
           variant="outline"
           className={cn(
-            "w-[280px] justify-start rounded-md px-4 py-2 text-left font-normal",
+            "w-full justify-start rounded-md px-4 py-2 text-left font-normal",
             !internalDate && "text-slate-9",
             className,
           )}
