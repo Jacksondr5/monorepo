@@ -79,48 +79,24 @@ export function CandidateForm<T extends AcceptableSchemas>({
           {/* Left column */}
           <div className="flex w-full flex-col gap-6">
             <form.AppField name="name">
-              {(field) => (
-                <field.FieldInput label="Name" className="col-start-1" />
-              )}
+              {(field) => <field.FieldInput label="Name" />}
             </form.AppField>
 
             <form.AppField name="location">
-              {(field) => (
-                <field.FieldInput label="Location" className="col-start-1" />
-              )}
+              {(field) => <field.FieldInput label="Location" />}
             </form.AppField>
             <form.AppField name="email">
-              {(field) => (
-                <field.FieldInput
-                  type="email"
-                  label="Email"
-                  className="col-start-1"
-                />
-              )}
+              {(field) => <field.FieldInput type="email" label="Email" />}
             </form.AppField>
             <form.AppField name="phone">
-              {(field) => (
-                <field.FieldInput
-                  type="tel"
-                  label="Phone"
-                  className="col-start-1"
-                />
-              )}
+              {(field) => <field.FieldInput type="tel" label="Phone" />}
             </form.AppField>
             <form.AppField name="salaryExpectations">
-              {(field) => (
-                <field.FieldInput
-                  label="Salary Expectations"
-                  className="col-start-1"
-                />
-              )}
+              {(field) => <field.FieldInput label="Salary Expectations" />}
             </form.AppField>
             <form.AppField name="startDate">
               {(field) => (
-                <field.FieldDatePicker
-                  label="Start Date"
-                  className="col-start-1 w-full"
-                />
+                <field.FieldDatePicker label="Start Date" className="w-full" />
               )}
             </form.AppField>
           </div>
@@ -129,7 +105,7 @@ export function CandidateForm<T extends AcceptableSchemas>({
           <div className="flex w-full flex-col gap-6">
             <form.AppField name="kanbanStageId">
               {(field) => (
-                <field.FieldSelect label="Kanban Stage" className="col-start-2">
+                <field.FieldSelect label="Kanban Stage">
                   <SelectTrigger>
                     <SelectValue placeholder="Select a kanban stage" />
                   </SelectTrigger>
@@ -145,7 +121,7 @@ export function CandidateForm<T extends AcceptableSchemas>({
             </form.AppField>
             <form.AppField name="type">
               {(field) => (
-                <field.FieldSelect label="Type" className="col-start-1">
+                <field.FieldSelect label="Type">
                   <SelectTrigger>
                     <SelectValue placeholder="Select a type" />
                   </SelectTrigger>
@@ -158,7 +134,7 @@ export function CandidateForm<T extends AcceptableSchemas>({
             </form.AppField>
             <form.AppField name="sourceId">
               {(field) => (
-                <field.FieldSelect label="Source" className="col-start-2">
+                <field.FieldSelect label="Source">
                   <SelectTrigger>
                     <SelectValue placeholder="Select a source" />
                   </SelectTrigger>
@@ -175,7 +151,7 @@ export function CandidateForm<T extends AcceptableSchemas>({
 
             <form.AppField name="roleId">
               {(field) => (
-                <field.FieldSelect label="Role" className="col-start-2">
+                <field.FieldSelect label="Role">
                   <SelectTrigger>
                     <SelectValue placeholder="Select a role" />
                   </SelectTrigger>
@@ -192,7 +168,7 @@ export function CandidateForm<T extends AcceptableSchemas>({
 
             <form.AppField name="seniorityId">
               {(field) => (
-                <field.FieldSelect label="Seniority" className="col-start-2">
+                <field.FieldSelect label="Seniority">
                   <SelectTrigger>
                     <SelectValue placeholder="Select a seniority level" />
                   </SelectTrigger>
@@ -209,7 +185,7 @@ export function CandidateForm<T extends AcceptableSchemas>({
 
             <form.AppField name="targetTeamId">
               {(field) => (
-                <field.FieldSelect label="Target Team" className="col-start-2">
+                <field.FieldSelect label="Target Team">
                   <SelectTrigger>
                     <SelectValue placeholder="Select a target team" />
                   </SelectTrigger>
@@ -231,7 +207,7 @@ export function CandidateForm<T extends AcceptableSchemas>({
             {(field) => (
               <field.FieldTextarea
                 label="Next Steps"
-                className="col-span-2 col-start-1 max-w-none"
+                className="col-span-2 max-w-none"
               />
             )}
           </form.AppField>
