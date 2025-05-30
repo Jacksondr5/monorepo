@@ -83,6 +83,7 @@ export function CandidateForm<T extends AcceptableSchemas>({
                 <field.FieldInput label="Name" className="col-start-1" />
               )}
             </form.AppField>
+
             <form.AppField name="location">
               {(field) => (
                 <field.FieldInput label="Location" className="col-start-1" />
@@ -118,7 +119,7 @@ export function CandidateForm<T extends AcceptableSchemas>({
               {(field) => (
                 <field.FieldDatePicker
                   label="Start Date"
-                  className="col-start-1"
+                  className="col-start-1 w-full"
                 />
               )}
             </form.AppField>
@@ -142,7 +143,19 @@ export function CandidateForm<T extends AcceptableSchemas>({
                 </field.FieldSelect>
               )}
             </form.AppField>
-
+            <form.AppField name="type">
+              {(field) => (
+                <field.FieldSelect label="Type" className="col-start-1">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="employee">Employee</SelectItem>
+                    <SelectItem value="contractor">Contractor</SelectItem>
+                  </SelectContent>
+                </field.FieldSelect>
+              )}
+            </form.AppField>
             <form.AppField name="sourceId">
               {(field) => (
                 <field.FieldSelect label="Source" className="col-start-2">
