@@ -27,10 +27,15 @@ export function useStoreUserEffect() {
     // Recall that `storeUser` gets the user information via the `auth`
     // object on the server. You don't need to pass anything manually here.
     async function createUser() {
-      const id = await storeUser({
-        user: userData,
-      });
-      setUserId(id);
+      try {
+        const id = await storeUser({
+          user: userData,
+        });
+        setUserId(id);
+      } catch (error) {
+        console.error("Failed to store user:", error);
+        // TODO: add toast
+      }
     }
     createUser();
     return () => setUserId(null);

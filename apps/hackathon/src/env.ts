@@ -2,7 +2,7 @@ import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
 /**
- * Environment variables for the hire application
+ * Environment variables for the hackathon application
  *
  * Required variables:
  * - CONVEX_DEPLOYMENT: Convex deployment identifier (server-only)
@@ -10,7 +10,7 @@ import { z } from "zod";
  * - NEXT_PUBLIC_CONVEX_URL: Convex API URL for client-side queries
  * - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: Clerk publishable key for auth components
  *
- * Set these in a .env.local file at the root of the hire app
+ * Set these in a .env.local file at the root of the hackathon app
  */
 export const env = createEnv({
   server: {},

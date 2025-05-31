@@ -4,11 +4,6 @@ import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 
 export default function HomePage() {
-  /*
-   * Replace the elements below with your own.
-   *
-   * Note: The corresponding styles are in the ./index.tailwind file.
-   */
   const latestHackathon = useQuery(
     api.hackathonEvents.getLatestHackathonEvent,
     {},
