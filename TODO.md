@@ -24,6 +24,10 @@
 - Generally add error handling in the UI and show toast notifications when failures occur
 - Deal with cascading deletion (e.g. deleting a kanban stage when there are boards using it)
 
+# Hackathon
+
+- Figure out how to transition between hackathon phases. Probably need an admin page.
+
 # Component Library
 
 - Add errors to form fields and ensure validation works
@@ -34,3 +38,5 @@
 # Monorepo
 
 - Nx inferred tasks seem to randomly disappear. Need to make a way to validate the task graph against an expected state
+- Migrate shared nextjs things to a lib (providers, shared convex/zod stuff)
+- Figure out how to share config between apps
