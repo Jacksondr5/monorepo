@@ -6,7 +6,6 @@ import { NoOp } from "convex-helpers/server/customFunctions";
 
 const hackathonEventQuery = zCustomQuery(query, NoOp);
 
-// Getter for all hackathon events
 export const getHackathonEvents = hackathonEventQuery({
   args: z.object({}),
   handler: async (ctx, _args) => {
@@ -16,8 +15,7 @@ export const getHackathonEvents = hackathonEventQuery({
   returns: z.array(HackathonEventSchema),
 });
 
-// Getter for the most recently created hackathon event
-// Will replace this with a better way of selecting the current hackathon event later
+// TODO: Replace this with a better way of selecting the current hackathon event
 export const getLatestHackathonEvent = hackathonEventQuery({
   args: z.object({}),
   handler: async (ctx, _args) => {

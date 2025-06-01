@@ -8,6 +8,10 @@ export const textareaVariants = {
     sm: "min-h-[60px] px-2 py-1.5 text-xs",
     lg: "min-h-[100px] px-4 py-3 text-base",
   },
+  resize: {
+    none: "resize-none",
+    vertical: "resize-y",
+  },
 };
 
 const textareaClassName = cva(
@@ -16,6 +20,7 @@ const textareaClassName = cva(
     variants: textareaVariants,
     defaultVariants: {
       size: "default",
+      resize: "none",
     },
   },
 );
@@ -24,11 +29,16 @@ export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
     VariantProps<typeof textareaClassName> {}
 
-const Textarea: React.FC<TextareaProps> = ({ className, size, ...props }) => {
+const Textarea: React.FC<TextareaProps> = ({
+  className,
+  size,
+  resize,
+  ...props
+}) => {
   return (
     <textarea
       data-slot="textarea"
-      className={cn(textareaClassName({ size, className }))}
+      className={cn(textareaClassName({ size, resize, className }))}
       {...props}
     />
   );

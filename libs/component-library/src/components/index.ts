@@ -1,3 +1,4 @@
+export * from "./avatar/avatar";
 export * from "./button/button";
 export * from "./button/submit-button";
 export * from "./form/use-app-form";

@@ -1,4 +1,3 @@
-// --- Zod schema for validation ---
 import { z } from "zod";
 import { zid } from "convex-helpers/server/zod";
 import { baseConvexFieldsOmit, nonEmptyString } from "./utils";
@@ -16,7 +15,7 @@ export const CandidateSchema = z.object({
   linkedinProfile: z.string().url({ message: "Invalid URL" }).optional(),
   name: nonEmptyString,
   location: z.string().optional(),
-  startDate: z.number().optional(), // milliseconds from UTC start
+  startDate: z.number().optional(),
   nextSteps: z.string().optional(),
   phone: z.string().optional(),
   resumeUrl: z.string().url({ message: "Invalid URL" }).optional(),

@@ -14,7 +14,7 @@ export const FieldTextarea = ({
 }) => {
   const field = useFieldContext<string>();
   return (
-    <div className={cn("grid w-full max-w-sm items-center gap-1.5", className)}>
+    <div className={cn("grid w-full items-center gap-1.5", className)}>
       <Label htmlFor={field.name}>{label}</Label>
       <Textarea
         {...props}

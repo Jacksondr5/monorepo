@@ -27,6 +27,7 @@
 # Hackathon
 
 - Figure out how to transition between hackathon phases. Probably need an admin page.
+- Add posthog
 
 # Component Library
 
