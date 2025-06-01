@@ -2,11 +2,11 @@ import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { zodCreateUser, zodUserId } from "../server/zod/user";
+import { ZodCreateUser, ZodUserId } from "../server/zod/user";
 
 export function useStoreUserEffect() {
   const { user, isSignedIn } = useUser();
-  const [userId, setUserId] = useState<zodUserId | null>(null);
+  const [userId, setUserId] = useState<ZodUserId | null>(null);
   const storeUser = useMutation(api.users.upsertUser);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export function useStoreUserEffect() {
       lastName: user.lastName!,
       avatarUrl: user.imageUrl,
       role: "USER",
-    } satisfies zodCreateUser;
+    } satisfies ZodCreateUser;
     // Store the user in the database.
     // Recall that `storeUser` gets the user information via the `auth`
     // object on the server. You don't need to pass anything manually here.

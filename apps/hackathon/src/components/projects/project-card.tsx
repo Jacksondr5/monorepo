@@ -15,7 +15,6 @@ import {
   AvatarImage,
   Button,
 } from "@j5/component-library";
-import { Id } from "../../../convex/_generated/dataModel";
 import { useState } from "react";
 import { ProjectSubmissionForm } from "../project-submission/project-submission-form";
 import { Pencil } from "lucide-react";
@@ -28,12 +27,13 @@ interface ProjectCardProps {
 export function ProjectCard({ project, isEditable }: ProjectCardProps) {
   // TODO: make a better project query that makes this unnecessary
   const creator = useQuery(api.users.getUserById, {
-    userId: project.creatorUserId as Id<"users">,
+    userId: project.creatorUserId,
   });
   const [isEditing, setIsEditing] = useState(false);
   const updateProject = useMutation(api.projects.updateProject);
 
   const onSubmit = async (data: { title: string; description: string }) => {
+    // TODO: handle failure
     await updateProject({
       id: project._id,
       values: data,

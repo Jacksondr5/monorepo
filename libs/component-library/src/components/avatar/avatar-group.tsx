@@ -3,12 +3,19 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 
-export interface AvatarDataItem {
-  src?: string;
-  alt?: string;
+export type AvatarDataItem = {
   fallback: string;
-  className?: string; // Optional className for individual avatars
-}
+  className?: string;
+} & (
+  | {
+      src?: undefined;
+      alt?: string;
+    }
+  | {
+      src: string;
+      alt: string;
+    }
+);
 
 export const avatarGroupVariants = {
   variant: {

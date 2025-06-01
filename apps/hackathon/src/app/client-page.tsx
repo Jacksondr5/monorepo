@@ -21,7 +21,7 @@ export const ClientPage = ({
 }: ClientPageProps) => {
   // We know it isn't null because this component
   // is only shown if there is an active hackathon event
-  const latestHackathon = usePreloadedQuery(preloadedLatestHackathon)!;
+  const latestHackathon = usePreloadedQuery(preloadedLatestHackathon);
   const convexUser = usePreloadedQuery(preloadedConvexUser);
   const projects = usePreloadedQuery(preloadedProjects);
 
@@ -31,6 +31,8 @@ export const ClientPage = ({
   const [submissionSuccess, setSubmissionSuccess] = useState<string | null>(
     null,
   );
+
+  if (!latestHackathon) throw new Error("Expected latest hackathon to exist");
 
   const handleSubmitProject = async (data: {
     title: string;
@@ -52,19 +54,16 @@ export const ClientPage = ({
     } catch (error) {
       console.error("Failed to submit project:", error);
       setSubmissionError(
-        error instanceof Error ? error.message : "An unknown error occurred.",
+        error instanceof Error
+          ? error.message
+          : "Failed to submit project. Please try again.",
       );
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  if (projects.length === 0)
-    return (
-      <p className="text-slate-10">
-        No projects submitted yet for {latestHackathon.name}. Be the first!
-      </p>
-    );
+  const hasProjects = projects.length > 0;
 
   return (
     <div>
@@ -73,13 +72,20 @@ export const ClientPage = ({
           Submitted Projects
         </h2>
         <div className="flex flex-col">
-          {projects.map((project) => (
-            <ProjectCard
-              key={project._id}
-              project={project}
-              isEditable={convexUser?._id === project.creatorUserId}
-            />
-          ))}
+          {hasProjects && (
+            <p className="text-slate-10">
+              No projects submitted yet for {latestHackathon.name}. Be the
+              first!
+            </p>
+          )}
+          {!hasProjects &&
+            projects.map((project) => (
+              <ProjectCard
+                key={project._id}
+                project={project}
+                isEditable={convexUser?._id === project.creatorUserId}
+              />
+            ))}
         </div>
       </div>
       <hr className="border-slate-6 my-8 w-full max-w-4xl" />

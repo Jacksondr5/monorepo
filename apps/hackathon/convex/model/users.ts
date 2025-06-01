@@ -8,7 +8,6 @@ export const getUserByClerkUserId = async (
 ) => {
   const user = await ctx.db
     .query("users")
-    // TODO: use index when schema is finalized
     .withIndex("by_clerk_user_id", (q) => q.eq("clerkUserId", clerkUserId))
     .unique();
   return user ? UserSchema.parse(user) : null;
@@ -27,5 +26,5 @@ export const getCurrentUser = async (ctx: QueryCtx) => {
 };
 
 export const ensureCurrentUserIsAuthenticated = async (ctx: QueryCtx) => {
-  void getCurrentUser(ctx);
+  await getCurrentUser(ctx);
 };

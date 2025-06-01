@@ -11,6 +11,7 @@ import {
   getUserByClerkUserId,
 } from "./model/users";
 import equal from "fast-deep-equal/es6";
+import { ConvexError } from "convex/values";
 
 const userQuery = zCustomQuery(query, NoOp);
 const userMutation = zCustomMutation(mutation, NoOp);
@@ -29,12 +30,17 @@ export const createUser = userMutation({
 export const upsertUser = userMutation({
   args: { user: CreateUserSchema },
   handler: async (ctx, { user }) => {
-    const currentUser = await modelGetCurrentUser(ctx);
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new ConvexError("User must be authenticated.");
+    }
+    const currentUser = await getUserByClerkUserId(ctx, identity.subject);
     if (currentUser) {
-      if (!equal(currentUser, user)) {
-        await ctx.db.patch(currentUser._id, user);
+      const { _id, _creationTime, ...comparableUser } = currentUser;
+      if (!equal(comparableUser, user)) {
+        await ctx.db.patch(_id, user);
       }
-      return currentUser._id;
+      return _id;
     }
     const id = await ctx.db.insert("users", user);
     return id;
