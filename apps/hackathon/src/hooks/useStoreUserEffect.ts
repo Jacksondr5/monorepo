@@ -2,47 +2,56 @@ import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { Id } from "../../convex/_generated/dataModel";
-import { zodCreateUser } from "../server/zod/user";
+import { ZodCreateUser, ZodUserId } from "../server/zod/user";
 
 export function useStoreUserEffect() {
-  const { user, isSignedIn } = useUser();
-  const [userId, setUserId] = useState<Id<"users"> | null>(null);
-  const storeUser = useMutation(api.users.store);
+  const {
+    user: clerkUser,
+    isSignedIn: isClerkSignedIn,
+    isLoaded: isClerkLoaded,
+  } = useUser();
+  const [convexUserId, setConvexUserId] = useState<ZodUserId | null>(null);
+  const [isAuthenticationFinalized, setIsAuthenticationFinalized] =
+    useState(false);
+  const storeUser = useMutation(api.users.upsertUser);
+  console.log("convexUserId", convexUserId);
+  console.log("isSignedIn", isClerkSignedIn);
+  console.log("isLoaded", isClerkLoaded);
+  console.log("isAuthenticationFinalized", isAuthenticationFinalized);
 
   useEffect(() => {
-    // If the user is not logged in don't do anything
-    if (!isSignedIn || !user) {
-      // TODO: redirect to auth
+    // If Clerk is not loaded yet don't do anything
+    if (!isClerkLoaded) return;
+    if (!isClerkSignedIn || !clerkUser) {
+      setIsAuthenticationFinalized(true);
       return;
     }
+
     const userData = {
-      clerkUserId: user.id,
-      firstName: user.firstName!,
-      lastName: user.lastName!,
-      avatarUrl: user.imageUrl,
+      clerkUserId: clerkUser.id,
+      firstName: clerkUser.firstName!,
+      lastName: clerkUser.lastName!,
+      avatarUrl: clerkUser.imageUrl,
       role: "USER",
-    } satisfies zodCreateUser;
-    // Store the user in the database.
-    // Recall that `storeUser` gets the user information via the `auth`
-    // object on the server. You don't need to pass anything manually here.
+    } satisfies ZodCreateUser;
     async function createUser() {
       try {
         const id = await storeUser({
           user: userData,
         });
-        setUserId(id);
+        setConvexUserId(id);
+        setIsAuthenticationFinalized(true);
       } catch (error) {
         console.error("Failed to store user:", error);
         // TODO: add toast
       }
     }
     createUser();
-    return () => setUserId(null);
-  }, [isSignedIn, storeUser, user?.id]);
+    return () => setConvexUserId(null);
+  }, [isClerkSignedIn, storeUser, clerkUser?.id, isClerkLoaded]);
 
   return {
-    isLoading: !isSignedIn || (isSignedIn && userId === null),
-    isAuthenticated: isSignedIn && userId !== null,
+    isLoading: !isAuthenticationFinalized,
+    isAuthenticated: isClerkSignedIn && convexUserId !== null,
   };
 }
