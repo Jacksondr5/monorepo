@@ -25,6 +25,7 @@ export const UserUpdateSchema = UserSchema.omit({
   _id: true,
 });
 
+export type zodUserId = z.infer<typeof UserIdSchema>;
 export type zodUser = z.infer<typeof UserSchema>;
 export type zodUserRole = z.infer<typeof UserRoleSchema>;
 export type zodCreateUser = z.infer<typeof CreateUserSchema>;

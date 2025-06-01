@@ -6,7 +6,10 @@ import {
   UserSchema,
   CreateUserSchema,
 } from "../src/server/zod/user";
-import { getCurrentUser, getUserByClerkUserId } from "./model/users";
+import {
+  getCurrentUser as modelGetCurrentUser,
+  getUserByClerkUserId,
+} from "./model/users";
 import equal from "fast-deep-equal/es6";
 
 const userQuery = zCustomQuery(query, NoOp);
@@ -26,7 +29,7 @@ export const createUser = userMutation({
 export const upsertUser = userMutation({
   args: { user: CreateUserSchema },
   handler: async (ctx, { user }) => {
-    const currentUser = await getCurrentUser(ctx);
+    const currentUser = await modelGetCurrentUser(ctx);
     if (currentUser) {
       if (!equal(currentUser, user)) {
         await ctx.db.patch(currentUser._id, user);
@@ -49,4 +52,11 @@ export const getUserById = userQuery({
     return null;
   },
   returns: UserSchema.nullable(),
+});
+
+export const getCurrentUser = userQuery({
+  handler: async (ctx) => {
+    return modelGetCurrentUser(ctx);
+  },
+  returns: UserSchema,
 });

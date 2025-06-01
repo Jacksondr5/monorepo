@@ -1,7 +1,7 @@
 "use client";
 
 import { z } from "zod";
-import { Card, useAppForm } from "@j5/component-library";
+import { Button, Card, useAppForm } from "@j5/component-library";
 import { CreateProjectSchema } from "../../server/zod/project";
 
 // Define the schema for the form values, picking only title and description
@@ -14,16 +14,22 @@ const ProjectSubmissionFormSchema = CreateProjectSchema.pick({
 type ProjectSubmissionFormValues = z.infer<typeof ProjectSubmissionFormSchema>;
 
 export type ProjectSubmissionFormProps = {
-  onSubmit: (data: ProjectSubmissionFormValues) => Promise<void> | void;
+  defaultData?: ProjectSubmissionFormValues;
   isSubmitting?: boolean;
+  onCancel?: () => void;
+  onSubmit: (data: ProjectSubmissionFormValues) => Promise<void> | void;
+  submitButtonLabel?: string;
 };
 
 export function ProjectSubmissionForm({
+  defaultData,
+  onCancel,
   onSubmit,
   isSubmitting = false,
+  submitButtonLabel = "Submit Project",
 }: ProjectSubmissionFormProps) {
   const form = useAppForm({
-    defaultValues: {
+    defaultValues: defaultData ?? {
       title: "",
       description: "",
     },
@@ -80,8 +86,13 @@ export function ProjectSubmissionForm({
           </p>
           <form.AppForm>
             <form.SubmitButton
-              label={isSubmitting ? "Submitting..." : "Submit Project"}
+              label={isSubmitting ? "Submitting..." : submitButtonLabel}
             />
+            {onCancel && (
+              <Button onClick={onCancel} variant="outline">
+                Cancel
+              </Button>
+            )}
           </form.AppForm>
         </div>
       </form>

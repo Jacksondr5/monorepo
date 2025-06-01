@@ -2,13 +2,12 @@ import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { Id } from "../../convex/_generated/dataModel";
-import { zodCreateUser } from "../server/zod/user";
+import { zodCreateUser, zodUserId } from "../server/zod/user";
 
 export function useStoreUserEffect() {
   const { user, isSignedIn } = useUser();
-  const [userId, setUserId] = useState<Id<"users"> | null>(null);
-  const storeUser = useMutation(api.users.store);
+  const [userId, setUserId] = useState<zodUserId | null>(null);
+  const storeUser = useMutation(api.users.upsertUser);
 
   useEffect(() => {
     // If the user is not logged in don't do anything

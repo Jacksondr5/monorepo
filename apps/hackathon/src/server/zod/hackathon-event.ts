@@ -10,6 +10,7 @@ export const HackathonPhaseSchema = z.enum([
   "EVENT_IN_PROGRESS",
   "EVENT_ENDED",
 ]);
+export const HackathonPhaseValues = HackathonPhaseSchema.enum;
 
 export const HackathonEventSchema = z.object({
   ...baseConvexFields("hackathonEvents"),

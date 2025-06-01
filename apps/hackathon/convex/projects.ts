@@ -71,7 +71,6 @@ export const getProjectsByHackathonEvent = projectQuery({
   handler: async (ctx, { hackathonEventId }) => {
     const projects = await ctx.db
       .query("projects")
-
       .withIndex("by_hackathon_event", (q) =>
         q.eq("hackathonEventId", hackathonEventId),
       )
