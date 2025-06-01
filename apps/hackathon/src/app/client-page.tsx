@@ -72,13 +72,13 @@ export const ClientPage = ({
           Submitted Projects
         </h2>
         <div className="flex flex-col">
-          {hasProjects && (
+          {!hasProjects && (
             <p className="text-slate-10">
               No projects submitted yet for {latestHackathon.name}. Be the
               first!
             </p>
           )}
-          {!hasProjects &&
+          {hasProjects &&
             projects.map((project) => (
               <ProjectCard
                 key={project._id}
