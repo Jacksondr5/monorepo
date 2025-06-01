@@ -14,6 +14,8 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as hackathonEvents from "../hackathonEvents.js";
+import type * as model_users from "../model/users.js";
+import type * as projects from "../projects.js";
 import type * as users from "../users.js";
 
 /**
@@ -26,6 +28,8 @@ import type * as users from "../users.js";
  */
 declare const fullApi: ApiFromModules<{
   hackathonEvents: typeof hackathonEvents;
+  "model/users": typeof model_users;
+  projects: typeof projects;
   users: typeof users;
 }>;
 export declare const api: FilterApi<

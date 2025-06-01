@@ -15,7 +15,7 @@ export const FieldDatePicker = ({
   const field = useFieldContext<number | undefined>();
 
   return (
-    <div className={cn("grid w-full max-w-sm items-center gap-1.5", className)}>
+    <div className={cn("grid w-full items-center gap-1.5", className)}>
       <Label htmlFor={field.name}>{label}</Label>
       <DatePicker
         {...props}
