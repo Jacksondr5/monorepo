@@ -13,10 +13,10 @@ importers:
         version: 1.1.7(@types/react-dom@19.1.5(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@t3-oss/env-core':
         specifier: 0.13.4
-        version: 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.45)
+        version: 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.46)
       '@t3-oss/env-nextjs':
         specifier: 0.13.4
-        version: 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.45)
+        version: 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.46)
       '@tailwindcss/vite':
         specifier: 4.1.8
         version: 4.1.8(vite@6.3.5(@types/node@22.15.29)(jiti@2.4.2)(less@4.1.3)(lightningcss@1.30.1)(sass-embedded@1.89.0)(sass@1.89.0)(stylus@0.64.0)(terser@5.39.2)(tsx@4.19.4)(yaml@2.8.0))
@@ -48,8 +48,8 @@ importers:
         specifier: 3.3.0
         version: 3.3.0
       zod:
-        specifier: 3.25.45
-        version: 3.25.45
+        specifier: 3.25.46
+        version: 3.25.46
     devDependencies:
       '@babel/core':
         specifier: ^7.14.5
@@ -282,19 +282,19 @@ importers:
         version: link:../../libs/component-library
       '@t3-oss/env-nextjs':
         specifier: 0.13.4
-        version: 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.45)
+        version: 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.46)
       '@tanstack/react-form':
         specifier: 1.12.0
         version: 1.12.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@tanstack/zod-form-adapter':
         specifier: 0.42.1
-        version: 0.42.1(zod@3.25.45)
+        version: 0.42.1(zod@3.25.46)
       convex:
         specifier: 1.24.6
         version: 1.24.6(@clerk/clerk-react@5.31.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       convex-helpers:
         specifier: 0.1.89
-        version: 0.1.89(convex@1.24.6(@clerk/clerk-react@5.31.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@3.25.45)
+        version: 0.1.89(convex@1.24.6(@clerk/clerk-react@5.31.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@3.25.46)
       next:
         specifier: 15.3.3
         version: 15.3.3(@babel/core@7.27.4)(@playwright/test@1.52.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.89.0)
@@ -305,8 +305,8 @@ importers:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
       zod:
-        specifier: 3.25.45
-        version: 3.25.45
+        specifier: 3.25.46
+        version: 3.25.46
     devDependencies:
       '@tailwindcss/postcss':
         specifier: 4.1.8
@@ -339,19 +339,19 @@ importers:
         version: link:../../libs/component-library
       '@t3-oss/env-nextjs':
         specifier: 0.13.4
-        version: 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.45)
+        version: 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.46)
       '@tanstack/react-form':
         specifier: 1.12.0
         version: 1.12.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@tanstack/zod-form-adapter':
         specifier: 0.42.1
-        version: 0.42.1(zod@3.25.45)
+        version: 0.42.1(zod@3.25.46)
       convex:
         specifier: 1.24.6
         version: 1.24.6(@clerk/clerk-react@5.31.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       convex-helpers:
         specifier: 0.1.89
-        version: 0.1.89(convex@1.24.6(@clerk/clerk-react@5.31.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@3.25.45)
+        version: 0.1.89(convex@1.24.6(@clerk/clerk-react@5.31.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@3.25.46)
       dayjs:
         specifier: 1.11.13
         version: 1.11.13
@@ -365,8 +365,8 @@ importers:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
       zod:
-        specifier: 3.25.45
-        version: 3.25.45
+        specifier: 3.25.46
+        version: 3.25.46
     devDependencies:
       '@tailwindcss/postcss':
         specifier: 4.1.8
@@ -390,7 +390,7 @@ importers:
         version: link:../../libs/component-library
       '@t3-oss/env-nextjs':
         specifier: 0.13.4
-        version: 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.45)
+        version: 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.46)
       next:
         specifier: 15.3.3
         version: 15.3.3(@babel/core@7.27.4)(@playwright/test@1.52.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.89.0)
@@ -401,8 +401,8 @@ importers:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
       zod:
-        specifier: 3.25.45
-        version: 3.25.45
+        specifier: 3.25.46
+        version: 3.25.46
     devDependencies:
       '@tailwindcss/postcss':
         specifier: 4.1.8
@@ -9954,8 +9954,8 @@ packages:
     resolution: {integrity: sha512-AyeEbWOu/TAXdxlV9wmGcR0+yh2j3vYPGOECcIj2S7MkrLyC7ne+oye2BKTItt0ii2PHk4cDy+95+LshzbXnGg==}
     engines: {node: '>=12.20'}
 
-  zod@3.25.45:
-    resolution: {integrity: sha512-kv1swJBZqv98NQibL0oVvkQE8rXT+6qGNM1FpZkFcJG2jnz4vbtu48bgaitp85CaBPLSKXibrEsU7MzJoVoZAA==}
+  zod@3.25.46:
+    resolution: {integrity: sha512-IqRxcHEIjqLd4LNS/zKffB3Jzg3NwqJxQQ0Ns7pdrvgGkwQsEBdEQcOHaBVqvvZArShRzI39+aMST3FBGmTrLQ==}
 
 snapshots:
 
@@ -13692,19 +13692,19 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@t3-oss/env-core@0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.45)':
+  '@t3-oss/env-core@0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.46)':
     dependencies:
       arktype: 2.1.20
     optionalDependencies:
       typescript: 5.8.3
-      zod: 3.25.45
+      zod: 3.25.46
 
-  '@t3-oss/env-nextjs@0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.45)':
+  '@t3-oss/env-nextjs@0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.46)':
     dependencies:
-      '@t3-oss/env-core': 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.45)
+      '@t3-oss/env-core': 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.46)
     optionalDependencies:
       typescript: 5.8.3
-      zod: 3.25.45
+      zod: 3.25.46
     transitivePeerDependencies:
       - arktype
 
@@ -13814,10 +13814,10 @@ snapshots:
 
   '@tanstack/store@0.7.0': {}
 
-  '@tanstack/zod-form-adapter@0.42.1(zod@3.25.45)':
+  '@tanstack/zod-form-adapter@0.42.1(zod@3.25.46)':
     dependencies:
       '@tanstack/form-core': 0.42.1
-      zod: 3.25.45
+      zod: 3.25.46
 
   '@testing-library/dom@10.4.0':
     dependencies:
@@ -15302,13 +15302,13 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  convex-helpers@0.1.89(convex@1.24.6(@clerk/clerk-react@5.31.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@3.25.45):
+  convex-helpers@0.1.89(convex@1.24.6(@clerk/clerk-react@5.31.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(zod@3.25.46):
     dependencies:
       convex: 1.24.6(@clerk/clerk-react@5.31.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
     optionalDependencies:
       react: 19.1.0
       typescript: 5.8.3
-      zod: 3.25.45
+      zod: 3.25.46
 
   convex@1.24.6(@clerk/clerk-react@5.31.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0):
     dependencies:
@@ -20800,4 +20800,4 @@ snapshots:
 
   yocto-queue@1.2.1: {}
 
-  zod@3.25.45: {}
+  zod@3.25.46: {}
