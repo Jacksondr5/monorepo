@@ -5,7 +5,7 @@
   "dependencies": {
     "@clerk/nextjs": "6.20.2",
     "@j5/component-library": "workspace:*",
-    "@t3-oss/env-nextjs": "0.13.4",
+    "@t3-oss/env-nextjs": "0.13.6",
     "@tanstack/react-form": "1.12.0",
     "@tanstack/zod-form-adapter": "0.42.1",
     "convex": "1.24.6",
