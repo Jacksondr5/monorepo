@@ -13,7 +13,7 @@ import {
   Button,
 } from "@j5/component-library";
 import { ThumbsUp } from "lucide-react";
-import posthog from "posthog-js";
+import { usePostHog } from "posthog-js/react";
 
 interface ProjectCommentsProps {
   comments: Project["comments"];
@@ -38,6 +38,7 @@ export function ProjectComments({
   const removeUpvoteFromCommentMutation = useMutation(
     api.projects.removeUpvoteFromComment,
   );
+  const postHog = usePostHog();
 
   const handleAddComment = async () => {
     if (newCommentText.trim() === "" || !currentUser) return;
@@ -46,7 +47,7 @@ export function ProjectComments({
         projectId,
         text: newCommentText.trim(),
       });
-      posthog.capture("comment_added", {
+      postHog.capture("comment_added", {
         projectId,
         userId: currentUser._id,
       });
@@ -82,7 +83,7 @@ export function ProjectComments({
         });
         postHogAction = "comment_upvote_added";
       }
-      posthog.capture(postHogAction, {
+      postHog.capture(postHogAction, {
         projectId,
         userId: currentUser._id,
       });

@@ -5,7 +5,7 @@ import { api } from "../../convex/_generated/api";
 import { useState } from "react";
 import { ProjectCard } from "~/components/projects/project-card";
 import { ProjectSubmissionForm } from "~/components/project-submission/project-submission-form";
-import posthog from "posthog-js";
+import { usePostHog } from "posthog-js/react";
 
 export interface ClientPageProps {
   preloadedLatestHackathon: Preloaded<
@@ -37,6 +37,7 @@ export const ClientPage = ({
   const [submissionSuccess, setSubmissionSuccess] = useState<string | null>(
     null,
   );
+  const postHog = usePostHog();
 
   if (!latestHackathon) throw new Error("Expected latest hackathon to exist");
 
@@ -56,7 +57,7 @@ export const ClientPage = ({
         },
       });
       setSubmissionSuccess(`Project submitted successfully!`);
-      posthog.capture("project_created", {
+      postHog.capture("project_created", {
         project_id: id,
         title: data.title,
       });

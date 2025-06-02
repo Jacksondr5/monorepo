@@ -17,10 +17,10 @@ import {
 } from "@j5/component-library";
 import { useState } from "react";
 import { ProjectSubmissionForm } from "../project-submission/project-submission-form";
-import posthog from "posthog-js";
 import { Pencil, ThumbsUp } from "lucide-react";
 import { ZodUser } from "~/server/zod";
 import { ProjectComments } from "./ProjectComments";
+import { usePostHog } from "posthog-js/react";
 
 interface ProjectCardProps {
   currentUser: ZodUser;
@@ -41,6 +41,7 @@ export function ProjectCard({
   const removeUpvoteFromProjectMutation = useMutation(
     api.projects.removeUpvoteFromProject,
   );
+  const postHog = usePostHog();
   const creator = userMap.get(project.creatorUserId)!;
 
   const onSubmit = async (data: { title: string; description: string }) => {
@@ -50,7 +51,7 @@ export function ProjectCard({
       values: data,
     });
     setIsEditing(false);
-    posthog.capture("project_updated", {
+    postHog.capture("project_updated", {
       project_id: project._id,
       title: data.title,
     });
@@ -144,7 +145,7 @@ export function ProjectCard({
                   });
                   postHogAction = "project_upvote_added";
                 }
-                posthog.capture(postHogAction, {
+                postHog.capture(postHogAction, {
                   projectId: project._id,
                   userId: currentUser._id,
                 });
