@@ -5,13 +5,12 @@ import { v4 as uuidv4 } from "uuid";
 import {
   CreateProjectSchema,
   ProjectIdSchema,
-  ProjectSchema,
   UpdateProjectSchema,
 } from "../src/server/zod/project";
 import { zCustomMutation, zCustomQuery } from "convex-helpers/server/zod";
 import { NoOp } from "convex-helpers/server/customFunctions";
 import { getCurrentUser } from "./model/users";
-import { HackathonEventIdSchema } from "~/server/zod";
+import { HackathonEventIdSchema, ZodUserId } from "~/server/zod";
 import { getCommentById, updateComment } from "./model/comments";
 import { getProjectById } from "./model/projects";
 import { ProjectListSchema } from "~/server/zod/views/project-list";
@@ -212,13 +211,21 @@ export const removeUpvoteFromComment = projectMutation({
 export const getProjectsByHackathonEvent = projectQuery({
   args: { hackathonEventId: HackathonEventIdSchema },
   handler: async (ctx, { hackathonEventId }) => {
-    const projects = await ctx.db
-      .query("projects")
-      .withIndex("by_hackathon_event", (q) =>
-        q.eq("hackathonEventId", hackathonEventId),
-      )
-      .collect();
-    const userIds = new Set<string>();
+    const projects = (
+      await ctx.db
+        .query("projects")
+        .withIndex("by_hackathon_event", (q) =>
+          q.eq("hackathonEventId", hackathonEventId),
+        )
+        .collect()
+    )
+      // TODO: remove after migration
+      .map((project) => ({
+        ...project,
+        comments: project.comments || [],
+        upvotes: project.upvotes || [],
+      }));
+    const userIds = new Set<ZodUserId>();
     projects.forEach((project) => {
       userIds.add(project.creatorUserId);
       // TODO: remove after migration
@@ -236,8 +243,10 @@ export const getProjectsByHackathonEvent = projectQuery({
         });
       }
     });
-    const users = await ctx.db.query("users").g(userIds).collect();
-    return z.array(ProjectListSchema).parse(projects);
+    const users = await Promise.all(
+      Array.from(userIds).map((userId) => ctx.db.get(userId)),
+    );
+    return ProjectListSchema.parse({ projects, visibleUsers: users });
   },
-  returns: z.array(ProjectListSchema),
+  returns: ProjectListSchema,
 });
