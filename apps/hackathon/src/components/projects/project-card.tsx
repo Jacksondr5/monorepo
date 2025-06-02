@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Project } from "../../server/zod/project";
 import {
@@ -17,21 +17,31 @@ import {
 } from "@j5/component-library";
 import { useState } from "react";
 import { ProjectSubmissionForm } from "../project-submission/project-submission-form";
-import { Pencil } from "lucide-react";
 import posthog from "posthog-js";
+import { Pencil, ThumbsUp } from "lucide-react";
+import { ZodUser } from "~/server/zod";
+import { ProjectComments } from "./ProjectComments";
 
 interface ProjectCardProps {
-  project: Project;
+  currentUser: ZodUser;
   isEditable: boolean;
+  project: Project;
+  userMap: Map<string, ZodUser>;
 }
 
-export function ProjectCard({ project, isEditable }: ProjectCardProps) {
-  // TODO: make a better project query that makes this unnecessary
-  const creator = useQuery(api.users.getUserById, {
-    userId: project.creatorUserId,
-  });
+export function ProjectCard({
+  currentUser,
+  project,
+  isEditable,
+  userMap,
+}: ProjectCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const updateProject = useMutation(api.projects.updateProject);
+  const upvoteProjectMutation = useMutation(api.projects.upvoteProject);
+  const removeUpvoteFromProjectMutation = useMutation(
+    api.projects.removeUpvoteFromProject,
+  );
+  const creator = userMap.get(project.creatorUserId)!;
 
   const onSubmit = async (data: { title: string; description: string }) => {
     // TODO: handle failure
@@ -47,8 +57,6 @@ export function ProjectCard({ project, isEditable }: ProjectCardProps) {
   };
 
   const creatorName = () => {
-    if (creator === undefined) return "Loading author...";
-    if (creator === null) return "Unknown author";
     return `${creator.firstName} ${creator.lastName}`.trim() || "Anonymous";
   };
 
@@ -57,6 +65,10 @@ export function ProjectCard({ project, isEditable }: ProjectCardProps) {
     const lastInitial = lastName?.[0]?.toUpperCase() || "";
     return `${firstInitial}${lastInitial}` || "??"; // Default to '??' for Unknown User
   };
+
+  const hasUpvoted = project.upvotes.some(
+    (upvote) => upvote.userId === currentUser._id,
+  );
 
   if (isEditing)
     return (
@@ -74,11 +86,11 @@ export function ProjectCard({ project, isEditable }: ProjectCardProps) {
           <CardTitle>{project.title}</CardTitle>
           <div className="flex items-center gap-2 pt-2">
             <Avatar className="h-6 w-6">
-              {creator?.avatarUrl && (
+              {creator.avatarUrl && (
                 <AvatarImage src={creator.avatarUrl} alt={creatorName()} />
               )}
               <AvatarFallback className="text-xs">
-                {getInitials(creator?.firstName, creator?.lastName)}
+                {getInitials(creator.firstName, creator.lastName)}
               </AvatarFallback>
             </Avatar>
             <CardDescription className="text-xs">
@@ -100,9 +112,52 @@ export function ProjectCard({ project, isEditable }: ProjectCardProps) {
         <p className="text-slate-11 text-sm">{project.description}</p>
         {/* TODO: Display project images here */}
         {/* {project.imageUrls && project.imageUrls.length > 0 && ( ... )} */}
+
+        <ProjectComments
+          projectId={project._id}
+          comments={project.comments}
+          currentUser={currentUser}
+          userMap={userMap}
+          getInitials={getInitials}
+        />
       </CardContent>
-      <CardFooter className="text-slate-9 text-xs">
-        Last updated: {new Date(project.updatedAt).toLocaleDateString()}
+      <CardFooter className="text-slate-9 flex items-center justify-between text-xs">
+        <span>
+          Last updated: {new Date(project.updatedAt).toLocaleDateString()}
+        </span>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-slate-10 hover:text-grass-9 h-auto p-1 disabled:opacity-50"
+            onClick={async () => {
+              try {
+                if (hasUpvoted) {
+                  await removeUpvoteFromProjectMutation({
+                    projectId: project._id,
+                  });
+                } else {
+                  await upvoteProjectMutation({
+                    projectId: project._id,
+                  });
+                }
+              } catch (error) {
+                console.error("Failed to update project upvote:", error);
+                // TODO: use toast
+              }
+            }}
+          >
+            <ThumbsUp
+              className={`h-4 w-4 ${
+                hasUpvoted ? "fill-grass-9 text-grass-9" : "text-slate-10"
+              }`}
+            />
+          </Button>
+          <span>
+            {project.upvotes.length}{" "}
+            {project.upvotes.length === 1 ? "upvote" : "upvotes"}
+          </span>
+        </div>
       </CardFooter>
     </Card>
   );

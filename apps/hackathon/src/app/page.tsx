@@ -14,7 +14,7 @@ export default async function HomePage() {
   );
   const latestHackathon = preloadedQueryResult(latestHackathonPreloaded);
   if (!latestHackathon) return <NoHackathon />;
-  const convexUser = await preloadQuery(
+  const currentUser = await preloadQuery(
     api.users.getCurrentUser,
     {},
     { token },
@@ -37,7 +37,7 @@ export default async function HomePage() {
       </div>
       <ClientPage
         preloadedLatestHackathon={latestHackathonPreloaded}
-        preloadedConvexUser={convexUser}
+        preloadedCurrentUser={currentUser}
         preloadedProjects={projects}
       />
     </main>

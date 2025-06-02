@@ -11,20 +11,25 @@ export interface ClientPageProps {
   preloadedLatestHackathon: Preloaded<
     typeof api.hackathonEvents.getLatestHackathonEvent
   >;
-  preloadedConvexUser: Preloaded<typeof api.users.getCurrentUser>;
+  preloadedCurrentUser: Preloaded<typeof api.users.getCurrentUser>;
   preloadedProjects: Preloaded<typeof api.projects.getProjectsByHackathonEvent>;
 }
 
 export const ClientPage = ({
   preloadedLatestHackathon,
-  preloadedConvexUser,
+  preloadedCurrentUser,
   preloadedProjects,
 }: ClientPageProps) => {
   // We know it isn't null because this component
   // is only shown if there is an active hackathon event
   const latestHackathon = usePreloadedQuery(preloadedLatestHackathon);
-  const convexUser = usePreloadedQuery(preloadedConvexUser);
-  const projects = usePreloadedQuery(preloadedProjects);
+  const currentUser = usePreloadedQuery(preloadedCurrentUser);
+  const { projects, visibleUsers: visibleUsersArray } =
+    usePreloadedQuery(preloadedProjects);
+
+  const visibleUsers = new Map(
+    visibleUsersArray.map((user) => [user._id, user]),
+  );
 
   const createProject = useMutation(api.projects.createProject);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -87,8 +92,10 @@ export const ClientPage = ({
             projects.map((project) => (
               <ProjectCard
                 key={project._id}
+                currentUser={currentUser}
                 project={project}
-                isEditable={convexUser?._id === project.creatorUserId}
+                isEditable={currentUser?._id === project.creatorUserId}
+                userMap={visibleUsers}
               />
             ))}
         </div>

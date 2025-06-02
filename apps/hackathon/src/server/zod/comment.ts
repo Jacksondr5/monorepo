@@ -1,11 +1,20 @@
 import { z } from "zod";
-// import { baseConvexFields } from "./utils";
+import { UserIdSchema } from "./user";
+import { UpvoteSchema } from "./upvote";
 
 export const CommentSchema = z.object({
-  // ...baseConvexFields("comments"),
-  projectId: z.string().describe("Foreign key to Project.id"),
+  authorId: UserIdSchema,
+  createdAt: z.number(), // NOTE: this is NOT the default Convex _createdAt
+  id: z.string(), // Unique ID for each comment, generated on creation.  NOT the default Convex _id
   text: z.string().min(1),
-  userId: z.string().describe("Foreign key to User.id"),
+  upvotes: z.array(UpvoteSchema),
+});
+
+export const UpdateCommentSchema = CommentSchema.omit({
+  authorId: true,
+  createdAt: true,
+  id: true,
 });
 
 export type Comment = z.infer<typeof CommentSchema>;
+export type UpdateComment = z.infer<typeof UpdateCommentSchema>;
