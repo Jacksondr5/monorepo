@@ -132,15 +132,22 @@ export function ProjectCard({
             className="text-slate-10 hover:text-grass-9 h-auto p-1 disabled:opacity-50"
             onClick={async () => {
               try {
+                let postHogAction = "";
                 if (hasUpvoted) {
                   await removeUpvoteFromProjectMutation({
                     projectId: project._id,
                   });
+                  postHogAction = "project_upvote_removed";
                 } else {
                   await upvoteProjectMutation({
                     projectId: project._id,
                   });
+                  postHogAction = "project_upvote_added";
                 }
+                posthog.capture(postHogAction, {
+                  projectId: project._id,
+                  userId: currentUser._id,
+                });
               } catch (error) {
                 console.error("Failed to update project upvote:", error);
                 // TODO: use toast

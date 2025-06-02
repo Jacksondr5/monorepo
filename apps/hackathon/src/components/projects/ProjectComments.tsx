@@ -13,6 +13,7 @@ import {
   Button,
 } from "@j5/component-library";
 import { ThumbsUp } from "lucide-react";
+import posthog from "posthog-js";
 
 interface ProjectCommentsProps {
   comments: Project["comments"];
@@ -45,6 +46,10 @@ export function ProjectComments({
         projectId,
         text: newCommentText.trim(),
       });
+      posthog.capture("comment_added", {
+        projectId,
+        userId: currentUser._id,
+      });
       setNewCommentText("");
       setShowCommentForm(false);
     } catch (error) {
@@ -63,17 +68,24 @@ export function ProjectComments({
     );
 
     try {
+      let postHogAction = "";
       if (hasUpvoted) {
         await removeUpvoteFromCommentMutation({
           projectId,
           commentId,
         });
+        postHogAction = "comment_upvote_removed";
       } else {
         await upvoteCommentMutation({
           projectId,
           commentId,
         });
+        postHogAction = "comment_upvote_added";
       }
+      posthog.capture(postHogAction, {
+        projectId,
+        userId: currentUser._id,
+      });
     } catch (error) {
       console.error("Failed to update comment upvote:", error);
       // TODO: Better error display
