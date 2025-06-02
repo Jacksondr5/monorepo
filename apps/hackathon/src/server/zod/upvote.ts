@@ -1,10 +1,10 @@
 import { z } from "zod";
-// import { baseConvexFields } from "./utils";
+import { UserIdSchema } from "./user";
 
 export const UpvoteSchema = z.object({
-  // ...baseConvexFields("upvotes"),
-  userId: z.string().describe("Foreign key to User.id"),
-  ideaId: z.string().describe("Foreign key to Idea.id"),
+  // NOTE: this is NOT the default Convex _createdAt
+  createdAt: z.number(),
+  userId: UserIdSchema,
 });
 
 export type Upvote = z.infer<typeof UpvoteSchema>;
