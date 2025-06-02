@@ -8,6 +8,7 @@ onlyBuiltDependencies:
   - "@parcel/watcher"
   - "@swc/core"
   - "@tailwindcss/oxide"
+  - core-js
   - esbuild
   - nx
   - sharp

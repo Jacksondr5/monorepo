@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { ZodCreateUser, ZodUserId } from "../server/zod/user";
+import posthog from "posthog-js";
+import { env } from "~/env";
 
 export function useStoreUserEffect() {
   const {
@@ -14,10 +16,6 @@ export function useStoreUserEffect() {
   const [isAuthenticationFinalized, setIsAuthenticationFinalized] =
     useState(false);
   const storeUser = useMutation(api.users.upsertUser);
-  console.log("convexUserId", convexUserId);
-  console.log("isSignedIn", isClerkSignedIn);
-  console.log("isLoaded", isClerkLoaded);
-  console.log("isAuthenticationFinalized", isAuthenticationFinalized);
 
   useEffect(() => {
     // If Clerk is not loaded yet don't do anything
@@ -40,6 +38,13 @@ export function useStoreUserEffect() {
           user: userData,
         });
         setConvexUserId(id);
+        posthog.identify(id, {
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          avatarUrl: userData.avatarUrl,
+          role: userData.role,
+          env: env.NEXT_PUBLIC_ENV,
+        });
         setIsAuthenticationFinalized(true);
       } catch (error) {
         console.error("Failed to store user:", error);

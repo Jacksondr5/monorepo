@@ -17,9 +17,6 @@ export interface HeaderProps {
 export function Header({ preloadedLatestHackathon }: HeaderProps) {
   const { isAuthenticated, isLoading } = useStoreUserEffect();
   const latestHackathon = usePreloadedQuery(preloadedLatestHackathon);
-  console.log("isLoading", isLoading);
-  console.log("isAuthenticated", isAuthenticated);
-  // TODO: make this server side render so we don't get the UI change
   return (
     <header className="bg-slate-2 border-slate-3 sticky top-0 z-50 w-full border-b backdrop-blur">
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">

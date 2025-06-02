@@ -20,6 +20,7 @@ import { ProjectSubmissionForm } from "../project-submission/project-submission-
 import { Pencil, ThumbsUp } from "lucide-react";
 import { ZodUser } from "~/server/zod";
 import { ProjectComments } from "./ProjectComments";
+import { usePostHog } from "posthog-js/react";
 
 interface ProjectCardProps {
   currentUser: ZodUser;
@@ -40,6 +41,7 @@ export function ProjectCard({
   const removeUpvoteFromProjectMutation = useMutation(
     api.projects.removeUpvoteFromProject,
   );
+  const postHog = usePostHog();
   const creator = userMap.get(project.creatorUserId)!;
 
   const onSubmit = async (data: { title: string; description: string }) => {
@@ -49,6 +51,10 @@ export function ProjectCard({
       values: data,
     });
     setIsEditing(false);
+    postHog.capture("project_updated", {
+      project_id: project._id,
+      title: data.title,
+    });
   };
 
   const creatorName = () => {
@@ -127,15 +133,22 @@ export function ProjectCard({
             className="text-slate-10 hover:text-grass-9 h-auto p-1 disabled:opacity-50"
             onClick={async () => {
               try {
+                let postHogAction = "";
                 if (hasUpvoted) {
                   await removeUpvoteFromProjectMutation({
                     projectId: project._id,
                   });
+                  postHogAction = "project_upvote_removed";
                 } else {
                   await upvoteProjectMutation({
                     projectId: project._id,
                   });
+                  postHogAction = "project_upvote_added";
                 }
+                postHog.capture(postHogAction, {
+                  projectId: project._id,
+                  userId: currentUser._id,
+                });
               } catch (error) {
                 console.error("Failed to update project upvote:", error);
                 // TODO: use toast
