@@ -61,6 +61,10 @@ export function ProjectCard({
     return `${firstInitial}${lastInitial}` || "??"; // Default to '??' for Unknown User
   };
 
+  const hasUpvoted = project.upvotes.some(
+    (upvote) => upvote.userId === currentUser._id,
+  );
+
   if (isEditing)
     return (
       <ProjectSubmissionForm
@@ -122,9 +126,6 @@ export function ProjectCard({
             size="sm"
             className="text-slate-10 hover:text-grass-9 h-auto p-1 disabled:opacity-50"
             onClick={async () => {
-              const hasUpvoted = project.upvotes.some(
-                (upvote) => upvote.userId === currentUser._id,
-              );
               try {
                 if (hasUpvoted) {
                   await removeUpvoteFromProjectMutation({
@@ -143,10 +144,7 @@ export function ProjectCard({
           >
             <ThumbsUp
               className={`h-4 w-4 ${
-                currentUser &&
-                project.upvotes.some(
-                  (upvote) => upvote.userId === currentUser._id,
-                )
+                currentUser && hasUpvoted
                   ? "fill-grass-9 text-grass-9"
                   : "text-slate-10"
               }`}
