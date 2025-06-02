@@ -9,6 +9,7 @@ import { z } from "zod";
  * - NEXT_PUBLIC_CLERK_FRONTEND_API_URL: Clerk frontend API URL for authentication
  * - NEXT_PUBLIC_CONVEX_URL: Convex API URL for client-side queries
  * - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: Clerk publishable key for auth components
+ * - NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL: Clerk sign up force redirect URL
  *
  * Set these in a .env.local file at the root of the hackathon app
  */
@@ -18,6 +19,7 @@ export const env = createEnv({
     NEXT_PUBLIC_CLERK_FRONTEND_API_URL: z.string().min(1),
     NEXT_PUBLIC_CONVEX_URL: z.string().min(1),
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
+    NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL: z.string().min(1),
   },
   // If you're using Next.js < 13.4.4, you'll need to specify the runtimeEnv manually
   runtimeEnv: {
@@ -26,6 +28,8 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_CLERK_FRONTEND_API_URL,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL:
+      process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL,
   },
   // For Next.js >= 13.4.4, you only need to destructure client variables:
   // experimental__runtimeEnv: {
