@@ -21,13 +21,13 @@ function PostHogPageView() {
   const ph = usePostHog();
 
   useEffect(() => {
-    if (pathname && ph) {
+    if (pathname && ph && ph.__loaded) {
       let url = window.origin + pathname;
       const search = searchParams.toString();
       if (search) {
         url += "?" + search;
       }
-      ph.capture("$pageview", { "$current_url": url });
+      ph.capture("$pageview", { $current_url: url });
     }
   }, [pathname, searchParams, ph]);
 
