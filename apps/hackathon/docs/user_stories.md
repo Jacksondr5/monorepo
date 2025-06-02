@@ -12,12 +12,12 @@ This document outlines user stories based on the application requirements.
 
 ## 2. Project Solicitation Phase
 
-- [ ] **US2.1 (Submit Project):** As an authenticated user, I want to submit a new project idea with a title and detailed description so that I can share my concept with others.
+- [x] **US2.1 (Submit Project):** As an authenticated user, I want to submit a new project idea with a title and detailed description so that I can share my concept with others.
 - [ ] **US2.1.1 (Add Project Image):** As an authenticated user, I want to add an image to an idea I have submitted so that I can provide a visual representation of the concept.
-- [ ] **US2.2 (View Project List):** As an authenticated user, I want to view a list of all submitted project ideas so that I can see what others are proposing.
-- [ ] **US2.3 (View Project Details):** As an authenticated user, I want to view the full details of a specific project idea (title, description, links, images, comments, upvotes) so that I can understand it better.
-- [ ] **US2.4 (Upvote Project):** As an authenticated user, I want to upvote a project idea I like so that I can show my support and help indicate popular ideas.
-- [ ] **US2.5 (Comment on Project):** As an authenticated user, I want to leave comments on a project idea so that I can ask questions, provide feedback, or discuss it with others.
+- [x] **US2.2 (View Project List):** As an authenticated user, I want to view a list of all submitted project ideas so that I can see what others are proposing.
+- [x] **US2.3 (View Project Details):** As an authenticated user, I want to view the full details of a specific project idea (title, description, links, images, comments, upvotes) so that I can understand it better.
+- [x] **US2.4 (Upvote Project):** As an authenticated user, I want to upvote a project idea I like so that I can show my support and help indicate popular ideas.
+- [x] **US2.5 (Comment on Project):** As an authenticated user, I want to leave comments on a project idea so that I can ask questions, provide feedback, or discuss it with others.
 
 ## 3. Project Selection Phase
 
