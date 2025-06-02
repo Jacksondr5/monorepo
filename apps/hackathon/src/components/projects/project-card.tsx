@@ -18,6 +18,7 @@ import {
 import { useState } from "react";
 import { ProjectSubmissionForm } from "../project-submission/project-submission-form";
 import { Pencil } from "lucide-react";
+import posthog from "posthog-js";
 
 interface ProjectCardProps {
   project: Project;
@@ -39,6 +40,10 @@ export function ProjectCard({ project, isEditable }: ProjectCardProps) {
       values: data,
     });
     setIsEditing(false);
+    posthog.capture("project_updated", {
+      project_id: project._id,
+      title: data.title,
+    });
   };
 
   const creatorName = () => {

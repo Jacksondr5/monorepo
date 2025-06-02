@@ -5,6 +5,7 @@ import { api } from "../../convex/_generated/api";
 import { useState } from "react";
 import { ProjectCard } from "~/components/projects/project-card";
 import { ProjectSubmissionForm } from "~/components/project-submission/project-submission-form";
+import posthog from "posthog-js";
 
 export interface ClientPageProps {
   preloadedLatestHackathon: Preloaded<
@@ -43,13 +44,17 @@ export const ClientPage = ({
     setSubmissionSuccess(null);
 
     try {
-      await createProject({
+      const id = await createProject({
         data: {
           ...data,
           hackathonEventId: latestHackathon._id,
         },
       });
       setSubmissionSuccess(`Project submitted successfully!`);
+      posthog.capture("project_created", {
+        project_id: id,
+        title: data.title,
+      });
       // Optionally, reset form or redirect
     } catch (error) {
       console.error("Failed to submit project:", error);

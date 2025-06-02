@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { ZodCreateUser, ZodUserId } from "../server/zod/user";
+import posthog from "posthog-js";
 
 export function useStoreUserEffect() {
   const {
@@ -40,6 +41,12 @@ export function useStoreUserEffect() {
           user: userData,
         });
         setConvexUserId(id);
+        posthog.identify(id, {
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          avatarUrl: userData.avatarUrl,
+          role: userData.role,
+        });
         setIsAuthenticationFinalized(true);
       } catch (error) {
         console.error("Failed to store user:", error);
