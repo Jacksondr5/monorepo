@@ -144,9 +144,7 @@ export function ProjectCard({
           >
             <ThumbsUp
               className={`h-4 w-4 ${
-                currentUser && hasUpvoted
-                  ? "fill-grass-9 text-grass-9"
-                  : "text-slate-10"
+                hasUpvoted ? "fill-grass-9 text-grass-9" : "text-slate-10"
               }`}
             />
           </Button>
