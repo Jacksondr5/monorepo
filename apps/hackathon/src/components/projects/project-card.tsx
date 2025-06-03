@@ -21,6 +21,7 @@ import { Pencil, ThumbsUp } from "lucide-react";
 import { ZodUser } from "~/server/zod";
 import { ProjectComments } from "./ProjectComments";
 import { usePostHog } from "posthog-js/react";
+import { captureException } from "@sentry/nextjs";
 
 interface ProjectCardProps {
   currentUser: ZodUser;
@@ -151,6 +152,7 @@ export function ProjectCard({
                 });
               } catch (error) {
                 console.error("Failed to update project upvote:", error);
+                captureException(error);
                 // TODO: use toast
               }
             }}

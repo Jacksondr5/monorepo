@@ -56,3 +56,5 @@ test-output
 storybook-static
 .env
 .env.local
+# Sentry Config File
+.env.sentry-build-plugin
