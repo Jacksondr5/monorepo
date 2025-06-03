@@ -39,7 +39,7 @@ export function Header({ preloadedLatestHackathon }: HeaderProps) {
           ) : isAuthenticated ? (
             <UserButton />
           ) : (
-            <SignInButton mode="modal">
+            <SignInButton mode="modal" signUpForceRedirectUrl="/sign-up">
               <Button variant="default">Sign In</Button>
             </SignInButton>
           )}
