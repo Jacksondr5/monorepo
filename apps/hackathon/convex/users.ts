@@ -62,6 +62,7 @@ export const getUserById = userQuery({
 
 export const getCurrentUser = userQuery({
   handler: async (ctx) => {
+    throw new ConvexError("test");
     return modelGetCurrentUser(ctx);
   },
   returns: UserSchema,

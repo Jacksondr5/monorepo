@@ -1,10 +1,26 @@
 import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
-import { useMutation } from "convex/react";
+import { ReactMutation, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { ZodCreateUser, ZodUserId } from "../server/zod/user";
 import posthog from "posthog-js";
 import { env } from "~/env";
+
+const retryStoreUser = async (
+  fn: ReactMutation<typeof api.users.upsertUser>,
+  user: ZodCreateUser,
+  times: number,
+) => {
+  try {
+    return fn({ user });
+  } catch (error) {
+    if (times === 0) {
+      throw error;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    return retryStoreUser(fn, user, times - 1);
+  }
+};
 
 export function useStoreUserEffect() {
   const {
@@ -34,9 +50,7 @@ export function useStoreUserEffect() {
     } satisfies ZodCreateUser;
     async function createUser() {
       try {
-        const id = await storeUser({
-          user: userData,
-        });
+        const id = await retryStoreUser(storeUser, userData, 3);
         setConvexUserId(id);
         posthog.identify(id, {
           firstName: userData.firstName,
