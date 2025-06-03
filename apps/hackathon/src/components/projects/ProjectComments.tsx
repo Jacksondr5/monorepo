@@ -14,6 +14,7 @@ import {
 } from "@j5/component-library";
 import { ThumbsUp } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
+import { captureException } from "@sentry/nextjs";
 
 interface ProjectCommentsProps {
   comments: Project["comments"];
@@ -55,6 +56,7 @@ export function ProjectComments({
       setShowCommentForm(false);
     } catch (error) {
       console.error("Failed to add comment:", error);
+      captureException(error);
       // TODO: Better error display
     }
   };
@@ -89,6 +91,7 @@ export function ProjectComments({
       });
     } catch (error) {
       console.error("Failed to update comment upvote:", error);
+      captureException(error);
       // TODO: Better error display
     }
   };

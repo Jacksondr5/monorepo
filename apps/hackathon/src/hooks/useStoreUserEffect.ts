@@ -5,6 +5,7 @@ import { api } from "../../convex/_generated/api";
 import { ZodCreateUser, ZodUserId } from "../server/zod/user";
 import posthog from "posthog-js";
 import { env } from "~/env";
+import { captureException } from "@sentry/nextjs";
 
 const retryStoreUser = async (
   fn: ReactMutation<typeof api.users.upsertUser>,
@@ -62,6 +63,7 @@ export function useStoreUserEffect() {
         setIsAuthenticationFinalized(true);
       } catch (error) {
         console.error("Failed to store user:", error);
+        captureException(error);
         // TODO: add toast
       }
     }

@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ProjectCard } from "~/components/projects/project-card";
 import { ProjectSubmissionForm } from "~/components/project-submission/project-submission-form";
 import { usePostHog } from "posthog-js/react";
+import { captureException } from "@sentry/nextjs";
 
 export interface ClientPageProps {
   preloadedLatestHackathon: Preloaded<
@@ -64,6 +65,7 @@ export const ClientPage = ({
       // Optionally, reset form or redirect
     } catch (error) {
       console.error("Failed to submit project:", error);
+      captureException(error);
       setSubmissionError(
         error instanceof Error
           ? error.message
