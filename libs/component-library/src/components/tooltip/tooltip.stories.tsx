@@ -113,8 +113,7 @@ export const AllVariants: Story = {
 
 export const HoverAndFocusTest: Story = {
   name: "Interaction: Hover and Focus Trigger",
-  args: {},
-  render: (args) => (
+  render: () => (
     <TooltipWrapper content="Tooltip appears!" side="bottom">
       <Button variant="outline" data-testid="tooltip-trigger-button">
         Hover or Focus Me

@@ -290,7 +290,7 @@ export const DisabledNoInteraction: Story = {
       // The primary check is that the mock is not called.
       try {
         await userEvent.click(button, { pointerEventsCheck: 0 }); // Attempt click even if pointer events are none
-      } catch (e) {
+      } catch {
         // Expected in some setups if click on disabled is blocked early
       }
       await expect(args.onClick).not.toHaveBeenCalled();
