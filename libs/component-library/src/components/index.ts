@@ -21,6 +21,7 @@ export * from "./separator/separator";
 export * from "./sheet/sheet";
 export * from "./sidebar";
 export * from "./skeleton/skeleton";
+export * from "./sonner/sonner";
 export * from "./sortable-list/sortable-list";
 export * from "./tag/tag";
 export * from "./tabs/tabs";
