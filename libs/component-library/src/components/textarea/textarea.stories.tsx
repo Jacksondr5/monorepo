@@ -61,6 +61,13 @@ export const AllVariants: Story = {
               <Textarea
                 {...args}
                 size={size}
+                resize="vertical"
+                value={`This is some sample text in a resizable ${size} textarea.`}
+                onChange={args.onChange}
+              />
+              <Textarea
+                {...args}
+                size={size}
                 disabled
                 value="Disabled textarea"
               />

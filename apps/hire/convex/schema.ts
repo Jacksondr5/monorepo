@@ -18,6 +18,8 @@ export default defineSchema({
     linkedinProfile: v.optional(v.string()),
     name: v.string(),
     nextSteps: v.optional(v.string()),
+    location: v.optional(v.string()),
+    startDate: v.optional(v.number()), // milliseconds from UTC start
     phone: v.optional(v.string()),
     resumeUrl: v.optional(v.string()),
     roleId: v.optional(v.id("roles")),
@@ -25,6 +27,7 @@ export default defineSchema({
     seniorityId: v.optional(v.id("seniorities")),
     sourceId: v.optional(v.id("sources")),
     targetTeamId: v.optional(v.id("targetTeams")),
+    type: v.optional(v.union(v.literal("employee"), v.literal("contractor"))),
     updatedAt: v.number(), // store as timestamp (Date.now())
   }).index("by_company", ["companyId"]),
   companies: defineTable({

@@ -26,6 +26,12 @@
     },
     {
       "path": "./apps/packing-list"
+    },
+    {
+      "path": "./apps/hackathon-e2e"
+    },
+    {
+      "path": "./apps/hackathon"
     }
   ],
   "ts-node": {

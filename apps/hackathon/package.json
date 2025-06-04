@@ -1,0 +1,28 @@
+{
+  "name": "@j5/hackathon",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@clerk/nextjs": "6.20.2",
+    "@j5/component-library": "workspace:*",
+    "@sentry/nextjs": "^9.24.0",
+    "@t3-oss/env-nextjs": "0.13.6",
+    "@tanstack/react-form": "1.12.0",
+    "@tanstack/zod-form-adapter": "0.42.1",
+    "convex": "1.24.6",
+    "convex-helpers": "0.1.89",
+    "fast-deep-equal": "3.1.3",
+    "next": "15.3.3",
+    "posthog-js": "1.249.0",
+    "posthog-node": "4.18.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "uuid": "^11.1.0",
+    "zod": "3.25.46"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.8",
+    "postcss": "8.5.4",
+    "tailwindcss": "4.1.8"
+  }
+}

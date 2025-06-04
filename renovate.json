@@ -30,7 +30,7 @@
       "matchUpdateTypes": ["major"]
     }
   ],
-  "schedule": ["* * * * 0"],
+  "schedule": ["* 1 * * 0"],
   "vulnerabilityAlerts": {
     "enabled": true
   }
