@@ -13,6 +13,7 @@ import { Project } from "~/server/zod";
 import { PostHog } from "posthog-js/react";
 import { api } from "../../../convex/_generated/api";
 import { ReactMutation } from "convex/react";
+import { captureException } from "@sentry/nextjs";
 
 export interface DeleteProjectDialogProps {
   isOpen: boolean;
@@ -64,6 +65,7 @@ export const DeleteProjectDialog = ({
                 // Optionally, you might want to navigate the user away or refresh the list
               } catch (error) {
                 console.error("Failed to delete project:", error);
+                captureException(error);
                 // TODO: use toast to show error
                 setIsOpen(false);
               }

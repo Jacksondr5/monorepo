@@ -22,6 +22,7 @@ import { ZodUser } from "~/server/zod";
 import { ProjectComments } from "./project-comments";
 import { usePostHog } from "posthog-js/react";
 import { DeleteProjectDialog } from "./delete-project-dialog";
+import { captureException } from "@sentry/nextjs";
 
 interface ProjectCardProps {
   currentUser: ZodUser;
@@ -163,6 +164,7 @@ export function ProjectCard({
                 });
               } catch (error) {
                 console.error("Failed to update project upvote:", error);
+                captureException(error);
                 // TODO: use toast
               }
             }}

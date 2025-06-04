@@ -14,6 +14,7 @@ import { api } from "../../../convex/_generated/api";
 import { ReactMutation } from "convex/react";
 import { CommentId, ProjectId } from "~/server/zod";
 import { Trash2 } from "lucide-react";
+import { captureException } from "@sentry/nextjs";
 
 export interface DeleteCommentDialogContentProps {
   isOpen: boolean;
@@ -81,6 +82,7 @@ export const DeleteCommentDialog = ({
                 setIsOpen(false);
               } catch (error) {
                 console.error("Failed to delete comment:", error);
+                captureException(error);
                 // TODO: use toast to show error
                 setIsOpen(false);
               }
