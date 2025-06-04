@@ -14,6 +14,8 @@ import {
 } from "@j5/component-library";
 import { ThumbsUp } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
+import { DeleteCommentDialog } from "./delete-comment-dialog";
+import { CommentId } from "~/server/zod";
 import { captureException } from "@sentry/nextjs";
 
 interface ProjectCommentsProps {
@@ -39,6 +41,7 @@ export function ProjectComments({
   const removeUpvoteFromCommentMutation = useMutation(
     api.projects.removeUpvoteFromComment,
   );
+  const deleteCommentMutation = useMutation(api.projects.deleteComment);
   const postHog = usePostHog();
 
   const handleAddComment = async () => {
@@ -61,7 +64,7 @@ export function ProjectComments({
     }
   };
 
-  const handleUpvoteComment = async (commentId: string) => {
+  const handleUpvoteComment = async (commentId: CommentId) => {
     if (!currentUser) return;
     const comment = comments.find((c) => c.id === commentId);
     if (!comment) return;
@@ -104,6 +107,7 @@ export function ProjectComments({
           <h4 className="text-slate-12 mb-2 text-sm font-semibold">Comments</h4>
           <ul className="space-y-3">
             {comments.map((comment) => {
+              console.log(comment);
               const commentAuthor = userMap.get(comment.authorId);
               const commentAuthorName = commentAuthor
                 ? `${commentAuthor.firstName} ${commentAuthor.lastName}`.trim() ||
@@ -160,6 +164,17 @@ export function ProjectComments({
                           {comment.upvotes.length}{" "}
                           {comment.upvotes.length === 1 ? "upvote" : "upvotes"}
                         </span>
+                        {currentUser?._id === comment.authorId && (
+                          <DeleteCommentDialog
+                            // isOpen={isDeleteDialogOpen}
+                            projectId={projectId}
+                            commentId={comment.id}
+                            currentUser={currentUser}
+                            postHog={postHog}
+                            // setIsOpen={setIsDeleteDialogOpen}
+                            deleteCommentMutation={deleteCommentMutation}
+                          />
+                        )}
                       </div>
                     </div>
                   </div>
