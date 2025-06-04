@@ -19,8 +19,9 @@ import { useState } from "react";
 import { ProjectSubmissionForm } from "../project-submission/project-submission-form";
 import { Pencil, ThumbsUp } from "lucide-react";
 import { ZodUser } from "~/server/zod";
-import { ProjectComments } from "./ProjectComments";
+import { ProjectComments } from "./project-comments";
 import { usePostHog } from "posthog-js/react";
+import { DeleteProjectDialog } from "./delete-project-dialog";
 
 interface ProjectCardProps {
   currentUser: ZodUser;
@@ -36,7 +37,9 @@ export function ProjectCard({
   userMap,
 }: ProjectCardProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const updateProject = useMutation(api.projects.updateProject);
+  const deleteProjectMutation = useMutation(api.projects.deleteProject);
   const upvoteProjectMutation = useMutation(api.projects.upvoteProject);
   const removeUpvoteFromProjectMutation = useMutation(
     api.projects.removeUpvoteFromProject,
@@ -100,13 +103,22 @@ export function ProjectCard({
           </div>
         </div>
         {isEditable && (
-          <Button
-            variant="ghost"
-            onClick={() => setIsEditing(true)}
-            className="mr-2"
-          >
-            <Pencil />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              onClick={() => setIsEditing(true)}
+              className="mr-2"
+            >
+              <Pencil />
+            </Button>
+            <DeleteProjectDialog
+              isOpen={isDeleteDialogOpen}
+              setIsOpen={setIsDeleteDialogOpen}
+              project={project}
+              deleteProjectMutation={deleteProjectMutation}
+              postHog={postHog}
+            />
+          </div>
         )}
       </CardHeader>
       <CardContent>

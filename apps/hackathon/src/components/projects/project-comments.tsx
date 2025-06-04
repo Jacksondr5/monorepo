@@ -14,6 +14,8 @@ import {
 } from "@j5/component-library";
 import { ThumbsUp } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
+import { DeleteCommentDialog } from "./delete-comment-dialog";
+import { CommentId } from "~/server/zod";
 
 interface ProjectCommentsProps {
   comments: Project["comments"];
@@ -32,12 +34,14 @@ export function ProjectComments({
 }: ProjectCommentsProps) {
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [newCommentText, setNewCommentText] = useState("");
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const addComment = useMutation(api.projects.addCommentToProject);
   const upvoteCommentMutation = useMutation(api.projects.upvoteComment);
   const removeUpvoteFromCommentMutation = useMutation(
     api.projects.removeUpvoteFromComment,
   );
+  const deleteCommentMutation = useMutation(api.projects.deleteComment);
   const postHog = usePostHog();
 
   const handleAddComment = async () => {
@@ -59,7 +63,7 @@ export function ProjectComments({
     }
   };
 
-  const handleUpvoteComment = async (commentId: string) => {
+  const handleUpvoteComment = async (commentId: CommentId) => {
     if (!currentUser) return;
     const comment = comments.find((c) => c.id === commentId);
     if (!comment) return;
@@ -157,6 +161,17 @@ export function ProjectComments({
                           {comment.upvotes.length}{" "}
                           {comment.upvotes.length === 1 ? "upvote" : "upvotes"}
                         </span>
+                        {currentUser?._id === comment.authorId && (
+                          <DeleteCommentDialog
+                            isOpen={isDeleteDialogOpen}
+                            projectId={projectId}
+                            commentId={comment.id}
+                            currentUser={currentUser}
+                            postHog={postHog}
+                            setIsOpen={setIsDeleteDialogOpen}
+                            deleteCommentMutation={deleteCommentMutation}
+                          />
+                        )}
                       </div>
                     </div>
                   </div>

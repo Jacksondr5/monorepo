@@ -119,6 +119,26 @@ export const updateCommentOnProject = projectMutation({
   },
 });
 
+export const deleteComment = projectMutation({
+  args: CommentTargetArgsSchema,
+  handler: async (ctx, { projectId, commentId }) => {
+    const user = await getCurrentUser(ctx);
+    const project = await getProjectById(ctx, projectId);
+
+    const { comment } = await getCommentById(ctx, projectId, commentId);
+
+    if (comment.authorId !== user._id) {
+      throw new ConvexError("Unauthorized to delete this comment.");
+    }
+
+    const updatedComments = project.comments.filter((c) => c.id !== commentId);
+
+    await ctx.db.patch(project._id, {
+      comments: updatedComments,
+    });
+  },
+});
+
 export const upvoteProject = projectMutation({
   args: ProjectTargetArgsSchema,
   handler: async (ctx, { projectId }) => {
