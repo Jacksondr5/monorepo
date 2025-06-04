@@ -38,7 +38,6 @@ export function ProjectCard({
   userMap,
 }: ProjectCardProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const updateProject = useMutation(api.projects.updateProject);
   const deleteProjectMutation = useMutation(api.projects.deleteProject);
   const upvoteProjectMutation = useMutation(api.projects.upvoteProject);
@@ -113,8 +112,6 @@ export function ProjectCard({
               <Pencil />
             </Button>
             <DeleteProjectDialog
-              isOpen={isDeleteDialogOpen}
-              setIsOpen={setIsDeleteDialogOpen}
               project={project}
               deleteProjectMutation={deleteProjectMutation}
               postHog={postHog}

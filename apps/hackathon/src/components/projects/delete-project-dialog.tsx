@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogTrigger,
@@ -14,22 +16,20 @@ import { PostHog } from "posthog-js/react";
 import { api } from "../../../convex/_generated/api";
 import { ReactMutation } from "convex/react";
 import { captureException } from "@sentry/nextjs";
+import { useState } from "react";
 
 export interface DeleteProjectDialogProps {
-  isOpen: boolean;
-  setIsOpen: (newOpen: boolean) => void;
   project: Project;
   deleteProjectMutation: ReactMutation<typeof api.projects.deleteProject>;
   postHog: PostHog;
 }
 
 export const DeleteProjectDialog = ({
-  isOpen,
-  setIsOpen,
   project,
   deleteProjectMutation,
   postHog,
 }: DeleteProjectDialogProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>

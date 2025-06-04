@@ -1,3 +1,5 @@
+"use client";
+
 import {
   DialogContent,
   DialogFooter,
@@ -15,41 +17,35 @@ import { ReactMutation } from "convex/react";
 import { CommentId, ProjectId } from "~/server/zod";
 import { Trash2 } from "lucide-react";
 import { captureException } from "@sentry/nextjs";
+import { useState } from "react";
 
 export interface DeleteCommentDialogContentProps {
-  isOpen: boolean;
+  // isOpen: boolean;
   projectId: ProjectId;
   commentId: CommentId;
   currentUser: ZodUser;
   postHog: PostHog;
-  setIsOpen: (isOpen: boolean) => void;
+  // setIsOpen: (isOpen: boolean) => void;
   deleteCommentMutation: ReactMutation<typeof api.projects.deleteComment>;
 }
 
 export const DeleteCommentDialog = ({
-  isOpen,
+  // isOpen,
   projectId,
   commentId,
   currentUser,
   postHog,
-  setIsOpen,
+  // setIsOpen,
   deleteCommentMutation,
 }: DeleteCommentDialogContentProps) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={(newOpen) => {
-        if (!newOpen) {
-          setIsOpen(false);
-        }
-      }}
-    >
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button
           variant="ghost"
           size="sm"
           className="text-destructive-foreground hover:bg-destructive/80 hover:text-destructive-foreground h-auto p-1"
-          onClick={() => setIsOpen(true)}
         >
           <Trash2 className="h-4 w-4" />
         </Button>
@@ -66,30 +62,32 @@ export const DeleteCommentDialog = ({
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button
-            variant="destructive"
-            onClick={async () => {
-              try {
-                await deleteCommentMutation({
-                  projectId,
-                  commentId,
-                });
-                postHog.capture("comment_deleted", {
-                  projectId,
-                  commentId,
-                  userId: currentUser._id,
-                });
-                setIsOpen(false);
-              } catch (error) {
-                console.error("Failed to delete comment:", error);
-                captureException(error);
-                // TODO: use toast to show error
-                setIsOpen(false);
-              }
-            }}
-          >
-            Delete
-          </Button>
+          <DialogClose asChild>
+            <Button
+              variant="destructive"
+              onClick={async () => {
+                try {
+                  await deleteCommentMutation({
+                    projectId,
+                    commentId,
+                  });
+                  postHog.capture("comment_deleted", {
+                    projectId,
+                    commentId,
+                    userId: currentUser._id,
+                  });
+                  setIsOpen(false);
+                } catch (error) {
+                  console.error("Failed to delete comment:", error);
+                  captureException(error);
+                  // TODO: use toast to show error
+                  setIsOpen(false);
+                }
+              }}
+            >
+              Delete
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

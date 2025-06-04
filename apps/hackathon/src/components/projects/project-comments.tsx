@@ -35,7 +35,6 @@ export function ProjectComments({
 }: ProjectCommentsProps) {
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [newCommentText, setNewCommentText] = useState("");
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const addComment = useMutation(api.projects.addCommentToProject);
   const upvoteCommentMutation = useMutation(api.projects.upvoteComment);
@@ -108,6 +107,7 @@ export function ProjectComments({
           <h4 className="text-slate-12 mb-2 text-sm font-semibold">Comments</h4>
           <ul className="space-y-3">
             {comments.map((comment) => {
+              console.log(comment);
               const commentAuthor = userMap.get(comment.authorId);
               const commentAuthorName = commentAuthor
                 ? `${commentAuthor.firstName} ${commentAuthor.lastName}`.trim() ||
@@ -166,12 +166,12 @@ export function ProjectComments({
                         </span>
                         {currentUser?._id === comment.authorId && (
                           <DeleteCommentDialog
-                            isOpen={isDeleteDialogOpen}
+                            // isOpen={isDeleteDialogOpen}
                             projectId={projectId}
                             commentId={comment.id}
                             currentUser={currentUser}
                             postHog={postHog}
-                            setIsOpen={setIsDeleteDialogOpen}
+                            // setIsOpen={setIsDeleteDialogOpen}
                             deleteCommentMutation={deleteCommentMutation}
                           />
                         )}

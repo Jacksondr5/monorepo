@@ -131,7 +131,10 @@ export const deleteComment = projectMutation({
       throw new ConvexError("Unauthorized to delete this comment.");
     }
 
+    console.log("Deleting comment:", commentId);
     const updatedComments = project.comments.filter((c) => c.id !== commentId);
+
+    console.log("Updated comments:", updatedComments);
 
     await ctx.db.patch(project._id, {
       comments: updatedComments,
