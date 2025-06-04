@@ -5,64 +5,133 @@ import {
   UserIdSchema,
   UserSchema,
   CreateUserSchema,
+  ZodUserId,
+  ZodUser,
 } from "../src/server/zod/user";
 import {
   getCurrentUser as modelGetCurrentUser,
-  getUserByClerkUserId,
+  GetCurrentUserError,
+  getUserByClerkUserIdNullable,
+  getConvexUserIdentity,
 } from "./model/users";
 import equal from "fast-deep-equal/es6";
-import { ConvexError } from "convex/values";
+import {
+  DataIsUnexpectedShapeError,
+  fromPromiseUnexpectedError,
+  getNotFoundError,
+  NotFoundError,
+  safeParseConvexObject,
+  UnexpectedError,
+} from "./model/error";
+import { err, ok, Result } from "neverthrow";
 
 const userQuery = zCustomQuery(query, NoOp);
 const userMutation = zCustomMutation(mutation, NoOp);
 
-export const createUser = userMutation({
-  args: CreateUserSchema,
-  handler: async (ctx, userData) => {
-    const existing = await getUserByClerkUserId(ctx, userData.clerkUserId);
-    if (existing) throw new Error("User already exists");
-    const id = await ctx.db.insert("users", userData);
-    return id;
-  },
-  returns: UserIdSchema,
-});
+// export type CreateUserError =
+//   | J5BaseError<"USER_ALREADY_EXISTS">
+//   | GetUserByClerkUserIdError
+//   | DataIsUnexpectedShapeError
+//   | UnexpectedError;
+
+// export const createUser = userMutation({
+//   args: CreateUserSchema,
+//   handler: async (
+//     ctx,
+//     userData,
+//   ): Promise<Result<ZodUserId, CreateUserError>> => {
+//     const existing = await getUserByClerkUserId(ctx, userData.clerkUserId);
+//     if (existing.isOk()) {
+//       return err({
+//         type: "USER_ALREADY_EXISTS",
+//         message: "User already exists.",
+//       });
+//     }
+//     if (existing.error.type !== "USER_NOT_FOUND") {
+//       return err(existing.error);
+//     }
+//     const insertResult = await fromPromise(
+//       ctx.db.insert("users", userData),
+//       (originalError) => originalError,
+//     );
+//     if (insertResult.isErr()) {
+//       return err({
+//         type: "UNEXPECTED_ERROR",
+//         message: "There was an unexpected error creating the user.",
+//         originalError: insertResult.error,
+//       });
+//     }
+//     const id = insertResult.value;
+//     return ok(id);
+//   },
+// });
+
+export type UpsertUserError =
+  | GetCurrentUserError
+  | DataIsUnexpectedShapeError
+  | UnexpectedError;
 
 export const upsertUser = userMutation({
   args: { user: CreateUserSchema },
-  handler: async (ctx, { user }) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      throw new ConvexError("User must be authenticated.");
+  handler: async (
+    ctx,
+    { user },
+  ): Promise<Result<ZodUserId, UpsertUserError>> => {
+    const userIdentityResult = await getConvexUserIdentity(ctx);
+    if (userIdentityResult.isErr()) return err(userIdentityResult.error);
+
+    const existingUserResult = await getUserByClerkUserIdNullable(
+      ctx,
+      userIdentityResult.value.subject,
+    );
+    if (existingUserResult.isErr()) {
+      return err(existingUserResult.error);
     }
-    const currentUser = await getUserByClerkUserId(ctx, identity.subject);
-    if (currentUser) {
-      const { _id, _creationTime, ...comparableUser } = currentUser;
-      if (!equal(comparableUser, user)) {
-        await ctx.db.patch(_id, user);
-      }
-      return _id;
+
+    // If the user doesn't exist, create it
+    if (!existingUserResult.value) {
+      return fromPromiseUnexpectedError(
+        ctx.db.insert("users", user),
+        "while creating the user",
+      );
     }
-    const id = await ctx.db.insert("users", user);
-    return id;
+
+    // If the user exists, update it
+    const currentUser = existingUserResult.value;
+    const { _id, _creationTime, ...comparableUser } = currentUser;
+    if (!equal(comparableUser, user)) {
+      return fromPromiseUnexpectedError(
+        ctx.db.patch(_id, user),
+        "while updating the user",
+      ).andThen(() => ok(_id));
+    }
+    return ok(_id);
   },
-  returns: UserIdSchema,
 });
+
+export type GetUserByIdError =
+  | UnexpectedError
+  | NotFoundError<"USER">
+  | DataIsUnexpectedShapeError;
 
 export const getUserById = userQuery({
   args: { userId: UserIdSchema },
-  handler: async (ctx, { userId }) => {
-    const user = await ctx.db.get(userId);
-    if (user) {
-      return UserSchema.parse(user);
+  handler: async (
+    ctx,
+    { userId },
+  ): Promise<Result<ZodUser, GetUserByIdError>> => {
+    const userResult = await fromPromiseUnexpectedError(ctx.db.get(userId));
+    if (userResult.isErr()) return err(userResult.error);
+    const user = userResult.value;
+    if (!user) {
+      return err(getNotFoundError("USER", userId));
     }
-    return null;
+    return safeParseConvexObject(UserSchema, user);
   },
-  returns: UserSchema.nullable(),
 });
 
 export const getCurrentUser = userQuery({
   handler: async (ctx) => {
     return modelGetCurrentUser(ctx);
   },
-  returns: UserSchema,
 });
