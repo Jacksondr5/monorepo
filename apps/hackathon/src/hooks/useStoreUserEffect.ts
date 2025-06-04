@@ -51,7 +51,12 @@ export function useStoreUserEffect() {
     } satisfies ZodCreateUser;
     async function createUser() {
       try {
-        const id = await retryStoreUser(storeUser, userData, 3);
+        const idResult = await retryStoreUser(storeUser, userData, 3);
+        if (idResult.isErr()) {
+          console.error("Failed to store user:", idResult.error);
+          return;
+        }
+        const id = idResult.value;
         setConvexUserId(id);
         posthog.identify(id, {
           firstName: userData.firstName,
