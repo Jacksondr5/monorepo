@@ -6,22 +6,29 @@ import { ToastProps, Toast } from "./toast";
 
 type ToastPropsWithoutId = Omit<ToastProps, "id">;
 
-export function toast(
-  toastData: ToastPropsWithoutId & Partial<Pick<ToastProps, "id">>,
-) {
-  console.log("toast data", toastData.id);
+export function toast({
+  title,
+  description,
+  action,
+  icon,
+  variant,
+  ...toastData
+}: ToastPropsWithoutId & Partial<Pick<ToastProps, "id">>) {
+  console.log(toastData);
   return sonnerToast.custom(
     (id) => (
       <Toast
         id={id}
-        title={toastData.title}
-        description={toastData.description}
-        action={toastData.action}
-        icon={toastData.icon}
-        variant={toastData.variant}
+        title={title}
+        description={description}
+        action={action}
+        icon={icon}
+        variant={variant}
       />
     ),
-    toastData,
+    {
+      ...toastData,
+    },
   );
 }
 
@@ -44,7 +51,7 @@ export function promiseToast(
         variant: "success",
       });
     })
-    .catch((error) => {
+    .catch(() => {
       toast({
         ...toastData.error,
         id: toastId,

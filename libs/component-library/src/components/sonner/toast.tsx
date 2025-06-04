@@ -105,23 +105,6 @@ export function Toast(props: ToastProps) {
       />
     );
 
-  const ringOffsetColorClass = () => {
-    switch (variant) {
-      case "success":
-        return "ring-offset-green-2";
-      case "error":
-        return "ring-offset-red-2";
-      case "warning":
-        return "ring-offset-amber-2";
-      case "info":
-        return "ring-offset-blue-2";
-      case "loading":
-        return "ring-offset-slate-2";
-      default:
-        return "ring-offset-olive-2";
-    }
-  };
-
   return (
     <div
       className={cn(
@@ -144,7 +127,7 @@ export function Toast(props: ToastProps) {
               "inline-flex items-center justify-center rounded-md px-2.5 py-1.5 text-sm font-medium",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
               currentVariantStyle.actionButtonClass,
-              ringOffsetColorClass(),
+              currentVariantStyle.ringOffsetClass,
             )}
             onClick={() => {
               action.onClick();

@@ -25,6 +25,7 @@ export function Sidebar({
   side = "left",
   variant = "sidebar",
   collapsible = "offcanvas",
+  // TODO: this is never used, fix that
   defaultOpen = true,
   className,
   children,

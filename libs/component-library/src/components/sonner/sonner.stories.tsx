@@ -4,7 +4,6 @@ import { Toaster } from "sonner";
 import { Button } from "../button/button";
 import { ToastVariant } from "./toast";
 import { expect, within, userEvent, waitFor, spyOn } from "@storybook/test";
-import { useState } from "react";
 
 const meta: Meta<typeof Toaster> = {
   title: "Components/Toast/sonner",
@@ -134,7 +133,9 @@ export const WithAction: StoryObj = {
     const canvas = within(canvasElement);
 
     // Mock window.alert
-    const alertMock = spyOn(window, "alert").mockImplementation(() => {});
+    const alertMock = spyOn(window, "alert").mockImplementation(
+      () => undefined,
+    );
 
     const triggerButton = await canvas.findByRole("button", {
       name: /Show Toast with Action/i,

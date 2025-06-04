@@ -9,8 +9,6 @@ import { cn } from "../../lib/utils";
 export interface CheckboxGroupItem {
   id: string;
   label: string;
-  // Allow any other props, e.g., disabled, custom styling, etc.
-  [key: string]: any;
 }
 
 export interface FieldCheckboxGroupProps
