@@ -23,16 +23,16 @@ export type GetHackathonEventsError =
 const _getHackathonEventsHandler = async (
   ctx: QueryCtx,
 ): Promise<Result<HackathonEvent[], GetHackathonEventsError>> => {
-    return fromPromise(
-      ctx.db.query("hackathonEvents").collect(),
-      (e): UnexpectedError => ({
-        message: "Failed to fetch hackathon events.",
-        originalError: e,
-        type: "UNEXPECTED_ERROR",
-      }),
-    ).andThen((events) => {
-      return safeParseConvexArray(HackathonEventSchema, events);
-    });
+  return fromPromise(
+    ctx.db.query("hackathonEvents").collect(),
+    (e): UnexpectedError => ({
+      message: "Failed to fetch hackathon events.",
+      originalError: e,
+      type: "UNEXPECTED_ERROR",
+    }),
+  ).andThen((events) => {
+    return safeParseConvexArray(HackathonEventSchema, events);
+  });
 };
 
 export const getHackathonEvents = query({
@@ -50,19 +50,19 @@ export type GetLatestHackathonEventError =
 const _getLatestHackathonEventHandler = async (
   ctx: QueryCtx,
 ): Promise<Result<HackathonEvent, GetLatestHackathonEventError>> => {
-    return fromPromise(
-      ctx.db.query("hackathonEvents").order("desc").first(),
-      (e): UnexpectedError => ({
-        message: "Failed to fetch the latest hackathon event.",
-        originalError: e,
-        type: "UNEXPECTED_ERROR",
-      }),
-    ).andThen((latestEvent) => {
-      if (!latestEvent) {
-        return err(getNotFoundError("HACKATHON_EVENT", "latest"));
-      }
-      return safeParseConvexObject(HackathonEventSchema, latestEvent);
-    });
+  return fromPromise(
+    ctx.db.query("hackathonEvents").order("desc").first(),
+    (e): UnexpectedError => ({
+      message: "Failed to fetch the latest hackathon event.",
+      originalError: e,
+      type: "UNEXPECTED_ERROR",
+    }),
+  ).andThen((latestEvent) => {
+    if (!latestEvent) {
+      return err(getNotFoundError("HACKATHON_EVENT", "latest"));
+    }
+    return safeParseConvexObject(HackathonEventSchema, latestEvent);
+  });
 };
 
 export const getLatestHackathonEvent = query({
