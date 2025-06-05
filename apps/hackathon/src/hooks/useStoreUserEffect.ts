@@ -2,35 +2,38 @@ import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { ReactMutation, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { ZodCreateUser, ZodUserId } from "../server/zod/user";
+import { CreateUserSchema, ZodCreateUser, ZodUserId } from "../server/zod/user";
 import posthog from "posthog-js";
 import { env } from "~/env";
 import { captureException } from "@sentry/nextjs";
 import { toast } from "@j5/component-library";
 import { useRouter, usePathname } from "next/navigation";
 import { err } from "neverthrow";
-import { serializeResult, UnexpectedError } from "../../convex/model/error";
+import {
+  DataIsUnexpectedShapeError,
+  serializeResult,
+  UnexpectedError,
+} from "../../convex/model/error";
+import { processError } from "~/lib/errors";
 
 const retryStoreUser = async (
   fn: ReactMutation<typeof api.users.upsertUser>,
   user: ZodCreateUser,
   times: number,
 ) => {
-  try {
-    return fn({ user });
-  } catch (error) {
-    if (times === 0) {
-      return serializeResult(
-        err({
-          message: "Failed to store user.  Please try reloading the page.",
-          type: "UNEXPECTED_ERROR",
-          originalError: error,
-        } satisfies UnexpectedError),
-      );
-    }
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    return retryStoreUser(fn, user, times - 1);
+  const result = await fn({ user });
+  if (result.ok) return result;
+  if (times === 0) {
+    return serializeResult(
+      err({
+        message: "Failed to store user.  Please try reloading the page.",
+        type: "UNEXPECTED_ERROR",
+        originalError: result.error,
+      } satisfies UnexpectedError),
+    );
   }
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  return retryStoreUser(fn, user, times - 1);
 };
 
 export function useStoreUserEffect() {
@@ -65,6 +68,19 @@ export function useStoreUserEffect() {
       role: "USER",
     } satisfies ZodCreateUser;
     async function createUser() {
+      const thing = CreateUserSchema.safeParse(userData);
+      if (!thing.success) {
+        const error = JSON.stringify(thing.error.format());
+        processError(
+          {
+            type: "DATA_IS_UNEXPECTED_SHAPE",
+            message: error,
+          } satisfies DataIsUnexpectedShapeError,
+          "Failed to store user",
+        );
+        setUserUpsertSucceeded(false);
+        return;
+      }
       const idResult = await retryStoreUser(storeUser, userData, 3);
       if (!idResult.ok) {
         captureException(idResult.error, { level: "fatal" });
