@@ -68,9 +68,9 @@ export function useStoreUserEffect() {
       role: "USER",
     } satisfies ZodCreateUser;
     async function createUser() {
-      const thing = CreateUserSchema.safeParse(userData);
-      if (!thing.success) {
-        const error = JSON.stringify(thing.error.format());
+      const parsedUser = CreateUserSchema.safeParse(userData);
+      if (!parsedUser.success) {
+        const error = JSON.stringify(parsedUser.error.format());
         processError(
           {
             type: "DATA_IS_UNEXPECTED_SHAPE",
