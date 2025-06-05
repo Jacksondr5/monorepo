@@ -42,3 +42,4 @@
 - Nx inferred tasks seem to randomly disappear. Need to make a way to validate the task graph against an expected state
 - Migrate shared nextjs things to a lib (providers, shared convex/zod stuff)
 - Figure out how to share config between apps
+- Zod 4

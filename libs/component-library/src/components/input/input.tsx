@@ -12,6 +12,10 @@ export const inputVariants = {
     sm: "h-8 py-1 text-xs",
     lg: "h-12 py-2 text-lg",
   },
+  error: {
+    true: "border-tomato-7 focus-visible:ring-tomato-8",
+    false: "border-slate-6 focus-visible:ring-slate-7",
+  },
   layout: {
     none: "", // Default padding
     iconLeft: "", // Padding for icon on the left
@@ -38,6 +42,7 @@ const inputCva = cva(inputBaseClasses, {
   defaultVariants: {
     size: "default",
     layout: "none",
+    error: false,
   },
 });
 
@@ -84,10 +89,22 @@ export interface InputProps
   // Uses inputCva for size variant
   icon?: React.ReactNode;
   iconPosition?: "left" | "right"; // This prop name is fine
+  error?: boolean;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, size, icon, iconPosition = "left", ...props }, ref) => {
+  (
+    {
+      className,
+      type,
+      size,
+      icon,
+      iconPosition = "left",
+      error = false,
+      ...props
+    },
+    ref,
+  ) => {
     const hasIcon = Boolean(icon);
     const layoutVariant = hasIcon
       ? iconPosition === "left"
@@ -112,7 +129,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             type={type}
             data-slot="input"
             className={cn(
-              inputCva({ size, layout: layoutVariant }),
+              inputCva({ size, layout: layoutVariant, error }),
               className, // Merge external className here
             )}
             ref={ref}
