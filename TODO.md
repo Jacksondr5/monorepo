@@ -29,6 +29,7 @@
 - Figure out how to transition between hackathon phases. Probably need an admin page.
 - Add posthog
 - Add better upvote UI, showing who upvoted
+- The zod convex helper library breaks neverthrow by validating the args outside of the neverthrow. Need to bring arg validation into the code I control
 
 # Component Library
 
