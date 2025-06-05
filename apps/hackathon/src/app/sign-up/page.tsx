@@ -19,7 +19,7 @@ export default function SignUp() {
     }
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
-  }, [isLoading]);
+  }, [isLoading, userUpsertSucceeded, router]);
   if (userUpsertSucceeded === false) {
     return (
       <div className="text-slate-12 flex flex-col items-center justify-center gap-8 p-4 md:p-8">

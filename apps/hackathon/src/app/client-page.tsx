@@ -24,30 +24,6 @@ export const ClientPage = ({
   const latestHackathonResult = usePreloadedQuery(preloadedLatestHackathon);
   const currentUserResult = usePreloadedQuery(preloadedCurrentUser);
   const projectsResult = usePreloadedQuery(preloadedProjects);
-
-  // TODO: actually handle error
-  if (
-    !projectsResult.ok ||
-    !latestHackathonResult.ok ||
-    !currentUserResult.ok
-  ) {
-    unwrapSerializableResult(projectsResult, "Failed to fetch projects");
-    unwrapSerializableResult(
-      latestHackathonResult,
-      "Failed to fetch latest hackathon",
-    );
-    unwrapSerializableResult(currentUserResult, "Failed to fetch current user");
-    return null;
-  }
-
-  const { projects, visibleUsers: visibleUsersArray } = projectsResult.value;
-  const latestHackathon = latestHackathonResult.value;
-  const currentUser = currentUserResult.value;
-
-  const visibleUsers = new Map(
-    visibleUsersArray.map((user) => [user._id, user]),
-  );
-
   const createProject = useMutation(api.projects.createProject);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
@@ -56,7 +32,27 @@ export const ClientPage = ({
   );
   const postHog = usePostHog();
 
-  if (!latestHackathon) throw new Error("Expected latest hackathon to exist");
+  // TODO: actually handle error
+  const projectsResultValue = unwrapSerializableResult(
+    projectsResult,
+    "Failed to fetch projects",
+  );
+  const latestHackathon = unwrapSerializableResult(
+    latestHackathonResult,
+    "Failed to fetch latest hackathon",
+  );
+  const currentUser = unwrapSerializableResult(
+    currentUserResult,
+    "Failed to fetch current user",
+  );
+  if (!projectsResultValue || !latestHackathon || !currentUser) {
+    return null;
+  }
+  const { projects, visibleUsers: visibleUsersArray } = projectsResultValue;
+
+  const visibleUsers = new Map(
+    visibleUsersArray.map((user) => [user._id, user]),
+  );
 
   const handleSubmitProject = async (data: {
     title: string;

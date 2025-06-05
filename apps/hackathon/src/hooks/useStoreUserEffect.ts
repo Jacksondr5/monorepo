@@ -8,6 +8,8 @@ import { env } from "~/env";
 import { captureException } from "@sentry/nextjs";
 import { toast } from "@j5/component-library";
 import { useRouter, usePathname } from "next/navigation";
+import { err } from "neverthrow";
+import { serializeResult, UnexpectedError } from "../../convex/model/error";
 
 const retryStoreUser = async (
   fn: ReactMutation<typeof api.users.upsertUser>,
@@ -18,7 +20,13 @@ const retryStoreUser = async (
     return fn({ user });
   } catch (error) {
     if (times === 0) {
-      throw error;
+      return serializeResult(
+        err({
+          message: "Failed to store user.  Please try reloading the page.",
+          type: "UNEXPECTED_ERROR",
+          originalError: error,
+        } satisfies UnexpectedError),
+      );
     }
     await new Promise((resolve) => setTimeout(resolve, 1000));
     return retryStoreUser(fn, user, times - 1);
@@ -92,7 +100,7 @@ export function useStoreUserEffect() {
     }
     createUser();
     return () => setConvexUserId(null);
-  }, [isClerkSignedIn, storeUser, clerkUser?.id, isClerkLoaded]);
+  }, [isClerkSignedIn, storeUser, clerkUser, isClerkLoaded, pathname, router]);
 
   return {
     isLoading: !isAuthenticationFinalized,

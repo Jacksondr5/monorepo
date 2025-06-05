@@ -61,7 +61,7 @@ const _upsertUserHandler = async (
   // If the user exists, update it
   const currentUser = existingUserResult.value;
   const { _id, _creationTime, ...comparableUser } = currentUser;
-  if (!equal(comparableUser, user)) {
+  if (comparableUser !== user && !equal(comparableUser, user)) {
     return fromPromiseUnexpectedError(
       ctx.db.patch(_id, user),
       "while updating the user",

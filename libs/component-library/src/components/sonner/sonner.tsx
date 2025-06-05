@@ -16,7 +16,6 @@ export function toast({
   ...toastData
 }: ToastPropsWithoutId &
   Partial<Pick<ToastProps, "id">> & { duration?: number }) {
-  console.log(toastData);
   return sonnerToast.custom(
     (id) => (
       <Toast

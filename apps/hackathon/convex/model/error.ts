@@ -95,11 +95,13 @@ export const unwrapResult = <T, E>(result: Result<T, E>): T | E => {
   return result.value;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type SerializableOK<T, E> = {
   ok: true;
   value: T;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type SerializableError<T, E> = {
   ok: false;
   error: E;
@@ -124,28 +126,3 @@ export const serializeResult = async <T, E>(
   }
   return { ok: true, value: result.value };
 };
-
-// export const unwrapPromise = <T, E>(
-//   promise: Promise<Result<T, E>>,
-// ): Promise<SerializableResult<T, E>> => {
-//   return promise.then((result) => {
-//     if (result.isErr()) {
-//       return { error: result.error };
-//     }
-//     return { value: result.value };
-//   });
-// };
-
-// export const unwrapResultFn = async <T, E>(
-//   fn: () => Promise<Result<T, E>>,
-// ): Promise<T | E> => {
-//   const result = await fn();
-//   if (result.isErr()) {
-//     throw result.error;
-//   }
-//   return result.value;
-// };
-
-// export const isError = (value: object): value is J5BaseError<string> => {
-//   return "type" in value && "message" in value;
-// };
