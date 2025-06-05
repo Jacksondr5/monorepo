@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { query } from "./_generated/server";
+import { query, QueryCtx } from "./_generated/server";
 import { HackathonEventSchema } from "../src/server/zod/hackathon-event";
 import { Result, err, fromPromise } from "neverthrow";
 import {
@@ -9,6 +9,7 @@ import {
   getNotFoundError,
   safeParseConvexArray,
   safeParseConvexObject,
+  serializeResult,
 } from "./model/error";
 
 // Infer the type from the Zod schema
@@ -19,11 +20,9 @@ export type GetHackathonEventsError =
   | DataIsUnexpectedShapeError
   | UnexpectedError;
 
-export const getHackathonEvents = query({
-  args: {},
-  handler: async (
-    ctx,
-  ): Promise<Result<HackathonEvent[], GetHackathonEventsError>> => {
+const _getHackathonEventsHandler = async (
+  ctx: QueryCtx,
+): Promise<Result<HackathonEvent[], GetHackathonEventsError>> => {
     return fromPromise(
       ctx.db.query("hackathonEvents").collect(),
       (e): UnexpectedError => ({
@@ -34,7 +33,11 @@ export const getHackathonEvents = query({
     ).andThen((events) => {
       return safeParseConvexArray(HackathonEventSchema, events);
     });
-  },
+};
+
+export const getHackathonEvents = query({
+  args: {},
+  handler: (ctx) => serializeResult(_getHackathonEventsHandler(ctx)),
 });
 
 // Error type for getLatestHackathonEvent
@@ -44,11 +47,9 @@ export type GetLatestHackathonEventError =
   | UnexpectedError;
 
 // TODO: Replace this with a better way of selecting the current hackathon event
-export const getLatestHackathonEvent = query({
-  args: {},
-  handler: async (
-    ctx,
-  ): Promise<Result<HackathonEvent, GetLatestHackathonEventError>> => {
+const _getLatestHackathonEventHandler = async (
+  ctx: QueryCtx,
+): Promise<Result<HackathonEvent, GetLatestHackathonEventError>> => {
     return fromPromise(
       ctx.db.query("hackathonEvents").order("desc").first(),
       (e): UnexpectedError => ({
@@ -62,5 +63,9 @@ export const getLatestHackathonEvent = query({
       }
       return safeParseConvexObject(HackathonEventSchema, latestEvent);
     });
-  },
+};
+
+export const getLatestHackathonEvent = query({
+  args: {},
+  handler: (ctx) => serializeResult(_getLatestHackathonEventHandler(ctx)),
 });

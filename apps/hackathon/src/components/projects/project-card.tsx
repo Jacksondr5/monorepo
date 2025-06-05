@@ -22,7 +22,12 @@ import { ZodUser } from "~/server/zod";
 import { ProjectComments } from "./project-comments";
 import { usePostHog } from "posthog-js/react";
 import { DeleteProjectDialog } from "./delete-project-dialog";
-import { captureException } from "@sentry/nextjs";
+import { SerializableResult } from "../../../convex/model/error";
+import {
+  RemoveUpvoteFromProjectError,
+  UpvoteProjectError,
+} from "../../../convex/projects";
+import { processError } from "~/lib/errors";
 
 interface ProjectCardProps {
   currentUser: ZodUser;
@@ -38,7 +43,7 @@ export function ProjectCard({
   userMap,
 }: ProjectCardProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const updateProject = useMutation(api.projects.updateProject);
+  const updateProjectMutation = useMutation(api.projects.updateProject);
   const deleteProjectMutation = useMutation(api.projects.deleteProject);
   const upvoteProjectMutation = useMutation(api.projects.upvoteProject);
   const removeUpvoteFromProjectMutation = useMutation(
@@ -48,11 +53,14 @@ export function ProjectCard({
   const creator = userMap.get(project.creatorUserId)!;
 
   const onSubmit = async (data: { title: string; description: string }) => {
-    // TODO: handle failure
-    await updateProject({
+    const updateProjectResult = await updateProjectMutation({
       id: project._id,
       values: data,
     });
+    if (!updateProjectResult.ok) {
+      processError(updateProjectResult.error, "Failed to update project");
+      return;
+    }
     setIsEditing(false);
     postHog.capture("project_updated", {
       project_id: project._id,
@@ -142,27 +150,33 @@ export function ProjectCard({
             size="sm"
             className="text-slate-10 hover:text-grass-9 h-auto p-1 disabled:opacity-50"
             onClick={async () => {
-              try {
-                let postHogAction = "";
-                if (hasUpvoted) {
-                  await removeUpvoteFromProjectMutation({
-                    projectId: project._id,
-                  });
-                  postHogAction = "project_upvote_removed";
-                } else {
-                  await upvoteProjectMutation({
-                    projectId: project._id,
-                  });
-                  postHogAction = "project_upvote_added";
-                }
+              let postHogAction = "";
+              let mutationResult: SerializableResult<
+                void,
+                RemoveUpvoteFromProjectError | UpvoteProjectError
+              >;
+              if (hasUpvoted) {
+                mutationResult = await removeUpvoteFromProjectMutation({
+                  projectId: project._id,
+                });
+                postHogAction = "project_upvote_removed";
+              } else {
+                mutationResult = await upvoteProjectMutation({
+                  projectId: project._id,
+                });
+                postHogAction = "project_upvote_added";
+              }
+
+              if (mutationResult.ok) {
                 postHog.capture(postHogAction, {
                   projectId: project._id,
                   userId: currentUser._id,
                 });
-              } catch (error) {
-                console.error("Failed to update project upvote:", error);
-                captureException(error);
-                // TODO: use toast
+              } else {
+                processError(
+                  mutationResult.error,
+                  "Failed to update project upvote",
+                );
               }
             }}
           >

@@ -87,3 +87,65 @@ export const fromPromiseUnexpectedError = <T>(
     originalError,
   }));
 };
+
+export const unwrapResult = <T, E>(result: Result<T, E>): T | E => {
+  if (result.isErr()) {
+    return result.error;
+  }
+  return result.value;
+};
+
+export type SerializableOK<T, E> = {
+  ok: true;
+  value: T;
+};
+
+export type SerializableError<T, E> = {
+  ok: false;
+  error: E;
+};
+
+export type SerializableResult<T, E> =
+  | SerializableOK<T, E>
+  | SerializableError<T, E>;
+
+export const serializeResult = async <T, E>(
+  result: Result<T, E> | Promise<Result<T, E>>,
+): Promise<SerializableResult<T, E>> => {
+  if (result instanceof Promise) {
+    const resolvedResult = await result;
+    if (resolvedResult.isErr()) {
+      return { ok: false, error: resolvedResult.error };
+    }
+    return { ok: true, value: resolvedResult.value };
+  }
+  if (result.isErr()) {
+    return { ok: false, error: result.error };
+  }
+  return { ok: true, value: result.value };
+};
+
+// export const unwrapPromise = <T, E>(
+//   promise: Promise<Result<T, E>>,
+// ): Promise<SerializableResult<T, E>> => {
+//   return promise.then((result) => {
+//     if (result.isErr()) {
+//       return { error: result.error };
+//     }
+//     return { value: result.value };
+//   });
+// };
+
+// export const unwrapResultFn = async <T, E>(
+//   fn: () => Promise<Result<T, E>>,
+// ): Promise<T | E> => {
+//   const result = await fn();
+//   if (result.isErr()) {
+//     throw result.error;
+//   }
+//   return result.value;
+// };
+
+// export const isError = (value: object): value is J5BaseError<string> => {
+//   return "type" in value && "message" in value;
+// };

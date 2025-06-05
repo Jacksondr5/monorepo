@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { mutation, query } from "./_generated/server";
+import { mutation, query, MutationCtx, QueryCtx } from "./_generated/server";
 import { v4 as uuidv4 } from "uuid";
 import {
   CreateProjectSchema,
@@ -27,6 +27,7 @@ import {
   UnauthorizedError,
   DataIsUnexpectedShapeError,
   safeParseConvexObject,
+  serializeResult,
 } from "./model/error";
 import { err, ok, Result } from "neverthrow";
 
@@ -106,12 +107,10 @@ export type GetProjectsByHackathonEventError =
   | DataIsUnexpectedShapeError;
 
 // --- Mutations ---
-export const createProject = projectMutation({
-  args: { data: CreateProjectSchema },
-  handler: async (
-    ctx,
-    { data },
-  ): Promise<Result<ProjectId, CreateProjectError>> => {
+const _createProjectHandler = async (
+  ctx: MutationCtx,
+  { data }: { data: z.infer<typeof CreateProjectSchema> },
+): Promise<Result<ProjectId, CreateProjectError>> => {
     const userResult = await getCurrentUser(ctx);
     if (userResult.isErr()) return err(userResult.error);
     const projectIdResult = await fromPromiseUnexpectedError(
@@ -125,18 +124,17 @@ export const createProject = projectMutation({
       }),
     );
     return projectIdResult;
-  },
+};
+
+export const createProject = projectMutation({
+  args: { data: CreateProjectSchema },
+  handler: (ctx, args) => serializeResult(_createProjectHandler(ctx, args)),
 });
 
-export const updateProject = projectMutation({
-  args: {
-    id: ProjectIdSchema,
-    values: UpdateProjectSchema,
-  },
-  handler: async (
-    ctx,
-    { id, values },
-  ): Promise<Result<void, UpdateProjectError>> => {
+const _updateProjectHandler = async (
+  ctx: MutationCtx,
+  { id, values }: { id: ProjectId; values: z.infer<typeof UpdateProjectSchema> },
+): Promise<Result<void, UpdateProjectError>> => {
     const userResult = await getCurrentUser(ctx);
     if (userResult.isErr()) return err(userResult.error);
     const user = userResult.value;
@@ -162,12 +160,20 @@ export const updateProject = projectMutation({
     if (patchResult.isErr()) return err(patchResult.error);
 
     return ok();
+};
+
+export const updateProject = projectMutation({
+  args: {
+    id: ProjectIdSchema,
+    values: UpdateProjectSchema,
   },
+  handler: (ctx, args) => serializeResult(_updateProjectHandler(ctx, args)),
 });
 
-export const deleteProject = projectMutation({
-  args: { id: ProjectIdSchema },
-  handler: async (ctx, { id }): Promise<Result<void, DeleteProjectError>> => {
+const _deleteProjectHandler = async (
+  ctx: MutationCtx,
+  { id }: { id: ProjectId },
+): Promise<Result<void, DeleteProjectError>> => {
     const userResult = await getCurrentUser(ctx);
     if (userResult.isErr()) return err(userResult.error);
     const user = userResult.value;
@@ -190,15 +196,17 @@ export const deleteProject = projectMutation({
     if (deleteResult.isErr()) return err(deleteResult.error);
 
     return ok();
-  },
+};
+
+export const deleteProject = projectMutation({
+  args: { id: ProjectIdSchema },
+  handler: (ctx, args) => serializeResult(_deleteProjectHandler(ctx, args)),
 });
 
-export const addCommentToProject = projectMutation({
-  args: AddCommentSchema,
-  handler: async (
-    ctx,
-    { projectId, text },
-  ): Promise<Result<void, AddCommentToProjectError>> => {
+const _addCommentToProjectHandler = async (
+  ctx: MutationCtx,
+  { projectId, text }: z.infer<typeof AddCommentSchema>,
+): Promise<Result<void, AddCommentToProjectError>> => {
     const userResult = await getCurrentUser(ctx);
     if (userResult.isErr()) return err(userResult.error);
     const user = userResult.value;
@@ -224,25 +232,29 @@ export const addCommentToProject = projectMutation({
     if (patchResult.isErr()) return err(patchResult.error);
 
     return ok();
-  },
+};
+
+export const addCommentToProject = projectMutation({
+  args: AddCommentSchema,
+  handler: (ctx, args) => serializeResult(_addCommentToProjectHandler(ctx, args)),
 });
+
+const _updateCommentOnProjectHandler = async (
+  ctx: MutationCtx,
+  { projectId, commentId, text }: z.infer<typeof UpdateCommentSchema>,
+): Promise<Result<void, UpdateCommentOnProjectError>> => {
+    return updateComment(ctx, projectId, commentId, { text });
+};
 
 export const updateCommentOnProject = projectMutation({
   args: UpdateCommentSchema,
-  handler: async (
-    ctx,
-    { projectId, commentId, text },
-  ): Promise<Result<void, UpdateCommentOnProjectError>> => {
-    return updateComment(ctx, projectId, commentId, { text });
-  },
+  handler: (ctx, args) => serializeResult(_updateCommentOnProjectHandler(ctx, args)),
 });
 
-export const deleteComment = projectMutation({
-  args: CommentTargetArgsSchema,
-  handler: async (
-    ctx,
-    { projectId, commentId },
-  ): Promise<Result<void, DeleteCommentError>> => {
+const _deleteCommentHandler = async (
+  ctx: MutationCtx,
+  { projectId, commentId }: z.infer<typeof CommentTargetArgsSchema>,
+): Promise<Result<void, DeleteCommentError>> => {
     const userResult = await getCurrentUser(ctx);
     if (userResult.isErr()) return err(userResult.error);
     const user = userResult.value;
@@ -275,15 +287,17 @@ export const deleteComment = projectMutation({
     if (patchResult.isErr()) return err(patchResult.error);
 
     return ok();
-  },
+};
+
+export const deleteComment = projectMutation({
+  args: CommentTargetArgsSchema,
+  handler: (ctx, args) => serializeResult(_deleteCommentHandler(ctx, args)),
 });
 
-export const upvoteProject = projectMutation({
-  args: ProjectTargetArgsSchema,
-  handler: async (
-    ctx,
-    { projectId },
-  ): Promise<Result<void, UpvoteProjectError>> => {
+const _upvoteProjectHandler = async (
+  ctx: MutationCtx,
+  { projectId }: z.infer<typeof ProjectTargetArgsSchema>,
+): Promise<Result<void, UpvoteProjectError>> => {
     const userResult = await getCurrentUser(ctx);
     if (userResult.isErr()) return err(userResult.error);
     const user = userResult.value;
@@ -312,15 +326,17 @@ export const upvoteProject = projectMutation({
     if (patchResult.isErr()) return err(patchResult.error);
 
     return ok();
-  },
+};
+
+export const upvoteProject = projectMutation({
+  args: ProjectTargetArgsSchema,
+  handler: (ctx, args) => serializeResult(_upvoteProjectHandler(ctx, args)),
 });
 
-export const removeUpvoteFromProject = projectMutation({
-  args: ProjectTargetArgsSchema,
-  handler: async (
-    ctx,
-    { projectId },
-  ): Promise<Result<void, RemoveUpvoteFromProjectError>> => {
+const _removeUpvoteFromProjectHandler = async (
+  ctx: MutationCtx,
+  { projectId }: z.infer<typeof ProjectTargetArgsSchema>,
+): Promise<Result<void, RemoveUpvoteFromProjectError>> => {
     const userResult = await getCurrentUser(ctx);
     if (userResult.isErr()) return err(userResult.error);
     const user = userResult.value;
@@ -346,15 +362,17 @@ export const removeUpvoteFromProject = projectMutation({
     if (patchResult.isErr()) return err(patchResult.error);
 
     return ok();
-  },
+};
+
+export const removeUpvoteFromProject = projectMutation({
+  args: ProjectTargetArgsSchema,
+  handler: (ctx, args) => serializeResult(_removeUpvoteFromProjectHandler(ctx, args)),
 });
 
-export const upvoteComment = projectMutation({
-  args: CommentTargetArgsSchema,
-  handler: async (
-    ctx,
-    { projectId, commentId },
-  ): Promise<Result<void, UpvoteCommentError>> => {
+const _upvoteCommentHandler = async (
+  ctx: MutationCtx,
+  { projectId, commentId }: z.infer<typeof CommentTargetArgsSchema>,
+): Promise<Result<void, UpvoteCommentError>> => {
     const userResult = await getCurrentUser(ctx);
     if (userResult.isErr()) return err(userResult.error);
     const user = userResult.value;
@@ -377,15 +395,17 @@ export const upvoteComment = projectMutation({
     };
 
     return updateComment(ctx, projectId, commentId, updatedCommentData);
-  },
+};
+
+export const upvoteComment = projectMutation({
+  args: CommentTargetArgsSchema,
+  handler: (ctx, args) => serializeResult(_upvoteCommentHandler(ctx, args)),
 });
 
-export const removeUpvoteFromComment = projectMutation({
-  args: CommentTargetArgsSchema,
-  handler: async (
-    ctx,
-    { projectId, commentId },
-  ): Promise<Result<void, RemoveUpvoteFromCommentError>> => {
+const _removeUpvoteFromCommentHandler = async (
+  ctx: MutationCtx,
+  { projectId, commentId }: z.infer<typeof CommentTargetArgsSchema>,
+): Promise<Result<void, RemoveUpvoteFromCommentError>> => {
     const userResult = await getCurrentUser(ctx);
     if (userResult.isErr()) return err(userResult.error);
     const user = userResult.value;
@@ -409,18 +429,20 @@ export const removeUpvoteFromComment = projectMutation({
     };
 
     return updateComment(ctx, projectId, commentId, updatedCommentData);
-  },
+};
+
+export const removeUpvoteFromComment = projectMutation({
+  args: CommentTargetArgsSchema,
+  handler: (ctx, args) => serializeResult(_removeUpvoteFromCommentHandler(ctx, args)),
 });
 
 // --- Queries ---
-export const getProjectsByHackathonEvent = projectQuery({
-  args: { hackathonEventId: HackathonEventIdSchema },
-  handler: async (
-    ctx,
-    { hackathonEventId },
-  ): Promise<
-    Result<z.infer<typeof ProjectListSchema>, GetProjectsByHackathonEventError>
-  > => {
+const _getProjectsByHackathonEventHandler = async (
+  ctx: QueryCtx,
+  { hackathonEventId }: { hackathonEventId: z.infer<typeof HackathonEventIdSchema> },
+): Promise<
+  Result<z.infer<typeof ProjectListSchema>, GetProjectsByHackathonEventError>
+> => {
     const projectsResult = await fromPromiseUnexpectedError(
       ctx.db
         .query("projects")
@@ -472,5 +494,9 @@ export const getProjectsByHackathonEvent = projectQuery({
       projects,
       visibleUsers: users,
     });
-  },
+};
+
+export const getProjectsByHackathonEvent = projectQuery({
+  args: { hackathonEventId: HackathonEventIdSchema },
+  handler: (ctx, args) => serializeResult(_getProjectsByHackathonEventHandler(ctx, args)),
 });

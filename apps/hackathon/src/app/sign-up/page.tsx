@@ -4,21 +4,32 @@ import { LoaderCircle } from "lucide-react";
 import { useStoreUserEffect } from "~/hooks/useStoreUserEffect";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { Button } from "@j5/component-library";
 
 export default function SignUp() {
-  const { isLoading } = useStoreUserEffect();
+  const { isLoading, userUpsertSucceeded } = useStoreUserEffect();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && userUpsertSucceeded) {
       const timeoutId = setTimeout(() => {
-        // router.push("/");
+        router.push("/");
       }, 3000);
       return () => clearTimeout(timeoutId);
     }
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
   }, [isLoading]);
+  if (userUpsertSucceeded === false) {
+    return (
+      <div className="text-slate-12 flex flex-col items-center justify-center gap-8 p-4 md:p-8">
+        <div className="flex items-center gap-2 text-3xl" aria-live="polite">
+          Failed to create your account. Please try again.
+        </div>
+        <Button onClick={() => window.location.reload()}>Try Again</Button>
+      </div>
+    );
+  }
 
   return (
     <div className="text-slate-12 flex flex-col items-center justify-center gap-8 p-4 md:p-8">

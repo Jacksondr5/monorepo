@@ -12,8 +12,9 @@ export default async function HomePage() {
     {},
     { token },
   );
-  const latestHackathon = preloadedQueryResult(latestHackathonPreloaded);
-  if (!latestHackathon) return <NoHackathon />;
+  const latestHackathonResult = preloadedQueryResult(latestHackathonPreloaded);
+  if (!latestHackathonResult.ok) return <NoHackathon />;
+  const latestHackathon = latestHackathonResult.value;
   const currentUser = await preloadQuery(
     api.users.getCurrentUser,
     {},

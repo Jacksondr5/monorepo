@@ -12,8 +12,10 @@ export function toast({
   action,
   icon,
   variant,
+  duration,
   ...toastData
-}: ToastPropsWithoutId & Partial<Pick<ToastProps, "id">>) {
+}: ToastPropsWithoutId &
+  Partial<Pick<ToastProps, "id">> & { duration?: number }) {
   console.log(toastData);
   return sonnerToast.custom(
     (id) => (
@@ -28,6 +30,7 @@ export function toast({
     ),
     {
       ...toastData,
+      duration,
     },
   );
 }

@@ -16,7 +16,7 @@ import { ThumbsUp } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 import { DeleteCommentDialog } from "./delete-comment-dialog";
 import { CommentId } from "~/server/zod";
-import { captureException } from "@sentry/nextjs";
+import { processError } from "~/lib/errors";
 
 interface ProjectCommentsProps {
   comments: Project["comments"];
@@ -46,22 +46,20 @@ export function ProjectComments({
 
   const handleAddComment = async () => {
     if (newCommentText.trim() === "" || !currentUser) return;
-    try {
-      await addComment({
-        projectId,
-        text: newCommentText.trim(),
-      });
-      postHog.capture("comment_added", {
-        projectId,
-        userId: currentUser._id,
-      });
-      setNewCommentText("");
-      setShowCommentForm(false);
-    } catch (error) {
-      console.error("Failed to add comment:", error);
-      captureException(error);
-      // TODO: Better error display
+    const result = await addComment({
+      projectId,
+      text: newCommentText.trim(),
+    });
+    if (!result.ok) {
+      processError(result.error, "Failed to add comment");
+      return;
     }
+    postHog.capture("comment_added", {
+      projectId,
+      userId: currentUser._id,
+    });
+    setNewCommentText("");
+    setShowCommentForm(false);
   };
 
   const handleUpvoteComment = async (commentId: CommentId) => {
@@ -73,30 +71,32 @@ export function ProjectComments({
       (upvote) => upvote.userId === currentUser._id,
     );
 
-    try {
-      let postHogAction = "";
-      if (hasUpvoted) {
-        await removeUpvoteFromCommentMutation({
-          projectId,
-          commentId,
-        });
-        postHogAction = "comment_upvote_removed";
-      } else {
-        await upvoteCommentMutation({
-          projectId,
-          commentId,
-        });
-        postHogAction = "comment_upvote_added";
-      }
-      postHog.capture(postHogAction, {
+    let postHogAction = "";
+    if (hasUpvoted) {
+      const result = await removeUpvoteFromCommentMutation({
         projectId,
-        userId: currentUser._id,
+        commentId,
       });
-    } catch (error) {
-      console.error("Failed to update comment upvote:", error);
-      captureException(error);
-      // TODO: Better error display
+      if (!result.ok) {
+        processError(result.error, "Failed to remove upvote");
+        return;
+      }
+      postHogAction = "comment_upvote_removed";
+    } else {
+      const result = await upvoteCommentMutation({
+        projectId,
+        commentId,
+      });
+      if (!result.ok) {
+        processError(result.error, "Failed to add upvote");
+        return;
+      }
+      postHogAction = "comment_upvote_added";
     }
+    postHog.capture(postHogAction, {
+      projectId,
+      userId: currentUser._id,
+    });
   };
 
   return (
