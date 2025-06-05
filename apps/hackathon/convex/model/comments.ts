@@ -1,10 +1,15 @@
-import { Comment, ProjectId } from "~/server/zod";
+import { Comment, ProjectId, Upvote } from "~/server/zod";
 import { QueryCtx, MutationCtx } from "../_generated/server";
 import { getCurrentUser, GetCurrentUserError } from "./users";
 import { UpdateComment } from "~/server/zod";
 import { getProjectById, GetProjectByIdError } from "./projects";
 import { ok, err, Result } from "neverthrow";
-import { getNotFoundError, NotFoundError, UnauthorizedError } from "./error";
+import {
+  fromPromiseUnexpectedError,
+  getNotFoundError,
+  NotFoundError,
+  UnauthorizedError,
+} from "./error";
 
 export type GetCommentByIdError =
   | NotFoundError<"COMMENT">
@@ -63,8 +68,32 @@ export const updateComment = async (
   const updatedComments = [...comments];
   updatedComments[commentIndex] = updatedComment;
 
-  await ctx.db.patch(projectId, {
-    comments: updatedComments,
-  });
-  return ok();
+  return fromPromiseUnexpectedError(
+    ctx.db.patch(projectId, {
+      comments: updatedComments,
+    }),
+  );
+};
+
+export const updateCommentUpvotes = async (
+  ctx: MutationCtx,
+  projectId: ProjectId,
+  commentId: string,
+  newUpvotes: Upvote[],
+): Promise<Result<void, UpdateCommentError>> => {
+  const result = await getCommentById(ctx, projectId, commentId);
+  if (result.isErr()) return err(result.error);
+
+  const { comment: existingComment, commentIndex, comments } = result.value;
+
+  const updatedComment = { ...existingComment, upvotes: newUpvotes };
+  const updatedComments = [...comments];
+  updatedComments[commentIndex] = updatedComment;
+
+  return fromPromiseUnexpectedError(
+    ctx.db.patch(projectId, {
+      comments: updatedComments,
+    }),
+    "Failed to update comment upvotes",
+  );
 };

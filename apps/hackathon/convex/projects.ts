@@ -16,6 +16,7 @@ import {
   updateComment,
   GetCommentByIdError,
   UpdateCommentError,
+  updateCommentUpvotes,
 } from "./model/comments";
 import { getProjectById, GetProjectByIdError } from "./model/projects";
 import { ProjectListSchema } from "~/server/zod/views/project-list";
@@ -395,12 +396,7 @@ const _upvoteCommentHandler = async (
 
   const newUpvote = { createdAt: Date.now(), userId: user._id };
   const updatedCommentUpvotes = [...comment.upvotes, newUpvote];
-  const updatedCommentData = {
-    ...comment,
-    upvotes: updatedCommentUpvotes,
-  };
-
-  return updateComment(ctx, projectId, commentId, updatedCommentData);
+  return updateCommentUpvotes(ctx, projectId, commentId, updatedCommentUpvotes);
 };
 
 export const upvoteComment = projectMutation({
@@ -429,12 +425,8 @@ const _removeUpvoteFromCommentHandler = async (
   const updatedCommentUpvotes = comment.upvotes.filter(
     (upvote) => upvote.userId !== user._id,
   );
-  const updatedCommentData = {
-    ...comment,
-    upvotes: updatedCommentUpvotes,
-  };
 
-  return updateComment(ctx, projectId, commentId, updatedCommentData);
+  return updateCommentUpvotes(ctx, projectId, commentId, updatedCommentUpvotes);
 };
 
 export const removeUpvoteFromComment = projectMutation({
