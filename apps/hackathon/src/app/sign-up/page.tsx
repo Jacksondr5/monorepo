@@ -12,7 +12,7 @@ export default function SignUp() {
   useEffect(() => {
     if (!isLoading) {
       const timeoutId = setTimeout(() => {
-        router.push("/");
+        // router.push("/");
       }, 3000);
       return () => clearTimeout(timeoutId);
     }
