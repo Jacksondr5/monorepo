@@ -6,6 +6,10 @@ import { ZodCreateUser, ZodUserId } from "../server/zod/user";
 import posthog from "posthog-js";
 import { env } from "~/env";
 import { captureException } from "@sentry/nextjs";
+import { toast } from "@j5/component-library";
+import { useRouter, usePathname } from "next/navigation";
+import { err } from "neverthrow";
+import { serializeResult, UnexpectedError } from "../../convex/model/error";
 
 const retryStoreUser = async (
   fn: ReactMutation<typeof api.users.upsertUser>,
@@ -16,7 +20,13 @@ const retryStoreUser = async (
     return fn({ user });
   } catch (error) {
     if (times === 0) {
-      throw error;
+      return serializeResult(
+        err({
+          message: "Failed to store user.  Please try reloading the page.",
+          type: "UNEXPECTED_ERROR",
+          originalError: error,
+        } satisfies UnexpectedError),
+      );
     }
     await new Promise((resolve) => setTimeout(resolve, 1000));
     return retryStoreUser(fn, user, times - 1);
@@ -33,6 +43,11 @@ export function useStoreUserEffect() {
   const [isAuthenticationFinalized, setIsAuthenticationFinalized] =
     useState(false);
   const storeUser = useMutation(api.users.upsertUser);
+  const router = useRouter();
+  const pathname = usePathname();
+  const [userUpsertSucceeded, setUserUpsertSucceeded] = useState<
+    boolean | null
+  >(null);
 
   useEffect(() => {
     // If Clerk is not loaded yet don't do anything
@@ -50,29 +65,46 @@ export function useStoreUserEffect() {
       role: "USER",
     } satisfies ZodCreateUser;
     async function createUser() {
-      try {
-        const id = await retryStoreUser(storeUser, userData, 3);
-        setConvexUserId(id);
-        posthog.identify(id, {
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          avatarUrl: userData.avatarUrl,
-          role: userData.role,
-          env: env.NEXT_PUBLIC_ENV,
+      const idResult = await retryStoreUser(storeUser, userData, 3);
+      if (!idResult.ok) {
+        captureException(idResult.error, { level: "fatal" });
+        setUserUpsertSucceeded(false);
+        toast({
+          title: "Failed to store user.  Please try reloading the page.",
+          description: idResult.error.message,
+          variant: "error",
+          action: {
+            label: "Reload",
+            onClick: () => {
+              if (pathname === "/sign-up") {
+                router.refresh();
+              } else {
+                router.push("/sign-up");
+              }
+            },
+          },
         });
-        setIsAuthenticationFinalized(true);
-      } catch (error) {
-        console.error("Failed to store user:", error);
-        captureException(error);
-        // TODO: add toast
+        return;
       }
+      const id = idResult.value;
+      setConvexUserId(id);
+      posthog.identify(id, {
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        avatarUrl: userData.avatarUrl,
+        role: userData.role,
+        env: env.NEXT_PUBLIC_ENV,
+      });
+      setUserUpsertSucceeded(true);
+      setIsAuthenticationFinalized(true);
     }
     createUser();
     return () => setConvexUserId(null);
-  }, [isClerkSignedIn, storeUser, clerkUser?.id, isClerkLoaded]);
+  }, [isClerkSignedIn, storeUser, clerkUser, isClerkLoaded, pathname, router]);
 
   return {
     isLoading: !isAuthenticationFinalized,
     isAuthenticated: isClerkSignedIn && convexUserId !== null,
+    userUpsertSucceeded,
   };
 }

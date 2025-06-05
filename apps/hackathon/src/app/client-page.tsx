@@ -6,7 +6,7 @@ import { useState } from "react";
 import { ProjectCard } from "~/components/projects/project-card";
 import { ProjectSubmissionForm } from "~/components/project-submission/project-submission-form";
 import { usePostHog } from "posthog-js/react";
-import { captureException } from "@sentry/nextjs";
+import { processError, unwrapSerializableResult } from "~/lib/errors";
 
 export interface ClientPageProps {
   preloadedLatestHackathon: Preloaded<
@@ -21,17 +21,9 @@ export const ClientPage = ({
   preloadedCurrentUser,
   preloadedProjects,
 }: ClientPageProps) => {
-  // We know it isn't null because this component
-  // is only shown if there is an active hackathon event
-  const latestHackathon = usePreloadedQuery(preloadedLatestHackathon);
-  const currentUser = usePreloadedQuery(preloadedCurrentUser);
-  const { projects, visibleUsers: visibleUsersArray } =
-    usePreloadedQuery(preloadedProjects);
-
-  const visibleUsers = new Map(
-    visibleUsersArray.map((user) => [user._id, user]),
-  );
-
+  const latestHackathonResult = usePreloadedQuery(preloadedLatestHackathon);
+  const currentUserResult = usePreloadedQuery(preloadedCurrentUser);
+  const projectsResult = usePreloadedQuery(preloadedProjects);
   const createProject = useMutation(api.projects.createProject);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
@@ -40,7 +32,27 @@ export const ClientPage = ({
   );
   const postHog = usePostHog();
 
-  if (!latestHackathon) throw new Error("Expected latest hackathon to exist");
+  // TODO: actually handle error
+  const projectsResultValue = unwrapSerializableResult(
+    projectsResult,
+    "Failed to fetch projects",
+  );
+  const latestHackathon = unwrapSerializableResult(
+    latestHackathonResult,
+    "Failed to fetch latest hackathon",
+  );
+  const currentUser = unwrapSerializableResult(
+    currentUserResult,
+    "Failed to fetch current user",
+  );
+  if (!projectsResultValue || !latestHackathon || !currentUser) {
+    return null;
+  }
+  const { projects, visibleUsers: visibleUsersArray } = projectsResultValue;
+
+  const visibleUsers = new Map(
+    visibleUsersArray.map((user) => [user._id, user]),
+  );
 
   const handleSubmitProject = async (data: {
     title: string;
@@ -50,30 +62,25 @@ export const ClientPage = ({
     setSubmissionError(null);
     setSubmissionSuccess(null);
 
-    try {
-      const id = await createProject({
-        data: {
-          ...data,
-          hackathonEventId: latestHackathon._id,
-        },
-      });
-      setSubmissionSuccess(`Project submitted successfully!`);
-      postHog.capture("project_created", {
-        project_id: id,
-        title: data.title,
-      });
-      // Optionally, reset form or redirect
-    } catch (error) {
-      console.error("Failed to submit project:", error);
-      captureException(error);
-      setSubmissionError(
-        error instanceof Error
-          ? error.message
-          : "Failed to submit project. Please try again.",
-      );
-    } finally {
+    const result = await createProject({
+      data: {
+        ...data,
+        hackathonEventId: latestHackathon._id,
+      },
+    });
+    if (!result.ok) {
+      processError(result.error, "Failed to create project");
+      setSubmissionError(result.error.message);
       setIsSubmitting(false);
+      return;
     }
+    const id = result.value;
+    setSubmissionSuccess(`Project submitted successfully!`);
+    postHog.capture("project_created", {
+      project_id: id,
+      title: data.title,
+    });
+    // Optionally, reset form or redirect
   };
 
   const hasProjects = projects.length > 0;

@@ -5,6 +5,7 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { getAuthToken } from "./auth";
 import { preloadQuery } from "convex/nextjs";
 import { api } from "../../convex/_generated/api";
+import { Toaster } from "@j5/component-library";
 
 export const metadata = {
   title: "Welcome to hackathon",
@@ -33,6 +34,7 @@ export default async function RootLayout({
             </div>
           </SignedOut>
           <SignedIn>{children}</SignedIn>
+          <Toaster />
         </Providers>
       </body>
     </html>

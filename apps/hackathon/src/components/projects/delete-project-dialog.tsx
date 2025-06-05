@@ -15,8 +15,8 @@ import { Project } from "~/server/zod";
 import { PostHog } from "posthog-js/react";
 import { api } from "../../../convex/_generated/api";
 import { ReactMutation } from "convex/react";
-import { captureException } from "@sentry/nextjs";
 import { useState } from "react";
+import { processError } from "~/lib/errors";
 
 export interface DeleteProjectDialogProps {
   project: Project;
@@ -56,19 +56,21 @@ export const DeleteProjectDialog = ({
           <Button
             variant="destructive"
             onClick={async () => {
-              try {
-                await deleteProjectMutation({ id: project._id });
-                postHog.capture("project_deleted", {
-                  project_id: project._id,
-                });
+              const deleteProjectResult = await deleteProjectMutation({
+                id: project._id,
+              });
+              if (!deleteProjectResult.ok) {
+                processError(
+                  deleteProjectResult.error,
+                  "Failed to delete project",
+                );
                 setIsOpen(false);
-                // Optionally, you might want to navigate the user away or refresh the list
-              } catch (error) {
-                console.error("Failed to delete project:", error);
-                captureException(error);
-                // TODO: use toast to show error
-                setIsOpen(false);
+                return;
               }
+              postHog.capture("project_deleted", {
+                project_id: project._id,
+              });
+              setIsOpen(false);
             }}
           >
             Delete

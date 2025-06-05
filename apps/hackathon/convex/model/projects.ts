@@ -1,16 +1,35 @@
-import { ConvexError } from "convex/values";
 import { QueryCtx } from "../_generated/server";
-import { ProjectId } from "~/server/zod";
+import { Project, ProjectId } from "~/server/zod";
+import { err, fromPromise, ok, Result } from "neverthrow";
+import { getNotFoundError, NotFoundError, UnexpectedError } from "./error";
 
-export const getProjectById = async (ctx: QueryCtx, projectId: ProjectId) => {
-  const project = await ctx.db.get(projectId);
-  if (!project) {
-    throw new ConvexError("Project not found.");
-  }
-  // TODO: remove after the migration
-  return {
-    ...project,
-    comments: project.comments || [],
-    upvotes: project.upvotes || [],
-  };
+export type GetProjectByIdError = NotFoundError<"PROJECT"> | UnexpectedError;
+
+export const getProjectById = (
+  ctx: QueryCtx,
+  projectId: ProjectId,
+): Promise<Result<Project, GetProjectByIdError>> => {
+  return fromPromise(
+    ctx.db.get(projectId),
+    (originalError) => originalError,
+  ).match(
+    (project) => {
+      if (!project) {
+        return err(getNotFoundError("PROJECT", projectId));
+      }
+      // TODO: remove after the migration
+      return ok({
+        ...project,
+        comments: project.comments || [],
+        upvotes: project.upvotes || [],
+      });
+    },
+    (originalError) => {
+      return err({
+        type: "UNEXPECTED_ERROR",
+        message: "There was an unexpected error getting the project.",
+        originalError,
+      });
+    },
+  );
 };

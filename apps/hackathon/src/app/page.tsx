@@ -4,6 +4,7 @@ import NoHackathon from "./no-hackathon";
 import { getAuthToken } from "./auth";
 import { ClientPage } from "./client-page";
 import { projectStatusMessages } from "../utils/messages";
+import { processError } from "~/lib/errors";
 
 export default async function HomePage() {
   const token = await getAuthToken();
@@ -12,8 +13,12 @@ export default async function HomePage() {
     {},
     { token },
   );
-  const latestHackathon = preloadedQueryResult(latestHackathonPreloaded);
-  if (!latestHackathon) return <NoHackathon />;
+  const latestHackathonResult = preloadedQueryResult(latestHackathonPreloaded);
+  if (!latestHackathonResult.ok) {
+    processError(latestHackathonResult.error, "Failed to get latest hackathon");
+    return <NoHackathon />;
+  }
+  const latestHackathon = latestHackathonResult.value;
   const currentUser = await preloadQuery(
     api.users.getCurrentUser,
     {},

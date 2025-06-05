@@ -1,26 +1,71 @@
 import { z } from "zod";
-import { query } from "./_generated/server";
+import { query, QueryCtx } from "./_generated/server";
 import { HackathonEventSchema } from "../src/server/zod/hackathon-event";
-import { zCustomQuery } from "convex-helpers/server/zod";
-import { NoOp } from "convex-helpers/server/customFunctions";
+import { Result, err, fromPromise } from "neverthrow";
+import {
+  DataIsUnexpectedShapeError,
+  NotFoundError,
+  UnexpectedError,
+  getNotFoundError,
+  safeParseConvexArray,
+  safeParseConvexObject,
+  serializeResult,
+} from "./model/error";
 
-const hackathonEventQuery = zCustomQuery(query, NoOp);
+// Infer the type from the Zod schema
+type HackathonEvent = z.infer<typeof HackathonEventSchema>;
 
-export const getHackathonEvents = hackathonEventQuery({
-  args: z.object({}),
-  handler: async (ctx, _args) => {
-    const events = await ctx.db.query("hackathonEvents").collect();
-    return z.array(HackathonEventSchema).parse(events);
-  },
-  returns: z.array(HackathonEventSchema),
+// Error type for getHackathonEvents
+export type GetHackathonEventsError =
+  | DataIsUnexpectedShapeError
+  | UnexpectedError;
+
+const _getHackathonEventsHandler = async (
+  ctx: QueryCtx,
+): Promise<Result<HackathonEvent[], GetHackathonEventsError>> => {
+  return fromPromise(
+    ctx.db.query("hackathonEvents").collect(),
+    (e): UnexpectedError => ({
+      message: "Failed to fetch hackathon events.",
+      originalError: e,
+      type: "UNEXPECTED_ERROR",
+    }),
+  ).andThen((events) => {
+    return safeParseConvexArray(HackathonEventSchema, events);
+  });
+};
+
+export const getHackathonEvents = query({
+  args: {},
+  handler: (ctx) => serializeResult(_getHackathonEventsHandler(ctx)),
 });
 
+// Error type for getLatestHackathonEvent
+export type GetLatestHackathonEventError =
+  | DataIsUnexpectedShapeError
+  | NotFoundError<"HACKATHON_EVENT">
+  | UnexpectedError;
+
 // TODO: Replace this with a better way of selecting the current hackathon event
-export const getLatestHackathonEvent = hackathonEventQuery({
-  args: z.object({}),
-  handler: async (ctx, _args) => {
-    const latest = await ctx.db.query("hackathonEvents").order("desc").first();
-    return latest ? HackathonEventSchema.parse(latest) : null;
-  },
-  returns: HackathonEventSchema.nullable(),
+const _getLatestHackathonEventHandler = async (
+  ctx: QueryCtx,
+): Promise<Result<HackathonEvent, GetLatestHackathonEventError>> => {
+  return fromPromise(
+    ctx.db.query("hackathonEvents").order("desc").first(),
+    (e): UnexpectedError => ({
+      message: "Failed to fetch the latest hackathon event.",
+      originalError: e,
+      type: "UNEXPECTED_ERROR",
+    }),
+  ).andThen((latestEvent) => {
+    if (!latestEvent) {
+      return err(getNotFoundError("HACKATHON_EVENT", "latest"));
+    }
+    return safeParseConvexObject(HackathonEventSchema, latestEvent);
+  });
+};
+
+export const getLatestHackathonEvent = query({
+  args: {},
+  handler: (ctx) => serializeResult(_getLatestHackathonEventHandler(ctx)),
 });

@@ -16,8 +16,8 @@ import { api } from "../../../convex/_generated/api";
 import { ReactMutation } from "convex/react";
 import { CommentId, ProjectId } from "~/server/zod";
 import { Trash2 } from "lucide-react";
-import { captureException } from "@sentry/nextjs";
 import { useState } from "react";
+import { processError } from "~/lib/errors";
 
 export interface DeleteCommentDialogContentProps {
   // isOpen: boolean;
@@ -66,23 +66,21 @@ export const DeleteCommentDialog = ({
             <Button
               variant="destructive"
               onClick={async () => {
-                try {
-                  await deleteCommentMutation({
-                    projectId,
-                    commentId,
-                  });
-                  postHog.capture("comment_deleted", {
-                    projectId,
-                    commentId,
-                    userId: currentUser._id,
-                  });
+                const result = await deleteCommentMutation({
+                  projectId,
+                  commentId,
+                });
+                if (!result.ok) {
+                  processError(result.error, "Failed to delete comment");
                   setIsOpen(false);
-                } catch (error) {
-                  console.error("Failed to delete comment:", error);
-                  captureException(error);
-                  // TODO: use toast to show error
-                  setIsOpen(false);
+                  return;
                 }
+                postHog.capture("comment_deleted", {
+                  projectId,
+                  commentId,
+                  userId: currentUser._id,
+                });
+                setIsOpen(false);
               }}
             >
               Delete
