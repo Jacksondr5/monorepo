@@ -19,7 +19,11 @@ export const FieldTextarea = ({
   const hasError = field.state.meta.errors.length > 0;
   return (
     <div className={cn("grid w-full items-center gap-1.5", className)}>
-      <Label htmlFor={field.name} dataTestId={`${field.name}-label`}>
+      <Label
+        htmlFor={field.name}
+        dataTestId={`${field.name}-label`}
+        error={hasError}
+      >
         {label}
       </Label>
       <Textarea

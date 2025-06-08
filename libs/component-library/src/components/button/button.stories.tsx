@@ -226,7 +226,7 @@ export const PrimaryClickable: Story = {
       await expect(args.onClick).toHaveBeenCalledTimes(1);
     });
 
-    args.onClick.mockClear(); // Clear mock for next interaction
+    args.onClick?.mockClear(); // Clear mock for next interaction
 
     await step("Keyboard (Enter)", async () => {
       fireEvent.focus(button);
@@ -235,7 +235,7 @@ export const PrimaryClickable: Story = {
       await expect(args.onClick).toHaveBeenCalledTimes(1);
     });
 
-    args.onClick.mockClear();
+    args.onClick?.mockClear();
 
     await step("Keyboard (Space)", async () => {
       fireEvent.focus(button);

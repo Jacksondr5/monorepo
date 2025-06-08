@@ -157,7 +157,12 @@ export const AllStates: Story = {
               justifySelf: "center",
             }}
           >
-            <Checkbox {...args} size={size} id={`all-label-${size}`} dataTestId={`checkbox-label-${size}`} />
+            <Checkbox
+              {...args}
+              size={size}
+              id={`all-label-${size}`}
+              dataTestId={`checkbox-label-${size}`}
+            />
             <label
               htmlFor={`all-label-${size}`}
               className="text-slate-11 font-sans"

@@ -1,12 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import {
-  userEvent,
-  within,
-  expect,
-  fn,
-  screen,
-  waitFor,
-} from "storybook/test";
+import { userEvent, within, expect, fn, screen, waitFor } from "storybook/test";
 import * as React from "react";
 
 import {
@@ -44,7 +37,9 @@ export const AllVariants: Story = {
       {/* Variant 1: Basic Dialog */}
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline">Basic Dialog</Button>
+          <Button variant="outline" dataTestId="basic-dialog-button">
+            Basic Dialog
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -57,7 +52,9 @@ export const AllVariants: Story = {
             <p>Some basic content goes here.</p>
           </div>
           <DialogFooter>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit" dataTestId="save-changes-button">
+              Save changes
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -65,7 +62,9 @@ export const AllVariants: Story = {
       {/* Variant 2: Dialog with Form */}
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline">Dialog with Form</Button>
+          <Button variant="outline" dataTestId="dialog-with-form-button">
+            Dialog with Form
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -76,20 +75,40 @@ export const AllVariants: Story = {
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
+              <Label
+                htmlFor="name"
+                className="text-right"
+                dataTestId="name-label"
+              >
                 Name
               </Label>
-              <Input id="name" value="Pedro Duarte" className="col-span-3" />
+              <Input
+                id="name"
+                value="Pedro Duarte"
+                className="col-span-3"
+                dataTestId="name-input"
+              />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
+              <Label
+                htmlFor="username"
+                className="text-right"
+                dataTestId="username-label"
+              >
                 Username
               </Label>
-              <Input id="username" value="@peduarte" className="col-span-3" />
+              <Input
+                id="username"
+                value="@peduarte"
+                className="col-span-3"
+                dataTestId="username-input"
+              />
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit" dataTestId="save-changes-button">
+              Save changes
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -97,7 +116,9 @@ export const AllVariants: Story = {
       {/* Variant 3: Dialog with explicit Close Button */}
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline">Dialog with Close Button</Button>
+          <Button variant="outline" dataTestId="dialog-with-close-button">
+            Dialog with Close Button
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -111,9 +132,13 @@ export const AllVariants: Story = {
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" dataTestId="cancel-button">
+                Cancel
+              </Button>
             </DialogClose>
-            <Button type="submit">Confirm</Button>
+            <Button type="submit" dataTestId="confirm-button">
+              Confirm
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -129,7 +154,9 @@ export const InteractionTest: Story = {
   render: (args) => (
     <Dialog onOpenChange={args.onOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline">Interaction Test Dialog</Button>
+        <Button variant="outline" dataTestId="interaction-test-dialog-button">
+          Interaction Test Dialog
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -140,21 +167,30 @@ export const InteractionTest: Story = {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="test-input" className="text-right">
+            <Label
+              htmlFor="test-input"
+              className="text-right"
+              dataTestId="test-input-label"
+            >
               Test Input
             </Label>
             <Input
               id="test-input"
               defaultValue="Initial Value"
               className="col-span-3"
+              dataTestId="test-input"
             />
           </div>
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" dataTestId="cancel-button">
+              Cancel
+            </Button>
           </DialogClose>
-          <Button type="submit">Save</Button>
+          <Button type="submit" dataTestId="save-button">
+            Save
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

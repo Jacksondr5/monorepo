@@ -75,6 +75,7 @@ export const FieldCheckboxGroup = React.forwardRef<
           htmlFor={field.name}
           className={labelClassName}
           dataTestId={`${field.name}-label`}
+          error={hasError}
         >
           {label}
         </Label>
@@ -105,6 +106,7 @@ export const FieldCheckboxGroup = React.forwardRef<
                 htmlFor={`${field.name}-${item.id}`}
                 className="ml-2 text-sm font-normal"
                 dataTestId={`${field.name}-${item.id}-label`}
+                error={hasError}
               >
                 {item.label}
               </Label>

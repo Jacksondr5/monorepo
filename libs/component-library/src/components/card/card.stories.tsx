@@ -76,7 +76,7 @@ export const AllVariants: Story = {
           </CardDescription>
           <CardAction>
             {/* Placeholder for an action, e.g., a Button or Menu */}
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" dataTestId="card-action-button">
               Action
             </Button>
           </CardAction>
@@ -124,7 +124,12 @@ export const ActionInteractionTest: Story = {
         <CardTitle>Card With Action</CardTitle>
         <CardDescription>Click the action button.</CardDescription>
         <CardAction>
-          <Button variant="outline" size="sm" onClick={args.onClick}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={args.onClick}
+            dataTestId="card-action-button"
+          >
             Action
           </Button>
         </CardAction>

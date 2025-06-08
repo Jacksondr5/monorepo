@@ -32,7 +32,9 @@ export const AllVariants: Story = {
         <h3 className="text-slate-10 mb-2 text-sm font-medium">
           Standalone Label
         </h3>
-        <Label {...args} dataTestId="standalone-label">This is a standalone label</Label>
+        <Label {...args} dataTestId="standalone-label">
+          This is a standalone label
+        </Label>
       </div>
 
       {/* Label with Input */}
@@ -57,7 +59,11 @@ export const AllVariants: Story = {
           With Disabled Input
         </h3>
         <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label htmlFor="name-disabled-variants" {...args} dataTestId="name-disabled-label">
+          <Label
+            htmlFor="name-disabled-variants"
+            {...args}
+            dataTestId="name-disabled-label"
+          >
             Name (Disabled Input)
           </Label>
           <Input
@@ -89,8 +95,16 @@ export const AllVariants: Story = {
           With Disabled Checkbox
         </h3>
         <div className="flex items-center space-x-2">
-          <Checkbox id="terms-disabled-variants" disabled dataTestId="terms-disabled-checkbox-variants" />
-          <Label htmlFor="terms-disabled-variants" {...args} dataTestId="terms-disabled-label">
+          <Checkbox
+            id="terms-disabled-variants"
+            disabled
+            dataTestId="terms-disabled-checkbox-variants"
+          />
+          <Label
+            htmlFor="terms-disabled-variants"
+            {...args}
+            dataTestId="terms-disabled-label"
+          >
             Accept terms (disabled checkbox)
           </Label>
         </div>
@@ -112,7 +126,12 @@ export const AllVariants: Story = {
           With Input and Error
         </h3>
         <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label htmlFor="email-error-variants" {...args} error dataTestId="email-error-label">
+          <Label
+            htmlFor="email-error-variants"
+            {...args}
+            error
+            dataTestId="email-error-label"
+          >
             Email Address (with error)
           </Label>
           <Input
@@ -124,7 +143,7 @@ export const AllVariants: Story = {
             aria-invalid="true"
             aria-describedby="email-error-message-variants"
           />
-          <p id="email-error-message-variants" className="text-sm text-red-11">
+          <p id="email-error-message-variants" className="text-red-11 text-sm">
             Please enter a valid email address.
           </p>
         </div>

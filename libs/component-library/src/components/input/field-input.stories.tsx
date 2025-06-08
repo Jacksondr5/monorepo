@@ -11,14 +11,13 @@ import { fieldContext } from "../form/form-contexts"; // Corrected import name
 // Type for the value prop of fieldContext.Provider
 type FieldContextValue = any; // Placeholder
 
-// Helper to provide mock FieldContext
 interface MockFieldProviderProps {
   children: React.ReactNode;
   name?: string;
   value?: string;
   errors?: string[];
-  handleChange?: (value: string) => void; // Added for interaction test assertions
-  handleBlur?: () => void; // Added for interaction test assertions
+  handleChange?: (value: string) => void;
+  handleBlur?: () => void;
 }
 
 const MockFieldProvider = ({
@@ -26,8 +25,8 @@ const MockFieldProvider = ({
   name = "testField",
   value = "",
   errors = [],
-  handleChange = fn(), // Default to a new spy if not provided
-  handleBlur = fn(), // Default to a new spy if not provided
+  handleChange = fn(),
+  handleBlur = fn(),
 }: MockFieldProviderProps) => {
   const contextValue: FieldContextValue = {
     name,
@@ -39,9 +38,8 @@ const MockFieldProvider = ({
       },
       value: value,
     },
-    handleBlur: handleBlur, // Use provided or default spy
-    handleChange: handleChange, // Use provided or default spy,
-    // Add other necessary FieldContext properties if any, with default/mock values
+    handleBlur: handleBlur,
+    handleChange: handleChange,
   };
 
   return (
@@ -116,7 +114,7 @@ export const AllFieldStates: Story = {
 };
 
 export const InteractionTest: Story = {
-  play: async ({ canvasElement, args, step }) => {
+  play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
     await step("Ensure input is empty", async () => {
       const inputField = canvas.getByTestId(`normalInput-input`);

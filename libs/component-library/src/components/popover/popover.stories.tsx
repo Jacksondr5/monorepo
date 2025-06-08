@@ -23,21 +23,25 @@ export const AllVariants: Story = {
   render: () => (
     <div className="flex flex-row gap-8">
       {/* Default Popover */}
-      <Popover>
+      <Popover dataTestId="default-popover">
         <PopoverTrigger asChild>
-          <Button variant="outline">Open Popover</Button>
+          <Button variant="outline" dataTestId="open-popover-button">
+            Open Popover
+          </Button>
         </PopoverTrigger>
         <PopoverContent>
           <div className="text-slate-12">Default Popover Content</div>
         </PopoverContent>
       </Popover>
       {/* Popover with Anchor */}
-      <Popover>
+      <Popover dataTestId="anchor-popover">
         <PopoverAnchor>
-          <Button variant="secondary">Anchor</Button>
+          <Button variant="secondary" dataTestId="anchor-button">
+            Anchor
+          </Button>
         </PopoverAnchor>
         <PopoverTrigger asChild>
-          <Button>Open with Anchor</Button>
+          <Button dataTestId="open-with-anchor-button">Open with Anchor</Button>
         </PopoverTrigger>
         <PopoverContent sideOffset={12} align="end">
           <div className="text-slate-12">With Anchor & Offset</div>
@@ -51,9 +55,11 @@ export const AllVariants: Story = {
 export const OpenAndClose: Story = {
   name: "Interaction: Open and Close",
   render: () => (
-    <Popover>
+    <Popover dataTestId="interaction-popover">
       <PopoverTrigger asChild>
-        <Button variant="outline">Open Popover</Button>
+        <Button variant="outline" dataTestId="open-popover-button">
+          Open Popover
+        </Button>
       </PopoverTrigger>
       <PopoverContent>
         <div className="text-slate-12">Popover test content</div>

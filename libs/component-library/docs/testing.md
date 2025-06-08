@@ -9,37 +9,39 @@ Storybook serves as our primary platform for both functional and visual testing.
 We will primarily use **three** types of stories, typically co-located within the same `*.stories.tsx` file for a given component or its field variant:
 
 1.  **Component Visual Matrix Story (e.g., `AllVariants` export):**
-    *   **Purpose:** To capture the visual appearance of a **base component** (e.g., `Button`, `Input`, `Checkbox`, `DatePicker`) across its numerous static prop combinations (e.g., variants, sizes, states like disabled, **error**, with/without icons).
-    *   **Method:** These stories utilize a custom `render` function within Storybook to display multiple component instances in a single story view.
-    *   **Benefit:** This significantly reduces the number of individual Chromatic snapshots for base components, helping to manage costs while still providing broad visual regression coverage for static states.
-    *   **Location:** Resides within the component's main story file (e.g., `input.stories.tsx`).
-    *   **Storybook Title:** Defined in the `meta` object (e.g., `title: "Components/Input"`).
-    *   **Error State:** Must include visual representation of the component in its error state (e.g., with `error={true}` or appropriate `aria-invalid` styling applied).
+
+    - **Purpose:** To capture the visual appearance of a **base component** (e.g., `Button`, `Input`, `Checkbox`, `DatePicker`) across its numerous static prop combinations (e.g., variants, sizes, states like disabled, **error**, with/without icons).
+    - **Method:** These stories utilize a custom `render` function within Storybook to display multiple component instances in a single story view.
+    - **Benefit:** This significantly reduces the number of individual Chromatic snapshots for base components, helping to manage costs while still providing broad visual regression coverage for static states.
+    - **Location:** Resides within the component's main story file (e.g., `input.stories.tsx`).
+    - **Storybook Title:** Defined in the `meta` object (e.g., `title: "Components/Input"`).
+    - **Error State:** Must include visual representation of the component in its error state (e.g., with `error={true}` or appropriate `aria-invalid` styling applied).
 
 2.  **Field Component Visual Matrix Story (e.g., `AllFieldStates` export):**
-    *   **Purpose:** To capture the visual appearance of **Field-level components** (e.g., `FieldInput`, `FieldSelect`, `FieldCheckboxGroup`, `FieldDatePicker`) which typically combine a `Label`, the core input component, and `FormErrorMessage`.
-    *   **Method:** Similar to Component Visual Matrix Stories, display multiple instances in a single story, showcasing common field states.
-    *   **States to Cover:**
-        *   Normal (empty)
-        *   Filled (with a value)
-        *   Disabled
-        *   Error (with an error message displayed and error styling on the input)
-        *   Error + Filled (error state with a value present)
-    *   **Benefit:** Ensures the composite Field component, including label and error message layout, is visually correct across key states. Reduces snapshots compared to individual stories for each state.
-    *   **Location:** Resides within a dedicated story file for the field component (e.g., `field-input.stories.tsx`).
-    *   **Storybook Title:** Defined in the `meta` object to nest under the base component (e.g., `title: "Components/Input/Field"` for `field-input.stories.tsx`).
+
+    - **Purpose:** To capture the visual appearance of **Field-level components** (e.g., `FieldInput`, `FieldSelect`, `FieldCheckboxGroup`, `FieldDatePicker`) which typically combine a `Label`, the core input component, and `FormErrorMessage`.
+    - **Method:** Similar to Component Visual Matrix Stories, display multiple instances in a single story, showcasing common field states.
+    - **States to Cover:**
+      - Normal (empty)
+      - Filled (with a value)
+      - Disabled
+      - Error (with an error message displayed and error styling on the input)
+      - Error + Filled (error state with a value present)
+    - **Benefit:** Ensures the composite Field component, including label and error message layout, is visually correct across key states. Reduces snapshots compared to individual stories for each state.
+    - **Location:** Resides within a dedicated story file for the field component (e.g., `field-input.stories.tsx`).
+    - **Storybook Title:** Defined in the `meta` object to nest under the base component (e.g., `title: "Components/Input/Field"` for `field-input.stories.tsx`).
 
 3.  **Functional/Interaction Stories (Individual story exports):**
-    *   **Purpose:** To test the dynamic behavior, event handling (`onClick`, `onChange`, etc.), accessibility attributes during interaction, and complex state changes of **both base components and Field components**.
-    *   **Method:** These stories leverage Storybook's `play` function to simulate user interactions.
-    *   **Chromatic Snapshots:** Chromatic will typically snapshot the component at the end of the `play` function execution, and can also capture intermediate steps if the `step` utility from `@storybook/test` is used. These snapshots are valuable for verifying visual changes that occur _as a result_ of interaction.
-    *   **Granularity:** `play` functions should ideally target specific, focused user flows or interactions.
-    *   **Field Component Interactions:** For Field components, interaction tests should verify:
-        *   Correct association of `Label` with the input.
-        *   Proper propagation of value changes to the form context (e.g., via `handleChange`).
-        *   Activation and display of error messages and ARIA attributes (`aria-invalid`, `aria-describedby`) when the form context indicates an error.
-    *   **Location:** Reside as individual story exports within the respective component's story file (e.g., `input.stories.tsx` or `field-input.stories.tsx`).
-    *   **Disabling Chromatic:** If visual testing the functional story is not valuable (e.g., it's purely a logic/event test with no significant visual change not covered elsewhere), you can disable Chromatic for that story by adding `chromatic: { disable: true }` to the story's parameters.
+    - **Purpose:** To test the dynamic behavior, event handling (`onClick`, `onChange`, etc.), accessibility attributes during interaction, and complex state changes of **both base components and Field components**.
+    - **Method:** These stories leverage Storybook's `play` function to simulate user interactions.
+    - **Chromatic Snapshots:** Chromatic will typically snapshot the component at the end of the `play` function execution, and can also capture intermediate steps if the `step` utility from `@storybook/test` is used. These snapshots are valuable for verifying visual changes that occur _as a result_ of interaction.
+    - **Granularity:** `play` functions should ideally target specific, focused user flows or interactions.
+    - **Field Component Interactions:** For Field components, interaction tests should verify:
+      - Correct association of `Label` with the input.
+      - Proper propagation of value changes to the form context (e.g., via `handleChange`).
+      - Activation and display of error messages and ARIA attributes (`aria-invalid`, `aria-describedby`) when the form context indicates an error.
+    - **Location:** Reside as individual story exports within the respective component's story file (e.g., `input.stories.tsx` or `field-input.stories.tsx`).
+    - **Disabling Chromatic:** If visual testing the functional story is not valuable (e.g., it's purely a logic/event test with no significant visual change not covered elsewhere), you can disable Chromatic for that story by adding `chromatic: { disable: true }` to the story's parameters.
 
 ## Testing Interactive States (Hover, Focus, Active)
 

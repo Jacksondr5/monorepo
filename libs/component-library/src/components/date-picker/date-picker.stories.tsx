@@ -17,6 +17,7 @@ const defaultProps: DatePickerProps = {
   value: targetDate,
   placeholder: "Pick a date",
   defaultMonth: targetDate,
+  dataTestId: "date-picker",
 };
 
 // Visual Matrix Story
@@ -25,7 +26,11 @@ export const AllVariants: Story = {
     <div className="flex flex-col gap-8">
       <div>
         <h3 className="text-slate-12">Default (no value)</h3>
-        <DatePicker placeholder="Pick a date" defaultMonth={targetDate} />
+        <DatePicker
+          placeholder="Pick a date"
+          defaultMonth={targetDate}
+          dataTestId="date-picker"
+        />
       </div>
       <div>
         <h3 className="text-slate-12">With Value</h3>
@@ -49,6 +54,7 @@ export const Interaction_SelectDate: Story = {
         defaultMonth={targetDate}
         value={selected}
         onChange={setSelected}
+        dataTestId="date-picker"
       />
     );
   },

@@ -67,13 +67,15 @@ function SelectGroup({
 function SelectValue({
   ...props
 }: ComponentProps<typeof SelectPrimitive.Value>) {
-  const { dataTestId } = useSelectContext();
+  const { dataTestId, error } = useSelectContext();
   return (
-    <SelectPrimitive.Value
-      data-slot="select-value"
-      data-testid={dataTestId ? `${dataTestId}-value` : undefined}
-      {...props}
-    />
+    <span className={cn(error && "text-red-11")}>
+      <SelectPrimitive.Value
+        data-slot="select-value"
+        data-testid={dataTestId ? `${dataTestId}-value` : undefined}
+        {...props}
+      />
+    </span>
   );
 }
 
@@ -115,7 +117,9 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className="size-4 opacity-50" />
+        <ChevronDownIcon
+          className={cn("size-4 opacity-50", error && "text-red-11")}
+        />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );

@@ -31,6 +31,7 @@ export const Default: StoryObj = {
         Trigger Default Toast
       </h2>
       <Button
+        dataTestId="default-toast-button"
         onClick={() =>
           toast({
             title: "Default Toast Triggered",
@@ -90,6 +91,7 @@ export const InteractiveVariants: StoryObj = {
         {variants.map((variant) => (
           <Button
             key={variant}
+            dataTestId={`${variant}-toast-button`}
             onClick={() =>
               toast({
                 title: `${variant.charAt(0).toUpperCase() + variant.slice(1)} Toast`,
@@ -112,6 +114,7 @@ export const WithAction: StoryObj = {
     <div className="bg-olive-1 flex flex-col items-start gap-4 rounded-lg p-6 shadow-md">
       <h2 className="text-olive-12 text-lg font-semibold">Toast with Action</h2>
       <Button
+        dataTestId="toast-with-action-button"
         onClick={() =>
           toast({
             title: "Action Required",
@@ -175,6 +178,7 @@ export const PromiseToast: StoryObj = {
           Promise-based Toast
         </h2>
         <Button
+          dataTestId="promise-toast-button"
           onClick={() => {
             // Show loading toast immediately and get its ID
             promiseToast(

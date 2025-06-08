@@ -19,14 +19,12 @@ export interface FieldSelectProps
   > {
   label: string;
   className?: string;
-  // children prop is inherited from SelectProps if it exists there, or can be explicitly added if needed.
-  // For Radix-based components, children are typically part of the base props.
 }
 
 export const FieldSelect = ({
   label,
   className,
-  children, // Keep children if SelectProps expects it, or if FieldSelect itself structures its children
+  children,
   ...props
 }: FieldSelectProps) => {
   const errorId = React.useId();
@@ -35,18 +33,22 @@ export const FieldSelect = ({
 
   return (
     <div className={cn("grid w-full items-center gap-1.5", className)}>
-      <Label htmlFor={field.name} dataTestId={`${field.name}-label`}>
+      <Label
+        htmlFor={field.name}
+        dataTestId={`${field.name}-label`}
+        error={hasError}
+      >
         {label}
       </Label>
       <Select
-        {...props} // Spread remaining props from FieldSelectProps
+        {...props}
         value={field.state.value || ""}
         onValueChange={(value) => field.handleChange(value)}
         onOpenChange={(open) => !open && field.handleBlur()} // Common Radix pattern for blur
         error={hasError}
         customAriaDescribedBy={hasError ? errorId : undefined}
       >
-        {children} {/* Pass children through to the Select component */}
+        {children}
       </Select>
       {hasError && (
         <FormErrorMessage
