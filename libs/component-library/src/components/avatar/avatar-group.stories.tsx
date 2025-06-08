@@ -43,7 +43,7 @@ const sampleAvatarData: AvatarDataItem[] = [
   { src: "https://github.com/shadcn.png", alt: "Shadcn", fallback: "SC" },
   { src: "https://github.com/vercel.png", alt: "Vercel", fallback: "VC" },
   { fallback: "UD", alt: "User D" }, // Fallback only
-  { fallback: "UF", alt: "User F", className: "border-4 border-green-500" }, // With custom class
+  { fallback: "UF", alt: "User F", className: "border-4 border-green-7" }, // With custom class
 ];
 
 export const AllVariants: Story = {
@@ -108,7 +108,7 @@ export const AllVariants: Story = {
           variant="stacked"
           avatars={sampleAvatarData}
           max={3}
-          overflowIndicatorClassName="bg-red-500 text-white border-2 border-red-700"
+          overflowIndicatorClassName="bg-red-9 text-red-1 border-2 border-red-7"
         />
       </div>
 
@@ -121,7 +121,7 @@ export const AllVariants: Story = {
           variant="stacked"
           avatars={sampleAvatarData.slice(0, 3)}
           max={3}
-          className="rounded-md bg-blue-500 p-2"
+          className="bg-blue-9 rounded-md p-2"
         />
       </div>
 

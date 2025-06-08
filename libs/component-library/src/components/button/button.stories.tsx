@@ -74,7 +74,7 @@ export const AllVariants: Story = {
       <div className="text-slate-11 flex w-full flex-col items-start gap-10 p-5">
         {variants.map((variant) => (
           <div key={variant} className="flex w-full flex-col items-start gap-5">
-            <h2 className="m-0 w-full border-b border-gray-300 pb-2 capitalize">
+            <h2 className="border-slate-6 m-0 w-full border-b pb-2 capitalize">
               {variant}
             </h2>
             {/* Sizes */}

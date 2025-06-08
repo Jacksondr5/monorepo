@@ -20,6 +20,7 @@ const config = [
       "**/convex/_generated",
       "**/.next",
       "**/storybook-static",
+      "**/out-tsc",
     ],
   },
   { plugins: { "@nx": nxEslintPlugin } },

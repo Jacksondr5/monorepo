@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 import { cn } from "../../lib/utils";
 
 const tagVariants = cva(
-  "focus:ring-blue-7/50 inline-flex items-center rounded-md font-sans text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2",
+  "focus:ring-blue-8/50 inline-flex items-center rounded-md font-sans text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2",
   {
     variants: {
       variant: {

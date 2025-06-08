@@ -4,7 +4,7 @@ import { cn } from "../../lib/utils";
 
 export const textareaVariants = {
   error: {
-    true: "border-red-7 focus-visible:ring-red-7/50 text-red-900 placeholder:text-red-400",
+    true: "border-red-7 focus-visible:ring-red-7/50 text-red-11 placeholder:text-red-9",
     false: "",
   },
   size: {

@@ -1,7 +1,7 @@
 import { create } from "storybook/theming/create";
 import { ThemeVars } from "storybook/theming";
 
-const themeVars: ThemeVars = create({
+export const j5Theme: ThemeVars = create({
   appBg: "#111210", // Radix Olive Dark 1
   appBorderColor: "#363b42", // Radix Slate Dark 6
   appBorderRadius: 6, // from --radius-md (6px)
@@ -29,5 +29,3 @@ const themeVars: ThemeVars = create({
   textColor: "#ededef", // Radix Slate Dark 12
   textInverseColor: "#151718", // Radix Slate Dark 1 (for text on colored/light backgrounds)
 });
-
-export default themeVars;

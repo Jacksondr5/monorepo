@@ -94,7 +94,7 @@ const AllVariantsTemplate = () => {
           title="Custom Icon Toast (Static)"
           description="This toast uses a custom icon passed as a prop, rendered statically."
           variant="default"
-          icon={<Bell className="text-purple-7 h-5 w-5" />}
+          icon={<Bell className="text-blue-9 h-5 w-5" />}
           action={{
             label: "Custom Action",
             onClick: () => alert("Custom icon toast action!"),
