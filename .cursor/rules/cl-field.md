@@ -217,6 +217,22 @@ export const InteractionTest: Story = {
 ### 2. MockFieldProvider Pattern
 
 ```typescript
+/**
+ * Type for the field context value in stories.
+ *
+ * The actual type is FieldApi from @tanstack/react-form, but it requires 19 generic type arguments
+ * which makes it impractical for story mocking. For stories, we only need to mock the specific
+ * properties that our field components actually use:
+ * - name: string
+ * - state.meta.errors: string[]
+ * - state.value: T
+ * - handleChange: (value: T) => void
+ * - handleBlur: () => void
+ *
+ * Using 'any' here is acceptable for story mocking purposes.
+ */
+type FieldContextValue = any;
+
 interface MockFieldProviderProps {
   children: React.ReactNode;
   name?: string;
@@ -256,7 +272,38 @@ const MockFieldProvider = ({
 };
 ```
 
-### 3. Story Testing Best Practices
+### 3. Story TypeScript Standards
+
+#### FieldContextValue Type Documentation
+
+Always include the comprehensive documentation comment for `FieldContextValue` type:
+
+```typescript
+/**
+ * Type for the field context value in stories.
+ *
+ * The actual type is FieldApi from @tanstack/react-form, but it requires 19 generic type arguments
+ * which makes it impractical for story mocking. For stories, we only need to mock the specific
+ * properties that our field components actually use:
+ * - name: string
+ * - state.meta.errors: string[]
+ * - state.value: T
+ * - handleChange: (value: T) => void
+ * - handleBlur: () => void
+ *
+ * Using 'any' here is acceptable for story mocking purposes.
+ */
+type FieldContextValue = any;
+```
+
+**Why this approach:**
+
+- **Practical**: The actual `FieldApi` type requires 19 generic type arguments
+- **Clear**: Documents exactly what properties are needed for mocking
+- **Maintainable**: Future developers understand the reasoning
+- **Consistent**: All field stories use the same pattern
+
+### 4. Story Testing Best Practices
 
 - **Use data test IDs** instead of text selectors for reliability
 - **Use `screen`** for elements in portals (dropdowns, modals)
@@ -396,9 +443,10 @@ export type { ComponentProps, FieldComponentProps } from "./component";
 - [ ] Proper TypeScript interfaces with omitted props
 - [ ] AllFieldStates story with all required states
 - [ ] InteractionTest story with comprehensive testing
-- [ ] MockFieldProvider implementation
+- [ ] MockFieldProvider implementation with proper FieldContextValue documentation
 - [ ] Consistent test ID pattern implementation
 - [ ] Error handling with FormErrorMessage
 - [ ] Accessibility attributes (aria-invalid, aria-describedby)
+- [ ] FieldContextValue type with comprehensive documentation comment
 - [ ] Build passes without TypeScript errors
 - [ ] Storybook stories render and interact correctly

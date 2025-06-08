@@ -12,16 +12,16 @@ export const j5Theme: ThemeVars = create({
   barSelectedColor: "#46a758", // Radix Grass Dark 9
   barTextColor: "#c8cdd3", // Radix Slate Dark 11
   base: "dark",
-  brandImage: "https://storybook.js.org/images/placeholders/350x150.png",
+  brandImage: "https://storybook.js.org/images/placeholders/350x150.png", // TODO: Add J5 logo
   brandTarget: "_self",
   brandTitle: "J5 Component Library",
-  brandUrl: "https://example.com",
+  brandUrl: "https://jackson.codes",
   colorPrimary: "#46a758", // Radix Grass Dark 9
   colorSecondary: "#0090ff", // Radix Blue Dark 9
   fontBase:
     "'Geist Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
   fontCode:
-    "'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace'",
+    "'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   inputBg: "#25282c", // Radix Slate Dark 3
   inputBorder: "#3e444c", // Radix Slate Dark 7
   inputBorderRadius: 4, // from --radius-sm (4px)

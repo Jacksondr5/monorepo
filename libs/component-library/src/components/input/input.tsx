@@ -136,7 +136,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               className, // Merge external className here
             )}
             ref={ref}
-            // {...props}
+            {...props}
           />
         </div>
       );

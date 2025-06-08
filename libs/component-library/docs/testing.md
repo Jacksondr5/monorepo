@@ -15,7 +15,7 @@ We will primarily use **three** types of stories, typically co-located within th
     - **Benefit:** This significantly reduces the number of individual Chromatic snapshots for base components, helping to manage costs while still providing broad visual regression coverage for static states.
     - **Location:** Resides within the component's main story file (e.g., `input.stories.tsx`).
     - **Storybook Title:** Defined in the `meta` object (e.g., `title: "Components/Input"`).
-    - **Error State:** Must include visual representation of the component in its error state (e.g., with `error={true}` or appropriate `aria-invalid` styling applied).
+    - **Error State:** Must include a visual representation of the component in its error state (e.g., with `error={true}` or appropriate `aria-invalid` styling applied).
 
 2.  **Field Component Visual Matrix Story (e.g., `AllFieldStates` export):**
 

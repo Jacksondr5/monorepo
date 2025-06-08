@@ -12,8 +12,21 @@ import {
   SelectValue,
 } from "./select";
 
-// Type for the value prop of fieldContext.Provider
-type FieldContextValue = any; // Placeholder
+/**
+ * Type for the field context value in stories.
+ *
+ * The actual type is FieldApi from @tanstack/react-form, but it requires 19 generic type arguments
+ * which makes it impractical for story mocking. For stories, we only need to mock the specific
+ * properties that our field components actually use:
+ * - name: string
+ * - state.meta.errors: string[]
+ * - state.value: T
+ * - handleChange: (value: T) => void
+ * - handleBlur: () => void
+ *
+ * Using 'any' here is acceptable for story mocking purposes.
+ */
+type FieldContextValue = any;
 
 interface MockFieldProviderProps {
   children: React.ReactNode;

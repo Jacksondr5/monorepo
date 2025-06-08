@@ -78,7 +78,6 @@ const config = [
       },
     })),
   ...storybook.configs["flat/recommended"],
-  ...storybook.configs["flat/recommended"],
 ];
 
 export default config;
