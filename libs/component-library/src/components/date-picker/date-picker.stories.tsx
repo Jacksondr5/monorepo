@@ -40,6 +40,10 @@ export const AllVariants: Story = {
         <h3 className="text-slate-12">Disabled</h3>
         <DatePicker {...defaultProps} disabled />
       </div>
+      <div>
+        <h3 className="text-slate-12">Error</h3>
+        <DatePicker {...defaultProps} error />
+      </div>
     </div>
   ),
 };

@@ -15,7 +15,12 @@ export interface CheckboxGroupItem {
 export interface FieldCheckboxGroupProps
   extends Omit<
     CheckboxProps,
-    "value" | "onCheckedChange" | "checked" | "defaultChecked" | "id"
+    | "value"
+    | "onCheckedChange"
+    | "checked"
+    | "defaultChecked"
+    | "id"
+    | "dataTestId"
   > {
   label: string;
   items: CheckboxGroupItem[];
@@ -93,14 +98,15 @@ export const FieldCheckboxGroup = React.forwardRef<
               className={cn("flex items-center", itemClassName)}
             >
               <Checkbox
-                {...props} // Pass down props like 'size'
+                {...props}
                 id={`${field.name}-${item.id}`}
                 checked={fieldItems.includes(item.id)}
                 onCheckedChange={(checked) => {
                   handleCheckedChange(item.id, Boolean(checked));
                 }}
-                onBlur={field.handleBlur} // Apply blur to the group or individual items as needed
+                onBlur={field.handleBlur}
                 aria-invalid={field.state.meta.errors.length > 0}
+                dataTestId={`${field.name}-${item.id}-checkbox`}
               />
               <Label
                 htmlFor={`${field.name}-${item.id}`}

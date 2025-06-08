@@ -107,7 +107,7 @@ function SelectTrigger({
   ];
   return (
     <SelectPrimitive.Trigger
-      aria-invalid={error || props["aria-invalid"]}
+      aria-invalid={error || props["aria-invalid"] || "false"}
       aria-describedby={customAriaDescribedBy || props["aria-describedby"]}
       data-slot="select-trigger"
       data-testid={dataTestId ? `${dataTestId}-trigger` : undefined}

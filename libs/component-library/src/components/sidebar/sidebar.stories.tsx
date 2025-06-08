@@ -32,16 +32,6 @@ const meta: Meta<typeof Sidebar> = {
   parameters: {
     layout: "fullscreen",
   },
-  subcomponents: {
-    SidebarHeader,
-    SidebarContent,
-    SidebarFooter,
-    SidebarTrigger,
-    SidebarGroup,
-    SidebarGroupLabel,
-    SidebarSeparator,
-    SidebarInset,
-  },
   argTypes: {
     children: { control: false },
     className: { control: false },

@@ -10,6 +10,7 @@ import {
 import { Button, buttonVariants } from "./button";
 import { Mail, ChevronRight, Aperture, Trash2 } from "lucide-react"; // Added more icons
 import React from "react";
+import { mocked } from "storybook/test";
 
 const meta: Meta<typeof Button> = {
   title: "Components/Button",
@@ -220,13 +221,15 @@ export const PrimaryClickable: Story = {
     const button = canvas.getByRole<HTMLButtonElement>("button", {
       name: /Primary Action/i,
     });
+    const mockedOnClick = mocked(args.onClick)!;
+    expect(mockedOnClick).toBeDefined();
 
     await step("Mouse click", async () => {
       await userEvent.click(button);
       await expect(args.onClick).toHaveBeenCalledTimes(1);
     });
 
-    args.onClick?.mockClear(); // Clear mock for next interaction
+    mockedOnClick.mockClear(); // Clear mock for next interaction
 
     await step("Keyboard (Enter)", async () => {
       fireEvent.focus(button);
@@ -235,7 +238,7 @@ export const PrimaryClickable: Story = {
       await expect(args.onClick).toHaveBeenCalledTimes(1);
     });
 
-    args.onClick?.mockClear();
+    mockedOnClick.mockClear();
 
     await step("Keyboard (Space)", async () => {
       fireEvent.focus(button);

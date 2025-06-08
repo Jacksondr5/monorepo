@@ -12,7 +12,6 @@ import { Aperture } from "lucide-react"; // Icon for icon button trigger
 const meta: Meta<typeof Tooltip> = {
   title: "Components/Tooltip",
   component: Tooltip,
-  subcomponents: { TooltipContent, TooltipTrigger },
   parameters: {
     layout: "centered",
   },

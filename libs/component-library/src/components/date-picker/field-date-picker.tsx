@@ -13,7 +13,12 @@ export const FieldDatePicker = ({
   ...props
 }: Omit<
   DatePickerProps,
-  "value" | "onChange" | "aria-invalid" | "error" | "aria-describedby"
+  | "value"
+  | "onChange"
+  | "aria-invalid"
+  | "error"
+  | "aria-describedby"
+  | "dataTestId"
 > & {
   label: string;
 }) => {
@@ -27,7 +32,11 @@ export const FieldDatePicker = ({
 
   return (
     <div className={cn("grid w-full items-center gap-1.5", className)}>
-      <Label htmlFor={field.name} dataTestId={`${field.name}-label`}>
+      <Label
+        htmlFor={field.name}
+        dataTestId={`${field.name}-label`}
+        error={hasError}
+      >
         {label}
       </Label>
       <DatePicker
@@ -36,6 +45,7 @@ export const FieldDatePicker = ({
         onChange={(e) => field.handleChange(e?.getTime())}
         error={hasError}
         aria-describedby={describedBy}
+        dataTestId={`${field.name}-date-picker`}
       />
       {hasError && (
         <FormErrorMessage

@@ -71,31 +71,18 @@ export const AllFieldStates: Story = {
   render: (args: Story["args"]) => (
     <div className="max-w-md space-y-8">
       <MockFieldProvider name="normalTextarea" value="">
-        <FieldTextarea
-          {...args}
-          label="Normal (Empty)"
-          dataTestId="normalTextarea-textarea"
-        />
+        <FieldTextarea {...args} label="Normal (Empty)" />
       </MockFieldProvider>
 
       <MockFieldProvider
         name="filledTextarea"
         value="Some text here that spans multiple lines and shows how the textarea handles longer content."
       >
-        <FieldTextarea
-          {...args}
-          label="Filled"
-          dataTestId="filledTextarea-textarea"
-        />
+        <FieldTextarea {...args} label="Filled" />
       </MockFieldProvider>
 
       <MockFieldProvider name="disabledTextarea" value="">
-        <FieldTextarea
-          {...args}
-          label="Disabled"
-          disabled
-          dataTestId="disabledTextarea-textarea"
-        />
+        <FieldTextarea {...args} label="Disabled" disabled />
       </MockFieldProvider>
 
       <MockFieldProvider
@@ -103,11 +90,7 @@ export const AllFieldStates: Story = {
         value=""
         errors={["This field is required."]}
       >
-        <FieldTextarea
-          {...args}
-          label="Error (Empty)"
-          dataTestId="errorTextarea-textarea"
-        />
+        <FieldTextarea {...args} label="Error (Empty)" />
       </MockFieldProvider>
 
       <MockFieldProvider
@@ -115,11 +98,7 @@ export const AllFieldStates: Story = {
         value="Incorrect value"
         errors={["This value is not valid."]}
       >
-        <FieldTextarea
-          {...args}
-          label="Error + Filled"
-          dataTestId="errorFilledTextarea-textarea"
-        />
+        <FieldTextarea {...args} label="Error + Filled" />
       </MockFieldProvider>
 
       <MockFieldProvider
@@ -129,11 +108,7 @@ export const AllFieldStates: Story = {
           "This is a very long error message to check how it wraps and displays within the allocated space for error messages under the textarea field.",
         ]}
       >
-        <FieldTextarea
-          {...args}
-          label="Long Error Message"
-          dataTestId="longErrorTextarea-textarea"
-        />
+        <FieldTextarea {...args} label="Long Error Message" />
       </MockFieldProvider>
     </div>
   ),
@@ -182,7 +157,7 @@ export const InteractionTest: Story = {
         handleChange={setValue}
         errors={value === "error" ? ["This is an error"] : []}
       >
-        <FieldTextarea label="Text Area" dataTestId="normalTextarea-textarea" />
+        <FieldTextarea label="Text Area" />
       </MockFieldProvider>
     );
   },

@@ -66,11 +66,16 @@ export function DatePicker({
           aria-describedby={ariaDescribedBy}
         >
           <CalendarIcon className="mr-2 size-4" />
-          {internalDate ? (
-            format(internalDate, "PPP")
-          ) : (
-            <span>{placeholder}</span>
-          )}
+          <span
+            data-testid={`${dataTestId}-date-picker-trigger-text`}
+            className={cn(error && "text-red-9")}
+          >
+            {internalDate ? (
+              format(internalDate, "PPP")
+            ) : (
+              <span className="text-slate-9">{placeholder}</span>
+            )}
+          </span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

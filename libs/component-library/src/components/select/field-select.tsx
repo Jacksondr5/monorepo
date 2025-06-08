@@ -16,6 +16,7 @@ export interface FieldSelectProps
     | "defaultValue"
     | "error"
     | "customAriaDescribedBy"
+    | "dataTestId"
   > {
   label: string;
   className?: string;
@@ -47,6 +48,7 @@ export const FieldSelect = ({
         onOpenChange={(open) => !open && field.handleBlur()} // Common Radix pattern for blur
         error={hasError}
         customAriaDescribedBy={hasError ? errorId : undefined}
+        dataTestId={`${field.name}-select`}
       >
         {children}
       </Select>

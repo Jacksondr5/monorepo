@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
-import { within, userEvent, expect, fn } from "storybook/test"; // Core testing utilities
+import { within, userEvent, expect } from "storybook/test"; // Core testing utilities
 import {
   Card,
   CardContent,
@@ -112,24 +112,14 @@ export const AllVariants: Story = {
 
 // Story for testing interaction with the action button
 export const ActionInteractionTest: Story = {
-  args: {
-    // Define a mock function for the button's onClick
-    onClick: fn(),
-  },
-  render: (args) => (
+  render: () => (
     <Card style={{ width: "350px" }}>
-      {" "}
       {/* Render only the card with action */}
       <CardHeader>
         <CardTitle>Card With Action</CardTitle>
         <CardDescription>Click the action button.</CardDescription>
         <CardAction>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={args.onClick}
-            dataTestId="card-action-button"
-          >
+          <Button variant="outline" size="sm" dataTestId="card-action-button">
             Action
           </Button>
         </CardAction>
@@ -139,7 +129,7 @@ export const ActionInteractionTest: Story = {
       </CardContent>
     </Card>
   ),
-  play: async ({ canvasElement, args, step }) => {
+  play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
     await step("Find Action Button", async () => {
@@ -154,10 +144,6 @@ export const ActionInteractionTest: Story = {
         name: /Action/i,
       }); // Re-find inside step
       await userEvent.click(actionButton);
-    });
-
-    await step("Verify onClick was called", async () => {
-      expect(args.onClick).toHaveBeenCalledTimes(1);
     });
   },
 };

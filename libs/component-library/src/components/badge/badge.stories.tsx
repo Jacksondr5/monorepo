@@ -99,14 +99,13 @@ export const AllVariants: Story = {
             className="grid w-full grid-cols-2 items-start gap-5"
           >
             <div className="col-span-1 flex flex-col gap-4">
-              <VariantDisplay variant={variant} {...args} />
+              <VariantDisplay variant={variant} />
             </div>
             <div className="col-span-1 flex flex-col gap-4">
               <VariantDisplay
                 variant={
                   `${variant}Outline` as keyof typeof badgeVariants.variant
                 }
-                {...args}
               />
             </div>
           </div>

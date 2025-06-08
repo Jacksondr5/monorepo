@@ -1,7 +1,7 @@
 "use client";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { fn, userEvent, expect, within, waitFor } from "storybook/test";
+import { fn, userEvent, expect, within, waitFor, screen } from "storybook/test";
 import React, { useState } from "react";
 import { FieldSelect } from "./field-select";
 import { fieldContext } from "../form/form-contexts";
@@ -90,28 +90,19 @@ export const AllFieldStates: Story = {
   render: (args: Story["args"]) => (
     <div className="max-w-md space-y-8">
       <MockFieldProvider name="normalSelect" value="">
-        <FieldSelect
-          {...args}
-          label="Normal (Empty)"
-          dataTestId="normalSelect-select"
-        >
+        <FieldSelect {...args} label="Normal (Empty)">
           <SelectOptions />
         </FieldSelect>
       </MockFieldProvider>
 
       <MockFieldProvider name="filledSelect" value="option2">
-        <FieldSelect {...args} label="Filled" dataTestId="filledSelect-select">
+        <FieldSelect {...args} label="Filled">
           <SelectOptions />
         </FieldSelect>
       </MockFieldProvider>
 
       <MockFieldProvider name="disabledSelect" value="">
-        <FieldSelect
-          {...args}
-          label="Disabled"
-          disabled
-          dataTestId="disabledSelect-select"
-        >
+        <FieldSelect {...args} label="Disabled" disabled>
           <SelectOptions />
         </FieldSelect>
       </MockFieldProvider>
@@ -121,11 +112,7 @@ export const AllFieldStates: Story = {
         value=""
         errors={["This field is required."]}
       >
-        <FieldSelect
-          {...args}
-          label="Error (Empty)"
-          dataTestId="errorSelect-select"
-        >
+        <FieldSelect {...args} label="Error (Empty)">
           <SelectOptions />
         </FieldSelect>
       </MockFieldProvider>
@@ -135,11 +122,7 @@ export const AllFieldStates: Story = {
         value="option1"
         errors={["This value is not valid."]}
       >
-        <FieldSelect
-          {...args}
-          label="Error + Filled"
-          dataTestId="errorFilledSelect-select"
-        >
+        <FieldSelect {...args} label="Error + Filled">
           <SelectOptions />
         </FieldSelect>
       </MockFieldProvider>
@@ -151,11 +134,7 @@ export const AllFieldStates: Story = {
           "This is a very long error message to check how it wraps and displays within the allocated space for error messages under the select field.",
         ]}
       >
-        <FieldSelect
-          {...args}
-          label="Long Error Message"
-          dataTestId="longErrorSelect-select"
-        >
+        <FieldSelect {...args} label="Long Error Message">
           <SelectOptions />
         </FieldSelect>
       </MockFieldProvider>
@@ -166,39 +145,65 @@ export const AllFieldStates: Story = {
 export const InteractionTest: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
+    const selectTrigger = canvas.getByTestId(`normalSelect-select-trigger`);
+
     await step("Ensure select is empty", async () => {
-      const selectTrigger = canvas.getByTestId(`normalSelect-select-trigger`);
       expect(selectTrigger).toHaveAttribute("aria-expanded", "false");
       expect(
         canvas.queryByTestId(`normalSelect-error`),
       ).not.toBeInTheDocument();
       expect(selectTrigger).toHaveAttribute("aria-invalid", "false");
+
+      // Check that the placeholder is shown
+      const selectValue = canvas.getByTestId(`normalSelect-select-value`);
+      expect(selectValue).toHaveTextContent("Select an option...");
     });
 
     await step("Open select and choose option", async () => {
-      const selectTrigger = canvas.getByTestId(`normalSelect-select-trigger`);
       await userEvent.click(selectTrigger);
       expect(selectTrigger).toHaveAttribute("aria-expanded", "true");
 
-      const option2 = canvas.getByText("Option 2");
+      // Wait for select content to appear and use test ID to find option
+      await waitFor(() => {
+        expect(
+          screen.getByTestId(`normalSelect-select-content`),
+        ).toBeInTheDocument();
+      });
+
+      const option2 = screen.getByTestId(`normalSelect-select-item-option2`);
       await userEvent.click(option2);
+
       expect(selectTrigger).toHaveAttribute("aria-expanded", "false");
       expect(
         canvas.queryByTestId(`normalSelect-error`),
       ).not.toBeInTheDocument();
+
+      // Verify the selected value is displayed
+      const selectValue = canvas.getByTestId(`normalSelect-select-value`);
+      expect(selectValue).toHaveTextContent("Option 2");
     });
 
     await step("Trigger error by selecting error option", async () => {
-      const selectTrigger = canvas.getByTestId(`normalSelect-select-trigger`);
       await userEvent.click(selectTrigger);
 
-      const errorOption = canvas.getByText("Error Option");
+      // Wait for select content to appear
+      await waitFor(() => {
+        expect(
+          screen.getByTestId(`normalSelect-select-content`),
+        ).toBeInTheDocument();
+      });
+
+      const errorOption = screen.getByTestId(`normalSelect-select-item-error`);
       await userEvent.click(errorOption);
 
       await waitFor(() => {
         expect(canvas.getByTestId(`normalSelect-error`)).toBeInTheDocument();
       });
       expect(selectTrigger).toHaveAttribute("aria-invalid", "true");
+
+      // Verify the error value is displayed
+      const selectValue = canvas.getByTestId(`normalSelect-select-value`);
+      expect(selectValue).toHaveTextContent("Error Option");
     });
   },
 
@@ -211,7 +216,7 @@ export const InteractionTest: Story = {
         handleChange={setValue}
         errors={value === "error" ? ["This is an error"] : []}
       >
-        <FieldSelect label="Select Field" dataTestId="normalSelect-select">
+        <FieldSelect label="Select Field">
           <SelectTrigger>
             <SelectValue placeholder="Select an option..." />
           </SelectTrigger>

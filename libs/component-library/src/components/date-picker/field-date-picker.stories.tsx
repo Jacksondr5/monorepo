@@ -1,7 +1,7 @@
 "use client";
 
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { fn, userEvent, expect, within, waitFor } from "storybook/test";
+import { fn, userEvent, expect, within, waitFor, screen } from "storybook/test";
 import React, { useState } from "react";
 import { FieldDatePicker } from "./field-date-picker";
 import { fieldContext } from "../form/form-contexts";
@@ -71,31 +71,18 @@ export const AllFieldStates: Story = {
   render: (args: Story["args"]) => (
     <div className="max-w-md space-y-8">
       <MockFieldProvider name="normalDatePicker" value={undefined}>
-        <FieldDatePicker
-          {...args}
-          label="Normal (Empty)"
-          dataTestId="normalDatePicker-datepicker"
-        />
+        <FieldDatePicker {...args} label="Normal (Empty)" />
       </MockFieldProvider>
 
       <MockFieldProvider
         name="filledDatePicker"
         value={new Date("2024-01-15").getTime()}
       >
-        <FieldDatePicker
-          {...args}
-          label="Filled"
-          dataTestId="filledDatePicker-datepicker"
-        />
+        <FieldDatePicker {...args} label="Filled" />
       </MockFieldProvider>
 
       <MockFieldProvider name="disabledDatePicker" value={undefined}>
-        <FieldDatePicker
-          {...args}
-          label="Disabled"
-          disabled
-          dataTestId="disabledDatePicker-datepicker"
-        />
+        <FieldDatePicker {...args} label="Disabled" disabled />
       </MockFieldProvider>
 
       <MockFieldProvider
@@ -103,11 +90,7 @@ export const AllFieldStates: Story = {
         value={undefined}
         errors={["This field is required."]}
       >
-        <FieldDatePicker
-          {...args}
-          label="Error (Empty)"
-          dataTestId="errorDatePicker-datepicker"
-        />
+        <FieldDatePicker {...args} label="Error (Empty)" />
       </MockFieldProvider>
 
       <MockFieldProvider
@@ -115,11 +98,7 @@ export const AllFieldStates: Story = {
         value={new Date("2024-12-31").getTime()}
         errors={["This date is not valid."]}
       >
-        <FieldDatePicker
-          {...args}
-          label="Error + Filled"
-          dataTestId="errorFilledDatePicker-datepicker"
-        />
+        <FieldDatePicker {...args} label="Error + Filled" />
       </MockFieldProvider>
 
       <MockFieldProvider
@@ -129,11 +108,7 @@ export const AllFieldStates: Story = {
           "This is a very long error message to check how it wraps and displays within the allocated space for error messages under the date picker field.",
         ]}
       >
-        <FieldDatePicker
-          {...args}
-          label="Long Error Message"
-          dataTestId="longErrorDatePicker-datepicker"
-        />
+        <FieldDatePicker {...args} label="Long Error Message" />
       </MockFieldProvider>
     </div>
   ),
@@ -142,10 +117,10 @@ export const AllFieldStates: Story = {
 export const InteractionTest: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
+    const datePickerTrigger = canvas.getByTestId(
+      `normalDatePicker-date-picker-popover-trigger`,
+    );
     await step("Ensure date picker is empty", async () => {
-      const datePickerTrigger = canvas.getByTestId(
-        `normalDatePicker-datepicker-trigger`,
-      );
       expect(datePickerTrigger).toHaveTextContent("Pick a date");
       expect(
         canvas.queryByTestId(`normalDatePicker-error`),
@@ -154,18 +129,17 @@ export const InteractionTest: Story = {
     });
 
     await step("Open date picker and select date", async () => {
-      const datePickerTrigger = canvas.getByTestId(
-        `normalDatePicker-datepicker-trigger`,
-      );
       await userEvent.click(datePickerTrigger);
 
       // Wait for calendar to open
       await waitFor(() => {
-        expect(canvas.getByRole("dialog")).toBeInTheDocument();
+        expect(
+          screen.getByTestId("normalDatePicker-date-picker-popover-content"),
+        ).toBeInTheDocument();
       });
 
       // Select today's date (assuming it's visible)
-      const todayButton = canvas.getByRole("gridcell", { name: "15" });
+      const todayButton = screen.getByRole("gridcell", { name: "15" });
       await userEvent.click(todayButton);
 
       expect(
@@ -174,13 +148,10 @@ export const InteractionTest: Story = {
     });
 
     await step("Trigger error by selecting invalid date", async () => {
-      const datePickerTrigger = canvas.getByTestId(
-        `normalDatePicker-datepicker-trigger`,
-      );
       await userEvent.click(datePickerTrigger);
 
       // Select a date that will trigger an error (this is simulated)
-      const errorDate = canvas.getByRole("gridcell", { name: "31" });
+      const errorDate = screen.getByRole("gridcell", { name: "30" });
       await userEvent.click(errorDate);
 
       await waitFor(() => {
@@ -194,7 +165,7 @@ export const InteractionTest: Story = {
 
   render: () => {
     const [value, setValue] = useState<number | undefined>(undefined);
-    const isInvalidDate = value && new Date(value).getDate() === 31;
+    const isInvalidDate = value && new Date(value).getDate() === 30;
 
     return (
       <MockFieldProvider
@@ -203,10 +174,7 @@ export const InteractionTest: Story = {
         handleChange={setValue}
         errors={isInvalidDate ? ["This date is not valid"] : []}
       >
-        <FieldDatePicker
-          label="Date Picker"
-          dataTestId="normalDatePicker-datepicker"
-        />
+        <FieldDatePicker label="Date Picker" />
       </MockFieldProvider>
     );
   },

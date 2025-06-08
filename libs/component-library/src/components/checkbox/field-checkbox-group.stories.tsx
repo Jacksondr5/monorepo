@@ -83,28 +83,18 @@ export const AllFieldStates: Story = {
   render: (args: Story["args"]) => (
     <div className="max-w-md space-y-8">
       <MockFieldProvider name="normalCheckboxGroup" value={[]}>
-        <FieldCheckboxGroup
-          label="Normal (Empty)"
-          items={checkboxItems}
-          dataTestId="normalCheckboxGroup-checkbox"
-        />
+        <FieldCheckboxGroup label="Normal (Empty)" items={checkboxItems} />
       </MockFieldProvider>
 
       <MockFieldProvider name="filledCheckboxGroup" value={["item1", "item3"]}>
         <FieldCheckboxGroup
           label="Filled (Multiple Selected)"
           items={checkboxItems}
-          dataTestId="filledCheckboxGroup-checkbox"
         />
       </MockFieldProvider>
 
       <MockFieldProvider name="disabledCheckboxGroup" value={[]}>
-        <FieldCheckboxGroup
-          label="Disabled"
-          items={checkboxItems}
-          disabled
-          dataTestId="disabledCheckboxGroup-checkbox"
-        />
+        <FieldCheckboxGroup label="Disabled" items={checkboxItems} disabled />
       </MockFieldProvider>
 
       <MockFieldProvider
@@ -112,11 +102,7 @@ export const AllFieldStates: Story = {
         value={[]}
         errors={["At least one option must be selected."]}
       >
-        <FieldCheckboxGroup
-          label="Error (Empty)"
-          items={checkboxItems}
-          dataTestId="errorCheckboxGroup-checkbox"
-        />
+        <FieldCheckboxGroup label="Error (Empty)" items={checkboxItems} />
       </MockFieldProvider>
 
       <MockFieldProvider
@@ -124,11 +110,7 @@ export const AllFieldStates: Story = {
         value={["item2"]}
         errors={["This selection is not valid."]}
       >
-        <FieldCheckboxGroup
-          label="Error + Filled"
-          items={checkboxItems}
-          dataTestId="errorFilledCheckboxGroup-checkbox"
-        />
+        <FieldCheckboxGroup label="Error + Filled" items={checkboxItems} />
       </MockFieldProvider>
 
       <MockFieldProvider
@@ -138,11 +120,7 @@ export const AllFieldStates: Story = {
           "This is a very long error message to check how it wraps and displays within the allocated space for error messages under the checkbox group field.",
         ]}
       >
-        <FieldCheckboxGroup
-          label="Long Error Message"
-          items={checkboxItems}
-          dataTestId="longErrorCheckboxGroup-checkbox"
-        />
+        <FieldCheckboxGroup label="Long Error Message" items={checkboxItems} />
       </MockFieldProvider>
 
       <MockFieldProvider name="horizontalCheckboxGroup" value={["item2"]}>
@@ -150,7 +128,6 @@ export const AllFieldStates: Story = {
           label="Horizontal Layout"
           items={checkboxItems}
           orientation="horizontal"
-          dataTestId="horizontalCheckboxGroup-checkbox"
         />
       </MockFieldProvider>
     </div>
@@ -160,11 +137,12 @@ export const AllFieldStates: Story = {
 export const InteractionTest: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
+    const checkbox1 = canvas.getByTestId(`normalCheckboxGroup-item1-checkbox`);
+    const checkbox2 = canvas.getByTestId(`normalCheckboxGroup-item2-checkbox`);
+    const checkbox3 = canvas.getByTestId(
+      `normalCheckboxGroup-error-item-checkbox`,
+    );
     await step("Ensure no checkboxes are selected initially", async () => {
-      const checkbox1 = canvas.getByTestId(`normalCheckboxGroup-item1`);
-      const checkbox2 = canvas.getByTestId(`normalCheckboxGroup-item2`);
-      const checkbox3 = canvas.getByTestId(`normalCheckboxGroup-item3`);
-
       expect(checkbox1).not.toBeChecked();
       expect(checkbox2).not.toBeChecked();
       expect(checkbox3).not.toBeChecked();
@@ -174,14 +152,11 @@ export const InteractionTest: Story = {
     });
 
     await step("Select multiple checkboxes", async () => {
-      const checkbox1 = canvas.getByTestId(`normalCheckboxGroup-item1`);
-      const checkbox3 = canvas.getByTestId(`normalCheckboxGroup-item3`);
-
       await userEvent.click(checkbox1);
-      await userEvent.click(checkbox3);
+      await userEvent.click(checkbox2);
 
       expect(checkbox1).toBeChecked();
-      expect(checkbox3).toBeChecked();
+      expect(checkbox2).toBeChecked();
       expect(
         canvas.queryByTestId(`normalCheckboxGroup-error`),
       ).not.toBeInTheDocument();
@@ -189,7 +164,7 @@ export const InteractionTest: Story = {
 
     await step("Trigger error by selecting error option", async () => {
       const errorCheckbox = canvas.getByTestId(
-        `normalCheckboxGroup-error-item`,
+        `normalCheckboxGroup-error-item-checkbox`,
       );
       await userEvent.click(errorCheckbox);
 
@@ -200,7 +175,6 @@ export const InteractionTest: Story = {
       });
     });
   },
-
   render: () => {
     const [value, setValue] = useState<string[]>([]);
     const testItems: CheckboxGroupItem[] = [
@@ -216,11 +190,7 @@ export const InteractionTest: Story = {
         handleChange={setValue}
         errors={value.includes("error-item") ? ["This is an error"] : []}
       >
-        <FieldCheckboxGroup
-          label="Checkbox Group"
-          items={testItems}
-          dataTestId="normalCheckboxGroup-checkbox"
-        />
+        <FieldCheckboxGroup label="Checkbox Group" items={testItems} />
       </MockFieldProvider>
     );
   },
