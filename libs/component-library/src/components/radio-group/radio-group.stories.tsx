@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { fn, userEvent, within, expect, waitFor } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn, userEvent, within, expect, waitFor } from "storybook/test";
 
 import { RadioGroup, RadioGroupItem } from "./radio-group";
 import { Label } from "../label/label"; // Import the styled Label
@@ -34,18 +34,18 @@ export const AllVariants: Story = {
       {/* Default */}
       <div>
         <h3 className="text-slate-10 mb-2 text-sm font-medium">Default</h3>
-        <RadioGroup defaultValue="option-one" {...args} name="variants-default">
+        <RadioGroup defaultValue="option-one" {...args} name="variants-default" dataTestId="radiogroup-variants-default">
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="option-one" id="v-opt-1" />
-            <Label htmlFor="v-opt-1">Option One</Label>
+            <Label htmlFor="v-opt-1" dataTestId="radiogroup-variants-default-label-option-one">Option One</Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="option-two" id="v-opt-2" />
-            <Label htmlFor="v-opt-2">Option Two</Label>
+            <Label htmlFor="v-opt-2" dataTestId="radiogroup-variants-default-label-option-two">Option Two</Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="option-three" id="v-opt-3" />
-            <Label htmlFor="v-opt-3">Option Three</Label>
+            <Label htmlFor="v-opt-3" dataTestId="radiogroup-variants-default-label-option-three">Option Three</Label>
           </div>
         </RadioGroup>
       </div>
@@ -59,18 +59,19 @@ export const AllVariants: Story = {
           defaultValue="option-one"
           {...args}
           name="variants-item-disabled"
+          dataTestId="radiogroup-variants-item-disabled"
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="option-one" id="v-id-opt-1" />
-            <Label htmlFor="v-id-opt-1">Option One</Label>
+            <Label htmlFor="v-id-opt-1" dataTestId="radiogroup-variants-item-disabled-label-option-one">Option One</Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="option-two" id="v-id-opt-2" disabled />
-            <Label htmlFor="v-id-opt-2">Option Two (Disabled)</Label>
+            <Label htmlFor="v-id-opt-2" dataTestId="radiogroup-variants-item-disabled-label-option-two">Option Two (Disabled)</Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="option-three" id="v-id-opt-3" />
-            <Label htmlFor="v-id-opt-3">Option Three</Label>
+            <Label htmlFor="v-id-opt-3" dataTestId="radiogroup-variants-item-disabled-label-option-three">Option Three</Label>
           </div>
         </RadioGroup>
       </div>
@@ -85,25 +86,29 @@ export const AllVariants: Story = {
 // Interaction Test Story
 export const InteractionTest: Story = {
   name: "Test: User Interaction",
-  render: (args) => (
-    <RadioGroup {...args} name="interaction-test">
+  render: (args) => {
+    const groupDataTestId = args.dataTestId || "radiogroup-interaction-fallback"; // Fallback if not in args
+    return (
+      <RadioGroup {...args} dataTestId={groupDataTestId} name="interaction-test">
       <div className="flex items-center space-x-2">
         <RadioGroupItem value="option-one" id="t-opt-1" />
-        <Label htmlFor="t-opt-1">Option One</Label>
+        <Label htmlFor="t-opt-1" dataTestId={`${groupDataTestId}-label-option-one`}>Option One</Label>
       </div>
       <div className="flex items-center space-x-2">
         <RadioGroupItem value="option-two" id="t-opt-2" />
-        <Label htmlFor="t-opt-2">Option Two</Label>
+        <Label htmlFor="t-opt-2" dataTestId={`${groupDataTestId}-label-option-two`}>Option Two</Label>
       </div>
       <div className="flex items-center space-x-2">
         <RadioGroupItem value="option-three" id="t-opt-3" />
-        <Label htmlFor="t-opt-3">Option Three</Label>
+        <Label htmlFor="t-opt-3" dataTestId={`${groupDataTestId}-label-option-three`}>Option Three</Label>
       </div>
     </RadioGroup>
-  ),
+    );
+  },
   args: {
     // Ensure the spy function is passed for this story specifically if not in meta.args
     onValueChange: fn(),
+    dataTestId: "radiogroup-interaction",
   },
   play: async ({ args, canvasElement, step }) => {
     const canvas = within(canvasElement);
@@ -141,6 +146,7 @@ export const KeyboardInteractionTest: Story = {
   args: {
     // Ensure the spy function is passed for this story specifically
     onValueChange: fn(),
+    dataTestId: "radiogroup-keyboard",
   },
   play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);

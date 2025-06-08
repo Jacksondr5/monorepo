@@ -26,8 +26,15 @@
 
 # Hackathon
 
+## Critical
+
+- Form error state
+- Automated testing
+- Get error logging to not suck (Convex can feed directly to Sentry)
+
+## Later
+
 - Figure out how to transition between hackathon phases. Probably need an admin page.
-- Add posthog
 - Add better upvote UI, showing who upvoted
 
 # Component Library

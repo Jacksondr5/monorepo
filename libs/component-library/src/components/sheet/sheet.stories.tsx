@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within, expect, screen, waitFor } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { userEvent, within, expect, screen, waitFor } from "storybook/test";
 import { Button } from "../button/button";
 import { Label } from "../label/label";
 import { Input } from "../input/input";
@@ -124,6 +124,7 @@ export const InteractionTest: Story = {
     await step("Close sheet with X button", async () => {
       const sheetContent = await screen.findByText("Test Sheet");
       const closeButton = await within(
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         sheetContent.closest('[data-slot="sheet-content"]')!.parentElement!,
       ).findByRole("button", { name: /close/i });
       await userEvent.click(closeButton);

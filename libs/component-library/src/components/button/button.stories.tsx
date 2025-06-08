@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   fn,
   userEvent,
@@ -6,7 +6,7 @@ import {
   expect,
   screen,
   fireEvent,
-} from "@storybook/test";
+} from "storybook/test";
 import { Button, buttonVariants } from "./button";
 import { Mail, ChevronRight, Aperture, Trash2 } from "lucide-react"; // Added more icons
 import React from "react";

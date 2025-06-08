@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useId } from "react";
 import { Checkbox, type CheckboxProps } from "./checkbox";
 import { useFieldContext } from "../form/form-contexts";
+import { FormErrorMessage } from "../form/form-error-message";
 import { Label } from "../label/label";
 import { cn } from "../../lib/utils";
 
@@ -40,6 +41,13 @@ export const FieldCheckboxGroup = React.forwardRef<
     ref,
   ) => {
     const field = useFieldContext<string[]>(); // Expects the field value to be an array of strings (IDs)
+    const {
+      state: { meta },
+    } = field;
+    const localErrorId = useId();
+    const hasError = meta.errors.length > 0;
+    // No help text functionality in this component, so only include errorId if present.
+    const describedBy = hasError ? localErrorId : undefined;
 
     const fieldItems = field.state.value || [];
 
@@ -57,8 +65,17 @@ export const FieldCheckboxGroup = React.forwardRef<
     );
 
     return (
-      <div ref={ref} className={cn("space-y-2", className)} role="group">
-        <Label htmlFor={field.name} className={labelClassName}>
+      <div
+        ref={ref}
+        className={cn("space-y-2", className)}
+        role="group"
+        aria-describedby={describedBy}
+      >
+        <Label
+          htmlFor={field.name}
+          className={labelClassName}
+          dataTestId={`${field.name}-label`}
+        >
           {label}
         </Label>
         <div
@@ -87,13 +104,20 @@ export const FieldCheckboxGroup = React.forwardRef<
               <Label
                 htmlFor={`${field.name}-${item.id}`}
                 className="ml-2 text-sm font-normal"
+                dataTestId={`${field.name}-${item.id}-label`}
               >
                 {item.label}
               </Label>
             </div>
           ))}
         </div>
-        {/* TODO: Consider how to display field errors for the group if needed */}
+        {hasError && (
+          <FormErrorMessage
+            id={localErrorId}
+            messages={meta.errors}
+            dataTestId={`${field.name}-error`}
+          />
+        )}
       </div>
     );
   },

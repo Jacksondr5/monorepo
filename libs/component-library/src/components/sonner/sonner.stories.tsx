@@ -1,9 +1,9 @@
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { promiseToast, toast } from "./sonner";
 import { Toaster } from "sonner";
 import { Button } from "../button/button";
 import { ToastVariant } from "./toast";
-import { expect, within, userEvent, waitFor, spyOn } from "@storybook/test";
+import { expect, within, userEvent, waitFor, spyOn } from "storybook/test";
 
 const meta: Meta<typeof Toaster> = {
   title: "Components/Toast/sonner",
@@ -168,7 +168,6 @@ export const WithAction: StoryObj = {
 };
 
 export const PromiseToast: StoryObj = {
-  name: "Promise Toast",
   render: () => {
     return (
       <div className="bg-olive-1 flex flex-col items-start gap-4 rounded-lg p-6 shadow-md">

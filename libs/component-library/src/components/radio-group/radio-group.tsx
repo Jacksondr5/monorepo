@@ -1,31 +1,58 @@
 "use client";
 
 import * as React from "react";
+import { useContext } from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { CircleIcon } from "lucide-react";
 
 import { cn } from "../../lib/utils";
 
+interface RadioGroupContextValue {
+  dataTestId: string;
+}
+
+const RadioGroupContext = React.createContext<RadioGroupContextValue | null>(
+  null,
+);
+
+const useRadioGroupContext = () => {
+  const context = useContext(RadioGroupContext);
+  if (!context) {
+    throw new Error("RadioGroupItem must be used within a RadioGroup provider");
+  }
+  return context;
+};
+
 function RadioGroup({
   className,
+  dataTestId,
   ...props
-}: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {
+}: React.ComponentProps<typeof RadioGroupPrimitive.Root> & {
+  dataTestId: string;
+}) {
   return (
-    <RadioGroupPrimitive.Root
-      data-slot="radio-group"
-      className={cn("grid gap-3", className)}
-      {...props}
-    />
+    <RadioGroupContext.Provider value={{ dataTestId }}>
+      <RadioGroupPrimitive.Root
+        data-slot="radio-group"
+        data-testid={dataTestId}
+        className={cn("grid gap-3", className)}
+        {...props}
+      />
+    </RadioGroupContext.Provider>
   );
 }
 
-function RadioGroupItem({
-  className,
-  ...props
-}: React.ComponentProps<typeof RadioGroupPrimitive.Item>) {
+type RadioGroupItemProps = React.ComponentProps<
+  typeof RadioGroupPrimitive.Item
+>;
+
+function RadioGroupItem({ className, ...props }: RadioGroupItemProps) {
+  const { dataTestId } = useRadioGroupContext();
+  const itemValue = props.value;
   return (
     <RadioGroupPrimitive.Item
       data-slot="radio-group-item"
+      data-testid={`${dataTestId}-item-${itemValue}`}
       className={cn(
         "border-olive-7 bg-olive-3 aspect-square size-4 shrink-0 rounded-full border", // Base styles
         "focus-visible:ring-blue-8/50 focus-visible:outline-none focus-visible:ring-2", // Focus

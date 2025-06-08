@@ -1,32 +1,75 @@
 "use client";
 
 import * as React from "react";
+import { useContext } from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 
 import { cn } from "../../lib/utils";
 
-function Popover({
-  ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Root>) {
-  return <PopoverPrimitive.Root data-slot="popover" {...props} />;
+interface PopoverContextValue {
+  dataTestId: string;
 }
 
-function PopoverTrigger({
+const PopoverContext = React.createContext<PopoverContextValue | null>(null);
+
+const usePopoverContext = () => {
+  const context = useContext(PopoverContext);
+  if (!context) {
+    throw new Error(
+      "Popover subcomponents must be used within a Popover provider",
+    );
+  }
+  return context;
+};
+
+function Popover({
+  dataTestId,
   ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Trigger>) {
-  return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />;
+}: React.ComponentProps<typeof PopoverPrimitive.Root> & {
+  dataTestId: string;
+}) {
+  return (
+    <PopoverContext.Provider value={{ dataTestId }}>
+      <PopoverPrimitive.Root
+        data-slot="popover"
+        data-testid={dataTestId}
+        {...props}
+      />
+    </PopoverContext.Provider>
+  );
 }
+
+type PopoverTriggerProps = React.ComponentProps<
+  typeof PopoverPrimitive.Trigger
+>;
+
+function PopoverTrigger({ ...props }: PopoverTriggerProps) {
+  const { dataTestId } = usePopoverContext();
+  return (
+    <PopoverPrimitive.Trigger
+      data-slot="popover-trigger"
+      data-testid={`${dataTestId}-trigger`}
+      {...props}
+    />
+  );
+}
+
+type PopoverContentProps = React.ComponentProps<
+  typeof PopoverPrimitive.Content
+>;
 
 function PopoverContent({
   className,
   align = "center",
   sideOffset = 4,
   ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Content>) {
+}: PopoverContentProps) {
+  const { dataTestId } = usePopoverContext();
   return (
     <PopoverPrimitive.Portal>
       <PopoverPrimitive.Content
         data-slot="popover-content"
+        data-testid={`${dataTestId}-content`}
         align={align}
         sideOffset={sideOffset}
         className={cn(
@@ -45,10 +88,17 @@ function PopoverContent({
   );
 }
 
-function PopoverAnchor({
-  ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Anchor>) {
-  return <PopoverPrimitive.Anchor data-slot="popover-anchor" {...props} />;
+type PopoverAnchorProps = React.ComponentProps<typeof PopoverPrimitive.Anchor>;
+
+function PopoverAnchor({ ...props }: PopoverAnchorProps) {
+  const { dataTestId } = usePopoverContext();
+  return (
+    <PopoverPrimitive.Anchor
+      data-slot="popover-anchor"
+      data-testid={`${dataTestId}-anchor`}
+      {...props}
+    />
+  );
 }
 
 export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor };

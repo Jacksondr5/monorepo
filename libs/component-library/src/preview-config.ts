@@ -1,8 +1,9 @@
-import type { Preview } from "@storybook/react";
+import type { Preview } from "@storybook/react-vite";
+import { themes } from "storybook/theming";
 // Import globals from the styles directory
 import "./styles/globals.css";
 
-export const previewConfig: Preview = {
+export const previewConfig = {
   parameters: {
     backgrounds: {
       default: "dark",
@@ -24,5 +25,8 @@ export const previewConfig: Preview = {
         date: /Date$/i,
       },
     },
+    docs: {
+      theme: themes.dark,
+    },
   },
-};
+} satisfies Preview;

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   userEvent,
   within,
@@ -6,7 +6,7 @@ import {
   fn,
   screen,
   waitFor,
-} from "@storybook/test";
+} from "storybook/test";
 import * as React from "react";
 
 import {

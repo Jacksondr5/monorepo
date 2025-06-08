@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
-import { within, userEvent, expect, fn } from "@storybook/test"; // Core testing utilities
+import { within, userEvent, expect, fn } from "storybook/test"; // Core testing utilities
 import {
   Card,
   CardContent,

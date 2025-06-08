@@ -8,7 +8,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/utils";
 
 const checkboxVariants = cva(
-  "border-olive-7 bg-olive-3 data-[state=checked]:bg-grass-9 data-[state=checked]:text-grass-1 data-[state=checked]:border-grass-9 focus-visible:ring-blue-8/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 peer shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50",
+  "border-olive-7 bg-olive-3 data-[state=checked]:bg-grass-9 data-[state=checked]:text-grass-1 data-[state=checked]:border-grass-9 focus-visible:ring-blue-8/50 aria-invalid:border-red-7 aria-invalid:ring-red-7/50 peer shrink-0 rounded-sm border focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       size: {
@@ -39,12 +39,15 @@ const iconVariants = cva(
 
 export interface CheckboxProps
   extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>,
-    VariantProps<typeof checkboxVariants> {}
+    VariantProps<typeof checkboxVariants> {
+  dataTestId: string;
+}
 
-function Checkbox({ className, size, ...props }: CheckboxProps) {
+function Checkbox({ className, size, dataTestId, ...props }: CheckboxProps) {
   return (
     <CheckboxPrimitive.Root
       data-slot="checkbox"
+      data-testid={dataTestId}
       className={cn(checkboxVariants({ size, className }))}
       {...props}
     >

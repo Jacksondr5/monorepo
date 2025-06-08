@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Toast, ToastProps, ToastVariant } from "./toast";
 import { Bell } from "lucide-react";
 import React from "react";

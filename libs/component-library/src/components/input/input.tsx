@@ -7,6 +7,10 @@ const inputBaseClasses =
   "border-olive-7 shadow-xs file:text-olive-11 placeholder:text-olive-11 text-slate-12 focus-visible:ring-olive-7 focus-visible:outline-hidden flex w-full rounded-md border bg-transparent text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm";
 
 export const inputVariants = {
+  error: {
+    true: "border-red-7 focus-visible:ring-red-7/50 text-red-900 placeholder:text-red-400",
+    false: "", // Default state handled by base and other variants
+  },
   size: {
     default: "h-9 py-1 text-base", // Horizontal padding via compound variants
     sm: "h-8 py-1 text-xs",
@@ -38,6 +42,7 @@ const inputCva = cva(inputBaseClasses, {
   defaultVariants: {
     size: "default",
     layout: "none",
+    error: false, // Default error state
   },
 });
 
@@ -81,13 +86,27 @@ const inputWrapperCva = cva("relative flex w-full items-center", {
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">,
     VariantProps<typeof inputCva> {
+  dataTestId: string;
+  error?: boolean;
   // Uses inputCva for size variant
   icon?: React.ReactNode;
   iconPosition?: "left" | "right"; // This prop name is fine
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, size, icon, iconPosition = "left", ...props }, ref) => {
+  (
+    {
+      className,
+      type,
+      size,
+      icon,
+      iconPosition = "left",
+      error,
+      dataTestId,
+      ...props
+    },
+    ref,
+  ) => {
     const hasIcon = Boolean(icon);
     const layoutVariant = hasIcon
       ? iconPosition === "left"
@@ -111,12 +130,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <input
             type={type}
             data-slot="input"
+            data-testid={dataTestId}
             className={cn(
-              inputCva({ size, layout: layoutVariant }),
+              inputCva({ size, layout: layoutVariant, error }),
               className, // Merge external className here
             )}
             ref={ref}
-            {...props}
+            // {...props}
           />
         </div>
       );
@@ -126,7 +146,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <input
         type={type}
         data-slot="input"
-        className={cn(inputCva({ size, layout: "none" }), className)}
+        data-testid={dataTestId}
+        className={cn(inputCva({ size, layout: "none", error }), className)}
         ref={ref}
         {...props}
       />
