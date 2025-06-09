@@ -1,5 +1,5 @@
 import { create } from "storybook/theming/create";
-import { ThemeVars } from "storybook/theming";
+import type { ThemeVars } from "storybook/theming";
 
 export const j5Theme: ThemeVars = create({
   appBg: "#111210", // Radix Olive Dark 1

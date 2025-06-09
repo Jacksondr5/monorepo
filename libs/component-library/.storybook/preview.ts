@@ -2,7 +2,7 @@ import "../src/styles/globals.css";
 
 import type { Preview } from "@storybook/react-vite";
 
-import { j5Theme } from "../src/j5-sb-theme";
+import { j5Theme } from "../src/storybook/j5-sb-theme";
 
 const preview: Preview = {
   parameters: {

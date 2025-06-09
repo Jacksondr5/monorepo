@@ -1,7 +1,6 @@
 import type { Preview } from "@storybook/react-vite";
-import { themes } from "storybook/theming";
-// Import globals from the styles directory
-import "./styles/globals.css";
+import { j5Theme } from "./j5-sb-theme";
+import "../styles/globals.css";
 
 export const previewConfig = {
   parameters: {
@@ -26,7 +25,7 @@ export const previewConfig = {
       },
     },
     docs: {
-      theme: themes.dark,
+      theme: j5Theme,
     },
   },
 } satisfies Preview;

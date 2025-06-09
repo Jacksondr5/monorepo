@@ -35,7 +35,7 @@ export interface FieldComponentProps
 
 **Key Points:**
 
-- Remove form-related props from base component interface
+- Remove form-related props from the base component interface
 - Remove `dataTestId` - field components handle this internally
 - Always include `label` as required prop
 - Include `className` for styling flexibility

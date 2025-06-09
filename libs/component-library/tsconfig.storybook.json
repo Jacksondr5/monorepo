@@ -25,7 +25,7 @@
     "src/**/*.stories.mdx",
     ".storybook/*.js",
     ".storybook/*.ts",
-    "src/j5-sb-theme.ts"
+    "src/storybook/j5-sb-theme.ts"
   ],
   "references": [
     {
