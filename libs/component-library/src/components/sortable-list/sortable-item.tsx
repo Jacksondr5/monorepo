@@ -31,6 +31,7 @@ const SortableItemContext = createContext<Context>({
     "aria-describedby": "",
   },
   listeners: undefined,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   ref() {},
 });
 

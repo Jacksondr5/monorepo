@@ -38,9 +38,14 @@ export function SeniorityTab({ orgId }: { orgId: string }) {
           value={seniorityName}
           onChange={(e) => setSeniorityName(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleAddSeniority()}
+          dataTestId="seniority-name-input"
         />
-        <Button onClick={handleAddSeniority} disabled={!seniorityName.trim()}>
-          Add Level
+        <Button
+          onClick={handleAddSeniority}
+          disabled={!seniorityName.trim()}
+          dataTestId="add-seniority-button"
+        >
+          Add Seniority
         </Button>
       </div>
       <div className="rounded-lg border p-4">

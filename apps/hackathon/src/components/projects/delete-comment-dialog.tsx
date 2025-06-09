@@ -46,6 +46,7 @@ export const DeleteCommentDialog = ({
           variant="ghost"
           size="sm"
           className="text-destructive-foreground hover:bg-destructive/80 hover:text-destructive-foreground h-auto p-1"
+          dataTestId="delete-comment-trigger-button"
         >
           <Trash2 className="h-4 w-4" />
         </Button>
@@ -60,11 +61,14 @@ export const DeleteCommentDialog = ({
         </p>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" dataTestId="delete-comment-cancel-button">
+              Cancel
+            </Button>
           </DialogClose>
           <DialogClose asChild>
             <Button
               variant="destructive"
+              dataTestId="delete-comment-confirm-button"
               onClick={async () => {
                 const result = await deleteCommentMutation({
                   projectId,

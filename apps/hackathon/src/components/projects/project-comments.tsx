@@ -151,6 +151,7 @@ export function ProjectComments({
                           className="text-slate-10 hover:text-grass-9 h-auto p-1 disabled:opacity-50"
                           onClick={() => handleUpvoteComment(comment.id)}
                           disabled={!currentUser}
+                          dataTestId={`upvote-comment-${comment.id}-button`}
                         >
                           <ThumbsUp
                             className={`h-4 w-4 ${
@@ -206,6 +207,7 @@ export function ProjectComments({
                     setShowCommentForm(false);
                     setNewCommentText("");
                   }}
+                  dataTestId="cancel-comment-button"
                 >
                   Cancel
                 </Button>
@@ -214,6 +216,7 @@ export function ProjectComments({
                   size="sm"
                   onClick={handleAddComment}
                   disabled={newCommentText.trim() === ""}
+                  dataTestId="submit-comment-button"
                 >
                   Submit Comment
                 </Button>
@@ -224,6 +227,7 @@ export function ProjectComments({
               variant="outline"
               size="sm"
               onClick={() => setShowCommentForm(true)}
+              dataTestId="add-comment-button"
             >
               Add Comment
             </Button>

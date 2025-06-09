@@ -112,7 +112,11 @@ export function EditBoardSheet({
           </form.AppField>
           <SheetFooter className="mt-8">
             <SheetClose asChild>
-              <Button type="button" variant="outline">
+              <Button
+                type="button"
+                variant="outline"
+                dataTestId="edit-board-cancel-button"
+              >
                 Cancel
               </Button>
             </SheetClose>
