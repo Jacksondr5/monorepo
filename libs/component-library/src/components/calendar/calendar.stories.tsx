@@ -49,12 +49,6 @@ export const SelectDate: Story = {
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
     // Find today button (should be selected)
-    const today = new Date();
-    const todayLabel = today.toLocaleString(undefined, {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
     // Try to select a day (the 15th, or next available)
     const allButtons = canvas.getAllByRole("button");
     const dayButton = allButtons.find((btn) => btn.textContent === "15");

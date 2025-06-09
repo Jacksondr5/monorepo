@@ -110,13 +110,12 @@ export const AllVariants: Story = {
   ),
 };
 
+// Create mock function outside the story for testing
+const mockActionClick = fn();
+
 // Story for testing interaction with the action button
 export const ActionInteractionTest: Story = {
-  args: {
-    // Define a mock function for the button's onClick
-    onClick: fn(),
-  },
-  render: (args) => (
+  render: () => (
     <Card style={{ width: "350px" }}>
       {" "}
       {/* Render only the card with action */}
@@ -124,7 +123,7 @@ export const ActionInteractionTest: Story = {
         <CardTitle>Card With Action</CardTitle>
         <CardDescription>Click the action button.</CardDescription>
         <CardAction>
-          <Button variant="outline" size="sm" onClick={args.onClick}>
+          <Button variant="outline" size="sm" onClick={mockActionClick}>
             Action
           </Button>
         </CardAction>
@@ -134,7 +133,7 @@ export const ActionInteractionTest: Story = {
       </CardContent>
     </Card>
   ),
-  play: async ({ canvasElement, args, step }) => {
+  play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
     await step("Find Action Button", async () => {
@@ -152,7 +151,7 @@ export const ActionInteractionTest: Story = {
     });
 
     await step("Verify onClick was called", async () => {
-      expect(args.onClick).toHaveBeenCalledTimes(1);
+      expect(mockActionClick).toHaveBeenCalledTimes(1);
     });
   },
 };
