@@ -72,7 +72,7 @@ export const ClientPage = ({
       processError(result.error, "Failed to create project");
       setSubmissionError(result.error.message);
       setIsSubmitting(false);
-      return;
+      return false;
     }
     const id = result.value;
     setSubmissionSuccess(`Project submitted successfully!`);
@@ -80,7 +80,8 @@ export const ClientPage = ({
       project_id: id,
       title: data.title,
     });
-    // Optionally, reset form or redirect
+    setIsSubmitting(false);
+    return true;
   };
 
   const hasProjects = projects.length > 0;
