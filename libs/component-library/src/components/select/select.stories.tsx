@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { fn, userEvent, within, expect, waitFor } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn, userEvent, within, expect, waitFor } from "storybook/test";
 
 import React from "react";
 import {
@@ -71,6 +71,7 @@ export const AllVariants: Story = {
                     disabled={state.disabled}
                     value={val.value}
                     onValueChange={args.onValueChange}
+                    dataTestId={`select-${state.label.toLowerCase().replace(/\s+/g, "-")}-${val.label.toLowerCase().replace(/\s+/g, "-")}`}
                   >
                     <SelectTrigger size="default">
                       <SelectValue />
@@ -111,7 +112,7 @@ export const SelectChange: Story = {
   },
   render: (args) => (
     <div className="w-[220px]">
-      <Select {...args}>
+      <Select {...args} dataTestId="select-change-value">
         <SelectTrigger size="default">
           <SelectValue />
         </SelectTrigger>
@@ -176,9 +177,9 @@ export const DisabledNoInteraction: Story = {
   },
   render: (args) => (
     <div className="w-[220px]">
-      <Select {...args}>
+      <Select {...args} dataTestId="select-disabled-no-interaction">
         <SelectTrigger size="default">
-          <SelectValue placeholder={args.placeholder} />
+          <SelectValue placeholder="Select an option" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>

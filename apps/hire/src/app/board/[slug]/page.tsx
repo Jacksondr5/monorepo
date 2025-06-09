@@ -72,7 +72,11 @@ export default function BoardPage({
         <div>This board has no stages configured yet.</div>
         {/* Optionally, add a link/button to configure stages for this board */}
         <Link href={`/settings`}>
-          <Button variant="default" className="mt-4">
+          <Button
+            variant="default"
+            className="mt-4"
+            dataTestId="configure-stages-button"
+          >
             Configure Stages
           </Button>
         </Link>

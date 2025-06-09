@@ -98,8 +98,13 @@ export function BoardsTab({ orgId }: { orgId: string }) {
           onChange={(e) => setBoardName(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleAddBoard()}
           className="max-w-xs"
+          dataTestId="board-name-input"
         />
-        <Button onClick={handleAddBoard} disabled={!boardName.trim()}>
+        <Button
+          onClick={handleAddBoard}
+          disabled={!boardName.trim()}
+          dataTestId="add-board-button"
+        >
           Add Board
         </Button>
       </div>
@@ -140,6 +145,7 @@ export function BoardsTab({ orgId }: { orgId: string }) {
                       setIsEditSheetOpen(true);
                     }}
                     aria-label="Edit board"
+                    dataTestId={`edit-board-${board._id}-button`}
                   >
                     <Pencil className="h-4 w-4" />
                   </Button>
@@ -148,6 +154,7 @@ export function BoardsTab({ orgId }: { orgId: string }) {
                     size="sm"
                     onClick={() => handleDeleteBoard(board._id)}
                     aria-label="Delete board"
+                    dataTestId={`delete-board-${board._id}-button`}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -176,9 +183,15 @@ export function BoardsTab({ orgId }: { orgId: string }) {
           </p>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" dataTestId="delete-board-cancel-button">
+                Cancel
+              </Button>
             </DialogClose>
-            <Button variant="destructive" onClick={executeDeleteBoard}>
+            <Button
+              variant="destructive"
+              onClick={executeDeleteBoard}
+              dataTestId="delete-board-confirm-button"
+            >
               Delete
             </Button>
           </DialogFooter>

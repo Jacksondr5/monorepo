@@ -226,6 +226,7 @@ export function CandidateForm<T extends AcceptableSchemas>({
                 // TODO: implement
                 console.log("cancelled");
               }}
+              dataTestId="candidate-form-cancel-button"
             >
               Cancel
             </Button>

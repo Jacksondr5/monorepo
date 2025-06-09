@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { Tag, TagProps } from "../tag/tag";
 import { SortableList } from "./sortable-list";

@@ -1,0 +1,452 @@
+# Component Library Field Component Development Rules
+
+## Overview
+
+This document outlines the standards and patterns for developing field components in the `@j5/component-library`. These rules ensure consistency, maintainability, and proper integration with form systems.
+
+## Field Component Architecture
+
+### 1. Component Structure
+
+All field components should follow this structure:
+
+- **Field Component** (e.g., `FieldInput`, `FieldSelect`) - The form-integrated wrapper
+- **Base Component** (e.g., `Input`, `Select`) - The standalone UI component
+- **Stories** - Comprehensive Storybook stories for testing and documentation
+
+### 2. Field Component Interface
+
+```typescript
+export interface FieldComponentProps
+  extends Omit<
+    BaseComponentProps,
+    | "value"
+    | "onChange"
+    | "onBlur"
+    | "error"
+    | "customAriaDescribedBy"
+    | "dataTestId" // Handled internally
+  > {
+  label: string;
+  className?: string;
+  // Additional field-specific props
+}
+```
+
+**Key Points:**
+
+- Remove form-related props from the base component interface
+- Remove `dataTestId` - field components handle this internally
+- Always include `label` as required prop
+- Include `className` for styling flexibility
+
+### 3. Field Component Implementation Pattern
+
+```typescript
+export const FieldComponent = ({
+  label,
+  className,
+  ...props
+}: FieldComponentProps) => {
+  const errorId = React.useId();
+  const field = useFieldContext<ValueType>();
+  const hasError = field.state.meta.errors.length > 0;
+
+  return (
+    <div className={cn("grid w-full items-center gap-1.5", className)}>
+      <Label
+        htmlFor={field.name}
+        dataTestId={`${field.name}-label`}
+        error={hasError}
+      >
+        {label}
+      </Label>
+      <BaseComponent
+        {...props}
+        value={field.state.value || ""}
+        onChange={(value) => field.handleChange(value)}
+        onBlur={field.handleBlur}
+        error={hasError}
+        customAriaDescribedBy={hasError ? errorId : undefined}
+        dataTestId={`${field.name}-{component-type}`}
+      />
+      {hasError && (
+        <FormErrorMessage
+          id={errorId}
+          messages={field.state.meta.errors as string[]}
+          dataTestId={`${field.name}-error`}
+        />
+      )}
+    </div>
+  );
+};
+```
+
+## Test ID Standards
+
+### 1. Test ID Pattern
+
+All field components must follow this consistent test ID pattern:
+
+- **Labels**: `${field.name}-label`
+- **Form Elements**: `${field.name}-{element-type}`
+  - Input: `${field.name}-input`
+  - Select: `${field.name}-select`
+  - Date Picker: `${field.name}-date-picker`
+- **Error Messages**: `${field.name}-error`
+- **Individual Items**: `${field.name}-${item.id}-{element-type}`
+  - Checkboxes: `${field.name}-${item.id}-checkbox`
+
+### 2. Base Component Test ID Implementation
+
+Base components should accept a `dataTestId` prop and propagate it to child elements:
+
+```typescript
+// For simple components
+<input data-testid={dataTestId} />
+
+// For complex components with multiple elements
+<div data-testid={dataTestId}>
+  <button data-testid={`${dataTestId}-trigger`} />
+  <div data-testid={`${dataTestId}-content`}>
+    <item data-testid={`${dataTestId}-item-${value}`} />
+  </div>
+</div>
+```
+
+## Storybook Stories Standards
+
+### 1. Required Stories
+
+Every field component must have these two stories:
+
+#### AllFieldStates Story
+
+```typescript
+export const AllFieldStates: Story = {
+  args: {},
+  render: (args: Story["args"]) => (
+    <div className="max-w-md space-y-8">
+      <MockFieldProvider name="normalField" value="">
+        <FieldComponent {...args} label="Normal (Empty)" />
+      </MockFieldProvider>
+
+      <MockFieldProvider name="filledField" value="filled-value">
+        <FieldComponent {...args} label="Filled" />
+      </MockFieldProvider>
+
+      <MockFieldProvider name="disabledField" value="">
+        <FieldComponent {...args} label="Disabled" disabled />
+      </MockFieldProvider>
+
+      <MockFieldProvider
+        name="errorField"
+        value=""
+        errors={["This field is required."]}
+      >
+        <FieldComponent {...args} label="Error (Empty)" />
+      </MockFieldProvider>
+
+      <MockFieldProvider
+        name="errorFilledField"
+        value="invalid-value"
+        errors={["This value is not valid."]}
+      >
+        <FieldComponent {...args} label="Error + Filled" />
+      </MockFieldProvider>
+
+      <MockFieldProvider
+        name="longErrorField"
+        value="some-value"
+        errors={[
+          "This is a very long error message to check how it wraps and displays within the allocated space for error messages under the field component.",
+        ]}
+      >
+        <FieldComponent {...args} label="Long Error Message" />
+      </MockFieldProvider>
+    </div>
+  ),
+};
+```
+
+#### InteractionTest Story
+
+```typescript
+export const InteractionTest: Story = {
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+    const fieldElement = canvas.getByTestId(`normalField-{element-type}`);
+
+    await step("Initial state verification", async () => {
+      // Verify initial state
+      expect(canvas.queryByTestId(`normalField-error`)).not.toBeInTheDocument();
+      // Component-specific initial state checks
+    });
+
+    await step("User interaction", async () => {
+      // Perform user interactions
+      await userEvent.click(fieldElement);
+      // Verify state changes
+    });
+
+    await step("Error state", async () => {
+      // Trigger error state
+      // Verify error display
+      await waitFor(() => {
+        expect(canvas.getByTestId(`normalField-error`)).toBeInTheDocument();
+      });
+    });
+  },
+
+  render: () => {
+    const [value, setValue] = useState(initialValue);
+    return (
+      <MockFieldProvider
+        name="normalField"
+        value={value}
+        handleChange={setValue}
+        errors={errorCondition ? ["Error message"] : []}
+      >
+        <FieldComponent label="Field Label" />
+      </MockFieldProvider>
+    );
+  },
+};
+```
+
+### 2. MockFieldProvider Pattern
+
+```typescript
+/**
+ * Type for the field context value in stories.
+ *
+ * The actual type is FieldApi from @tanstack/react-form, but it requires 19 generic type arguments
+ * which makes it impractical for story mocking. For stories, we only need to mock the specific
+ * properties that our field components actually use:
+ * - name: string
+ * - state.meta.errors: string[]
+ * - state.value: T
+ * - handleChange: (value: T) => void
+ * - handleBlur: () => void
+ *
+ * Using 'any' here is acceptable for story mocking purposes.
+ */
+type FieldContextValue = any;
+
+interface MockFieldProviderProps {
+  children: React.ReactNode;
+  name?: string;
+  value?: ValueType;
+  errors?: string[];
+  handleChange?: (value: ValueType) => void;
+  handleBlur?: () => void;
+}
+
+const MockFieldProvider = ({
+  children,
+  name = "testField",
+  value = defaultValue,
+  errors = [],
+  handleChange = fn(),
+  handleBlur = fn(),
+}: MockFieldProviderProps) => {
+  const contextValue: FieldContextValue = {
+    name,
+    state: {
+      meta: {
+        errors,
+        isTouched: false,
+        isValidating: false,
+      },
+      value: value,
+    },
+    handleBlur: handleBlur,
+    handleChange: handleChange,
+  };
+
+  return (
+    <fieldContext.Provider value={contextValue}>
+      {children}
+    </fieldContext.Provider>
+  );
+};
+```
+
+### 3. Story TypeScript Standards
+
+#### FieldContextValue Type Documentation
+
+Always include the comprehensive documentation comment for `FieldContextValue` type:
+
+```typescript
+/**
+ * Type for the field context value in stories.
+ *
+ * The actual type is FieldApi from @tanstack/react-form, but it requires 19 generic type arguments
+ * which makes it impractical for story mocking. For stories, we only need to mock the specific
+ * properties that our field components actually use:
+ * - name: string
+ * - state.meta.errors: string[]
+ * - state.value: T
+ * - handleChange: (value: T) => void
+ * - handleBlur: () => void
+ *
+ * Using 'any' here is acceptable for story mocking purposes.
+ */
+type FieldContextValue = any;
+```
+
+**Why this approach:**
+
+- **Practical**: The actual `FieldApi` type requires 19 generic type arguments
+- **Clear**: Documents exactly what properties are needed for mocking
+- **Maintainable**: Future developers understand the reasoning
+- **Consistent**: All field stories use the same pattern
+
+### 4. Story Testing Best Practices
+
+- **Use data test IDs** instead of text selectors for reliability
+- **Use `screen`** for elements in portals (dropdowns, modals)
+- **Use `canvas`** for elements within the component
+- **Add `waitFor`** when waiting for async state changes
+- **Verify both positive and negative states**
+- **Test accessibility attributes** (aria-invalid, aria-describedby)
+
+## Error Handling Standards
+
+### 1. Error Display
+
+- Use `FormErrorMessage` component for consistent error styling
+- Connect errors via `aria-describedby` for accessibility
+- Set `aria-invalid="true"` on form elements when errors exist
+
+### 2. Error State Styling
+
+- Form elements should have error styling when `error` prop is true
+- Labels should adapt color when errors are present
+- Use design system error colors consistently
+
+## Form Integration
+
+### 1. Context Usage
+
+- Use `useFieldContext<ValueType>()` to get field state and handlers
+- Handle value changes via `field.handleChange(value)`
+- Handle blur events via `field.handleBlur()`
+- Access errors via `field.state.meta.errors`
+
+### 2. Value Handling
+
+- Support undefined/empty initial values
+- Provide sensible defaults (empty string, empty array, etc.)
+- Handle type conversions appropriately
+
+## File Organization
+
+### 1. Directory Structure
+
+```
+components/
+├── {component-name}/
+│   ├── {component-name}.tsx          # Base component
+│   ├── field-{component-name}.tsx    # Field wrapper
+│   ├── {component-name}.stories.tsx  # Base component stories
+│   ├── field-{component-name}.stories.tsx # Field component stories
+│   └── index.ts                      # Exports
+```
+
+### 2. Export Pattern
+
+```typescript
+// index.ts
+export { Component } from "./component";
+export { FieldComponent } from "./field-component";
+export type { ComponentProps, FieldComponentProps } from "./component";
+```
+
+## TypeScript Standards
+
+### 1. Interface Design
+
+- Extend base component props and omit form-related ones
+- Use proper generic types for value types
+- Provide clear prop documentation
+
+### 2. Type Safety
+
+- Ensure no TypeScript errors after implementation
+- Use proper typing for form values
+- Handle optional/undefined values correctly
+
+## Accessibility Requirements
+
+### 1. ARIA Attributes
+
+- `aria-invalid` on form elements when errors exist
+- `aria-describedby` linking to error messages
+- Proper `htmlFor` on labels
+
+### 2. Keyboard Navigation
+
+- Ensure all interactive elements are keyboard accessible
+- Test tab order and focus management
+- Support standard keyboard shortcuts where applicable
+
+## Performance Considerations
+
+### 1. Re-render Optimization
+
+- Use `React.useId()` for stable IDs
+- Memoize expensive computations
+- Avoid unnecessary re-renders in form contexts
+
+### 2. Bundle Size
+
+- Import only necessary dependencies
+- Use tree-shakeable exports
+- Avoid large utility libraries where possible
+
+## Testing Requirements
+
+### 1. Unit Tests
+
+- Test component rendering with various props
+- Test form integration and value handling
+- Test error states and accessibility
+
+### 2. Storybook Tests
+
+- Comprehensive interaction testing
+- Visual regression testing via stories
+- Accessibility testing in stories
+
+## Documentation Standards
+
+### 1. Component Documentation
+
+- Clear prop descriptions
+- Usage examples
+- Integration guidelines
+
+### 2. Story Documentation
+
+- Descriptive story names
+- Clear step descriptions in interaction tests
+- Comprehensive state coverage
+
+---
+
+## Checklist for New Field Components
+
+- [ ] Base component with proper test ID support
+- [ ] Field component following interface pattern
+- [ ] Proper TypeScript interfaces with omitted props
+- [ ] AllFieldStates story with all required states
+- [ ] InteractionTest story with comprehensive testing
+- [ ] MockFieldProvider implementation with proper FieldContextValue documentation
+- [ ] Consistent test ID pattern implementation
+- [ ] Error handling with FormErrorMessage
+- [ ] Accessibility attributes (aria-invalid, aria-describedby)
+- [ ] FieldContextValue type with comprehensive documentation comment
+- [ ] Build passes without TypeScript errors
+- [ ] Storybook stories render and interact correctly

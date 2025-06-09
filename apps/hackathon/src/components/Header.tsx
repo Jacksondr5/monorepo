@@ -54,7 +54,9 @@ export function Header({ preloadedLatestHackathon }: HeaderProps) {
             <UserButton />
           ) : (
             <SignInButton mode="modal" signUpForceRedirectUrl="/sign-up">
-              <Button variant="default">Sign In</Button>
+              <Button variant="default" dataTestId="header-sign-in-button">
+                Sign In
+              </Button>
             </SignInButton>
           )}
         </div>

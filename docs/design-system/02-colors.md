@@ -39,6 +39,7 @@ Used for user feedback (success, error, warning, info). All use Radix dark scale
   - **Scale:** Radix `Red` (Dark Scale)
   - **Purpose:** Highlighting errors, critical alerts.
   - **CSS Prefix:** `--color-red-*`
+  - When coloring text, use red-9
 - **Warning:**
   - **Scale:** Radix `Amber` (Dark Scale)
   - **Purpose:** Drawing attention to potential issues or cautionary messages.

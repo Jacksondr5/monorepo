@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { userEvent, within } from "storybook/test";
 import {
   Tooltip,
   TooltipContent,
@@ -12,7 +12,6 @@ import { Aperture } from "lucide-react"; // Icon for icon button trigger
 const meta: Meta<typeof Tooltip> = {
   title: "Components/Tooltip",
   component: Tooltip,
-  subcomponents: { TooltipContent, TooltipTrigger },
   parameters: {
     layout: "centered",
   },
@@ -76,20 +75,33 @@ export const AllVariants: Story = {
   render: () => (
     <div className="grid grid-cols-2 place-items-center gap-x-20 gap-y-28">
       <TooltipWrapper content="Tooltip on Top" side="top">
-        <Button variant="outline">Top</Button>
+        <Button variant="outline" dataTestId="tooltip-trigger-button">
+          Top
+        </Button>
       </TooltipWrapper>
       <TooltipWrapper content="Tooltip on Bottom" side="bottom">
-        <Button variant="outline">Bottom</Button>
+        <Button variant="outline" dataTestId="tooltip-trigger-button">
+          Bottom
+        </Button>
       </TooltipWrapper>
       <TooltipWrapper content="Tooltip on Left" side="left">
-        <Button variant="outline">Left</Button>
+        <Button variant="outline" dataTestId="tooltip-trigger-button">
+          Left
+        </Button>
       </TooltipWrapper>
       <TooltipWrapper content="Tooltip on Right" side="right">
-        <Button variant="outline">Right</Button>
+        <Button variant="outline" dataTestId="tooltip-trigger-button">
+          Right
+        </Button>
       </TooltipWrapper>
 
       <TooltipWrapper content="Icon Tooltip (Top)" side="top">
-        <Button variant="ghost" size="icon" aria-label="Camera">
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label="Camera"
+          dataTestId="tooltip-trigger-button"
+        >
           <Aperture className="size-5" />
         </Button>
       </TooltipWrapper>
@@ -98,14 +110,20 @@ export const AllVariants: Story = {
         content="Longer content to show wrapping and text balance."
         side="bottom"
       >
-        <Button variant="secondary">With Longer Text</Button>
+        <Button variant="secondary" dataTestId="tooltip-trigger-button">
+          With Longer Text
+        </Button>
       </TooltipWrapper>
 
       <TooltipWrapper content="Aligned Start" side="top" align="start">
-        <Button variant="outline">Top Align Start</Button>
+        <Button variant="outline" dataTestId="tooltip-trigger-button">
+          Top Align Start
+        </Button>
       </TooltipWrapper>
       <TooltipWrapper content="Aligned End" side="top" align="end">
-        <Button variant="outline">Top Align End</Button>
+        <Button variant="outline" dataTestId="tooltip-trigger-button">
+          Top Align End
+        </Button>
       </TooltipWrapper>
     </div>
   ),
@@ -115,7 +133,11 @@ export const HoverAndFocusTest: Story = {
   name: "Interaction: Hover and Focus Trigger",
   render: () => (
     <TooltipWrapper content="Tooltip appears!" side="bottom">
-      <Button variant="outline" data-testid="tooltip-trigger-button">
+      <Button
+        variant="outline"
+        data-testid="tooltip-trigger-button"
+        dataTestId="tooltip-trigger-button"
+      >
         Hover or Focus Me
       </Button>
     </TooltipWrapper>

@@ -37,6 +37,7 @@ export const DeleteProjectDialog = ({
           variant="ghost"
           size="icon"
           className="text-slate-11 hover:bg-destructive/80 hover:text-destructive-foreground h-9 w-9 p-0"
+          dataTestId={`delete-project-${project._id}-trigger-button`}
         >
           <Trash2 className="h-4 w-4" />
         </Button>
@@ -51,7 +52,9 @@ export const DeleteProjectDialog = ({
         </p>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" dataTestId="delete-project-cancel-button">
+              Cancel
+            </Button>
           </DialogClose>
           <Button
             variant="destructive"
@@ -72,6 +75,7 @@ export const DeleteProjectDialog = ({
               });
               setIsOpen(false);
             }}
+            dataTestId="delete-project-confirm-button"
           >
             Delete
           </Button>

@@ -40,6 +40,7 @@ export interface ButtonProps
     VariantProps<typeof buttonClassName> {
   asChild?: boolean;
   isLoading?: boolean;
+  dataTestId: string;
 }
 
 function Button({
@@ -50,6 +51,7 @@ function Button({
   isLoading = false,
   children,
   disabled,
+  dataTestId,
   ...props
 }: ButtonProps) {
   const Comp = asChild ? Slot : "button";
@@ -57,6 +59,7 @@ function Button({
   return (
     <Comp
       data-slot="button"
+      data-testid={dataTestId}
       className={cn(buttonClassName({ variant, size, className }), {
         "cursor-not-allowed opacity-70": isLoading,
       })}

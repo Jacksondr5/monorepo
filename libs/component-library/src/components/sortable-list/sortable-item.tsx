@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useMemo } from "react";
 import type { CSSProperties, PropsWithChildren } from "react";
 import type {
+  DraggableAttributes,
   DraggableSyntheticListeners,
   UniqueIdentifier,
 } from "@dnd-kit/core";
@@ -15,13 +16,20 @@ interface Props {
 }
 
 interface Context {
-  attributes: Record<string, any>;
+  attributes: DraggableAttributes;
   listeners: DraggableSyntheticListeners;
   ref(node: HTMLElement | null): void;
 }
 
 const SortableItemContext = createContext<Context>({
-  attributes: {},
+  attributes: {
+    role: "listitem",
+    tabIndex: 0,
+    "aria-disabled": false,
+    "aria-pressed": false,
+    "aria-roledescription": "sortable item",
+    "aria-describedby": "",
+  },
   listeners: undefined,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   ref() {},

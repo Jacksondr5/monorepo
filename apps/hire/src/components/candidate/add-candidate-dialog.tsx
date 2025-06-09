@@ -48,7 +48,11 @@ export function AddCandidateDialog() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="default" className="w-full">
+        <Button
+          variant="default"
+          className="w-full"
+          dataTestId="add-candidate-button"
+        >
           <PlusIcon className="mr-2 h-4 w-4" /> Add Candidate
         </Button>
       </DialogTrigger>

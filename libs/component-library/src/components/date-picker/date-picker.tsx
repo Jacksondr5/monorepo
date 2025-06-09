@@ -17,6 +17,9 @@ export interface DatePickerProps {
   className?: string;
   "aria-label"?: string;
   defaultMonth?: Date;
+  error?: boolean;
+  "aria-describedby"?: string;
+  dataTestId: string;
 }
 
 /**
@@ -30,6 +33,9 @@ export function DatePicker({
   className,
   "aria-label": ariaLabel,
   defaultMonth,
+  error,
+  "aria-describedby": ariaDescribedBy,
+  dataTestId,
 }: DatePickerProps) {
   const [internalDate, setInternalDate] = React.useState<Date | undefined>(
     value,
@@ -43,9 +49,10 @@ export function DatePicker({
     onChange?.(date);
   };
   return (
-    <Popover>
+    <Popover dataTestId={`${dataTestId}-popover`}>
       <PopoverTrigger asChild>
         <Button
+          dataTestId={dataTestId}
           variant="outline"
           className={cn(
             "w-full justify-start rounded-md px-4 py-2 text-left font-normal",
@@ -55,17 +62,27 @@ export function DatePicker({
           aria-label={ariaLabel || placeholder}
           aria-disabled={disabled}
           disabled={disabled}
+          aria-invalid={error}
+          aria-describedby={ariaDescribedBy}
         >
-          <CalendarIcon className="mr-2 size-4" />
-          {internalDate ? (
-            format(internalDate, "PPP")
-          ) : (
-            <span>{placeholder}</span>
-          )}
+          <CalendarIcon className={cn("mr-2 size-4", error && "text-red-9")} />
+          <span
+            data-testid={`${dataTestId}-date-picker-trigger-text`}
+            className={cn("text-slate-9", error && "text-red-9")}
+          >
+            {internalDate ? (
+              <span className={cn("text-slate-12", error && "text-red-9")}>
+                {format(internalDate, "PPP")}
+              </span>
+            ) : (
+              <span>{placeholder}</span>
+            )}
+          </span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
+          dataTestId={`${dataTestId}-calendar`}
           mode="single"
           selected={internalDate}
           onSelect={handleSelect}

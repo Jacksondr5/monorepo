@@ -151,6 +151,7 @@ export function ProjectComments({
                           className="text-slate-10 hover:text-grass-9 h-auto p-1 disabled:opacity-50"
                           onClick={() => handleUpvoteComment(comment.id)}
                           disabled={!currentUser}
+                          dataTestId={`upvote-comment-${comment.id}-button`}
                         >
                           <ThumbsUp
                             className={`h-4 w-4 ${
@@ -190,6 +191,7 @@ export function ProjectComments({
         <div className="border-slate-6 mt-4 border-t pt-2">
           {showCommentForm ? (
             <div className="space-y-2">
+              {/* TODO: replace with component library textarea after hackathon storybook is built */}
               <textarea
                 className="border-slate-7 bg-slate-3 text-slate-12 focus:ring-grass-9 focus:border-grass-9 w-full rounded-md border p-2 text-sm"
                 rows={3}
@@ -205,6 +207,7 @@ export function ProjectComments({
                     setShowCommentForm(false);
                     setNewCommentText("");
                   }}
+                  dataTestId="cancel-comment-button"
                 >
                   Cancel
                 </Button>
@@ -213,6 +216,7 @@ export function ProjectComments({
                   size="sm"
                   onClick={handleAddComment}
                   disabled={newCommentText.trim() === ""}
+                  dataTestId="submit-comment-button"
                 >
                   Submit Comment
                 </Button>
@@ -223,6 +227,7 @@ export function ProjectComments({
               variant="outline"
               size="sm"
               onClick={() => setShowCommentForm(true)}
+              dataTestId="add-comment-button"
             >
               Add Comment
             </Button>

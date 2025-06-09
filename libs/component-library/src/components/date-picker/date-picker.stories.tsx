@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within, expect, screen, waitFor } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { userEvent, within, expect, screen, waitFor } from "storybook/test";
 import React from "react";
 import { DatePicker, DatePickerProps } from "./date-picker";
 
@@ -17,6 +17,7 @@ const defaultProps: DatePickerProps = {
   value: targetDate,
   placeholder: "Pick a date",
   defaultMonth: targetDate,
+  dataTestId: "date-picker",
 };
 
 // Visual Matrix Story
@@ -25,7 +26,11 @@ export const AllVariants: Story = {
     <div className="flex flex-col gap-8">
       <div>
         <h3 className="text-slate-12">Default (no value)</h3>
-        <DatePicker placeholder="Pick a date" defaultMonth={targetDate} />
+        <DatePicker
+          placeholder="Pick a date"
+          defaultMonth={targetDate}
+          dataTestId="date-picker"
+        />
       </div>
       <div>
         <h3 className="text-slate-12">With Value</h3>
@@ -34,6 +39,10 @@ export const AllVariants: Story = {
       <div>
         <h3 className="text-slate-12">Disabled</h3>
         <DatePicker {...defaultProps} disabled />
+      </div>
+      <div>
+        <h3 className="text-slate-12">Error</h3>
+        <DatePicker {...defaultProps} error />
       </div>
     </div>
   ),
@@ -49,6 +58,7 @@ export const Interaction_SelectDate: Story = {
         defaultMonth={targetDate}
         value={selected}
         onChange={setSelected}
+        dataTestId="date-picker"
       />
     );
   },

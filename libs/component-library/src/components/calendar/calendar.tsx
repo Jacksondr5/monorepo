@@ -7,16 +7,22 @@ import { DayPicker } from "react-day-picker";
 import { cn } from "../../lib/utils";
 import { buttonClassName } from "../button/button";
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  "aria-describedby"?: string;
+  "aria-label"?: string;
+  dataTestId: string;
+};
 
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  dataTestId,
   ...props
 }: CalendarProps) {
   return (
     <DayPicker
+      data-testid={dataTestId}
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
       classNames={{

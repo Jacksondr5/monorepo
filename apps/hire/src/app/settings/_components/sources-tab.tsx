@@ -44,8 +44,13 @@ export function SourcesTab({ orgId }: { orgId: string }) {
           value={sourceName}
           onChange={(e) => setSourceName(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleAddSource()}
+          dataTestId="source-name-input"
         />
-        <Button onClick={handleAddSource} disabled={!sourceName.trim()}>
+        <Button
+          onClick={handleAddSource}
+          disabled={!sourceName.trim()}
+          dataTestId="add-source-button"
+        >
           Add Source
         </Button>
       </div>

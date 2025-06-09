@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within, expect, screen, waitFor } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { userEvent, within, expect, screen, waitFor } from "storybook/test";
 import { Button } from "../button/button";
 import { Label } from "../label/label";
 import { Input } from "../input/input";
@@ -36,21 +36,37 @@ const SheetDemoContent = () => (
     </SheetHeader>
     <div className="grid gap-4 py-4">
       <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="name" className="text-right">
+        <Label htmlFor="name" className="text-right" dataTestId="name-label">
           Name
         </Label>
-        <Input id="name" defaultValue="Pedro Duarte" className="col-span-3" />
+        <Input
+          id="name"
+          defaultValue="Pedro Duarte"
+          className="col-span-3"
+          dataTestId="name-input"
+        />
       </div>
       <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="username" className="text-right">
+        <Label
+          htmlFor="username"
+          className="text-right"
+          dataTestId="username-label"
+        >
           Username
         </Label>
-        <Input id="username" defaultValue="@peduarte" className="col-span-3" />
+        <Input
+          id="username"
+          defaultValue="@peduarte"
+          className="col-span-3"
+          dataTestId="username-input"
+        />
       </div>
     </div>
     <SheetFooter>
       <SheetClose asChild>
-        <Button type="submit">Save changes</Button>
+        <Button type="submit" dataTestId="save-button">
+          Save changes
+        </Button>
       </SheetClose>
     </SheetFooter>
   </>
@@ -61,7 +77,9 @@ export const Default: Story = {
     <div className="grid grid-cols-2 gap-4">
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="outline">Open Sheet</Button>
+          <Button variant="outline" dataTestId="open-sheet-button">
+            Open Sheet
+          </Button>
         </SheetTrigger>
         <SheetContent>
           <SheetDemoContent />
@@ -90,7 +108,9 @@ export const InteractionTest: Story = {
   render: (args) => (
     <Sheet {...args}>
       <SheetTrigger asChild>
-        <Button variant="outline">Open Sheet</Button>
+        <Button variant="outline" dataTestId="open-sheet-button">
+          Open Sheet
+        </Button>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
@@ -100,9 +120,11 @@ export const InteractionTest: Story = {
         <div className="p-4">Your sheet content here.</div>
         <SheetFooter>
           <SheetClose asChild>
-            <Button variant="secondary">Cancel</Button>
+            <Button variant="secondary" dataTestId="cancel-button">
+              Cancel
+            </Button>
           </SheetClose>
-          <Button>Save</Button>
+          <Button dataTestId="save-button">Save</Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>
@@ -124,6 +146,7 @@ export const InteractionTest: Story = {
     await step("Close sheet with X button", async () => {
       const sheetContent = await screen.findByText("Test Sheet");
       const closeButton = await within(
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         sheetContent.closest('[data-slot="sheet-content"]')!.parentElement!,
       ).findByRole("button", { name: /close/i });
       await userEvent.click(closeButton);
