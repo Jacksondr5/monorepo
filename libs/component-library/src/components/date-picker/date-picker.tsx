@@ -65,15 +65,17 @@ export function DatePicker({
           aria-invalid={error}
           aria-describedby={ariaDescribedBy}
         >
-          <CalendarIcon className="mr-2 size-4" />
+          <CalendarIcon className={cn("mr-2 size-4", error && "text-red-9")} />
           <span
             data-testid={`${dataTestId}-date-picker-trigger-text`}
-            className={cn(error && "text-red-9")}
+            className={cn("text-slate-9", error && "text-red-9")}
           >
             {internalDate ? (
-              format(internalDate, "PPP")
+              <span className={cn("text-slate-12", error && "text-red-9")}>
+                {format(internalDate, "PPP")}
+              </span>
             ) : (
-              <span className="text-slate-9">{placeholder}</span>
+              <span>{placeholder}</span>
             )}
           </span>
         </Button>
