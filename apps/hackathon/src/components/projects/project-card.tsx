@@ -116,6 +116,7 @@ export function ProjectCard({
               variant="ghost"
               onClick={() => setIsEditing(true)}
               className="mr-2"
+              dataTestId={`edit-project-${project._id}-button`}
             >
               <Pencil />
             </Button>
@@ -179,6 +180,7 @@ export function ProjectCard({
                 );
               }
             }}
+            dataTestId={`upvote-project-${project._id}-button`}
           >
             <ThumbsUp
               className={`h-4 w-4 ${

@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { userEvent, within, expect } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { userEvent, within, expect } from "storybook/test";
 import React from "react";
 import { Calendar, CalendarProps } from "./calendar";
 
@@ -16,6 +16,7 @@ const targetDate = new Date("2025-04-26");
 const defaultProps = {
   selected: targetDate,
   defaultMonth: targetDate,
+  dataTestId: "calendar",
 } satisfies CalendarProps;
 // Visual Matrix Story
 export const AllVariants: Story = {
@@ -48,8 +49,6 @@ export const SelectDate: Story = {
   render: () => <Calendar {...defaultProps} />,
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
-    // Find today button (should be selected)
-    // Try to select a day (the 15th, or next available)
     const allButtons = canvas.getAllByRole("button");
     const dayButton = allButtons.find((btn) => btn.textContent === "15");
     if (dayButton) {

@@ -54,12 +54,16 @@ export const AppSidebar = () => {
       <SidebarFooter>
         <SignedOut>
           <SignInButton>
-            <Button variant="default">Sign in</Button>
+            <Button variant="default" dataTestId="sidebar-sign-in-button">
+              Sign in
+            </Button>
           </SignInButton>
         </SignedOut>
         <SignedIn>
           <SignOutButton>
-            <Button variant="ghost">Sign out</Button>
+            <Button variant="ghost" dataTestId="sidebar-sign-out-button">
+              Sign out
+            </Button>
           </SignOutButton>
         </SignedIn>
       </SidebarFooter>

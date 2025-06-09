@@ -36,8 +36,13 @@ export function KanbanStagesTab({ orgId }: { orgId: string }) {
           value={stageName}
           onChange={(e) => setStageName(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleAddStage()}
+          dataTestId="stage-name-input"
         />
-        <Button onClick={handleAddStage} disabled={!stageName.trim()}>
+        <Button
+          onClick={handleAddStage}
+          disabled={!stageName.trim()}
+          dataTestId="add-stage-button"
+        >
           Add Stage
         </Button>
       </div>

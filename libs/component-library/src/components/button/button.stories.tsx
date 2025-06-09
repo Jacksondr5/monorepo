@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   fn,
   userEvent,
@@ -6,10 +6,11 @@ import {
   expect,
   screen,
   fireEvent,
-} from "@storybook/test";
+} from "storybook/test";
 import { Button, buttonVariants } from "./button";
 import { Mail, ChevronRight, Aperture, Trash2 } from "lucide-react"; // Added more icons
 import React from "react";
+import { mocked } from "storybook/test";
 
 const meta: Meta<typeof Button> = {
   title: "Components/Button",
@@ -73,7 +74,7 @@ export const AllVariants: Story = {
       <div className="text-slate-11 flex w-full flex-col items-start gap-10 p-5">
         {variants.map((variant) => (
           <div key={variant} className="flex w-full flex-col items-start gap-5">
-            <h2 className="m-0 w-full border-b border-gray-300 pb-2 capitalize">
+            <h2 className="border-slate-6 m-0 w-full border-b pb-2 capitalize">
               {variant}
             </h2>
             {/* Sizes */}
@@ -220,13 +221,15 @@ export const PrimaryClickable: Story = {
     const button = canvas.getByRole<HTMLButtonElement>("button", {
       name: /Primary Action/i,
     });
+    const mockedOnClick = mocked(args.onClick)!;
+    expect(mockedOnClick).toBeDefined();
 
     await step("Mouse click", async () => {
       await userEvent.click(button);
       await expect(args.onClick).toHaveBeenCalledTimes(1);
     });
 
-    args.onClick.mockClear(); // Clear mock for next interaction
+    mockedOnClick.mockClear(); // Clear mock for next interaction
 
     await step("Keyboard (Enter)", async () => {
       fireEvent.focus(button);
@@ -235,7 +238,7 @@ export const PrimaryClickable: Story = {
       await expect(args.onClick).toHaveBeenCalledTimes(1);
     });
 
-    args.onClick.mockClear();
+    mockedOnClick.mockClear();
 
     await step("Keyboard (Space)", async () => {
       fireEvent.focus(button);

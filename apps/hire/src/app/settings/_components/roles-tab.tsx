@@ -36,8 +36,13 @@ export function RolesTab({ orgId }: { orgId: string }) {
           value={roleName}
           onChange={(e) => setRoleName(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleAddRole()}
+          dataTestId="role-name-input"
         />
-        <Button onClick={handleAddRole} disabled={!roleName.trim()}>
+        <Button
+          onClick={handleAddRole}
+          disabled={!roleName.trim()}
+          dataTestId="add-role-button"
+        >
           Add Role
         </Button>
       </div>

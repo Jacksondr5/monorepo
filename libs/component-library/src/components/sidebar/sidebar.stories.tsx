@@ -1,5 +1,5 @@
 import React from "react";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Home,
   Settings,
@@ -32,16 +32,6 @@ const meta: Meta<typeof Sidebar> = {
   parameters: {
     layout: "fullscreen",
   },
-  subcomponents: {
-    SidebarHeader,
-    SidebarContent,
-    SidebarFooter,
-    SidebarTrigger,
-    SidebarGroup,
-    SidebarGroupLabel,
-    SidebarSeparator,
-    SidebarInset,
-  },
   argTypes: {
     children: { control: false },
     className: { control: false },
@@ -62,7 +52,7 @@ const meta: Meta<typeof Sidebar> = {
                 sidebar.
               </p>
             </div>
-            <SidebarTrigger />
+            <SidebarTrigger dataTestId="sidebar-trigger" />
           </SidebarInset>
         </div>
       </SidebarProvider>
@@ -98,7 +88,7 @@ const sidebarContentItems = (
         <h2 className="text-lg font-semibold group-data-[state=collapsed]:hidden">
           My App
         </h2>
-        <SidebarTrigger />
+        <SidebarTrigger dataTestId="sidebar-trigger" />
       </div>
     </SidebarHeader>
     <SidebarContent className="flex-grow overflow-y-auto p-2">
@@ -127,7 +117,12 @@ const sidebarContentItems = (
     </SidebarContent>
     <SidebarFooter className="p-2 group-data-[state=collapsed]:p-0">
       <div className="group-data-[state=collapsed]:hidden">
-        <Button variant="outline" size="sm" className="w-full">
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full"
+          dataTestId="placeholder-footer-button"
+        >
           Placeholder Footer Button
         </Button>
       </div>
@@ -135,6 +130,7 @@ const sidebarContentItems = (
         variant="ghost"
         size="icon"
         className="hidden w-full group-data-[state=collapsed]:flex group-data-[state=collapsed]:justify-center"
+        dataTestId="settings-button"
       >
         <Settings />
         <span className="sr-only">Settings</span>
@@ -151,7 +147,6 @@ export const DefaultExpanded: Story = {
     collapsible: "icon",
     defaultOpen: true,
     children: sidebarContentItems,
-    mobileBehavior: "icon",
   },
 };
 
@@ -163,6 +158,5 @@ export const DefaultCollapsed: Story = {
     collapsible: "icon",
     defaultOpen: false,
     children: sidebarContentItems,
-    mobileBehavior: "icon",
   },
 };

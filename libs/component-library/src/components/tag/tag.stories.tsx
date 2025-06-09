@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Tag, TagProps } from "./tag";
 import { Check, AlertCircle, Info } from "lucide-react";
-import { userEvent, within, expect } from "@storybook/test";
-import { fn } from "@storybook/test";
+import { userEvent, within, expect } from "storybook/test";
+import { fn } from "storybook/test";
 
 const meta: Meta<typeof Tag> = {
   title: "Components/Tag",

@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { fn, userEvent, within, expect } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn, userEvent, within, expect } from "storybook/test";
 import { Input, inputVariants } from "./input"; // Added inputVariants import
 import { Search } from "lucide-react"; // Import an icon
 

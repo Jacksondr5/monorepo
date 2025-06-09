@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { fn, userEvent, within, expect } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn, userEvent, within, expect } from "storybook/test";
 import { Textarea, textareaVariants } from "./textarea";
 
 const meta: Meta<typeof Textarea> = {
@@ -51,12 +51,14 @@ export const AllVariants: Story = {
                 {...args}
                 size={size}
                 placeholder={`Enter your text here... (${size})`}
+                dataTestId={`textarea-${size}-placeholder`}
               />
               <Textarea
                 {...args}
                 size={size}
                 value={`This is some sample text in a ${size} textarea.`}
                 onChange={args.onChange}
+                dataTestId={`textarea-${size}-value`}
               />
               <Textarea
                 {...args}
@@ -64,12 +66,14 @@ export const AllVariants: Story = {
                 resize="vertical"
                 value={`This is some sample text in a resizable ${size} textarea.`}
                 onChange={args.onChange}
+                dataTestId={`textarea-${size}-resizable`}
               />
               <Textarea
                 {...args}
                 size={size}
                 disabled
                 value="Disabled textarea"
+                dataTestId={`textarea-${size}-disabled`}
               />
             </div>
           </div>
@@ -87,6 +91,7 @@ export const ChangeValue: Story = {
   name: "Test: Change Value",
   args: {
     placeholder: "Initial value",
+    dataTestId: "textarea-change-value",
   },
   play: async ({ args, canvasElement, step }) => {
     const canvas = within(canvasElement);
@@ -114,6 +119,7 @@ export const DisabledNoInteraction: Story = {
   args: {
     disabled: true,
     placeholder: "This textarea is disabled and cannot be edited.",
+    dataTestId: "textarea-disabled-no-interaction",
   },
   play: async ({ args, canvasElement, step }) => {
     const canvas = within(canvasElement);

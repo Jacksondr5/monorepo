@@ -36,13 +36,18 @@ export function TargetTeamTab({ orgId }: { orgId: string }) {
       </p>
       <div className="flex items-center justify-between gap-4">
         <Input
-          placeholder="New target team"
+          placeholder="New target team name"
           value={targetTeamName}
           onChange={(e) => setTargetTeamName(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleAddTargetTeam()}
+          dataTestId="target-team-name-input"
         />
-        <Button onClick={handleAddTargetTeam} disabled={!targetTeamName.trim()}>
-          Add Team
+        <Button
+          onClick={handleAddTargetTeam}
+          disabled={!targetTeamName.trim()}
+          dataTestId="add-target-team-button"
+        >
+          Add Target Team
         </Button>
       </div>
       <div className="rounded-lg border p-4">

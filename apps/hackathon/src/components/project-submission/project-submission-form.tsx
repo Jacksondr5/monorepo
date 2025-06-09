@@ -89,7 +89,11 @@ export function ProjectSubmissionForm({
               label={isSubmitting ? "Submitting..." : submitButtonLabel}
             />
             {onCancel && (
-              <Button onClick={onCancel} variant="outline">
+              <Button
+                onClick={onCancel}
+                variant="outline"
+                dataTestId="project-submission-cancel-button"
+              >
                 Cancel
               </Button>
             )}

@@ -55,6 +55,7 @@ export function OrganizationSelect() {
       value={organization.id ?? undefined}
       onValueChange={handleValueChange}
       disabled={!organizations || organizations.length === 0}
+      dataTestId="organization-select"
     >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select Organization">

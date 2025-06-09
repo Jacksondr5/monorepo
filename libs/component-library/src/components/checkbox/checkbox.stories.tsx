@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { fn, userEvent, within, expect } from "@storybook/test";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { fn, userEvent, within, expect } from "storybook/test";
 import { Checkbox, type CheckboxProps } from "./checkbox";
 
 const meta: Meta<typeof Checkbox> = {
@@ -90,6 +90,7 @@ export const AllStates: Story = {
                 size={size}
                 checked={state}
                 id={`all-${state}-${size}-normal`}
+                dataTestId={`checkbox-${state}-${size}-normal`}
                 aria-label={`${state === "indeterminate" ? "Indeterminate" : state ? "Checked" : "Default"} ${size}`}
               />
               <span
@@ -126,6 +127,7 @@ export const AllStates: Story = {
                 checked={state}
                 disabled
                 id={`all-${state}-${size}-disabled`}
+                dataTestId={`checkbox-${state}-${size}-disabled`}
                 aria-label={`Disabled ${state === "indeterminate" ? "Indeterminate" : state ? "Checked" : "Default"} ${size}`}
               />
               <span
@@ -155,7 +157,12 @@ export const AllStates: Story = {
               justifySelf: "center",
             }}
           >
-            <Checkbox {...args} size={size} id={`all-label-${size}`} />
+            <Checkbox
+              {...args}
+              size={size}
+              id={`all-label-${size}`}
+              dataTestId={`checkbox-label-${size}`}
+            />
             <label
               htmlFor={`all-label-${size}`}
               className="text-slate-11 font-sans"
@@ -178,6 +185,7 @@ export const InteractionTest: Story = {
   args: {
     id: "interaction-checkbox",
     "aria-label": "Interaction Test Checkbox",
+    dataTestId: "checkbox-interaction-test",
   },
   play: async ({ args, canvasElement, step }) => {
     const canvas = within(canvasElement);
@@ -212,6 +220,7 @@ export const KeyboardInteractionTest: Story = {
   args: {
     id: "keyboard-interaction-checkbox",
     "aria-label": "Keyboard Interaction Test Checkbox",
+    dataTestId: "checkbox-keyboard-test",
   },
   play: async ({ args, canvasElement, step }) => {
     const canvas = within(canvasElement);

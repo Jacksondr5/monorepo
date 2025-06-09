@@ -26,7 +26,12 @@ export default function SignUp() {
         <div className="flex items-center gap-2 text-3xl" aria-live="polite">
           Failed to create your account. Please try again.
         </div>
-        <Button onClick={() => window.location.reload()}>Try Again</Button>
+        <Button
+          onClick={() => window.location.reload()}
+          dataTestId="try-again-button"
+        >
+          Try Again
+        </Button>
       </div>
     );
   }

@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./tabs";
-import { fn, userEvent, within, expect } from "@storybook/test";
+import { fn, userEvent, within, expect } from "storybook/test";
 import React from "react";
 
 const meta: Meta<typeof Tabs> = {
