@@ -17,7 +17,7 @@ export type ProjectSubmissionFormProps = {
   defaultData?: ProjectSubmissionFormValues;
   isSubmitting?: boolean;
   onCancel?: () => void;
-  onSubmit: (data: ProjectSubmissionFormValues) => Promise<void> | void;
+  onSubmit: (data: ProjectSubmissionFormValues) => Promise<boolean>;
   submitButtonLabel?: string;
 };
 
@@ -44,7 +44,10 @@ export function ProjectSubmissionForm({
       },
     },
     onSubmit: async ({ value }) => {
-      await onSubmit(value);
+      const result = await onSubmit(value);
+      if (result) {
+        form.reset();
+      }
     },
   });
 
