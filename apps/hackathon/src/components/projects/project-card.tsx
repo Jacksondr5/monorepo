@@ -59,13 +59,14 @@ export function ProjectCard({
     });
     if (!updateProjectResult.ok) {
       processError(updateProjectResult.error, "Failed to update project");
-      return;
+      return false;
     }
     setIsEditing(false);
     postHog.capture("project_updated", {
       project_id: project._id,
       title: data.title,
     });
+    return true;
   };
 
   const creatorName = () => {
