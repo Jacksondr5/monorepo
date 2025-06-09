@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 
 import { cn } from "../../lib/utils";
-import { Button, buttonClassName } from "../button/button";
+import { buttonClassName } from "../button/button";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
   "aria-describedby"?: string;
@@ -69,25 +69,11 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        PreviousMonthButton: ({ className, ...props }) => (
-          <Button
-            variant="ghost"
-            size="icon"
-            className={cn("size-4", className)}
-            {...props}
-          >
-            <ChevronLeft className={cn("size-4", className)} />
-          </Button>
+        IconLeft: ({ className, ...props }) => (
+          <ChevronLeft className={cn("size-4", className)} {...props} />
         ),
-        NextMonthButton: ({ className, ...props }) => (
-          <Button
-            variant="ghost"
-            size="icon"
-            className={cn("size-4", className)}
-            {...props}
-          >
-            <ChevronRight className={cn("size-4", className)} />
-          </Button>
+        IconRight: ({ className, ...props }) => (
+          <ChevronRight className={cn("size-4", className)} {...props} />
         ),
       }}
       {...props}
