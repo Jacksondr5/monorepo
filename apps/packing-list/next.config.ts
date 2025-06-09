@@ -8,6 +8,8 @@ const nextConfig: WithNxOptions = {
   // Use this to set Nx-specific options
   // See: https://nx.dev/recipes/next/next-config-setup
   nx: {},
+  // Add transpilePackages to handle packages with TypeScript source
+  transpilePackages: ["convex-helpers"],
 };
 
 const plugins = [
