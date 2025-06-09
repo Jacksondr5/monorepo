@@ -11,6 +11,8 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  // Add transpilePackages to handle packages with TypeScript source
+  transpilePackages: ["convex-helpers"],
   images: {
     remotePatterns: [
       {
