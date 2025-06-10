@@ -6,23 +6,34 @@ import { getAuthToken } from "./auth";
 import { preloadQuery } from "convex/nextjs";
 import { api } from "../../convex/_generated/api";
 import { Toaster } from "@j5/component-library";
+import { Preloaded } from "convex/react";
 
 export const metadata = {
   title: "Welcome to hackathon",
   description: "This app is used to coordinate hackathons",
 };
 
+type PreloadedHackathon = Preloaded<
+  typeof api.hackathonEvents.getLatestHackathonEvent
+>;
+
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const token = await getAuthToken();
-  const latestHackathonPreloaded = await preloadQuery(
-    api.hackathonEvents.getLatestHackathonEvent,
-    {},
-    { token },
-  );
+  const tokenResult = await getAuthToken();
+  let token: string | undefined;
+  let latestHackathonPreloaded: PreloadedHackathon | undefined;
+  if (tokenResult.isOk()) {
+    token = tokenResult.value;
+    latestHackathonPreloaded = await preloadQuery(
+      api.hackathonEvents.getLatestHackathonEvent,
+      {},
+      { token },
+    );
+  }
+
   return (
     <html lang="en">
       <body className="bg-slate-1 h-screen">
