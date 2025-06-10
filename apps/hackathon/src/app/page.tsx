@@ -5,9 +5,24 @@ import { getAuthToken } from "./auth";
 import { ClientPage } from "./client-page";
 import { projectStatusMessages } from "../utils/messages";
 import { processError } from "~/lib/errors";
+import { redirect } from "next/navigation";
 
 export default async function HomePage() {
-  const token = await getAuthToken();
+  const tokenResult = await getAuthToken();
+
+  // If we can't get a token, redirect to sign-in
+  if (tokenResult.isErr()) {
+    if (tokenResult.error.type === "UNAUTHENTICATED") {
+      redirect("/sign-in");
+    } else {
+      // Handle unexpected errors
+      processError(tokenResult.error, "Failed to get authentication token");
+      redirect("/sign-in");
+    }
+  }
+
+  const token = tokenResult.value;
+
   const latestHackathonPreloaded = await preloadQuery(
     api.hackathonEvents.getLatestHackathonEvent,
     {},
