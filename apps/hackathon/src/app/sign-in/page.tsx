@@ -27,8 +27,8 @@ export default function SignIn() {
             </p>
             <div className="text-slate-10 text-sm">
               <p>
-                Don't have an account? You'll be redirected to create one after
-                signing in.
+                Don&apos;t have an account? You&apos;ll be redirected to create
+                one after signing in.
               </p>
             </div>
           </div>

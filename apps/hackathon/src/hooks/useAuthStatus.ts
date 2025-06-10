@@ -8,7 +8,7 @@ export function useAuthStatus(): {
   isAuthenticated: boolean;
   needsSignUp: boolean;
   isUnauthenticated: boolean;
-  clerkUser: any;
+  clerkUser: ReturnType<typeof useUser>["user"];
   convexUser: ZodUser | null;
 } {
   const {
