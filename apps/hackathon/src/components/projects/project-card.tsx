@@ -130,7 +130,9 @@ export function ProjectCard({
         )}
       </CardHeader>
       <CardContent>
-        <p className="text-slate-11 text-sm">{project.description}</p>
+        <p className="text-slate-11 whitespace-pre-wrap text-sm">
+          {project.description}
+        </p>
         {/* TODO: Display project images here */}
         {/* {project.imageUrls && project.imageUrls.length > 0 && ( ... )} */}
 
