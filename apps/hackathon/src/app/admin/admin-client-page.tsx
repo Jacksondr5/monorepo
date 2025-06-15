@@ -83,31 +83,32 @@ export const AdminClientPage = ({
     title: string;
     description: string;
   }) => {
-    setIsSubmitting(true);
     setSubmissionError(null);
     setSubmissionSuccess(null);
-
-    const result = await createFinalizedProject({
-      data: {
-        ...data,
-        hackathonEventId: latestHackathon._id,
-      },
-    });
-    if (!result.ok) {
-      processError(result.error, "Failed to create finalized project");
-      setSubmissionError(result.error.message);
+    try {
+      setIsSubmitting(true);
+      const result = await createFinalizedProject({
+        data: {
+          ...data,
+          hackathonEventId: latestHackathon._id,
+        },
+      });
+      if (!result.ok) {
+        processError(result.error, "Failed to create finalized project");
+        setSubmissionError(result.error.message);
+        return false;
+      }
+      const id = result.value;
+      setSubmissionSuccess(`Finalized project created successfully!`);
+      postHog.capture("finalized_project_created", {
+        project_id: id,
+        title: data.title,
+      });
+      setShowCreateForm(false);
+      return true;
+    } finally {
       setIsSubmitting(false);
-      return false;
     }
-    const id = result.value;
-    setSubmissionSuccess(`Finalized project created successfully!`);
-    postHog.capture("finalized_project_created", {
-      projectId: id,
-      title: data.title,
-    });
-    setIsSubmitting(false);
-    setShowCreateForm(false);
-    return true;
   };
 
   return (

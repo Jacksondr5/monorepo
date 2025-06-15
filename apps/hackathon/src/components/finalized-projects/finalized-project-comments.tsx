@@ -35,6 +35,7 @@ export function FinalizedProjectComments({
 }: FinalizedProjectCommentsProps) {
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [newCommentText, setNewCommentText] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const addComment = useMutation(
     api.finalizedProjects.addCommentToFinalizedProject,
@@ -51,21 +52,27 @@ export function FinalizedProjectComments({
   const postHog = usePostHog();
 
   const handleAddComment = async () => {
-    if (newCommentText.trim() === "" || !currentUser) return;
-    const result = await addComment({
-      projectId,
-      text: newCommentText.trim(),
-    });
-    if (!result.ok) {
-      processError(result.error, "Failed to add comment");
-      return;
+    if (newCommentText.trim() === "" || !currentUser || submitting) return;
+
+    setSubmitting(true);
+    try {
+      const result = await addComment({
+        projectId,
+        text: newCommentText.trim(),
+      });
+      if (!result.ok) {
+        processError(result.error, "Failed to add comment");
+        return;
+      }
+      postHog.capture("finalized_project_comment_added", {
+        projectId,
+        userId: currentUser._id,
+      });
+      setNewCommentText("");
+      setShowCommentForm(false);
+    } finally {
+      setSubmitting(false);
     }
-    postHog.capture("finalized_project_comment_added", {
-      projectId,
-      userId: currentUser._id,
-    });
-    setNewCommentText("");
-    setShowCommentForm(false);
   };
 
   const handleUpvoteComment = async (commentId: CommentId) => {
@@ -220,10 +227,10 @@ export function FinalizedProjectComments({
                   variant="default"
                   size="sm"
                   onClick={handleAddComment}
-                  disabled={newCommentText.trim() === ""}
+                  disabled={newCommentText.trim() === "" || submitting}
                   dataTestId="submit-finalized-project-comment-button"
                 >
-                  Submit Comment
+                  {submitting ? "Submitting..." : "Submit Comment"}
                 </Button>
               </div>
             </div>

@@ -12,7 +12,6 @@ export async function ProjectSubmissionServerPage({
   hackathon,
   token,
 }: ProjectSubmissionServerPageProps) {
-  // Preload data for project submission phase
   const latestHackathonPreloaded = await preloadQuery(
     api.hackathonEvents.getLatestHackathonEvent,
     {},

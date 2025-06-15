@@ -82,9 +82,6 @@ export type AddCommentToFinalizedProjectError =
   | GetFinalizedProjectByIdError
   | UnexpectedError;
 
-export type UpdateCommentOnFinalizedProjectHandlerError =
-  UpdateCommentOnFinalizedProjectError;
-
 export type DeleteCommentFromFinalizedProjectError =
   | GetCurrentUserError
   | GetFinalizedProjectByIdError
@@ -271,7 +268,7 @@ export const addCommentToFinalizedProject = finalizedProjectMutation({
 const _updateCommentOnFinalizedProjectHandler = async (
   ctx: MutationCtx,
   { projectId, commentId, text }: z.infer<typeof UpdateCommentSchema>,
-): Promise<Result<void, UpdateCommentOnFinalizedProjectHandlerError>> => {
+): Promise<Result<void, UpdateCommentOnFinalizedProjectError>> => {
   return updateCommentOnFinalizedProject(ctx, projectId, commentId, { text });
 };
 
@@ -506,30 +503,19 @@ const _getFinalizedProjectsByHackathonEventHandler = async (
 
   if (projectsResult.isErr()) return err(projectsResult.error);
 
-  const projects = projectsResult.value
-    // TODO: remove after migration
-    .map((project) => ({
-      ...project,
-      comments: project.comments || [],
-      interestedUsers: project.interestedUsers || [],
-    }));
+  const projects = projectsResult.value;
 
   const userIds = new Set<ZodUserId>();
   projects.forEach((project) => {
-    // TODO: remove after migration
-    if (project.comments) {
-      project.comments.forEach((comment) => {
-        userIds.add(comment.authorId);
-        comment.upvotes.forEach((upvote) => {
-          userIds.add(upvote.userId);
-        });
+    project.comments.forEach((comment) => {
+      userIds.add(comment.authorId);
+      comment.upvotes.forEach((upvote) => {
+        userIds.add(upvote.userId);
       });
-    }
-    if (project.interestedUsers) {
-      project.interestedUsers.forEach((interestedUser) => {
-        userIds.add(interestedUser.userId);
-      });
-    }
+    });
+    project.interestedUsers.forEach((interestedUser) => {
+      userIds.add(interestedUser.userId);
+    });
   });
 
   const usersResult = await fromPromiseUnexpectedError(

@@ -80,7 +80,7 @@ export const updateCommentOnFinalizedProject = async (
   const updatedComments = [...comments];
   updatedComments[commentIndex] = updatedComment;
 
-  return fromPromiseUnexpectedError(
+  return await fromPromiseUnexpectedError(
     ctx.db.patch(projectId, {
       comments: updatedComments,
     }),

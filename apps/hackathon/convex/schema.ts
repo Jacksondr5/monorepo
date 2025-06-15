@@ -3,32 +3,28 @@ import { v } from "convex/values";
 
 export default defineSchema({
   finalizedProjects: defineTable({
-    comments: v.optional(
-      v.array(
-        v.object({
-          authorId: v.id("users"),
-          createdAt: v.number(),
-          id: v.string(), // Unique ID for each comment, generated on creation
-          text: v.string(),
-          upvotes: v.array(
-            // Upvotes for this specific comment
-            v.object({
-              createdAt: v.number(),
-              userId: v.id("users"),
-            }),
-          ),
-        }),
-      ),
+    comments: v.array(
+      v.object({
+        authorId: v.id("users"),
+        createdAt: v.number(),
+        id: v.string(), // Unique ID for each comment, generated on creation
+        text: v.string(),
+        upvotes: v.array(
+          // Upvotes for this specific comment
+          v.object({
+            createdAt: v.number(),
+            userId: v.id("users"),
+          }),
+        ),
+      }),
     ),
     description: v.string(),
     hackathonEventId: v.id("hackathonEvents"),
-    interestedUsers: v.optional(
-      v.array(
-        v.object({
-          createdAt: v.number(),
-          userId: v.id("users"),
-        }),
-      ),
+    interestedUsers: v.array(
+      v.object({
+        createdAt: v.number(),
+        userId: v.id("users"),
+      }),
     ),
     title: v.string(),
     updatedAt: v.number(),

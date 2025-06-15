@@ -37,7 +37,6 @@ export default async function HomePage() {
   }
   const latestHackathon = latestHackathonResult.value;
 
-  // Phase-based rendering - each phase server component handles its own data preloading
   switch (latestHackathon.currentPhase) {
     case "PROJECT_SUBMISSION":
       return (

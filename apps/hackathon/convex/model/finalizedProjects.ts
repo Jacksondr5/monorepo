@@ -1,37 +1,34 @@
 import { QueryCtx } from "../_generated/server";
 import { FinalizedProject, FinalizedProjectId } from "~/server/zod";
-import { err, fromPromise, ok, Result } from "neverthrow";
-import { getNotFoundError, NotFoundError, UnexpectedError } from "./error";
+import { err, ok, Result } from "neverthrow";
+import {
+  fromPromiseUnexpectedError,
+  getNotFoundError,
+  NotFoundError,
+  UnexpectedError,
+} from "./error";
 
 export type GetFinalizedProjectByIdError =
   | NotFoundError<"FINALIZED_PROJECT">
   | UnexpectedError;
 
-export const getFinalizedProjectById = (
+export const getFinalizedProjectById = async (
   ctx: QueryCtx,
   projectId: FinalizedProjectId,
 ): Promise<Result<FinalizedProject, GetFinalizedProjectByIdError>> => {
-  return fromPromise(
+  const result = await fromPromiseUnexpectedError(
     ctx.db.get(projectId),
-    (originalError) => originalError,
-  ).match(
-    (project) => {
-      if (!project) {
-        return err(getNotFoundError("FINALIZED_PROJECT", projectId));
-      }
-      // TODO: remove after the migration
-      return ok({
-        ...project,
-        comments: project.comments || [],
-        interestedUsers: project.interestedUsers || [],
-      });
-    },
-    (originalError) => {
-      return err({
-        type: "UNEXPECTED_ERROR",
-        message: "There was an unexpected error getting the finalized project.",
-        originalError,
-      });
-    },
+    "There was an unexpected error getting the finalized project.",
   );
+  if (result.isErr()) {
+    return err(result.error);
+  }
+  if (!result.value) {
+    return err(getNotFoundError("FINALIZED_PROJECT", projectId));
+  }
+  return ok({
+    ...result.value,
+    comments: result.value.comments || [],
+    interestedUsers: result.value.interestedUsers || [],
+  });
 };

@@ -12,23 +12,38 @@ import {
 } from "@j5/component-library";
 import { ZodUser } from "../../server/zod/user";
 import { PostHog } from "posthog-js/react";
-import { ReactMutation } from "convex/react";
 import { CommentId } from "~/server/zod";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { processError } from "~/lib/errors";
+import { Id } from "../../../convex/_generated/dataModel";
+import { DeleteCommentError } from "../../../convex/projects";
+import { SerializableResult } from "../../../convex/model/error";
+import { DeleteCommentFromFinalizedProjectError } from "../../../convex/finalizedProjects";
 
-export interface DeleteCommentDialogProps<TProjectId> {
+export interface DeleteCommentDialogProps<
+  TProjectId extends Id<"projects" | "finalizedProjects">,
+> {
   projectId: TProjectId;
   commentId: CommentId;
   currentUser: ZodUser;
   postHog: PostHog;
-  deleteCommentMutation: ReactMutation<any>;
+  deleteCommentMutation: (args: {
+    projectId: TProjectId;
+    commentId: CommentId;
+  }) => Promise<
+    SerializableResult<
+      void,
+      DeleteCommentError | DeleteCommentFromFinalizedProjectError
+    >
+  >;
   postHogEventName: string;
   testIdPrefix?: string;
 }
 
-export const DeleteCommentDialog = <TProjectId,>({
+export const DeleteCommentDialog = <
+  TProjectId extends Id<"projects" | "finalizedProjects">,
+>({
   projectId,
   commentId,
   currentUser,
