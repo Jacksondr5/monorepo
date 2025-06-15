@@ -143,7 +143,9 @@ export function ProjectComments({
                       <span className="text-slate-9 text-xxs ml-2">
                         {new Date(comment.createdAt).toLocaleDateString()}
                       </span>
-                      <p className="mt-0.5">{comment.text}</p>
+                      <p className="mt-0.5 whitespace-pre-wrap">
+                        {comment.text}
+                      </p>
                       <div className="mt-1 flex items-center gap-2">
                         <Button
                           variant="ghost"
