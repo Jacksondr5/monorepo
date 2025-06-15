@@ -1,14 +1,14 @@
 "use client";
 
 import { Preloaded, useMutation, usePreloadedQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import { api } from "../../../convex/_generated/api";
 import { useState } from "react";
 import { ProjectCard } from "~/components/projects/project-card";
 import { ProjectSubmissionForm } from "~/components/project-submission/project-submission-form";
 import { usePostHog } from "posthog-js/react";
 import { processError, unwrapSerializableResult } from "~/lib/errors";
 
-export interface ClientPageProps {
+export interface ProjectSubmissionClientPageProps {
   preloadedLatestHackathon: Preloaded<
     typeof api.hackathonEvents.getLatestHackathonEvent
   >;
@@ -16,11 +16,11 @@ export interface ClientPageProps {
   preloadedProjects: Preloaded<typeof api.projects.getProjectsByHackathonEvent>;
 }
 
-export const ClientPage = ({
+export const ProjectSubmissionClientPage = ({
   preloadedLatestHackathon,
   preloadedCurrentUser,
   preloadedProjects,
-}: ClientPageProps) => {
+}: ProjectSubmissionClientPageProps) => {
   const latestHackathonResult = usePreloadedQuery(preloadedLatestHackathon);
   const currentUserResult = usePreloadedQuery(preloadedCurrentUser);
   const projectsResult = usePreloadedQuery(preloadedProjects);
