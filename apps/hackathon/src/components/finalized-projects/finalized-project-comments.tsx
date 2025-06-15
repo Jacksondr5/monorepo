@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
-import type { Project } from "../../server/zod/project";
+import type { FinalizedProject } from "../../server/zod/finalized-project";
 import type { ZodUser } from "../../server/zod/user";
 import {
   Avatar,
@@ -18,30 +18,36 @@ import { DeleteCommentDialog } from "../shared/delete-comment-dialog";
 import { CommentId } from "~/server/zod";
 import { processError } from "~/lib/errors";
 
-interface ProjectCommentsProps {
-  comments: Project["comments"];
+interface FinalizedProjectCommentsProps {
+  comments: FinalizedProject["comments"];
   currentUser: ZodUser;
   getInitials: (firstName?: string, lastName?: string) => string;
-  projectId: Id<"projects">;
+  projectId: Id<"finalizedProjects">;
   userMap: Map<string, ZodUser>;
 }
 
-export function ProjectComments({
+export function FinalizedProjectComments({
   comments,
   currentUser,
   getInitials,
   projectId,
   userMap,
-}: ProjectCommentsProps) {
+}: FinalizedProjectCommentsProps) {
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [newCommentText, setNewCommentText] = useState("");
 
-  const addComment = useMutation(api.projects.addCommentToProject);
-  const upvoteCommentMutation = useMutation(api.projects.upvoteComment);
-  const removeUpvoteFromCommentMutation = useMutation(
-    api.projects.removeUpvoteFromComment,
+  const addComment = useMutation(
+    api.finalizedProjects.addCommentToFinalizedProject,
   );
-  const deleteCommentMutation = useMutation(api.projects.deleteComment);
+  const upvoteCommentMutation = useMutation(
+    api.finalizedProjects.upvoteCommentOnFinalizedProject,
+  );
+  const removeUpvoteFromCommentMutation = useMutation(
+    api.finalizedProjects.removeUpvoteFromCommentOnFinalizedProject,
+  );
+  const deleteCommentMutation = useMutation(
+    api.finalizedProjects.deleteCommentFromFinalizedProject,
+  );
   const postHog = usePostHog();
 
   const handleAddComment = async () => {
@@ -54,7 +60,7 @@ export function ProjectComments({
       processError(result.error, "Failed to add comment");
       return;
     }
-    postHog.capture("comment_added", {
+    postHog.capture("finalized_project_comment_added", {
       projectId,
       userId: currentUser._id,
     });
@@ -81,7 +87,7 @@ export function ProjectComments({
         processError(result.error, "Failed to remove upvote");
         return;
       }
-      postHogAction = "comment_upvote_removed";
+      postHogAction = "finalized_project_comment_upvote_removed";
     } else {
       const result = await upvoteCommentMutation({
         projectId,
@@ -91,7 +97,7 @@ export function ProjectComments({
         processError(result.error, "Failed to add upvote");
         return;
       }
-      postHogAction = "comment_upvote_added";
+      postHogAction = "finalized_project_comment_upvote_added";
     }
     postHog.capture(postHogAction, {
       projectId,
@@ -150,7 +156,7 @@ export function ProjectComments({
                           className="text-slate-10 hover:text-grass-9 h-auto p-1 disabled:opacity-50"
                           onClick={() => handleUpvoteComment(comment.id)}
                           disabled={!currentUser}
-                          dataTestId={`upvote-comment-${comment.id}-button`}
+                          dataTestId={`upvote-finalized-project-comment-${comment.id}-button`}
                         >
                           <ThumbsUp
                             className={`h-4 w-4 ${
@@ -171,8 +177,8 @@ export function ProjectComments({
                             currentUser={currentUser}
                             postHog={postHog}
                             deleteCommentMutation={deleteCommentMutation}
-                            postHogEventName="comment_deleted"
-                            testIdPrefix="delete-comment"
+                            postHogEventName="finalized_project_comment_deleted"
+                            testIdPrefix="delete-finalized-project-comment"
                           />
                         )}
                       </div>
@@ -206,7 +212,7 @@ export function ProjectComments({
                     setShowCommentForm(false);
                     setNewCommentText("");
                   }}
-                  dataTestId="cancel-comment-button"
+                  dataTestId="cancel-finalized-project-comment-button"
                 >
                   Cancel
                 </Button>
@@ -215,7 +221,7 @@ export function ProjectComments({
                   size="sm"
                   onClick={handleAddComment}
                   disabled={newCommentText.trim() === ""}
-                  dataTestId="submit-comment-button"
+                  dataTestId="submit-finalized-project-comment-button"
                 >
                   Submit Comment
                 </Button>
@@ -226,7 +232,7 @@ export function ProjectComments({
               variant="outline"
               size="sm"
               onClick={() => setShowCommentForm(true)}
-              dataTestId="add-comment-button"
+              dataTestId="add-finalized-project-comment-button"
             >
               Add Comment
             </Button>

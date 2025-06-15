@@ -1,3 +1,9 @@
+---
+description: when writing code for fields in the component-library
+globs:
+alwaysApply: false
+---
+
 # Component Library Field Component Development Rules
 
 ## Overview

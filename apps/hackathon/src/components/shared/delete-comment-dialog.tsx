@@ -12,33 +12,33 @@ import {
 } from "@j5/component-library";
 import { ZodUser } from "../../server/zod/user";
 import { PostHog } from "posthog-js/react";
-import { api } from "../../../convex/_generated/api";
 import { ReactMutation } from "convex/react";
-import { CommentId, ProjectId } from "~/server/zod";
+import { CommentId } from "~/server/zod";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { processError } from "~/lib/errors";
 
-export interface DeleteCommentDialogContentProps {
-  // isOpen: boolean;
-  projectId: ProjectId;
+export interface DeleteCommentDialogProps<TProjectId> {
+  projectId: TProjectId;
   commentId: CommentId;
   currentUser: ZodUser;
   postHog: PostHog;
-  // setIsOpen: (isOpen: boolean) => void;
-  deleteCommentMutation: ReactMutation<typeof api.projects.deleteComment>;
+  deleteCommentMutation: ReactMutation<any>;
+  postHogEventName: string;
+  testIdPrefix?: string;
 }
 
-export const DeleteCommentDialog = ({
-  // isOpen,
+export const DeleteCommentDialog = <TProjectId,>({
   projectId,
   commentId,
   currentUser,
   postHog,
-  // setIsOpen,
   deleteCommentMutation,
-}: DeleteCommentDialogContentProps) => {
+  postHogEventName,
+  testIdPrefix = "delete-comment",
+}: DeleteCommentDialogProps<TProjectId>) => {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -46,7 +46,7 @@ export const DeleteCommentDialog = ({
           variant="ghost"
           size="sm"
           className="text-destructive-foreground hover:bg-destructive/80 hover:text-destructive-foreground h-auto p-1"
-          dataTestId="delete-comment-trigger-button"
+          dataTestId={`${testIdPrefix}-trigger-button`}
         >
           <Trash2 className="h-4 w-4" />
         </Button>
@@ -61,14 +61,17 @@ export const DeleteCommentDialog = ({
         </p>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline" dataTestId="delete-comment-cancel-button">
+            <Button
+              variant="outline"
+              dataTestId={`${testIdPrefix}-cancel-button`}
+            >
               Cancel
             </Button>
           </DialogClose>
           <DialogClose asChild>
             <Button
               variant="destructive"
-              dataTestId="delete-comment-confirm-button"
+              dataTestId={`${testIdPrefix}-confirm-button`}
               onClick={async () => {
                 const result = await deleteCommentMutation({
                   projectId,
@@ -79,7 +82,7 @@ export const DeleteCommentDialog = ({
                   setIsOpen(false);
                   return;
                 }
-                postHog.capture("comment_deleted", {
+                postHog.capture(postHogEventName, {
                   projectId,
                   commentId,
                   userId: currentUser._id,
