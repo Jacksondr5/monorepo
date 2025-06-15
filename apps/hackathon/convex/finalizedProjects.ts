@@ -51,13 +51,13 @@ const ProjectTargetArgsSchema = z.object({
 
 const AddCommentSchema = z.object({
   projectId: FinalizedProjectIdSchema,
-  text: z.string().min(1, "Comment cannot be empty."),
+  text: z.string().trim().min(1, "Comment cannot be empty."),
 });
 
 const UpdateCommentSchema = z.object({
   commentId: z.string(),
   projectId: FinalizedProjectIdSchema,
-  text: z.string().min(1, "Comment cannot be empty."),
+  text: z.string().trim().min(1, "Comment cannot be empty."),
 });
 
 export type CreateFinalizedProjectError =

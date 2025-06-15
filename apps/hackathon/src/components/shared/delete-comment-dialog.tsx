@@ -38,6 +38,34 @@ export const DeleteCommentDialog = <TProjectId,>({
   testIdPrefix = "delete-comment",
 }: DeleteCommentDialogProps<TProjectId>) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+
+    try {
+      const result = await deleteCommentMutation({
+        projectId,
+        commentId,
+      });
+
+      if (!result.ok) {
+        processError(result.error, "Failed to delete comment");
+        return;
+      }
+
+      postHog.capture(postHogEventName, {
+        projectId,
+        commentId,
+        userId: currentUser._id,
+      });
+
+      // Only close dialog on successful deletion
+      setIsOpen(false);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -64,35 +92,19 @@ export const DeleteCommentDialog = <TProjectId,>({
             <Button
               variant="outline"
               dataTestId={`${testIdPrefix}-cancel-button`}
+              disabled={isDeleting}
             >
               Cancel
             </Button>
           </DialogClose>
-          <DialogClose asChild>
-            <Button
-              variant="destructive"
-              dataTestId={`${testIdPrefix}-confirm-button`}
-              onClick={async () => {
-                const result = await deleteCommentMutation({
-                  projectId,
-                  commentId,
-                });
-                if (!result.ok) {
-                  processError(result.error, "Failed to delete comment");
-                  setIsOpen(false);
-                  return;
-                }
-                postHog.capture(postHogEventName, {
-                  projectId,
-                  commentId,
-                  userId: currentUser._id,
-                });
-                setIsOpen(false);
-              }}
-            >
-              Delete
-            </Button>
-          </DialogClose>
+          <Button
+            variant="destructive"
+            dataTestId={`${testIdPrefix}-confirm-button`}
+            onClick={handleDelete}
+            disabled={isDeleting}
+          >
+            {isDeleting ? "Deleting..." : "Delete"}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

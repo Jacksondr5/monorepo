@@ -102,7 +102,7 @@ export const AdminClientPage = ({
     const id = result.value;
     setSubmissionSuccess(`Finalized project created successfully!`);
     postHog.capture("finalized_project_created", {
-      project_id: id,
+      projectId: id,
       title: data.title,
     });
     setIsSubmitting(false);
