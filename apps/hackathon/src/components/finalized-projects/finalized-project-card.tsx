@@ -139,7 +139,9 @@ export function FinalizedProjectCard({
         </Button>
       </CardHeader>
       <CardContent>
-        <p className="text-slate-11 mb-4 text-sm">{project.description}</p>
+        <p className="text-slate-11 mb-4 whitespace-pre-wrap text-sm">
+          {project.description}
+        </p>
         {/* Interested users avatars */}
         {project.interestedUsers.length > 0 && (
           <>
