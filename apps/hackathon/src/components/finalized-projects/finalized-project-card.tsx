@@ -154,7 +154,7 @@ export function FinalizedProjectCard({
               </p>
               <AvatarGroup
                 avatars={interestedUsersAvatars}
-                max={5}
+                max={17}
                 dataTestId={`finalized-project-${project._id}-interested-users`}
               />
             </div>
