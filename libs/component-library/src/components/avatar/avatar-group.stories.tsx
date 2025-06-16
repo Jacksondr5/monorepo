@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { userEvent, within, screen } from "storybook/test";
+import { userEvent, within, screen, expect } from "storybook/test";
 import { AvatarGroup, AvatarDataItem } from "./avatar-group";
 import { TooltipProvider } from "../tooltip/tooltip";
 
@@ -183,7 +183,7 @@ export const TooltipInteractionTest: Story = {
         avatars={sampleAvatarData.slice(0, 3)}
         dataTestId="avatar-group-tooltip-test"
       />
-      <h3 className="text-slate-11 mb-4 text-lg font-semibold">
+      <h3 className="text-slate-11 mt-4 text-lg font-semibold">
         Hover over avatars to see names
       </h3>
     </div>
@@ -201,14 +201,15 @@ export const TooltipInteractionTest: Story = {
       const tooltip = await screen.findByTestId(
         "avatar-group-tooltip-test-avatar-jacksondr5-tooltip",
       );
-      if (!tooltip.textContent?.includes("Jackson Miller")) {
-        throw new Error("Expected tooltip to show 'Jackson Miller'");
-      }
+      expect(tooltip).toHaveTextContent("Jackson Miller");
     });
 
     await step(
       "Hover over second avatar to show different tooltip",
       async () => {
+        // Unhover the first avatar by hovering over the canvas root to prevent multiple tooltips
+        await userEvent.hover(canvasElement);
+
         const secondAvatar = canvas.getByTestId(
           "avatar-group-tooltip-test-avatar-shadcn",
         );
@@ -218,9 +219,7 @@ export const TooltipInteractionTest: Story = {
         const tooltip = await screen.findByTestId(
           "avatar-group-tooltip-test-avatar-shadcn-tooltip",
         );
-        if (!tooltip.textContent?.includes("Shadcn UI")) {
-          throw new Error("Expected tooltip to show 'Shadcn UI'");
-        }
+        expect(tooltip).toHaveTextContent("Shadcn UI");
       },
     );
   },
@@ -236,7 +235,7 @@ export const OverflowTooltipTest: Story = {
         max={3}
         dataTestId="avatar-group-overflow-test"
       />
-      <h3 className="text-slate-11 mb-4 text-lg font-semibold">
+      <h3 className="text-slate-11 mt-4 text-lg font-semibold">
         Hover over overflow indicator
       </h3>
     </div>
@@ -254,9 +253,7 @@ export const OverflowTooltipTest: Story = {
       const tooltip = await screen.findByTestId(
         "avatar-group-overflow-test-overflow-avatar-tooltip",
       );
-      if (!tooltip.textContent?.includes("3 more users")) {
-        throw new Error("Expected tooltip to show '3 more users'");
-      }
+      expect(tooltip).toHaveTextContent("3 more users");
     });
   },
 };
