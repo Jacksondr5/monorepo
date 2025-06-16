@@ -22,7 +22,7 @@ const meta: Meta<typeof AvatarGroup> = {
     avatars: {
       control: "object", // Allows editing in Storybook, though complex for arrays
       description:
-        "Array of avatar data objects ({ name, src, alt, fallback, className? })",
+        "Array of avatar data objects ({ name, src, alt, fallback, className?, id })",
     },
     max: {
       control: { type: "number", min: 1 },
@@ -207,9 +207,6 @@ export const TooltipInteractionTest: Story = {
     await step(
       "Hover over second avatar to show different tooltip",
       async () => {
-        // Unhover the first avatar by hovering over the canvas root to prevent multiple tooltips
-        await userEvent.hover(canvasElement);
-
         const secondAvatar = canvas.getByTestId(
           "avatar-group-tooltip-test-avatar-shadcn",
         );

@@ -85,6 +85,8 @@ export function FinalizedProjectCard({
         src: user?.avatarUrl,
         alt: user ? `${user.firstName} ${user.lastName}` : "Unknown User",
         fallback: user ? getInitials(user.firstName, user.lastName) : "??",
+        id: user?._id ?? "",
+        name: user ? `${user.firstName} ${user.lastName}` : "Unknown User",
       };
     },
   );
@@ -148,7 +150,11 @@ export function FinalizedProjectCard({
                 {project.interestedUsers.length === 1 ? "person" : "people"}{" "}
                 interested:
               </p>
-              <AvatarGroup avatars={interestedUsersAvatars} max={5} />
+              <AvatarGroup
+                avatars={interestedUsersAvatars}
+                max={5}
+                dataTestId={`finalized-project-${project._id}-interested-users`}
+              />
             </div>
           </>
         )}
