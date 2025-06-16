@@ -2,10 +2,12 @@ import { preloadedQueryResult, preloadQuery } from "convex/nextjs";
 import { api } from "../../convex/_generated/api";
 import NoHackathon from "./no-hackathon";
 import { getAuthToken } from "./auth";
-import { ClientPage } from "./client-page";
-import { projectStatusMessages } from "../utils/messages";
 import { processError } from "~/lib/errors";
 import { redirect } from "next/navigation";
+import { ProjectSubmissionServerPage } from "./phases/project-submission-server-page";
+import { ProjectVotingServerPage } from "./phases/project-voting-server-page";
+import { EventInProgressServerPage } from "./phases/event-in-progress-server-page";
+import { EventEndedServerPage } from "./phases/event-ended-server-page";
 
 export default async function HomePage() {
   const tokenResult = await getAuthToken();
@@ -34,32 +36,25 @@ export default async function HomePage() {
     return <NoHackathon />;
   }
   const latestHackathon = latestHackathonResult.value;
-  const currentUser = await preloadQuery(
-    api.users.getCurrentUser,
-    {},
-    { token },
-  );
-  const projects = await preloadQuery(
-    api.projects.getProjectsByHackathonEvent,
-    { hackathonEventId: latestHackathon._id },
-    { token },
-  );
 
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-8 p-4 md:p-8">
-      <div className="text-center">
-        <h1 className="text-slate-11 text-4xl font-bold">
-          {latestHackathon.name}
-        </h1>
-        <p className="text-slate-11 text-lg">
-          Current Phase: {projectStatusMessages[latestHackathon.currentPhase]}
-        </p>
-      </div>
-      <ClientPage
-        preloadedLatestHackathon={latestHackathonPreloaded}
-        preloadedCurrentUser={currentUser}
-        preloadedProjects={projects}
-      />
-    </main>
-  );
+  switch (latestHackathon.currentPhase) {
+    case "PROJECT_SUBMISSION":
+      return <ProjectSubmissionServerPage token={token} />;
+    case "PROJECT_VOTING":
+      return <ProjectVotingServerPage token={token} />;
+    case "EVENT_IN_PROGRESS":
+      return <EventInProgressServerPage hackathon={latestHackathon} />;
+    case "EVENT_ENDED":
+      return <EventEndedServerPage hackathon={latestHackathon} />;
+    default:
+      // This ensures all phases are handled at compile time
+      processError(
+        {
+          type: "UNEXPECTED_ERROR",
+          message: `Unknown hackathon phase: ${latestHackathon.currentPhase}`,
+        },
+        "Unknown hackathon phase encountered",
+      );
+      return <NoHackathon />;
+  }
 }

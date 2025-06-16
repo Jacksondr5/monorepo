@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { mutation, query, MutationCtx, QueryCtx } from "./_generated/server";
+import { mutation, query, MutationCtx } from "./_generated/server";
 import { v4 as uuidv4 } from "uuid";
 import {
   CreateProjectSchema,
@@ -10,7 +10,7 @@ import {
 import { zCustomMutation, zCustomQuery } from "convex-helpers/server/zod";
 import { NoOp } from "convex-helpers/server/customFunctions";
 import { getCurrentUser, GetCurrentUserError } from "./model/users";
-import { HackathonEventIdSchema, ZodUserId } from "~/server/zod";
+import { HackathonEventIdSchema } from "~/server/zod";
 import {
   getCommentById,
   updateComment,
@@ -18,8 +18,11 @@ import {
   UpdateCommentError,
   updateCommentUpvotes,
 } from "./model/comments";
-import { getProjectById, GetProjectByIdError } from "./model/projects";
-import { ProjectListSchema } from "~/server/zod/views/project-list";
+import {
+  getProjectById,
+  GetProjectByIdError,
+  getProjectsByHackathonEvent as modelGetProjectsByHackathonEvent,
+} from "./model/projects";
 import {
   fromPromiseUnexpectedError,
   UnexpectedError,
@@ -27,7 +30,6 @@ import {
   getNotFoundError,
   UnauthorizedError,
   DataIsUnexpectedShapeError,
-  safeParseConvexObject,
   serializeResult,
 } from "./model/error";
 import { err, ok, Result } from "neverthrow";
@@ -436,69 +438,8 @@ export const removeUpvoteFromComment = projectMutation({
 });
 
 // --- Queries ---
-const _getProjectsByHackathonEventHandler = async (
-  ctx: QueryCtx,
-  {
-    hackathonEventId,
-  }: { hackathonEventId: z.infer<typeof HackathonEventIdSchema> },
-): Promise<
-  Result<z.infer<typeof ProjectListSchema>, GetProjectsByHackathonEventError>
-> => {
-  const projectsResult = await fromPromiseUnexpectedError(
-    ctx.db
-      .query("projects")
-      .withIndex("by_hackathon_event", (q) =>
-        q.eq("hackathonEventId", hackathonEventId),
-      )
-      .collect(),
-    "Failed to query projects by hackathon event id",
-  );
-
-  if (projectsResult.isErr()) return err(projectsResult.error);
-
-  const projects = projectsResult.value
-    // TODO: remove after migration
-    .map((project) => ({
-      ...project,
-      comments: project.comments || [],
-      upvotes: project.upvotes || [],
-    }));
-
-  const userIds = new Set<ZodUserId>();
-  projects.forEach((project) => {
-    userIds.add(project.creatorUserId);
-    // TODO: remove after migration
-    if (project.comments) {
-      project.comments.forEach((comment) => {
-        userIds.add(comment.authorId);
-        comment.upvotes.forEach((upvote) => {
-          userIds.add(upvote.userId);
-        });
-      });
-    }
-    if (project.upvotes) {
-      project.upvotes.forEach((upvote) => {
-        userIds.add(upvote.userId);
-      });
-    }
-  });
-
-  const usersResult = await fromPromiseUnexpectedError(
-    Promise.all(Array.from(userIds).map((userId) => ctx.db.get(userId))),
-    "Failed to get users for projects",
-  );
-
-  if (usersResult.isErr()) return err(usersResult.error);
-  const users = usersResult.value;
-
-  return safeParseConvexObject(ProjectListSchema, {
-    projects,
-    visibleUsers: users,
-  });
-};
-
 export const getProjectsByHackathonEvent = projectQuery({
   args: { hackathonEventId: HackathonEventIdSchema },
-  handler: (ctx, args) =>
-    serializeResult(_getProjectsByHackathonEventHandler(ctx, args)),
+  handler: (ctx, { hackathonEventId }) =>
+    serializeResult(modelGetProjectsByHackathonEvent(ctx, hackathonEventId)),
 });
