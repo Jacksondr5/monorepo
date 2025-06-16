@@ -2,8 +2,11 @@ import React from "react";
 import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip/tooltip";
 
 export type AvatarDataItem = {
+  id: string;
+  name: string;
   fallback: string;
   className?: string;
 } & (
@@ -36,13 +39,21 @@ export interface AvatarGroupProps
     VariantProps<typeof avatarGroupClassName> {
   avatars: AvatarDataItem[];
   max?: number;
-  // Custom class for the overflow indicator avatar
   overflowIndicatorClassName?: string;
+  dataTestId: string;
 }
 
 export const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
   (
-    { avatars, max, variant, className, overflowIndicatorClassName, ...props },
+    {
+      avatars,
+      max,
+      variant,
+      className,
+      overflowIndicatorClassName,
+      dataTestId,
+      ...props
+    },
     ref,
   ) => {
     const numAvatars = avatars.length;
@@ -62,28 +73,50 @@ export const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
           "[&>[data-slot=avatar]]:ring-background [&>[data-slot=avatar]]:ring-2",
           className,
         )}
+        data-testid={dataTestId}
         {...props}
       >
-        {displayedAvatars.map((avatarData, index) => (
-          <Avatar
-            key={`avatar-${index}`}
-            className={cn("h-10 w-10", avatarData.className)}
-            data-slot="avatar"
-          >
-            {avatarData.src ? (
-              <AvatarImage src={avatarData.src} alt={avatarData.alt} />
-            ) : (
-              <AvatarFallback>{avatarData.fallback}</AvatarFallback>
-            )}
-          </Avatar>
+        {displayedAvatars.map((avatarData) => (
+          <Tooltip key={`avatar-tooltip-${avatarData.id}`}>
+            <TooltipTrigger asChild>
+              <Avatar
+                className={cn("h-10 w-10", avatarData.className)}
+                data-slot="avatar"
+                data-testid={`${dataTestId}-avatar-${avatarData.id}`}
+              >
+                {avatarData.src ? (
+                  <AvatarImage src={avatarData.src} alt={avatarData.alt} />
+                ) : (
+                  <AvatarFallback>{avatarData.fallback}</AvatarFallback>
+                )}
+              </Avatar>
+            </TooltipTrigger>
+            <TooltipContent
+              side="top"
+              data-testid={`${dataTestId}-avatar-${avatarData.id}-tooltip`}
+            >
+              {avatarData.name}
+            </TooltipContent>
+          </Tooltip>
         ))}
         {overflowCount > 0 && (
-          <Avatar
-            className={cn("h-10 w-10", overflowIndicatorClassName)}
-            data-slot="avatar"
-          >
-            <AvatarFallback>{`+${overflowCount}`}</AvatarFallback>
-          </Avatar>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Avatar
+                className={cn("h-10 w-10", overflowIndicatorClassName)}
+                data-slot="avatar"
+                data-testid={`${dataTestId}-overflow-avatar`}
+              >
+                <AvatarFallback>{`+${overflowCount}`}</AvatarFallback>
+              </Avatar>
+            </TooltipTrigger>
+            <TooltipContent
+              side="top"
+              data-testid={`${dataTestId}-overflow-avatar-tooltip`}
+            >
+              {`${overflowCount} more user${overflowCount > 1 ? "s" : ""}`}
+            </TooltipContent>
+          </Tooltip>
         )}
       </div>
     );

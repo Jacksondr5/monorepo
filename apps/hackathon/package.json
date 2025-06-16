@@ -3,28 +3,28 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@clerk/nextjs": "6.21.0",
+    "@clerk/nextjs": "6.22.0",
     "@j5/component-library": "workspace:*",
-    "@sentry/nextjs": "9.27.0",
-    "@t3-oss/env-nextjs": "0.13.6",
-    "@tanstack/react-form": "1.12.2",
+    "@sentry/nextjs": "9.29.0",
+    "@t3-oss/env-nextjs": "0.13.8",
+    "@tanstack/react-form": "1.12.3",
     "@tanstack/zod-form-adapter": "0.42.1",
     "convex": "1.24.8",
-    "convex-helpers": "0.1.92",
+    "convex-helpers": "0.1.94",
     "fast-deep-equal": "3.1.3",
     "neverthrow": "8.2.0",
     "next": "15.3.3",
-    "posthog-js": "1.249.4",
-    "posthog-node": "4.18.0",
+    "posthog-js": "1.252.1",
+    "posthog-node": "5.1.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "uuid": "11.1.0",
-    "zod": "3.25.56"
+    "zod": "3.25.64"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "4.1.8",
+    "@tailwindcss/postcss": "4.1.10",
     "eslint-plugin-neverthrow": "1.1.4",
-    "postcss": "8.5.4",
-    "tailwindcss": "4.1.8"
+    "postcss": "8.5.5",
+    "tailwindcss": "4.1.10"
   }
 }
