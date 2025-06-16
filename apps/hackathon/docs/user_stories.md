@@ -21,9 +21,9 @@ This document outlines user stories based on the application requirements.
 
 ## 3. Project Selection Phase
 
-- [ ] **US3.1 (Select Preferred Projects):** As an authenticated user, I want to select up to 3 finalized projects that I am interested in working on so that I can indicate my preferences for team formation.
-- [ ] **US3.2 (View My Selections):** As an authenticated user, I want to see the list of projects I have currently selected so that I can remember my choices.
-- [ ] **US3.3 (Change Project Selections):** As an authenticated user, I want to be able to change my project selections before the selection deadline so that I can update my preferences if needed.
+- [x] **US3.1 (Select Preferred Projects):** As an authenticated user, I want to select up to 3 finalized projects that I am interested in working on so that I can indicate my preferences for team formation.
+- [x] **US3.2 (View My Selections):** As an authenticated user, I want to see the list of projects I have currently selected so that I can remember my choices.
+- [x] **US3.3 (Change Project Selections):** As an authenticated user, I want to be able to change my project selections before the selection deadline so that I can update my preferences if needed.
 
 ## 4. Hackathon Lifecycle Awareness
 

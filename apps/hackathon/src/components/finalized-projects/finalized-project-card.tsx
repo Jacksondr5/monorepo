@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { FinalizedProject } from "../../server/zod/finalized-project";
 import {
@@ -14,17 +14,25 @@ import {
   AvatarGroup,
   type AvatarDataItem,
   Separator,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@j5/component-library";
-import { ZodUser } from "~/server/zod";
+import { ZodUser, ZodUserId, HackathonPhase } from "~/server/zod";
 import { FinalizedProjectComments } from "./finalized-project-comments";
 import { usePostHog } from "posthog-js/react";
 import { processError } from "~/lib/errors";
+import { useState } from "react";
 
 interface FinalizedProjectCardProps {
   currentUser: ZodUser;
   project: FinalizedProject;
   userMap: Map<string, ZodUser>;
   remainingInterests: number;
+  hackathonPhase: HackathonPhase;
+  showBothUserGroups?: boolean; // true for admin page, false/undefined for user pages
 }
 
 export function FinalizedProjectCard({
@@ -32,6 +40,8 @@ export function FinalizedProjectCard({
   project,
   userMap,
   remainingInterests,
+  hackathonPhase,
+  showBothUserGroups,
 }: FinalizedProjectCardProps) {
   const addInterestedUserMutation = useMutation(
     api.finalizedProjects.addInterestedUser,
@@ -39,7 +49,16 @@ export function FinalizedProjectCard({
   const removeInterestedUserMutation = useMutation(
     api.finalizedProjects.removeInterestedUser,
   );
+  const assignUserToProjectMutation = useMutation(
+    api.finalizedProjects.assignUserToProject,
+  );
+  const unassignUserFromProjectMutation = useMutation(
+    api.finalizedProjects.unassignUserFromProject,
+  );
+  const allUsersQuery = useQuery(api.finalizedProjects.getAllUsers);
   const postHog = usePostHog();
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
+  const [isAssigning, setIsAssigning] = useState(false);
 
   const getInitials = (firstName?: string, lastName?: string) => {
     const firstInitial = firstName?.[0]?.toUpperCase() || "";
@@ -77,6 +96,48 @@ export function FinalizedProjectCard({
     }
   };
 
+  const handleAssignUser = async () => {
+    if (!selectedUserId) return;
+
+    setIsAssigning(true);
+    try {
+      const result = await assignUserToProjectMutation({
+        projectId: project._id,
+        userId: selectedUserId as ZodUserId,
+      });
+
+      if (result.ok) {
+        setSelectedUserId("");
+        postHog.capture("user_assigned_to_project", {
+          projectId: project._id,
+          assignedUserId: selectedUserId,
+          adminUserId: currentUser._id,
+        });
+      } else {
+        processError(result.error, "Failed to assign user to project");
+      }
+    } finally {
+      setIsAssigning(false);
+    }
+  };
+
+  const handleUnassignUser = async (userId: string) => {
+    const result = await unassignUserFromProjectMutation({
+      projectId: project._id,
+      userId: userId as ZodUserId,
+    });
+
+    if (result.ok) {
+      postHog.capture("user_unassigned_from_project", {
+        projectId: project._id,
+        unassignedUserId: userId,
+        adminUserId: currentUser._id,
+      });
+    } else {
+      processError(result.error, "Failed to unassign user from project");
+    }
+  };
+
   // Prepare avatar data for interested users
   const interestedUsersAvatars: AvatarDataItem[] = project.interestedUsers.map(
     (interestedUser) => {
@@ -89,6 +150,29 @@ export function FinalizedProjectCard({
         name: user ? `${user.firstName} ${user.lastName}` : "Unknown User",
       };
     },
+  );
+
+  // Prepare avatar data for assigned users
+  const assignedUsersAvatars: AvatarDataItem[] = (
+    project.assignedUsers || []
+  ).map((assignedUser) => {
+    const user = userMap.get(assignedUser.userId);
+    return {
+      src: user?.avatarUrl,
+      alt: user ? `${user.firstName} ${user.lastName}` : "Unknown User",
+      fallback: user ? getInitials(user.firstName, user.lastName) : "??",
+      id: user?._id ?? "",
+      name: user ? `${user.firstName} ${user.lastName}` : "Unknown User",
+    };
+  });
+
+  // Get all users for the select dropdown
+  const allUsers = allUsersQuery?.ok ? allUsersQuery.value : [];
+  const assignedUserIds = new Set(
+    (project.assignedUsers || []).map((au) => au.userId),
+  );
+  const availableUsers = allUsers.filter(
+    (user) => !assignedUserIds.has(user._id),
   );
 
   // Determine interest button state
@@ -115,6 +199,29 @@ export function FinalizedProjectCard({
   };
 
   const interestButtonProps = getInterestButtonProps();
+  const isAdmin = currentUser.role === "ADMIN";
+
+  // Determine what to show based on context
+  let showInterestedUsers: boolean;
+  let showAssignedUsers: boolean;
+  let showInterestButton: boolean;
+  let showAssignmentControls: boolean;
+
+  if (showBothUserGroups) {
+    // Admin page - show both groups and admin controls
+    showInterestedUsers = true;
+    showAssignedUsers = true;
+    showInterestButton = false;
+    showAssignmentControls = isAdmin && availableUsers.length > 0;
+  } else {
+    // User pages - show contextually appropriate group
+    showInterestedUsers = hackathonPhase === "PROJECT_VOTING";
+    showAssignedUsers =
+      hackathonPhase === "EVENT_IN_PROGRESS" ||
+      hackathonPhase === "EVENT_ENDED";
+    showInterestButton = hackathonPhase === "PROJECT_VOTING";
+    showAssignmentControls = false;
+  }
 
   return (
     <Card className="mb-4 w-full">
@@ -127,23 +234,104 @@ export function FinalizedProjectCard({
             </CardDescription>
           </div>
         </div>
-        <Button
-          variant={interestButtonProps.variant}
-          size="sm"
-          onClick={handleInterestToggle}
-          disabled={interestButtonProps.disabled}
-          dataTestId={`interest-project-${project._id}-button`}
-          className={interestButtonProps.disabled ? "opacity-50" : ""}
-        >
-          {interestButtonProps.text}
-        </Button>
+        {showInterestButton && (
+          <Button
+            variant={interestButtonProps.variant}
+            size="sm"
+            onClick={handleInterestToggle}
+            disabled={interestButtonProps.disabled}
+            dataTestId={`interest-project-${project._id}-button`}
+            className={interestButtonProps.disabled ? "opacity-50" : ""}
+          >
+            {interestButtonProps.text}
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         <p className="text-slate-11 mb-4 whitespace-pre-wrap text-sm">
           {project.description}
         </p>
+
+        {/* Assigned users section */}
+        {showAssignedUsers && (
+          <>
+            <Separator className="my-4" />
+            <div className="mb-4">
+              <p className="text-slate-10 mb-4 text-xs font-semibold">
+                Assigned Team Members ({(project.assignedUsers || []).length}):
+              </p>
+              {(project.assignedUsers || []).length > 0 ? (
+                <div className="flex flex-wrap items-center gap-2">
+                  <AvatarGroup
+                    avatars={assignedUsersAvatars}
+                    max={10}
+                    dataTestId={`finalized-project-${project._id}-assigned-users`}
+                  />
+                  {isAdmin &&
+                    (project.assignedUsers || []).map((assignedUser) => {
+                      const user = userMap.get(assignedUser.userId);
+                      return (
+                        <Button
+                          key={assignedUser.userId}
+                          variant="ghost"
+                          size="sm"
+                          onClick={() =>
+                            handleUnassignUser(assignedUser.userId)
+                          }
+                          className="h-6 px-2 text-xs"
+                          dataTestId={`unassign-user-${assignedUser.userId}-from-${project._id}`}
+                        >
+                          Remove {user ? user.firstName : "User"}
+                        </Button>
+                      );
+                    })}
+                </div>
+              ) : (
+                <p className="text-slate-9 text-xs italic">
+                  No team members assigned yet
+                </p>
+              )}
+            </div>
+          </>
+        )}
+
+        {/* Admin assignment controls */}
+        {showAssignmentControls && (
+          <div className="border-slate-6 bg-slate-2 mb-4 rounded-lg border p-3">
+            <p className="text-slate-11 mb-2 text-xs font-semibold">
+              Assign Team Member:
+            </p>
+            <div className="flex gap-2">
+              <Select
+                value={selectedUserId}
+                onValueChange={setSelectedUserId}
+                dataTestId={`assign-user-select-${project._id}`}
+              >
+                <SelectTrigger className="flex-1">
+                  <SelectValue placeholder="Select a user to assign..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {availableUsers.map((user) => (
+                    <SelectItem key={user._id} value={user._id}>
+                      {user.firstName} {user.lastName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                onClick={handleAssignUser}
+                disabled={!selectedUserId || isAssigning}
+                size="sm"
+                dataTestId={`assign-user-button-${project._id}`}
+              >
+                {isAssigning ? "Assigning..." : "Assign"}
+              </Button>
+            </div>
+          </div>
+        )}
+
         {/* Interested users avatars */}
-        {project.interestedUsers.length > 0 && (
+        {showInterestedUsers && project.interestedUsers.length > 0 && (
           <>
             <Separator className="my-4" />
             <div className="mb-4">

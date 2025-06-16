@@ -9,7 +9,11 @@ import {
 } from "../src/server/zod/finalized-project";
 import { zCustomMutation, zCustomQuery } from "convex-helpers/server/zod";
 import { NoOp } from "convex-helpers/server/customFunctions";
-import { getCurrentUser, GetCurrentUserError } from "./model/users";
+import {
+  getCurrentUser,
+  GetCurrentUserError,
+  getAllUsers as modelGetAllUsers,
+} from "./model/users";
 import { HackathonEventIdSchema } from "~/server/zod";
 import {
   getCommentByIdOnFinalizedProject,
@@ -33,6 +37,7 @@ import {
   serializeResult,
 } from "./model/error";
 import { err, ok, Result } from "neverthrow";
+import { UserIdSchema } from "../src/server/zod/user";
 
 const finalizedProjectQuery = zCustomQuery(query, NoOp);
 const finalizedProjectMutation = zCustomMutation(mutation, NoOp);
@@ -44,6 +49,11 @@ const CommentTargetArgsSchema = z.object({
 
 const ProjectTargetArgsSchema = z.object({
   projectId: FinalizedProjectIdSchema,
+});
+
+const AssignUserSchema = z.object({
+  projectId: FinalizedProjectIdSchema,
+  userId: UserIdSchema,
 });
 
 const AddCommentSchema = z.object({
@@ -96,6 +106,24 @@ export type RemoveInterestedUserError =
   | GetFinalizedProjectByIdError
   | UnexpectedError;
 
+export type AssignUserToProjectError =
+  | GetCurrentUserError
+  | GetFinalizedProjectByIdError
+  | UnauthorizedError
+  | UnexpectedError;
+
+export type UnassignUserFromProjectError =
+  | GetCurrentUserError
+  | GetFinalizedProjectByIdError
+  | UnauthorizedError
+  | UnexpectedError;
+
+export type ReassignUserToProjectError =
+  | GetCurrentUserError
+  | GetFinalizedProjectByIdError
+  | UnauthorizedError
+  | UnexpectedError;
+
 export type UpvoteCommentOnFinalizedProjectError =
   | GetCurrentUserError
   | GetCommentByIdOnFinalizedProjectError
@@ -133,6 +161,7 @@ const _createFinalizedProjectHandler = async (
       // Ensure new fields from schema are initialized
       comments: [],
       interestedUsers: [],
+      assignedUsers: [],
       updatedAt: Date.now(),
     }),
   );
@@ -479,6 +508,137 @@ export const removeUpvoteFromCommentOnFinalizedProject =
       ),
   });
 
+const _assignUserToProjectHandler = async (
+  ctx: MutationCtx,
+  { projectId, userId }: z.infer<typeof AssignUserSchema>,
+): Promise<Result<void, AssignUserToProjectError>> => {
+  const userResult = await getCurrentUser(ctx);
+  if (userResult.isErr()) return err(userResult.error);
+  const user = userResult.value;
+
+  // Only admins can assign users to projects
+  if (user.role !== "ADMIN") {
+    return err({
+      type: "UNAUTHORIZED",
+      message: "Only admins can assign users to projects.",
+    } satisfies UnauthorizedError);
+  }
+
+  const projectResult = await getFinalizedProjectById(ctx, projectId);
+  if (projectResult.isErr()) return err(projectResult.error);
+  const project = projectResult.value;
+
+  // Check if user is already assigned to this project
+  const existingAssignment = (project.assignedUsers || []).find(
+    (assignedUser) => assignedUser.userId === userId,
+  );
+  if (existingAssignment) return ok();
+
+  // Remove user from any other project they might be assigned to
+  const allProjectsResult = await fromPromiseUnexpectedError(
+    ctx.db
+      .query("finalizedProjects")
+      .withIndex("by_hackathon_event", (q) =>
+        q.eq("hackathonEventId", project.hackathonEventId),
+      )
+      .collect(),
+    "Failed to query finalized projects by hackathon event id",
+  );
+  if (allProjectsResult.isErr()) return err(allProjectsResult.error);
+
+  // Remove user from all other projects
+  const allProjects = allProjectsResult.value;
+  for (const otherProject of allProjects) {
+    if (otherProject._id === projectId) continue;
+
+    const hasAssignment = (otherProject.assignedUsers || []).some(
+      (assignedUser) => assignedUser.userId === userId,
+    );
+
+    if (hasAssignment) {
+      const updatedAssignedUsers = (otherProject.assignedUsers || []).filter(
+        (assignedUser) => assignedUser.userId !== userId,
+      );
+
+      const removeResult = await fromPromiseUnexpectedError(
+        ctx.db.patch(otherProject._id, {
+          assignedUsers: updatedAssignedUsers,
+          updatedAt: Date.now(),
+        }),
+        "Failed to remove user from other project",
+      );
+      if (removeResult.isErr()) return err(removeResult.error);
+    }
+  }
+
+  const newAssignedUser = {
+    createdAt: Date.now(),
+    userId: userId,
+  };
+
+  const patchResult = await fromPromiseUnexpectedError(
+    ctx.db.patch(project._id, {
+      assignedUsers: [...(project.assignedUsers || []), newAssignedUser],
+      updatedAt: Date.now(),
+    }),
+    "Failed to assign user to finalized project",
+  );
+  if (patchResult.isErr()) return err(patchResult.error);
+
+  return ok();
+};
+
+export const assignUserToProject = finalizedProjectMutation({
+  args: AssignUserSchema,
+  handler: (ctx, args) =>
+    serializeResult(_assignUserToProjectHandler(ctx, args)),
+});
+
+const _unassignUserFromProjectHandler = async (
+  ctx: MutationCtx,
+  { projectId, userId }: z.infer<typeof AssignUserSchema>,
+): Promise<Result<void, UnassignUserFromProjectError>> => {
+  const userResult = await getCurrentUser(ctx);
+  if (userResult.isErr()) return err(userResult.error);
+  const user = userResult.value;
+
+  // Only admins can unassign users from projects
+  if (user.role !== "ADMIN") {
+    return err({
+      type: "UNAUTHORIZED",
+      message: "Only admins can unassign users from projects.",
+    } satisfies UnauthorizedError);
+  }
+
+  const projectResult = await getFinalizedProjectById(ctx, projectId);
+  if (projectResult.isErr()) return err(projectResult.error);
+  const project = projectResult.value;
+
+  const initialAssignedUsersCount = (project.assignedUsers || []).length;
+  const updatedAssignedUsers = (project.assignedUsers || []).filter(
+    (assignedUser) => assignedUser.userId !== userId,
+  );
+
+  if (updatedAssignedUsers.length === initialAssignedUsersCount) return ok(); // User was not assigned to this project
+
+  const patchResult = await fromPromiseUnexpectedError(
+    ctx.db.patch(project._id, {
+      assignedUsers: updatedAssignedUsers,
+      updatedAt: Date.now(),
+    }),
+    "Failed to unassign user from finalized project",
+  );
+  if (patchResult.isErr()) return err(patchResult.error);
+
+  return ok();
+};
+
+export const unassignUserFromProject = finalizedProjectMutation({
+  args: AssignUserSchema,
+  handler: (ctx, args) =>
+    serializeResult(_unassignUserFromProjectHandler(ctx, args)),
+});
+
 // --- Queries ---
 export const getFinalizedProjectsByHackathonEvent = finalizedProjectQuery({
   args: { hackathonEventId: HackathonEventIdSchema },
@@ -486,4 +646,9 @@ export const getFinalizedProjectsByHackathonEvent = finalizedProjectQuery({
     serializeResult(
       modelGetFinalizedProjectsByHackathonEvent(ctx, hackathonEventId),
     ),
+});
+
+export const getAllUsers = finalizedProjectQuery({
+  args: {},
+  handler: (ctx) => serializeResult(modelGetAllUsers(ctx)),
 });
