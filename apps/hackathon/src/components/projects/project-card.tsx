@@ -50,6 +50,7 @@ export function ProjectCard({
     api.projects.removeUpvoteFromProject,
   );
   const postHog = usePostHog();
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const creator = userMap.get(project.creatorUserId)!;
 
   const onSubmit = async (data: { title: string; description: string }) => {

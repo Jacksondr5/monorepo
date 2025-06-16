@@ -48,11 +48,10 @@ export default async function HomePage() {
       return <EventEndedServerPage hackathon={latestHackathon} />;
     default:
       // This ensures all phases are handled at compile time
-      const exhaustiveCheck: never = latestHackathon.currentPhase;
       processError(
         {
           type: "UNEXPECTED_ERROR",
-          message: `Unknown hackathon phase: ${exhaustiveCheck}`,
+          message: `Unknown hackathon phase: ${latestHackathon.currentPhase}`,
         },
         "Unknown hackathon phase encountered",
       );

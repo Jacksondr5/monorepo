@@ -3,6 +3,7 @@ import {
   FinalizedProject,
   FinalizedProjectId,
   HackathonEventIdSchema,
+  ZodUser,
   ZodUserId,
 } from "~/server/zod";
 import { err, ok, Result } from "neverthrow";
@@ -43,7 +44,7 @@ export const getFinalizedProjectById = async (
 // Define the FinalizedProjectList type
 type FinalizedProjectList = {
   projects: FinalizedProject[];
-  visibleUsers: any[]; // Using any[] to match the existing structure
+  visibleUsers: ZodUser[];
 };
 
 export type GetFinalizedProjectsByHackathonEventError =

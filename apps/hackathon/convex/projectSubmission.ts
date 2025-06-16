@@ -16,7 +16,7 @@ import { UserSchema } from "~/server/zod/user";
 import { z } from "zod";
 
 // Combined response schema for the project submission page
-const ProjectSubmissionDataSchema = z.object({
+export const ProjectSubmissionDataSchema = z.object({
   hackathon: HackathonEventSchema,
   currentUser: UserSchema,
   projects: ProjectListSchema,

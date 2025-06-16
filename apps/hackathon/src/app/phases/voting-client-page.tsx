@@ -23,19 +23,22 @@ export const VotingClientPage = ({
     "Failed to fetch project voting data",
   );
 
-  if (!projectVotingData) {
-    return null;
-  }
-
+  // Extract data with fallbacks to ensure hooks are always called
   const {
     hackathon: latestHackathon,
     currentUser,
     finalizedProjects,
-  } = projectVotingData;
+  } = projectVotingData || {
+    hackathon: null,
+    currentUser: null,
+    finalizedProjects: { projects: [], visibleUsers: [] },
+  };
   const { projects, visibleUsers: visibleUsersArray } = finalizedProjects;
 
   // Calculate current user's interests from the projects data
   const currentUserInterests = useMemo(() => {
+    if (!currentUser || !projects) return new Set<string>();
+
     const interestedProjectIds = new Set<string>();
     projects.forEach((project) => {
       const isUserInterested = project.interestedUsers.some(
@@ -46,11 +49,17 @@ export const VotingClientPage = ({
       }
     });
     return interestedProjectIds;
-  }, [projects, currentUser._id]);
+  }, [projects, currentUser]);
 
   const visibleUsers = useMemo(() => {
+    if (!visibleUsersArray) return new Map();
     return new Map(visibleUsersArray.map((user) => [user._id, user]));
   }, [visibleUsersArray]);
+
+  // Early return after all hooks have been called
+  if (!projectVotingData || !latestHackathon || !currentUser) {
+    return null;
+  }
 
   const hasProjects = projects.length > 0;
   const maxInterests = 3;

@@ -22,7 +22,7 @@ const FinalizedProjectListSchema = z.object({
 });
 
 // Combined response schema for the project voting page
-const ProjectVotingDataSchema = z.object({
+export const ProjectVotingDataSchema = z.object({
   hackathon: HackathonEventSchema,
   currentUser: UserSchema,
   finalizedProjects: FinalizedProjectListSchema,
