@@ -2,6 +2,7 @@ import { QueryCtx } from "../_generated/server";
 import {
   FinalizedProject,
   FinalizedProjectId,
+  FinalizedProjectListSchema,
   HackathonEventIdSchema,
   ZodUser,
   ZodUserId,
@@ -13,6 +14,7 @@ import {
   NotFoundError,
   UnexpectedError,
   DataIsUnexpectedShapeError,
+  safeParseConvexObject,
 } from "./error";
 import { z } from "zod";
 
@@ -92,7 +94,7 @@ export const getFinalizedProjectsByHackathonEvent = async (
   if (usersResult.isErr()) return err(usersResult.error);
   const users = usersResult.value.filter((user) => user !== null);
 
-  return ok({
+  return safeParseConvexObject(FinalizedProjectListSchema, {
     projects,
     visibleUsers: users,
   });

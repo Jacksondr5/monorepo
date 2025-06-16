@@ -13,13 +13,7 @@ import {
 import { HackathonEventSchema } from "~/server/zod/hackathon-event";
 import { UserSchema } from "~/server/zod/user";
 import { z } from "zod";
-import { FinalizedProjectSchema } from "~/server/zod/finalized-project";
-
-// Define the FinalizedProjectList schema to match the model return type
-const FinalizedProjectListSchema = z.object({
-  projects: z.array(FinalizedProjectSchema),
-  visibleUsers: z.array(UserSchema),
-});
+import { FinalizedProjectListSchema } from "~/server/zod";
 
 // Combined response schema for the project voting page
 export const ProjectVotingDataSchema = z.object({

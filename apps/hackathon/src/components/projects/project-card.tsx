@@ -50,8 +50,13 @@ export function ProjectCard({
     api.projects.removeUpvoteFromProject,
   );
   const postHog = usePostHog();
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const creator = userMap.get(project.creatorUserId)!;
+  const creator =
+    userMap.get(project.creatorUserId) ??
+    ({
+      firstName: "Anonymous",
+      lastName: "",
+      avatarUrl: "",
+    } satisfies Pick<ZodUser, "firstName" | "lastName" | "avatarUrl">);
 
   const onSubmit = async (data: { title: string; description: string }) => {
     const updateProjectResult = await updateProjectMutation({

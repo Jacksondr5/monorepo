@@ -103,7 +103,7 @@ export const getProjectsByHackathonEvent = async (
   );
 
   if (usersResult.isErr()) return err(usersResult.error);
-  const users = usersResult.value;
+  const users = usersResult.value.filter((user) => user !== null);
 
   return safeParseConvexObject(ProjectListSchema, {
     projects,

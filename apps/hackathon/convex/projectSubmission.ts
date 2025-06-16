@@ -32,14 +32,16 @@ export type GetProjectSubmissionDataError =
 const _getProjectSubmissionDataHandler = async (
   ctx: QueryCtx,
 ): Promise<Result<ProjectSubmissionData, GetProjectSubmissionDataError>> => {
-  // First, get the latest hackathon event
-  const hackathonResult = await getLatestHackathonEvent(ctx);
-  if (hackathonResult.isErr()) return err(hackathonResult.error);
-  const hackathon = hackathonResult.value;
+  // Get latest hackathon event and current user in parallel
+  const [hackathonResult, currentUserResult] = await Promise.all([
+    getLatestHackathonEvent(ctx),
+    getCurrentUser(ctx),
+  ]);
 
-  // Get the current user
-  const currentUserResult = await getCurrentUser(ctx);
+  if (hackathonResult.isErr()) return err(hackathonResult.error);
   if (currentUserResult.isErr()) return err(currentUserResult.error);
+
+  const hackathon = hackathonResult.value;
   const currentUser = currentUserResult.value;
 
   // Get projects for this hackathon event
