@@ -7,69 +7,70 @@ import { FinalizedProjectCard } from "~/components/finalized-projects/finalized-
 import { unwrapSerializableResult } from "~/lib/errors";
 
 export interface VotingClientPageProps {
-  preloadedLatestHackathon: Preloaded<
-    typeof api.hackathonEvents.getLatestHackathonEvent
-  >;
-  preloadedCurrentUser: Preloaded<typeof api.users.getCurrentUser>;
-  preloadedFinalizedProjects: Preloaded<
-    typeof api.finalizedProjects.getFinalizedProjectsByHackathonEvent
+  preloadedProjectVotingData: Preloaded<
+    typeof api.projectVoting.getProjectVotingData
   >;
 }
 
 export const VotingClientPage = ({
-  preloadedLatestHackathon,
-  preloadedCurrentUser,
-  preloadedFinalizedProjects,
+  preloadedProjectVotingData,
 }: VotingClientPageProps) => {
-  const latestHackathonResult = usePreloadedQuery(preloadedLatestHackathon);
-  const currentUserResult = usePreloadedQuery(preloadedCurrentUser);
-  const finalizedProjectsResult = usePreloadedQuery(preloadedFinalizedProjects);
+  const projectVotingDataResult = usePreloadedQuery(preloadedProjectVotingData);
 
   // TODO: actually handle error
-  const finalizedProjectsResultValue = unwrapSerializableResult(
-    finalizedProjectsResult,
-    "Failed to fetch finalized projects",
+  const projectVotingData = unwrapSerializableResult(
+    projectVotingDataResult,
+    "Failed to fetch project voting data",
   );
-  const latestHackathon = unwrapSerializableResult(
-    latestHackathonResult,
-    "Failed to fetch latest hackathon",
-  );
-  const currentUser = unwrapSerializableResult(
-    currentUserResult,
-    "Failed to fetch current user",
-  );
+
+  if (!projectVotingData) {
+    return null;
+  }
+
+  const {
+    hackathon: latestHackathon,
+    currentUser,
+    finalizedProjects,
+  } = projectVotingData;
+  const { projects, visibleUsers: visibleUsersArray } = finalizedProjects;
 
   // Calculate current user's interests from the projects data
   const currentUserInterests = useMemo(() => {
     const interestedProjectIds = new Set<string>();
-    finalizedProjectsResultValue?.projects.forEach((project) => {
+    projects.forEach((project) => {
       const isUserInterested = project.interestedUsers.some(
-        (interestedUser) => interestedUser.userId === currentUser?._id,
+        (interestedUser) => interestedUser.userId === currentUser._id,
       );
       if (isUserInterested) {
         interestedProjectIds.add(project._id);
       }
     });
     return interestedProjectIds;
-  }, [finalizedProjectsResultValue, currentUser?._id]);
+  }, [projects, currentUser._id]);
 
-  if (!finalizedProjectsResultValue || !latestHackathon || !currentUser) {
-    return null;
-  }
-  const { projects, visibleUsers: visibleUsersArray } =
-    finalizedProjectsResultValue;
-
-  const visibleUsers = new Map(
-    visibleUsersArray.map((user) => [user._id, user]),
-  );
+  const visibleUsers = useMemo(() => {
+    return new Map(visibleUsersArray.map((user) => [user._id, user]));
+  }, [visibleUsersArray]);
 
   const hasProjects = projects.length > 0;
   const maxInterests = 3;
 
-  const remainingInterests = maxInterests - currentUserInterests.size;
+  const remainingInterests = Math.max(
+    maxInterests - currentUserInterests.size,
+    0,
+  );
 
   return (
     <div className="w-full max-w-4xl">
+      <div className="mb-8 text-center">
+        <h1 className="text-slate-11 text-4xl font-bold">
+          {latestHackathon.name}
+        </h1>
+        <p className="text-slate-11 text-lg">
+          Project Voting Phase - Select up to 3 projects you&apos;re interested
+          in working on
+        </p>
+      </div>
       <div
         className={`mb-4 rounded-lg p-3 text-center text-sm font-medium ${
           remainingInterests > 0

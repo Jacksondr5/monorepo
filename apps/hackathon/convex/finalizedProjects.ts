@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { mutation, query, MutationCtx, QueryCtx } from "./_generated/server";
+import { mutation, query, MutationCtx } from "./_generated/server";
 import { v4 as uuidv4 } from "uuid";
 import {
   CreateFinalizedProjectSchema,
@@ -10,11 +10,7 @@ import {
 import { zCustomMutation, zCustomQuery } from "convex-helpers/server/zod";
 import { NoOp } from "convex-helpers/server/customFunctions";
 import { getCurrentUser, GetCurrentUserError } from "./model/users";
-import {
-  HackathonEventIdSchema,
-  ZodUserId,
-  FinalizedProjectList,
-} from "~/server/zod";
+import { HackathonEventIdSchema } from "~/server/zod";
 import {
   getCommentByIdOnFinalizedProject,
   updateCommentOnFinalizedProject,
@@ -25,6 +21,7 @@ import {
 import {
   getFinalizedProjectById,
   GetFinalizedProjectByIdError,
+  getFinalizedProjectsByHackathonEvent as modelGetFinalizedProjectsByHackathonEvent,
 } from "./model/finalizedProjects";
 import {
   fromPromiseUnexpectedError,
@@ -483,57 +480,10 @@ export const removeUpvoteFromCommentOnFinalizedProject =
   });
 
 // --- Queries ---
-const _getFinalizedProjectsByHackathonEventHandler = async (
-  ctx: QueryCtx,
-  {
-    hackathonEventId,
-  }: { hackathonEventId: z.infer<typeof HackathonEventIdSchema> },
-): Promise<
-  Result<FinalizedProjectList, GetFinalizedProjectsByHackathonEventError>
-> => {
-  const projectsResult = await fromPromiseUnexpectedError(
-    ctx.db
-      .query("finalizedProjects")
-      .withIndex("by_hackathon_event", (q) =>
-        q.eq("hackathonEventId", hackathonEventId),
-      )
-      .collect(),
-    "Failed to query finalized projects by hackathon event id",
-  );
-
-  if (projectsResult.isErr()) return err(projectsResult.error);
-
-  const projects = projectsResult.value;
-
-  const userIds = new Set<ZodUserId>();
-  projects.forEach((project) => {
-    project.comments.forEach((comment) => {
-      userIds.add(comment.authorId);
-      comment.upvotes.forEach((upvote) => {
-        userIds.add(upvote.userId);
-      });
-    });
-    project.interestedUsers.forEach((interestedUser) => {
-      userIds.add(interestedUser.userId);
-    });
-  });
-
-  const usersResult = await fromPromiseUnexpectedError(
-    Promise.all(Array.from(userIds).map((userId) => ctx.db.get(userId))),
-    "Failed to get users for finalized projects",
-  );
-
-  if (usersResult.isErr()) return err(usersResult.error);
-  const users = usersResult.value.filter((user) => user !== null);
-
-  return ok({
-    projects,
-    visibleUsers: users,
-  });
-};
-
 export const getFinalizedProjectsByHackathonEvent = finalizedProjectQuery({
   args: { hackathonEventId: HackathonEventIdSchema },
-  handler: (ctx, args) =>
-    serializeResult(_getFinalizedProjectsByHackathonEventHandler(ctx, args)),
+  handler: (ctx, { hackathonEventId }) =>
+    serializeResult(
+      modelGetFinalizedProjectsByHackathonEvent(ctx, hackathonEventId),
+    ),
 });

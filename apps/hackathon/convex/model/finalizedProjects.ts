@@ -1,12 +1,19 @@
 import { QueryCtx } from "../_generated/server";
-import { FinalizedProject, FinalizedProjectId } from "~/server/zod";
+import {
+  FinalizedProject,
+  FinalizedProjectId,
+  HackathonEventIdSchema,
+  ZodUserId,
+} from "~/server/zod";
 import { err, ok, Result } from "neverthrow";
 import {
   fromPromiseUnexpectedError,
   getNotFoundError,
   NotFoundError,
   UnexpectedError,
+  DataIsUnexpectedShapeError,
 } from "./error";
+import { z } from "zod";
 
 export type GetFinalizedProjectByIdError =
   | NotFoundError<"FINALIZED_PROJECT">
@@ -30,5 +37,62 @@ export const getFinalizedProjectById = async (
     ...result.value,
     comments: result.value.comments || [],
     interestedUsers: result.value.interestedUsers || [],
+  });
+};
+
+// Define the FinalizedProjectList type
+type FinalizedProjectList = {
+  projects: FinalizedProject[];
+  visibleUsers: any[]; // Using any[] to match the existing structure
+};
+
+export type GetFinalizedProjectsByHackathonEventError =
+  | UnexpectedError
+  | DataIsUnexpectedShapeError;
+
+export const getFinalizedProjectsByHackathonEvent = async (
+  ctx: QueryCtx,
+  hackathonEventId: z.infer<typeof HackathonEventIdSchema>,
+): Promise<
+  Result<FinalizedProjectList, GetFinalizedProjectsByHackathonEventError>
+> => {
+  const projectsResult = await fromPromiseUnexpectedError(
+    ctx.db
+      .query("finalizedProjects")
+      .withIndex("by_hackathon_event", (q) =>
+        q.eq("hackathonEventId", hackathonEventId),
+      )
+      .collect(),
+    "Failed to query finalized projects by hackathon event id",
+  );
+
+  if (projectsResult.isErr()) return err(projectsResult.error);
+
+  const projects = projectsResult.value;
+
+  const userIds = new Set<ZodUserId>();
+  projects.forEach((project) => {
+    project.comments.forEach((comment) => {
+      userIds.add(comment.authorId);
+      comment.upvotes.forEach((upvote) => {
+        userIds.add(upvote.userId);
+      });
+    });
+    project.interestedUsers.forEach((interestedUser) => {
+      userIds.add(interestedUser.userId);
+    });
+  });
+
+  const usersResult = await fromPromiseUnexpectedError(
+    Promise.all(Array.from(userIds).map((userId) => ctx.db.get(userId))),
+    "Failed to get users for finalized projects",
+  );
+
+  if (usersResult.isErr()) return err(usersResult.error);
+  const users = usersResult.value.filter((user) => user !== null);
+
+  return ok({
+    projects,
+    visibleUsers: users,
   });
 };

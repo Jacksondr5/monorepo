@@ -2,7 +2,6 @@ import type { HackathonEvent } from "~/server/zod";
 
 interface EventInProgressServerPageProps {
   hackathon: HackathonEvent;
-  token: string;
 }
 
 export async function EventInProgressServerPage({

@@ -9,21 +9,17 @@ import { usePostHog } from "posthog-js/react";
 import { processError, unwrapSerializableResult } from "~/lib/errors";
 
 export interface ProjectSubmissionClientPageProps {
-  preloadedLatestHackathon: Preloaded<
-    typeof api.hackathonEvents.getLatestHackathonEvent
+  preloadedProjectSubmissionData: Preloaded<
+    typeof api.projectSubmission.getProjectSubmissionData
   >;
-  preloadedCurrentUser: Preloaded<typeof api.users.getCurrentUser>;
-  preloadedProjects: Preloaded<typeof api.projects.getProjectsByHackathonEvent>;
 }
 
 export const ProjectSubmissionClientPage = ({
-  preloadedLatestHackathon,
-  preloadedCurrentUser,
-  preloadedProjects,
+  preloadedProjectSubmissionData,
 }: ProjectSubmissionClientPageProps) => {
-  const latestHackathonResult = usePreloadedQuery(preloadedLatestHackathon);
-  const currentUserResult = usePreloadedQuery(preloadedCurrentUser);
-  const projectsResult = usePreloadedQuery(preloadedProjects);
+  const projectSubmissionDataResult = usePreloadedQuery(
+    preloadedProjectSubmissionData,
+  );
   const createProject = useMutation(api.projects.createProject);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
@@ -33,21 +29,20 @@ export const ProjectSubmissionClientPage = ({
   const postHog = usePostHog();
 
   // TODO: actually handle error
-  const projectsResultValue = unwrapSerializableResult(
-    projectsResult,
-    "Failed to fetch projects",
+  const projectSubmissionData = unwrapSerializableResult(
+    projectSubmissionDataResult,
+    "Failed to fetch project submission data",
   );
-  const latestHackathon = unwrapSerializableResult(
-    latestHackathonResult,
-    "Failed to fetch latest hackathon",
-  );
-  const currentUser = unwrapSerializableResult(
-    currentUserResult,
-    "Failed to fetch current user",
-  );
-  if (!projectsResultValue || !latestHackathon || !currentUser) {
+
+  if (!projectSubmissionData) {
     return null;
   }
+
+  const {
+    hackathon: latestHackathon,
+    currentUser,
+    projects: projectsResultValue,
+  } = projectSubmissionData;
   const { projects, visibleUsers: visibleUsersArray } = projectsResultValue;
 
   const visibleUsers = new Map(
@@ -88,6 +83,12 @@ export const ProjectSubmissionClientPage = ({
 
   return (
     <div>
+      <div className="mb-8 text-center">
+        <h1 className="text-slate-11 text-4xl font-bold">
+          {latestHackathon.name}
+        </h1>
+        <p className="text-slate-11 text-lg">Project Submission Phase</p>
+      </div>
       <div className="w-4xl">
         <h2 className="text-slate-12 mb-4 text-center text-3xl font-semibold">
           Submitted Projects

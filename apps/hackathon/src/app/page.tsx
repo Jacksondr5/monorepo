@@ -39,25 +39,23 @@ export default async function HomePage() {
 
   switch (latestHackathon.currentPhase) {
     case "PROJECT_SUBMISSION":
-      return (
-        <ProjectSubmissionServerPage
-          hackathon={latestHackathon}
-          token={token}
-        />
-      );
+      return <ProjectSubmissionServerPage token={token} />;
     case "PROJECT_VOTING":
-      return (
-        <ProjectVotingServerPage hackathon={latestHackathon} token={token} />
-      );
+      return <ProjectVotingServerPage token={token} />;
     case "EVENT_IN_PROGRESS":
-      return (
-        <EventInProgressServerPage hackathon={latestHackathon} token={token} />
-      );
+      return <EventInProgressServerPage hackathon={latestHackathon} />;
     case "EVENT_ENDED":
-      return <EventEndedServerPage hackathon={latestHackathon} token={token} />;
+      return <EventEndedServerPage hackathon={latestHackathon} />;
     default:
-      // Fallback for unknown phases
-      console.error(`Unknown hackathon phase: ${latestHackathon.currentPhase}`);
+      // This ensures all phases are handled at compile time
+      const exhaustiveCheck: never = latestHackathon.currentPhase;
+      processError(
+        {
+          type: "UNEXPECTED_ERROR",
+          message: `Unknown hackathon phase: ${exhaustiveCheck}`,
+        },
+        "Unknown hackathon phase encountered",
+      );
       return <NoHackathon />;
   }
 }
