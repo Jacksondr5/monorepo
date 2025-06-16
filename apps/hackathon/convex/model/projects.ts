@@ -96,8 +96,9 @@ export const getProjectsByHackathonEvent = async (
       });
     }
   });
-
   const usersResult = await fromPromiseUnexpectedError(
+    // The AI might complain that this is inefficient, but Convex says to do this:
+    // https://stack.convex.dev/complex-filters-in-convex#optimize-with-indexes
     Promise.all(Array.from(userIds).map((userId) => ctx.db.get(userId))),
     "Failed to get users for projects",
   );
