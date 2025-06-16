@@ -53,29 +53,34 @@ const sampleAvatarData: AvatarDataItem[] = [
     src: "https://github.com/jacksondr5.png",
     alt: "Jacksondr5",
     fallback: "JR",
+    id: "jacksondr5",
   },
   {
     name: "Shadcn UI",
     src: "https://github.com/shadcn.png",
     alt: "Shadcn",
     fallback: "SC",
+    id: "shadcn",
   },
   {
     name: "Vercel Team",
     src: "https://github.com/vercel.png",
     alt: "Vercel",
     fallback: "VC",
+    id: "vercel",
   },
   {
     name: "User Delta",
     fallback: "UD",
     alt: "User D",
+    id: "user-delta",
   }, // Fallback only
   {
     name: "User Foxtrot",
     fallback: "UF",
     alt: "User F",
     className: "border-4 border-green-7",
+    id: "user-foxtrot",
   }, // With custom class
 ];
 
@@ -173,14 +178,14 @@ export const TooltipInteractionTest: Story = {
   name: "Interaction: Avatar Tooltip on Hover",
   render: () => (
     <div className="p-8">
-      <h3 className="text-slate-11 mb-4 text-lg font-semibold">
-        Hover over avatars to see names
-      </h3>
       <AvatarGroup
         variant="default"
         avatars={sampleAvatarData.slice(0, 3)}
         dataTestId="avatar-group-tooltip-test"
       />
+      <h3 className="text-slate-11 mb-4 text-lg font-semibold">
+        Hover over avatars to see names
+      </h3>
     </div>
   ),
   play: async ({ canvasElement, step }) => {
@@ -188,13 +193,13 @@ export const TooltipInteractionTest: Story = {
 
     await step("Hover over first avatar to show tooltip", async () => {
       const firstAvatar = canvas.getByTestId(
-        "avatar-group-tooltip-test-avatar-0",
+        "avatar-group-tooltip-test-avatar-jacksondr5",
       );
       await userEvent.hover(firstAvatar);
 
       // Wait for tooltip to appear and verify content
       const tooltip = await screen.findByTestId(
-        "avatar-group-tooltip-test-avatar-0-tooltip",
+        "avatar-group-tooltip-test-avatar-jacksondr5-tooltip",
       );
       if (!tooltip.textContent?.includes("Jackson Miller")) {
         throw new Error("Expected tooltip to show 'Jackson Miller'");
@@ -205,13 +210,13 @@ export const TooltipInteractionTest: Story = {
       "Hover over second avatar to show different tooltip",
       async () => {
         const secondAvatar = canvas.getByTestId(
-          "avatar-group-tooltip-test-avatar-1",
+          "avatar-group-tooltip-test-avatar-shadcn",
         );
         await userEvent.hover(secondAvatar);
 
         // Wait for tooltip to appear and verify content
         const tooltip = await screen.findByTestId(
-          "avatar-group-tooltip-test-avatar-1-tooltip",
+          "avatar-group-tooltip-test-avatar-shadcn-tooltip",
         );
         if (!tooltip.textContent?.includes("Shadcn UI")) {
           throw new Error("Expected tooltip to show 'Shadcn UI'");
@@ -225,15 +230,15 @@ export const OverflowTooltipTest: Story = {
   name: "Interaction: Overflow Tooltip",
   render: () => (
     <div className="p-8">
-      <h3 className="text-slate-11 mb-4 text-lg font-semibold">
-        Hover over overflow indicator
-      </h3>
       <AvatarGroup
         variant="stacked"
         avatars={sampleAvatarData}
         max={3}
         dataTestId="avatar-group-overflow-test"
       />
+      <h3 className="text-slate-11 mb-4 text-lg font-semibold">
+        Hover over overflow indicator
+      </h3>
     </div>
   ),
   play: async ({ canvasElement, step }) => {
@@ -241,13 +246,13 @@ export const OverflowTooltipTest: Story = {
 
     await step("Hover over overflow indicator to show count", async () => {
       const overflowAvatar = canvas.getByTestId(
-        "avatar-group-overflow-test-overflow",
+        "avatar-group-overflow-test-overflow-avatar",
       );
       await userEvent.hover(overflowAvatar);
 
       // Wait for tooltip to appear and verify content
       const tooltip = await screen.findByTestId(
-        "avatar-group-overflow-test-overflow-tooltip",
+        "avatar-group-overflow-test-overflow-avatar-tooltip",
       );
       if (!tooltip.textContent?.includes("3 more users")) {
         throw new Error("Expected tooltip to show '3 more users'");

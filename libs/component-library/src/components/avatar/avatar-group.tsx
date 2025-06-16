@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip/tooltip";
 
 export type AvatarDataItem = {
+  id: string;
   name: string;
   fallback: string;
   className?: string;
@@ -38,9 +39,7 @@ export interface AvatarGroupProps
     VariantProps<typeof avatarGroupClassName> {
   avatars: AvatarDataItem[];
   max?: number;
-  // Custom class for the overflow indicator avatar
   overflowIndicatorClassName?: string;
-  // Test ID for the avatar group and prefix for child elements
   dataTestId: string;
 }
 
@@ -77,15 +76,13 @@ export const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
         data-testid={dataTestId}
         {...props}
       >
-        {displayedAvatars.map((avatarData, index) => (
-          <Tooltip key={`avatar-tooltip-${index}`}>
+        {displayedAvatars.map((avatarData) => (
+          <Tooltip key={`avatar-tooltip-${avatarData.id}`}>
             <TooltipTrigger asChild>
               <Avatar
                 className={cn("h-10 w-10", avatarData.className)}
                 data-slot="avatar"
-                data-testid={
-                  dataTestId ? `${dataTestId}-avatar-${index}` : undefined
-                }
+                data-testid={`${dataTestId}-avatar-${avatarData.id}`}
               >
                 {avatarData.src ? (
                   <AvatarImage src={avatarData.src} alt={avatarData.alt} />
@@ -96,9 +93,7 @@ export const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
             </TooltipTrigger>
             <TooltipContent
               side="top"
-              data-testid={
-                dataTestId ? `${dataTestId}-avatar-${index}-tooltip` : undefined
-              }
+              data-testid={`${dataTestId}-avatar-${avatarData.id}-tooltip`}
             >
               {avatarData.name}
             </TooltipContent>
@@ -110,16 +105,14 @@ export const AvatarGroup = React.forwardRef<HTMLDivElement, AvatarGroupProps>(
               <Avatar
                 className={cn("h-10 w-10", overflowIndicatorClassName)}
                 data-slot="avatar"
-                data-testid={dataTestId ? `${dataTestId}-overflow` : undefined}
+                data-testid={`${dataTestId}-overflow-avatar`}
               >
                 <AvatarFallback>{`+${overflowCount}`}</AvatarFallback>
               </Avatar>
             </TooltipTrigger>
             <TooltipContent
               side="top"
-              data-testid={
-                dataTestId ? `${dataTestId}-overflow-tooltip` : undefined
-              }
+              data-testid={`${dataTestId}-overflow-avatar-tooltip`}
             >
               {`${overflowCount} more user${overflowCount > 1 ? "s" : ""}`}
             </TooltipContent>
