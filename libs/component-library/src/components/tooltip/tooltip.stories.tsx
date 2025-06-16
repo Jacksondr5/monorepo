@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { userEvent, within } from "storybook/test";
+import { expect, userEvent, within, screen } from "storybook/test";
 import {
   Tooltip,
   TooltipContent,
@@ -52,16 +52,23 @@ const TooltipWrapper = ({
   side,
   align,
   sideOffset = 4,
+  dataTestId,
 }: {
   children: React.ReactNode;
   content: React.ReactNode;
   side?: "top" | "right" | "bottom" | "left";
   align?: "start" | "center" | "end";
   sideOffset?: number;
+  dataTestId?: string;
 }) => (
   <Tooltip>
     <TooltipTrigger asChild>{children}</TooltipTrigger>
-    <TooltipContent side={side} align={align} sideOffset={sideOffset}>
+    <TooltipContent
+      side={side}
+      align={align}
+      sideOffset={sideOffset}
+      data-testid={dataTestId}
+    >
       {content}
     </TooltipContent>
   </Tooltip>
@@ -132,7 +139,11 @@ export const AllVariants: Story = {
 export const HoverAndFocusTest: Story = {
   name: "Interaction: Hover and Focus Trigger",
   render: () => (
-    <TooltipWrapper content="Tooltip appears!" side="bottom">
+    <TooltipWrapper
+      content="Tooltip appears!"
+      side="bottom"
+      dataTestId="tooltip-trigger-button-tooltip"
+    >
       <Button
         variant="outline"
         data-testid="tooltip-trigger-button"
@@ -148,6 +159,11 @@ export const HoverAndFocusTest: Story = {
 
     await step("Hover to show tooltip", async () => {
       await userEvent.hover(triggerButton);
+
+      const tooltip = await screen.findByTestId(
+        "tooltip-trigger-button-tooltip",
+      );
+      expect(tooltip).toBeInTheDocument();
     });
   },
 };

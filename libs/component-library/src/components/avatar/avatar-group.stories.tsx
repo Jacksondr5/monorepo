@@ -1,10 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { userEvent, within, screen } from "storybook/test";
 import { AvatarGroup, AvatarDataItem } from "./avatar-group";
+import { TooltipProvider } from "../tooltip/tooltip";
 
 const meta: Meta<typeof AvatarGroup> = {
   title: "Components/AvatarGroup",
   component: AvatarGroup,
   tags: ["autodocs"],
+  decorators: [
+    (Story) => (
+      <TooltipProvider>
+        <Story />
+      </TooltipProvider>
+    ),
+  ],
   argTypes: {
     variant: {
       control: { type: "radio" },
@@ -13,7 +22,7 @@ const meta: Meta<typeof AvatarGroup> = {
     avatars: {
       control: "object", // Allows editing in Storybook, though complex for arrays
       description:
-        "Array of avatar data objects ({ src, alt, fallback, className? })",
+        "Array of avatar data objects ({ name, src, alt, fallback, className? })",
     },
     max: {
       control: { type: "number", min: 1 },
@@ -23,6 +32,10 @@ const meta: Meta<typeof AvatarGroup> = {
     overflowIndicatorClassName: {
       control: "text",
       description: "Custom className for the overflow indicator avatar",
+    },
+    dataTestId: {
+      control: "text",
+      description: "Test ID for the avatar group and prefix for child elements",
     },
   },
   args: {
@@ -36,14 +49,34 @@ type Story = StoryObj<typeof AvatarGroup>;
 
 const sampleAvatarData: AvatarDataItem[] = [
   {
+    name: "Jackson Miller",
     src: "https://github.com/jacksondr5.png",
     alt: "Jacksondr5",
     fallback: "JR",
   },
-  { src: "https://github.com/shadcn.png", alt: "Shadcn", fallback: "SC" },
-  { src: "https://github.com/vercel.png", alt: "Vercel", fallback: "VC" },
-  { fallback: "UD", alt: "User D" }, // Fallback only
-  { fallback: "UF", alt: "User F", className: "border-4 border-green-7" }, // With custom class
+  {
+    name: "Shadcn UI",
+    src: "https://github.com/shadcn.png",
+    alt: "Shadcn",
+    fallback: "SC",
+  },
+  {
+    name: "Vercel Team",
+    src: "https://github.com/vercel.png",
+    alt: "Vercel",
+    fallback: "VC",
+  },
+  {
+    name: "User Delta",
+    fallback: "UD",
+    alt: "User D",
+  }, // Fallback only
+  {
+    name: "User Foxtrot",
+    fallback: "UF",
+    alt: "User F",
+    className: "border-4 border-green-7",
+  }, // With custom class
 ];
 
 export const AllVariants: Story = {
@@ -133,5 +166,92 @@ export const AllVariants: Story = {
   ),
   args: {
     // Default args for the AllVariants story, individual groups can override
+  },
+};
+
+export const TooltipInteractionTest: Story = {
+  name: "Interaction: Avatar Tooltip on Hover",
+  render: () => (
+    <div className="p-8">
+      <h3 className="text-slate-11 mb-4 text-lg font-semibold">
+        Hover over avatars to see names
+      </h3>
+      <AvatarGroup
+        variant="default"
+        avatars={sampleAvatarData.slice(0, 3)}
+        dataTestId="avatar-group-tooltip-test"
+      />
+    </div>
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step("Hover over first avatar to show tooltip", async () => {
+      const firstAvatar = canvas.getByTestId(
+        "avatar-group-tooltip-test-avatar-0",
+      );
+      await userEvent.hover(firstAvatar);
+
+      // Wait for tooltip to appear and verify content
+      const tooltip = await screen.findByTestId(
+        "avatar-group-tooltip-test-avatar-0-tooltip",
+      );
+      if (!tooltip.textContent?.includes("Jackson Miller")) {
+        throw new Error("Expected tooltip to show 'Jackson Miller'");
+      }
+    });
+
+    await step(
+      "Hover over second avatar to show different tooltip",
+      async () => {
+        const secondAvatar = canvas.getByTestId(
+          "avatar-group-tooltip-test-avatar-1",
+        );
+        await userEvent.hover(secondAvatar);
+
+        // Wait for tooltip to appear and verify content
+        const tooltip = await screen.findByTestId(
+          "avatar-group-tooltip-test-avatar-1-tooltip",
+        );
+        if (!tooltip.textContent?.includes("Shadcn UI")) {
+          throw new Error("Expected tooltip to show 'Shadcn UI'");
+        }
+      },
+    );
+  },
+};
+
+export const OverflowTooltipTest: Story = {
+  name: "Interaction: Overflow Tooltip",
+  render: () => (
+    <div className="p-8">
+      <h3 className="text-slate-11 mb-4 text-lg font-semibold">
+        Hover over overflow indicator
+      </h3>
+      <AvatarGroup
+        variant="stacked"
+        avatars={sampleAvatarData}
+        max={3}
+        dataTestId="avatar-group-overflow-test"
+      />
+    </div>
+  ),
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step("Hover over overflow indicator to show count", async () => {
+      const overflowAvatar = canvas.getByTestId(
+        "avatar-group-overflow-test-overflow",
+      );
+      await userEvent.hover(overflowAvatar);
+
+      // Wait for tooltip to appear and verify content
+      const tooltip = await screen.findByTestId(
+        "avatar-group-overflow-test-overflow-tooltip",
+      );
+      if (!tooltip.textContent?.includes("3 more users")) {
+        throw new Error("Expected tooltip to show '3 more users'");
+      }
+    });
   },
 };
