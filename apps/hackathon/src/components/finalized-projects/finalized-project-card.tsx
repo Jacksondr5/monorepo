@@ -261,31 +261,11 @@ export function FinalizedProjectCard({
                 Assigned Team Members ({(project.assignedUsers || []).length}):
               </p>
               {(project.assignedUsers || []).length > 0 ? (
-                <div className="flex flex-wrap items-center gap-2">
-                  <AvatarGroup
-                    avatars={assignedUsersAvatars}
-                    max={10}
-                    dataTestId={`finalized-project-${project._id}-assigned-users`}
-                  />
-                  {isAdmin &&
-                    (project.assignedUsers || []).map((assignedUser) => {
-                      const user = userMap.get(assignedUser.userId);
-                      return (
-                        <Button
-                          key={assignedUser.userId}
-                          variant="ghost"
-                          size="sm"
-                          onClick={() =>
-                            handleUnassignUser(assignedUser.userId)
-                          }
-                          className="h-6 px-2 text-xs"
-                          dataTestId={`unassign-user-${assignedUser.userId}-from-${project._id}`}
-                        >
-                          Remove {user ? user.firstName : "User"}
-                        </Button>
-                      );
-                    })}
-                </div>
+                <AvatarGroup
+                  avatars={assignedUsersAvatars}
+                  max={10}
+                  dataTestId={`finalized-project-${project._id}-assigned-users`}
+                />
               ) : (
                 <p className="text-slate-9 text-xs italic">
                   No team members assigned yet
