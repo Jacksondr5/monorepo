@@ -110,6 +110,7 @@ export const VotingClientPage = ({
                 project={project}
                 userMap={visibleUsers}
                 remainingInterests={remainingInterests}
+                hackathonPhase={latestHackathon.currentPhase}
               />
             ))}
         </div>

@@ -158,6 +158,8 @@ export const AdminClientPage = ({
             project={project}
             userMap={finalizedVisibleUsers}
             remainingInterests={0} // Admin view doesn't need interest tracking
+            hackathonPhase={latestHackathon.currentPhase}
+            showBothUserGroups={true}
           />
         ))}
       </div>

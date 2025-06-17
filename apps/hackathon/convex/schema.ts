@@ -26,6 +26,14 @@ export default defineSchema({
         userId: v.id("users"),
       }),
     ),
+    assignedUsers: v.optional(
+      v.array(
+        v.object({
+          createdAt: v.number(),
+          userId: v.id("users"),
+        }),
+      ),
+    ),
     title: v.string(),
     updatedAt: v.number(),
   }).index("by_hackathon_event", ["hackathonEventId"]),

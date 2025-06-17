@@ -117,3 +117,33 @@ export const getConvexUserIdentity = async (
 
   return ok(userIdentityResult.value);
 };
+
+export type GetAllUsersError = UnexpectedError | DataIsUnexpectedShapeError;
+
+export const getAllUsers = async (
+  ctx: QueryCtx,
+): Promise<Result<ZodUser[], GetAllUsersError>> => {
+  const usersResult = await fromPromise(
+    ctx.db.query("users").collect(),
+    (originalError) => originalError,
+  );
+
+  if (usersResult.isErr()) {
+    return err({
+      type: "UNEXPECTED_ERROR",
+      message: "There was an unexpected error getting all users.",
+      originalError: usersResult.error,
+    });
+  }
+
+  const users = usersResult.value;
+  const parsedUsers: ZodUser[] = [];
+
+  for (const user of users) {
+    const parseResult = safeParseConvexObject(UserSchema, user);
+    if (parseResult.isErr()) return err(parseResult.error);
+    parsedUsers.push(parseResult.value);
+  }
+
+  return ok(parsedUsers);
+};

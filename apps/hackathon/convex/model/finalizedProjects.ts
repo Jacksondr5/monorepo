@@ -40,6 +40,7 @@ export const getFinalizedProjectById = async (
     ...result.value,
     comments: result.value.comments || [],
     interestedUsers: result.value.interestedUsers || [],
+    assignedUsers: result.value.assignedUsers || [],
   });
 };
 
@@ -83,6 +84,9 @@ export const getFinalizedProjectsByHackathonEvent = async (
     });
     project.interestedUsers.forEach((interestedUser) => {
       userIds.add(interestedUser.userId);
+    });
+    (project.assignedUsers || []).forEach((assignedUser) => {
+      userIds.add(assignedUser.userId);
     });
   });
 
