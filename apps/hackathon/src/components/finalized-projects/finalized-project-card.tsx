@@ -52,9 +52,7 @@ export function FinalizedProjectCard({
   const assignUserToProjectMutation = useMutation(
     api.finalizedProjects.assignUserToProject,
   );
-  const unassignUserFromProjectMutation = useMutation(
-    api.finalizedProjects.unassignUserFromProject,
-  );
+
   const allUsersQuery = useQuery(api.finalizedProjects.getAllUsers);
   const postHog = usePostHog();
   const [selectedUserId, setSelectedUserId] = useState<string>("");
@@ -118,23 +116,6 @@ export function FinalizedProjectCard({
       }
     } finally {
       setIsAssigning(false);
-    }
-  };
-
-  const handleUnassignUser = async (userId: string) => {
-    const result = await unassignUserFromProjectMutation({
-      projectId: project._id,
-      userId: userId as ZodUserId,
-    });
-
-    if (result.ok) {
-      postHog.capture("user_unassigned_from_project", {
-        projectId: project._id,
-        unassignedUserId: userId,
-        adminUserId: currentUser._id,
-      });
-    } else {
-      processError(result.error, "Failed to unassign user from project");
     }
   };
 

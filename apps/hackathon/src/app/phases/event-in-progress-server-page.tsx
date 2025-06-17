@@ -5,7 +5,7 @@ interface EventInProgressServerPageProps {
   hackathon: HackathonEvent;
 }
 
-export async function EventInProgressServerPage({
+export function EventInProgressServerPage({
   hackathon,
 }: EventInProgressServerPageProps) {
   return <EventInProgressClientPage hackathon={hackathon} />;

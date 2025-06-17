@@ -112,18 +112,6 @@ export type AssignUserToProjectError =
   | UnauthorizedError
   | UnexpectedError;
 
-export type UnassignUserFromProjectError =
-  | GetCurrentUserError
-  | GetFinalizedProjectByIdError
-  | UnauthorizedError
-  | UnexpectedError;
-
-export type ReassignUserToProjectError =
-  | GetCurrentUserError
-  | GetFinalizedProjectByIdError
-  | UnauthorizedError
-  | UnexpectedError;
-
 export type UpvoteCommentOnFinalizedProjectError =
   | GetCurrentUserError
   | GetCommentByIdOnFinalizedProjectError
@@ -592,51 +580,6 @@ export const assignUserToProject = finalizedProjectMutation({
   args: AssignUserSchema,
   handler: (ctx, args) =>
     serializeResult(_assignUserToProjectHandler(ctx, args)),
-});
-
-const _unassignUserFromProjectHandler = async (
-  ctx: MutationCtx,
-  { projectId, userId }: z.infer<typeof AssignUserSchema>,
-): Promise<Result<void, UnassignUserFromProjectError>> => {
-  const userResult = await getCurrentUser(ctx);
-  if (userResult.isErr()) return err(userResult.error);
-  const user = userResult.value;
-
-  // Only admins can unassign users from projects
-  if (user.role !== "ADMIN") {
-    return err({
-      type: "UNAUTHORIZED",
-      message: "Only admins can unassign users from projects.",
-    } satisfies UnauthorizedError);
-  }
-
-  const projectResult = await getFinalizedProjectById(ctx, projectId);
-  if (projectResult.isErr()) return err(projectResult.error);
-  const project = projectResult.value;
-
-  const initialAssignedUsersCount = (project.assignedUsers || []).length;
-  const updatedAssignedUsers = (project.assignedUsers || []).filter(
-    (assignedUser) => assignedUser.userId !== userId,
-  );
-
-  if (updatedAssignedUsers.length === initialAssignedUsersCount) return ok(); // User was not assigned to this project
-
-  const patchResult = await fromPromiseUnexpectedError(
-    ctx.db.patch(project._id, {
-      assignedUsers: updatedAssignedUsers,
-      updatedAt: Date.now(),
-    }),
-    "Failed to unassign user from finalized project",
-  );
-  if (patchResult.isErr()) return err(patchResult.error);
-
-  return ok();
-};
-
-export const unassignUserFromProject = finalizedProjectMutation({
-  args: AssignUserSchema,
-  handler: (ctx, args) =>
-    serializeResult(_unassignUserFromProjectHandler(ctx, args)),
 });
 
 // --- Queries ---

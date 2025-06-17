@@ -22,7 +22,6 @@ export function EventInProgressClientPage({
 
   const currentUserResult = useQuery(api.users.getCurrentUser, {});
 
-  // Create user map from the visible users - must be before any early returns due to React hook rules
   const userMap = useMemo(() => {
     const projects = finalizedProjectsResult?.ok
       ? finalizedProjectsResult.value
