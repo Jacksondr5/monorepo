@@ -71,7 +71,7 @@ export default function SignUp() {
         // Set up PostHog identification
         posthog.identify(result.value, {
           avatarUrl: userData.avatarUrl,
-          email: clerkUser.emailAddresses[0].emailAddress,
+          email: clerkUser.emailAddresses[0]?.emailAddress,
           env: env.NEXT_PUBLIC_ENV,
           firstName: userData.firstName,
           lastName: userData.lastName,

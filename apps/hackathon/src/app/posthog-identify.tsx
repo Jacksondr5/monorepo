@@ -24,6 +24,16 @@ export function PostHogIdentify() {
     }
 
     if (!currentUserResult || !currentUserResult.ok) {
+      if (
+        env.NEXT_PUBLIC_POSTHOG_DEBUG &&
+        currentUserResult &&
+        !currentUserResult.ok
+      ) {
+        console.warn(
+          "PostHog identification skipped: user query failed",
+          currentUserResult.error,
+        );
+      }
       return;
     }
 
