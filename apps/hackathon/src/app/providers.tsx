@@ -43,19 +43,6 @@ function SuspendedPostHogPageView() {
 }
 
 export const Providers = ({ children, authToken }: ProvidersProps) => {
-  // Initialize PostHog in the browser
-  useEffect(() => {
-    if (!env.NEXT_PUBLIC_POSTHOG_ENABLED) return;
-    posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
-      api_host: "/ingest",
-      ui_host: env.NEXT_PUBLIC_POSTHOG_HOST,
-      capture_pageview: false, // manual pageview capture
-      capture_pageleave: true,
-      capture_exceptions: true,
-      debug: env.NEXT_PUBLIC_POSTHOG_DEBUG,
-    });
-  }, []);
-
   // Convex client setup
   const convex = useMemo(() => {
     const client = new ConvexReactClient(env.NEXT_PUBLIC_CONVEX_URL);
