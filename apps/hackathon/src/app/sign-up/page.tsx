@@ -70,11 +70,13 @@ export default function SignUp() {
 
         // Set up PostHog identification
         posthog.identify(result.value, {
+          avatarUrl: userData.avatarUrl,
+          email: clerkUser.emailAddresses[0]?.emailAddress,
+          env: env.NEXT_PUBLIC_ENV,
           firstName: userData.firstName,
           lastName: userData.lastName,
-          avatarUrl: userData.avatarUrl,
+          name: `${userData.firstName} ${userData.lastName}`,
           role: userData.role,
-          env: env.NEXT_PUBLIC_ENV,
         });
 
         toast({

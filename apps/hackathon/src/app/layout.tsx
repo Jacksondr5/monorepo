@@ -7,6 +7,7 @@ import { preloadQuery } from "convex/nextjs";
 import { api } from "../../convex/_generated/api";
 import { Toaster } from "@j5/component-library";
 import { Preloaded } from "convex/react";
+import { PostHogIdentify } from "./posthog-identify";
 
 export const metadata = {
   title: "Welcome to hackathon",
@@ -44,7 +45,10 @@ export default async function RootLayout({
               You need to sign in to view this app
             </div>
           </SignedOut>
-          <SignedIn>{children}</SignedIn>
+          <SignedIn>
+            <PostHogIdentify />
+            {children}
+          </SignedIn>
           <Toaster />
         </Providers>
       </body>
