@@ -3,13 +3,15 @@ packages:
   - packages/*
   - libs/*
   - libs
+
 onlyBuiltDependencies:
-  - "@clerk/shared"
-  - "@parcel/watcher"
-  - "@sentry/cli"
-  - "@swc/core"
-  - "@tailwindcss/oxide"
+  - '@clerk/shared'
+  - '@parcel/watcher'
+  - '@sentry/cli'
+  - '@swc/core'
+  - '@tailwindcss/oxide'
   - core-js
+  - core-js-pure
   - esbuild
   - nx
   - sharp
