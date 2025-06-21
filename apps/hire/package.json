@@ -14,14 +14,14 @@
     "convex": "1.24.8",
     "convex-helpers": "0.1.94",
     "dayjs": "1.11.13",
-    "next": "15.3.3",
+    "next": "15.3.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "zod": "3.25.64"
+    "zod": "3.25.67"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.1.10",
-    "postcss": "8.5.5",
+    "postcss": "8.5.6",
     "tailwindcss": "4.1.10"
   }
 }
