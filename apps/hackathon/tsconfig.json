@@ -29,7 +29,8 @@
     "next-env.d.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "convex/**/*.ts"
+    "convex/**/*.ts",
+    "sentry.*.config.ts"
   ],
   "exclude": [
     "out-tsc",
@@ -41,7 +42,11 @@
     ".next",
     "eslint.config.js",
     "eslint.config.cjs",
-    "eslint.config.mjs"
+    "eslint.config.mjs",
+    "**/*.stories.ts",
+    "**/*.stories.js",
+    "**/*.stories.jsx",
+    "**/*.stories.tsx"
   ],
   "references": [
     {

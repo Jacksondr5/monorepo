@@ -1,31 +1,19 @@
-import type { Preview } from "@storybook/react-vite";
+import type { Preview as PreviewVite } from "@storybook/react-vite";
 import { j5Theme } from "./j5-sb-theme";
-import "../styles/globals.css";
+// import "../styles/globals.css";
 
-export const previewConfig = {
+export const previewConfigVite = {
   parameters: {
     backgrounds: {
-      default: "dark",
-      values: [
-        {
-          name: "light",
-          value: "oklch(1 0 0)", // Your light background color
-        },
-        {
-          name: "dark",
-          value: "oklch(0.145 0 0)", // Your dark background color
-        },
-      ],
-    },
-    actions: { argTypesRegex: "^on[A-Z].*" },
-    controls: {
-      matchers: {
-        color: /(background|color)$/i,
-        date: /Date$/i,
+      options: {
+        j5: { name: "J5", value: "#111210" },
       },
     },
     docs: {
       theme: j5Theme,
     },
   },
-} satisfies Preview;
+  initialGlobals: {
+    backgrounds: { value: "j5" },
+  },
+} satisfies PreviewVite;

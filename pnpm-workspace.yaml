@@ -3,6 +3,7 @@ packages:
   - packages/*
   - libs/*
   - libs
+
 onlyBuiltDependencies:
   - "@clerk/shared"
   - "@parcel/watcher"
@@ -10,6 +11,7 @@ onlyBuiltDependencies:
   - "@swc/core"
   - "@tailwindcss/oxide"
   - core-js
+  - core-js-pure
   - esbuild
   - nx
   - sharp
