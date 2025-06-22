@@ -1,10 +1,11 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "out-tsc/storybook",
     "module": "esnext",
     "moduleResolution": "bundler",
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "noEmit": false
   },
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
   "include": [

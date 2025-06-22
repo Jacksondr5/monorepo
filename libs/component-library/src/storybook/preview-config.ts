@@ -1,6 +1,6 @@
 import type { Preview as PreviewVite } from "@storybook/react-vite";
 import { j5Theme } from "./j5-sb-theme";
-import "../styles/globals.css";
+// import "../styles/globals.css";
 
 export const previewConfigVite = {
   parameters: {
