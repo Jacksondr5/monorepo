@@ -22,7 +22,7 @@
     "zod": "3.25.67"
   },
   "devDependencies": {
-    "@storybook/nextjs-vite": "^9.0.12",
+    "@storybook/nextjs-vite": "9.0.12",
     "@tailwindcss/postcss": "4.1.10",
     "@tailwindcss/vite": "4.1.10",
     "eslint-plugin-neverthrow": "1.1.4",
