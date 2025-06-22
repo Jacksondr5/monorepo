@@ -1,3 +1,11 @@
-import { j5StorybookConfig } from "../src/storybook";
+import type { StorybookConfig } from "@storybook/react-vite";
 
-export default j5StorybookConfig;
+const config: StorybookConfig = {
+  stories: ["../src/**/*.@(mdx|stories.@(js|jsx|ts|tsx))"],
+  framework: {
+    name: "@storybook/react-vite",
+    options: {},
+  },
+};
+
+export default config;
