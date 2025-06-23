@@ -30,6 +30,10 @@ export default defineSchema({
     type: v.optional(v.union(v.literal("employee"), v.literal("contractor"))),
     updatedAt: v.number(), // store as timestamp (Date.now())
   }).index("by_company", ["companyId"]),
+  candidateOnboardingSteps: defineTable({
+    candidateId: v.id("candidates"),
+    completedSteps: v.array(v.id("onboardingSteps")),
+  }).index("by_candidate", ["candidateId"]),
   companies: defineTable({
     clerkOrganizationId: v.string(),
     name: v.string(),
@@ -39,6 +43,15 @@ export default defineSchema({
     name: v.string(),
     order: v.float64(),
   }).index("by_company_order", ["companyId", "order"]),
+  onboardingSteps: defineTable({
+    companyId: v.id("companies"),
+    name: v.string(),
+    details: v.optional(v.string()),
+    parentStepId: v.optional(v.id("onboardingSteps")),
+    order: v.float64(),
+  })
+    .index("by_company_order", ["companyId", "order"])
+    .index("by_parent", ["parentStepId"]),
   roles: defineTable({
     companyId: v.id("companies"),
     name: v.string(),
