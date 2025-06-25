@@ -43,7 +43,7 @@ export const AppSidebar = () => {
               <SidebarMenuButton tooltip="Onboarding Overview" asChild>
                 <Link href="/onboarding" aria-label="Onboarding Overview">
                   <ClipboardListIcon />
-                  <span>Onboarding</span>
+                  <span>Onboarding Overview</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

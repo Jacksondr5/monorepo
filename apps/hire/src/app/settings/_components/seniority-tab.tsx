@@ -3,7 +3,7 @@
 import { Button, Input } from "@j5/component-library";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { SortableTagList } from "./sortable-tag-list";
 
 export function SeniorityTab({ orgId }: { orgId: string }) {
@@ -17,6 +17,17 @@ export function SeniorityTab({ orgId }: { orgId: string }) {
   useEffect(() => {
     setLocalSeniorities(seniorities);
   }, [seniorities]);
+
+  // Memoize the initialTags to prevent infinite re-renders
+  const initialTags = useMemo(() => {
+    return (
+      localSeniorities?.map(({ _id, name, ...rest }) => ({
+        value: name,
+        id: _id,
+        ...rest,
+      })) || []
+    );
+  }, [localSeniorities]);
 
   if (!orgId) return null;
 
@@ -50,13 +61,7 @@ export function SeniorityTab({ orgId }: { orgId: string }) {
       </div>
       <div className="rounded-lg border p-4">
         <SortableTagList
-          initialTags={
-            localSeniorities?.map(({ _id, name, ...rest }) => ({
-              value: name,
-              id: _id,
-              ...rest,
-            })) || []
-          }
+          initialTags={initialTags}
           onTagsSorted={(newSeniorities) => {
             const updatedSeniorities = newSeniorities.map(
               ({ id, value, ...rest }, i) => {
