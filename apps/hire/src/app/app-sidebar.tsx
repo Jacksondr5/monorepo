@@ -10,7 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@j5/component-library";
-import { SettingsIcon } from "lucide-react";
+import { SettingsIcon, ClipboardListIcon } from "lucide-react";
 import Link from "next/link";
 import { BoardsMenu } from "./boards-menu";
 import {
@@ -36,10 +36,17 @@ export const AppSidebar = () => {
         {/* Boards */}
         <BoardsMenu />
 
-        {/* Settings */}
+        {/* Navigation */}
         <SidebarGroup>
-          {/* <SidebarGroupLabel>Settings</SidebarGroupLabel> */}
           <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton tooltip="Onboarding Overview" asChild>
+                <Link href="/onboarding" aria-label="Onboarding Overview">
+                  <ClipboardListIcon />
+                  <span>Onboarding</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton tooltip="Settings" asChild>
                 <Link href="/settings" aria-label="Settings">

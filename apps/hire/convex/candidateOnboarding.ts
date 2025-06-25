@@ -1,12 +1,10 @@
-import { mutation, query } from "./_generated/server";
-import { zCustomMutation, zCustomQuery } from "convex-helpers/server/zod";
+import { mutation } from "./_generated/server";
+import { zCustomMutation } from "convex-helpers/server/zod";
 import { NoOp } from "convex-helpers/server/customFunctions";
 import { CandidateIdSchema } from "../src/server/zod/candidate";
 import { OnboardingStepIdSchema } from "../src/server/zod/onboardingStep";
-import { getCandidateById, verifyCandidateExists } from "./model/candidates";
-import { z } from "zod";
+import { verifyCandidateExists } from "./model/candidates";
 
-const candidateOnboardingQuery = zCustomQuery(query, NoOp);
 const candidateOnboardingMutation = zCustomMutation(mutation, NoOp);
 
 // export const addCompletedStep = candidateOnboardingMutation({

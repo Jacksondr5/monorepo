@@ -7,6 +7,7 @@ import { KanbanStagesTab } from "./_components/kanban-stages-tab";
 import { BoardsTab } from "./_components/boards-tab";
 import { TargetTeamTab } from "./_components/target-team-tab";
 import { OnboardingStepsTab } from "./_components/onboarding-steps-tab";
+import { OnboardingOverviewTab } from "./_components/onboarding-overview-tab";
 import { useOrganization } from "@clerk/nextjs";
 
 export const dynamic = "force-dynamic";
@@ -32,9 +33,10 @@ export default function SettingsPage() {
         <KanbanStagesTab orgId={orgId} />
       </div>
 
-      {/* Onboarding Steps - Full Width */}
-      <div className="w-full">
+      {/* Full Width Sections */}
+      <div className="w-full space-y-6">
         <OnboardingStepsTab orgId={orgId} />
+        <OnboardingOverviewTab orgId={orgId} />
       </div>
     </div>
   );

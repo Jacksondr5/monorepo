@@ -35,6 +35,10 @@ export default defineSchema({
     clerkOrganizationId: v.string(),
     name: v.string(),
   }).index("by_clerk_org_id", ["clerkOrganizationId"]),
+  configuration: defineTable({
+    companyId: v.id("companies"),
+    onboardingOverviewKanbanStages: v.array(v.id("kanbanStages")),
+  }).index("by_company", ["companyId"]),
   kanbanStages: defineTable({
     companyId: v.id("companies"),
     name: v.string(),
