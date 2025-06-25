@@ -27,8 +27,8 @@ export function OnboardingChecklist({
   isReadOnly = false,
   showDetails = false,
 }: OnboardingChecklistProps) {
-  const steps =
-    useQuery(api.onboardingSteps.getStepsByCompany, { orgId }) || [];
+  const stepsData = useQuery(api.onboardingSteps.getStepsByCompany, { orgId });
+  const steps = useMemo(() => stepsData || [], [stepsData]);
   const [expandedSteps, setExpandedSteps] = useState<Set<string>>(new Set());
 
   // Build hierarchical structure
@@ -43,7 +43,8 @@ export function OnboardingChecklist({
 
     // Second pass: build hierarchy
     steps.forEach((step) => {
-      const stepWithChildren = stepMap.get(step._id)!;
+      const stepWithChildren = stepMap.get(step._id);
+      if (!stepWithChildren) return;
 
       if (step.parentStepId) {
         const parent = stepMap.get(step.parentStepId);

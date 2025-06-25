@@ -8,7 +8,8 @@ import { SortableTagList } from "./sortable-tag-list";
 
 export function SeniorityTab({ orgId }: { orgId: string }) {
   const [seniorityName, setSeniorityName] = useState("");
-  const seniorities = useQuery(api.seniorities.getSeniorities, { orgId }) || [];
+  const senioritiesData = useQuery(api.seniorities.getSeniorities, { orgId });
+  const seniorities = useMemo(() => senioritiesData || [], [senioritiesData]);
   const [localSeniorities, setLocalSeniorities] = useState(seniorities);
   const addSeniority = useMutation(api.seniorities.addSeniority);
   const reorderSeniorities = useMutation(api.seniorities.reorderSeniorities);

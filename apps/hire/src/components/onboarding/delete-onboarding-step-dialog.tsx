@@ -55,7 +55,7 @@ export function DeleteOnboardingStepDialog({
             Are you sure you want to delete{" "}
             {stepName ? (
               <>
-                the step "<strong>{stepName}</strong>"
+                the step &ldquo;<strong>{stepName}</strong>&rdquo;
               </>
             ) : (
               "this onboarding step"
