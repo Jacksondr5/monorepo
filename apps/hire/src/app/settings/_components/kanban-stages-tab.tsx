@@ -3,12 +3,13 @@
 import { Button, Input } from "@j5/component-library";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { SortableTagList } from "./sortable-tag-list";
 
 export function KanbanStagesTab({ orgId }: { orgId: string }) {
   const [stageName, setStageName] = useState("");
-  const stages = useQuery(api.kanbanStages.getKanbanStages, { orgId }) || [];
+  const stagesData = useQuery(api.kanbanStages.getKanbanStages, { orgId });
+  const stages = useMemo(() => stagesData || [], [stagesData]);
   const [localStages, setLocalStages] = useState(stages);
   const addStage = useMutation(api.kanbanStages.addKanbanStage);
   const reorderStages = useMutation(api.kanbanStages.reorderKanbanStages);

@@ -3,13 +3,14 @@
 import { Button, Input } from "@j5/component-library";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { SortableTagList } from "./sortable-tag-list";
 import type { TargetTeam } from "../../../server/zod/targetTeam";
 
 export function TargetTeamTab({ orgId }: { orgId: string }) {
   const [targetTeamName, setTargetTeamName] = useState("");
-  const targetTeams = useQuery(api.targetTeams.getTargetTeams, { orgId }) || [];
+  const targetTeamsData = useQuery(api.targetTeams.getTargetTeams, { orgId });
+  const targetTeams = useMemo(() => targetTeamsData || [], [targetTeamsData]);
   const [localTargetTeams, setLocalTargetTeams] =
     useState<TargetTeam[]>(targetTeams);
   const addTargetTeam = useMutation(api.targetTeams.addTargetTeam);

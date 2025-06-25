@@ -14,6 +14,7 @@
 - Invites
 - Add resume upload
 - Add interview notes
+- There's a problem with the SortableList where the useEffect reaches a call depth
 
 ## Later
 

@@ -37,8 +37,8 @@ export function KanbanBoard({
   const updateCandidateStage = useMutation(api.candidates.updateCandidateStage);
   const updateCandidateDetails = useMutation(api.candidates.updateCandidate);
 
-  const [selectedCandidateForEdit, setSelectedCandidateForEdit] =
-    useState<ZodCandidate | null>(null);
+  const [selectedCandidateIdForEdit, setSelectedCandidateIdForEdit] =
+    useState<CandidateId | null>(null);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
 
   const sensors = useSensors(
@@ -75,7 +75,7 @@ export function KanbanBoard({
   }
 
   const handleCardClick = (candidate: ZodCandidate) => {
-    setSelectedCandidateForEdit(candidate);
+    setSelectedCandidateIdForEdit(candidate._id);
     setIsEditSheetOpen(true);
   };
 
@@ -84,7 +84,7 @@ export function KanbanBoard({
   };
 
   const handleUpdateCandidate = async (values: ZodUpdateCandidate) => {
-    if (!selectedCandidateForEdit) return;
+    if (!selectedCandidateIdForEdit) return;
 
     try {
       await updateCandidateDetails({
@@ -108,6 +108,10 @@ export function KanbanBoard({
     );
   }
 
+  const selectedCandidate = candidates.find(
+    (c) => c._id === selectedCandidateIdForEdit,
+  );
+
   return (
     <div className="flex min-h-[80vh] gap-4 overflow-x-auto p-4">
       <DndContext
@@ -126,9 +130,9 @@ export function KanbanBoard({
           />
         ))}
       </DndContext>
-      {selectedCandidateForEdit && (
+      {selectedCandidate && (
         <EditCandidateSheet
-          candidate={selectedCandidateForEdit}
+          candidate={selectedCandidate}
           isOpen={isEditSheetOpen}
           onOpenChange={handleCloseEditSheet}
           organizationId={organizationId}

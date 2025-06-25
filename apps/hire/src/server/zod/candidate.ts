@@ -10,6 +10,7 @@ export const CandidateIdSchema = zid("candidates");
 export const CandidateSchema = z.object({
   ...baseConvexFields("candidates"),
   companyId: CompanyIdSchema,
+  completedOnboardingSteps: z.array(zid("onboardingSteps")).default([]),
   email: z.string().email({ message: "Invalid email address" }).optional(),
   kanbanStageId: zid("kanbanStages"),
   linkedinProfile: z.string().url({ message: "Invalid URL" }).optional(),
@@ -31,12 +32,14 @@ export const CandidateSchema = z.object({
 export const CreateCandidateSchema = CandidateSchema.omit({
   ...baseConvexFieldsOmit,
   companyId: true,
+  completedOnboardingSteps: true,
   updatedAt: true,
 });
 
 export const UpdateCandidateSchema = CandidateSchema.omit({
   _creationTime: true,
   companyId: true,
+  completedOnboardingSteps: true,
   updatedAt: true,
 });
 

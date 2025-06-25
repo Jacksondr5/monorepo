@@ -3,12 +3,13 @@
 import { Button, Input } from "@j5/component-library";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { SortableTagList } from "./sortable-tag-list";
 
 export function RolesTab({ orgId }: { orgId: string }) {
   const [roleName, setRoleName] = useState("");
-  const roles = useQuery(api.roles.getRoles, { orgId }) || [];
+  const rolesData = useQuery(api.roles.getRoles, { orgId });
+  const roles = useMemo(() => rolesData || [], [rolesData]);
   const [localRoles, setLocalRoles] = useState(roles);
   const addRole = useMutation(api.roles.addRole);
   const reorderRoles = useMutation(api.roles.reorderRoles);

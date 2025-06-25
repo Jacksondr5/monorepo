@@ -24,9 +24,15 @@ import { ZodBoard } from "~/server/zod/board";
 export function BoardsTab({ orgId }: { orgId: string }) {
   const [boardName, setBoardName] = useState("");
   // Assuming a query like getBoardsByOrgId exists in your convex/boards.ts
-  const boards = useQuery(api.boards.getBoardsByOrgId, { orgId }) || [];
-  const allKanbanStages =
-    useQuery(api.kanbanStages.getKanbanStages, { orgId }) || []; // Fetch all stages
+  const boardsData = useQuery(api.boards.getBoardsByOrgId, { orgId });
+  const boards = useMemo(() => boardsData || [], [boardsData]);
+  const allKanbanStagesData = useQuery(api.kanbanStages.getKanbanStages, {
+    orgId,
+  });
+  const allKanbanStages = useMemo(
+    () => allKanbanStagesData || [],
+    [allKanbanStagesData],
+  ); // Fetch all stages
   const [localBoards, setLocalBoards] = useState(boards);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false);
   const [editingBoard, setEditingBoard] = useState<ZodBoard | null>(null);

@@ -14,11 +14,15 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as boards from "../boards.js";
+import type * as candidateOnboarding from "../candidateOnboarding.js";
 import type * as candidates from "../candidates.js";
+import type * as configuration from "../configuration.js";
 import type * as kanbanStages from "../kanbanStages.js";
 import type * as model_boards from "../model/boards.js";
 import type * as model_candidates from "../model/candidates.js";
 import type * as model_companies from "../model/companies.js";
+import type * as onboardingOverview from "../onboardingOverview.js";
+import type * as onboardingSteps from "../onboardingSteps.js";
 import type * as roles from "../roles.js";
 import type * as seniorities from "../seniorities.js";
 import type * as sources from "../sources.js";
@@ -34,11 +38,15 @@ import type * as targetTeams from "../targetTeams.js";
  */
 declare const fullApi: ApiFromModules<{
   boards: typeof boards;
+  candidateOnboarding: typeof candidateOnboarding;
   candidates: typeof candidates;
+  configuration: typeof configuration;
   kanbanStages: typeof kanbanStages;
   "model/boards": typeof model_boards;
   "model/candidates": typeof model_candidates;
   "model/companies": typeof model_companies;
+  onboardingOverview: typeof onboardingOverview;
+  onboardingSteps: typeof onboardingSteps;
   roles: typeof roles;
   seniorities: typeof seniorities;
   sources: typeof sources;
