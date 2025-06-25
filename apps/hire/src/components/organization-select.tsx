@@ -59,15 +59,17 @@ export function OrganizationSelect() {
     >
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select Organization">
-          {organization.hasImage && (
-            <Image
-              src={organization.imageUrl}
-              alt={organization.name}
-              width={24}
-              height={24}
-            />
-          )}
-          {organization.name ?? "Select Organization"}
+          <div className="flex items-center gap-2">
+            {organization.hasImage && (
+              <Image
+                src={organization.imageUrl}
+                alt={organization.name}
+                width={24}
+                height={24}
+              />
+            )}
+            {organization.name ?? "Select Organization"}
+          </div>
         </SelectValue>
       </SelectTrigger>
       <SelectContent>

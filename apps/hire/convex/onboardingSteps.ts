@@ -86,17 +86,19 @@ export const removeStep = onboardingStepMutation({
     }
 
     // Remove from any candidate completion lists
-    const candidateOnboardingSteps = await ctx.db
-      .query("candidateOnboardingSteps")
+    const candidates = await ctx.db
+      .query("candidates")
+      .filter((q) => q.eq(q.field("companyId"), companyId))
       .collect();
 
-    for (const candidateSteps of candidateOnboardingSteps) {
-      if (candidateSteps.completedSteps.includes(id)) {
-        const updatedCompletedSteps = candidateSteps.completedSteps.filter(
+    for (const candidate of candidates) {
+      if (candidate.completedOnboardingSteps?.includes(id)) {
+        const updatedCompletedSteps = candidate.completedOnboardingSteps.filter(
           (stepId) => stepId !== id,
         );
-        await ctx.db.patch(candidateSteps._id, {
-          completedSteps: updatedCompletedSteps,
+        await ctx.db.patch(candidate._id, {
+          completedOnboardingSteps: updatedCompletedSteps,
+          updatedAt: Date.now(),
         });
       }
     }

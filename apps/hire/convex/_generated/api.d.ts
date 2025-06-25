@@ -14,6 +14,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as boards from "../boards.js";
+import type * as candidateOnboarding from "../candidateOnboarding.js";
 import type * as candidates from "../candidates.js";
 import type * as kanbanStages from "../kanbanStages.js";
 import type * as model_boards from "../model/boards.js";
@@ -35,6 +36,7 @@ import type * as targetTeams from "../targetTeams.js";
  */
 declare const fullApi: ApiFromModules<{
   boards: typeof boards;
+  candidateOnboarding: typeof candidateOnboarding;
   candidates: typeof candidates;
   kanbanStages: typeof kanbanStages;
   "model/boards": typeof model_boards;

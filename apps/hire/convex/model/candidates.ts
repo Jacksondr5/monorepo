@@ -7,7 +7,12 @@ export const getCandidateById = async (
 ) => {
   const candidate = await ctx.db.get(args._id);
   if (!candidate) throw new Error("Candidate not found");
-  return candidate;
+
+  // Ensure completedOnboardingSteps is always an array
+  return {
+    ...candidate,
+    completedOnboardingSteps: candidate.completedOnboardingSteps || [],
+  };
 };
 
 export const verifyCandidateExists = async (

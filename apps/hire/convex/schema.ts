@@ -13,6 +13,7 @@ export default defineSchema({
     .index("by_company_slug", ["companyId", "slug"]),
   candidates: defineTable({
     companyId: v.id("companies"),
+    completedOnboardingSteps: v.optional(v.array(v.id("onboardingSteps"))),
     email: v.optional(v.string()),
     kanbanStageId: v.id("kanbanStages"),
     linkedinProfile: v.optional(v.string()),
@@ -30,10 +31,6 @@ export default defineSchema({
     type: v.optional(v.union(v.literal("employee"), v.literal("contractor"))),
     updatedAt: v.number(), // store as timestamp (Date.now())
   }).index("by_company", ["companyId"]),
-  candidateOnboardingSteps: defineTable({
-    candidateId: v.id("candidates"),
-    completedSteps: v.array(v.id("onboardingSteps")),
-  }).index("by_candidate", ["candidateId"]),
   companies: defineTable({
     clerkOrganizationId: v.string(),
     name: v.string(),
