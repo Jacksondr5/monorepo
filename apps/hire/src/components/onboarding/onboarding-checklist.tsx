@@ -11,7 +11,7 @@ import type { ZodOnboardingStep } from "~/server/zod/onboardingStep";
 interface OnboardingChecklistProps {
   orgId: string;
   completedStepIds?: string[];
-  onStepToggle?: (stepId: string, isCompleted: boolean) => void;
+  onStepToggle?: (stepId: string) => void;
   isReadOnly?: boolean;
   showDetails?: boolean;
 }
@@ -101,9 +101,9 @@ export function OnboardingChecklist({
           <Checkbox
             checked={isCompleted}
             disabled={isReadOnly}
-            onCheckedChange={(checked) => {
+            onCheckedChange={() => {
               if (!isReadOnly && onStepToggle) {
-                onStepToggle(step._id, !!checked);
+                onStepToggle(step._id);
               }
             }}
             className="mt-1"

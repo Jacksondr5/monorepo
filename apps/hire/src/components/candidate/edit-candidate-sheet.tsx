@@ -7,13 +7,18 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
+  Separator,
 } from "@j5/component-library";
+import { useMutation } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 import { CandidateForm } from "./candidate-form";
+import { OnboardingChecklist } from "~/components/onboarding";
 import {
   ZodCandidate,
   ZodUpdateCandidate,
   UpdateCandidateSchema,
 } from "~/server/zod/candidate";
+import { OnboardingStepId } from "~/server/zod/onboardingStep";
 
 interface EditCandidateSheetProps {
   candidate: ZodCandidate;
@@ -31,6 +36,9 @@ export function EditCandidateSheet({
   onSubmit,
 }: EditCandidateSheetProps) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const toggleCompletedStep = useMutation(
+    api.candidateOnboarding.toggleCompletedStep,
+  );
 
   const handleSubmit = async (values: ZodUpdateCandidate) => {
     setIsSubmitting(true);
@@ -45,16 +53,28 @@ export function EditCandidateSheet({
     }
   };
 
+  const handleStepToggle = async (stepId: string) => {
+    try {
+      await toggleCompletedStep({
+        candidateId: candidate._id,
+        stepId: stepId as OnboardingStepId,
+      });
+    } catch (error) {
+      console.error("Failed to toggle onboarding step:", error);
+      // TODO: Add toast notification
+    }
+  };
+
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-4xl">
-        <SheetHeader>
+      <SheetContent className="flex flex-col sm:max-w-4xl">
+        <SheetHeader className="flex-shrink-0">
           <SheetTitle>Edit Candidate</SheetTitle>
           <SheetDescription>
             Update the details for {candidate.name}.
           </SheetDescription>
         </SheetHeader>
-        <div className="py-4">
+        <div className="flex-1 space-y-6 overflow-y-auto py-4">
           <CandidateForm
             initialData={candidate}
             onSubmit={handleSubmit}
@@ -62,6 +82,19 @@ export function EditCandidateSheet({
             organizationId={organizationId}
             schema={UpdateCandidateSchema}
           />
+
+          <Separator />
+
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">Onboarding Checklist</h3>
+            <OnboardingChecklist
+              orgId={organizationId}
+              completedStepIds={candidate.completedOnboardingSteps || []}
+              onStepToggle={handleStepToggle}
+              isReadOnly={false}
+              showDetails={true}
+            />
+          </div>
         </div>
         {/* SheetFooter can be used if CandidateForm doesn't have its own submit button area */}
         {/* <SheetFooter>
