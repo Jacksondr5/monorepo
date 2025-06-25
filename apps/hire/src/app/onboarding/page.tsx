@@ -4,6 +4,7 @@ import { Card, CardContent, Checkbox } from "@j5/component-library";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useOrganization } from "@clerk/nextjs";
+import { useMemo } from "react";
 import type { ZodOnboardingOverviewData } from "~/server/zod/views/onboarding-overview";
 import type { Id } from "../../../convex/_generated/dataModel";
 
@@ -40,15 +41,16 @@ function OnboardingTable({
     return candidate.completedOnboardingSteps?.includes(stepId) || false;
   };
 
+  // Memoize allSteps to prevent unnecessary recalculations
+  const allSteps = useMemo(() => {
+    return onboardingSteps.flatMap((step) => [step, ...step.subSteps]);
+  }, [onboardingSteps]);
+
   const isAllStepsCompleted = (
     candidate: ZodOnboardingOverviewData["candidates"][0],
   ) => {
     if (!onboardingSteps.length) return false;
     // Check both root steps and their substeps
-    const allSteps = onboardingSteps.flatMap((step) => [
-      step,
-      ...step.subSteps,
-    ]);
     return allSteps.every(
       (step) => candidate.completedOnboardingSteps?.includes(step._id) || false,
     );
@@ -165,17 +167,14 @@ function OnboardingTable({
                             {tableColumns.map((step) => {
                               const isCompleted = isStepCompleted(
                                 candidate,
-                                step._id as Id<"onboardingSteps">,
+                                step._id,
                               );
                               return (
                                 <td key={step._id} className="p-4 text-center">
                                   <Checkbox
                                     checked={isCompleted}
                                     onCheckedChange={() =>
-                                      handleStepToggle(
-                                        candidate._id,
-                                        step._id as Id<"onboardingSteps">,
-                                      )
+                                      handleStepToggle(candidate._id, step._id)
                                     }
                                     dataTestId={`onboarding-step-${candidate._id}-${step._id}`}
                                   />
@@ -240,30 +239,6 @@ export default function OnboardingPage() {
     );
   }
 
-  if (onboardingData === null || onboardingData.onboardingSteps.length === 0) {
-    return (
-      <div className="p-6">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold tracking-tight">
-            Onboarding Overview
-          </h1>
-          <p className="text-muted-foreground">
-            Track onboarding progress across all candidates
-          </p>
-        </div>
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-muted-foreground text-center">
-              No onboarding steps configured yet.
-              <br />
-              Configure them in Settings → Onboarding Steps.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
   return (
     <div className="p-6">
       <div className="mb-6">
@@ -276,8 +251,8 @@ export default function OnboardingPage() {
       </div>
 
       <OnboardingTable
-        onboardingSteps={onboardingData.onboardingSteps}
-        candidates={onboardingData.candidates}
+        onboardingSteps={onboardingData?.onboardingSteps || []}
+        candidates={onboardingData?.candidates || []}
       />
     </div>
   );

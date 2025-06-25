@@ -20,7 +20,10 @@ import {
   EditOnboardingStepDialog,
   DeleteOnboardingStepDialog,
 } from "~/components/onboarding";
-import type { ZodOnboardingStep } from "~/server/zod/onboardingStep";
+import type {
+  OnboardingStepId,
+  ZodOnboardingStep,
+} from "~/server/zod/onboardingStep";
 
 export function OnboardingStepsTab({ orgId }: { orgId: string }) {
   const [stepName, setStepName] = useState("");
@@ -52,7 +55,7 @@ export function OnboardingStepsTab({ orgId }: { orgId: string }) {
         name: stepName.trim(),
         details: stepDetails.trim() || undefined,
         parentStepId: (parentStepId || undefined) as
-          | Id<"onboardingSteps">
+          | OnboardingStepId
           | undefined,
       });
 
