@@ -31,6 +31,7 @@ export const FieldTextarea = ({
       </Label>
       <Textarea
         {...props}
+        id={field.name}
         value={field.state.value || ""}
         onChange={(e) => field.handleChange(e.target.value)}
         onBlur={field.handleBlur}

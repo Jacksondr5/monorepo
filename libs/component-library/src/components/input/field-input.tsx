@@ -31,6 +31,7 @@ export const FieldInput = ({
       </Label>
       <Input
         {...props}
+        id={field.name}
         dataTestId={`${field.name}-input`}
         value={field.state.value || ""}
         onChange={(e) => field.handleChange(e.target.value)}
