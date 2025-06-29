@@ -320,6 +320,13 @@ export const UpvoteProject: Story = {
       const thumbsUpIcon = upvoteButton.querySelector("svg");
       expect(thumbsUpIcon).not.toHaveClass("fill-grass-9");
 
+      // Verify accessibility attributes
+      expect(upvoteButton).toHaveAttribute(
+        "aria-label",
+        expect.stringContaining("Upvote"),
+      );
+      expect(upvoteButton).toHaveAttribute("aria-pressed", "false");
+
       await userEvent.click(upvoteButton);
 
       // Verify mutation was called
@@ -355,6 +362,13 @@ export const RemoveUpvote: Story = {
       // Button should be filled initially (user has upvoted)
       const thumbsUpIcon = upvoteButton.querySelector("svg");
       expect(thumbsUpIcon).toHaveClass("fill-grass-9");
+
+      // Verify accessibility attributes
+      expect(upvoteButton).toHaveAttribute(
+        "aria-label",
+        expect.stringContaining("Remove upvote"),
+      );
+      expect(upvoteButton).toHaveAttribute("aria-pressed", "true");
 
       await userEvent.click(upvoteButton);
 

@@ -85,6 +85,7 @@ export function FinalizedProjectForm({
             />
 
             <Button
+              type="button"
               onClick={onCancel}
               variant="outline"
               disabled={isSubmitting}

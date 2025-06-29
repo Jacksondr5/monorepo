@@ -184,6 +184,8 @@ export function ProjectCard({
               }
             }}
             dataTestId={`upvote-project-${project._id}-button`}
+            aria-label={hasUpvoted ? "Remove upvote" : "Upvote project"}
+            aria-pressed={hasUpvoted}
           >
             <ThumbsUp
               className={`h-4 w-4 ${
