@@ -13,11 +13,10 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as comment from "../comment.js";
 import type * as finalizedProjects from "../finalizedProjects.js";
 import type * as hackathonEvents from "../hackathonEvents.js";
-import type * as model_comments from "../model/comments.js";
 import type * as model_error from "../model/error.js";
-import type * as model_finalizedProjectComments from "../model/finalizedProjectComments.js";
 import type * as model_finalizedProjects from "../model/finalizedProjects.js";
 import type * as model_hackathonEvents from "../model/hackathonEvents.js";
 import type * as model_projects from "../model/projects.js";
@@ -36,11 +35,10 @@ import type * as users from "../users.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  comment: typeof comment;
   finalizedProjects: typeof finalizedProjects;
   hackathonEvents: typeof hackathonEvents;
-  "model/comments": typeof model_comments;
   "model/error": typeof model_error;
-  "model/finalizedProjectComments": typeof model_finalizedProjectComments;
   "model/finalizedProjects": typeof model_finalizedProjects;
   "model/hackathonEvents": typeof model_hackathonEvents;
   "model/projects": typeof model_projects;

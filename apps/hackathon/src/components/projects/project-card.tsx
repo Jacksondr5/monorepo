@@ -19,7 +19,6 @@ import { useState } from "react";
 import { ProjectSubmissionForm } from "../project-submission/project-submission-form";
 import { Pencil, ThumbsUp } from "lucide-react";
 import { ZodUser } from "~/server/zod";
-import { ProjectComments } from "./project-comments";
 import { usePostHog } from "posthog-js/react";
 import { DeleteProjectDialog } from "./delete-project-dialog";
 import { SerializableResult } from "../../../convex/model/error";
@@ -28,6 +27,8 @@ import {
   UpvoteProjectError,
 } from "../../../convex/projects";
 import { processError } from "~/lib/errors";
+import { Comments } from "../shared/comments";
+import { getInitials } from "#src/lib/get-initials.js";
 
 interface ProjectCardProps {
   currentUser: ZodUser;
@@ -76,12 +77,6 @@ export function ProjectCard({
 
   const creatorName = () => {
     return `${creator.firstName} ${creator.lastName}`.trim() || "Anonymous";
-  };
-
-  const getInitials = (firstName?: string, lastName?: string) => {
-    const firstInitial = firstName?.[0]?.toUpperCase() || "";
-    const lastInitial = lastName?.[0]?.toUpperCase() || "";
-    return `${firstInitial}${lastInitial}` || "??"; // Default to '??' for Unknown User
   };
 
   const hasUpvoted = project.upvotes.some(
@@ -137,12 +132,16 @@ export function ProjectCard({
         {/* TODO: Display project images here */}
         {/* {project.imageUrls && project.imageUrls.length > 0 && ( ... )} */}
 
-        <ProjectComments
+        <Comments
           projectId={project._id}
           comments={project.comments}
           currentUser={currentUser}
           userMap={userMap}
-          getInitials={getInitials}
+          config={{
+            type: "project",
+            postHogEventTarget: "project_comment",
+            testIdTarget: "project-comment",
+          }}
         />
       </CardContent>
       <CardFooter className="text-slate-9 flex items-center justify-between text-xs">

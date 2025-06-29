@@ -21,10 +21,11 @@ import {
   SelectValue,
 } from "@j5/component-library";
 import { ZodUser, ZodUserId, HackathonPhase } from "~/server/zod";
-import { FinalizedProjectComments } from "./finalized-project-comments";
 import { usePostHog } from "posthog-js/react";
 import { processError } from "~/lib/errors";
 import { useState } from "react";
+import { Comments } from "../shared/comments";
+import { getInitials } from "#src/lib/get-initials.js";
 
 interface FinalizedProjectCardProps {
   currentUser: ZodUser;
@@ -57,12 +58,6 @@ export function FinalizedProjectCard({
   const postHog = usePostHog();
   const [selectedUserId, setSelectedUserId] = useState<string>("");
   const [isAssigning, setIsAssigning] = useState(false);
-
-  const getInitials = (firstName?: string, lastName?: string) => {
-    const firstInitial = firstName?.[0]?.toUpperCase() || "";
-    const lastInitial = lastName?.[0]?.toUpperCase() || "";
-    return `${firstInitial}${lastInitial}` || "??";
-  };
 
   const isUserInterested = project.interestedUsers.some(
     (interestedUser) => interestedUser.userId === currentUser._id,
@@ -310,12 +305,16 @@ export function FinalizedProjectCard({
           </>
         )}
 
-        <FinalizedProjectComments
+        <Comments
           projectId={project._id}
           comments={project.comments}
           currentUser={currentUser}
           userMap={userMap}
-          getInitials={getInitials}
+          config={{
+            type: "finalizedProject",
+            postHogEventTarget: "finalized_project_comment",
+            testIdTarget: "finalized-project-comment",
+          }}
         />
       </CardContent>
       <CardFooter className="text-slate-9 flex items-center justify-between text-xs">

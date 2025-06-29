@@ -17,9 +17,8 @@ import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { processError } from "~/lib/errors";
 import { Id } from "../../../convex/_generated/dataModel";
-import { DeleteCommentError } from "../../../convex/projects";
 import { SerializableResult } from "../../../convex/model/error";
-import { DeleteCommentFromFinalizedProjectError } from "../../../convex/finalizedProjects";
+import { DeleteCommentError } from "#convex/comment.js";
 
 export interface DeleteCommentDialogProps<
   TProjectId extends Id<"projects" | "finalizedProjects">,
@@ -31,14 +30,9 @@ export interface DeleteCommentDialogProps<
   deleteCommentMutation: (args: {
     projectId: TProjectId;
     commentId: CommentId;
-  }) => Promise<
-    SerializableResult<
-      void,
-      DeleteCommentError | DeleteCommentFromFinalizedProjectError
-    >
-  >;
+  }) => Promise<SerializableResult<void, DeleteCommentError>>;
   postHogEventName: string;
-  testIdPrefix?: string;
+  testIdPrefix: string;
 }
 
 export const DeleteCommentDialog = <
@@ -50,7 +44,7 @@ export const DeleteCommentDialog = <
   postHog,
   deleteCommentMutation,
   postHogEventName,
-  testIdPrefix = "delete-comment",
+  testIdPrefix,
 }: DeleteCommentDialogProps<TProjectId>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -81,7 +75,7 @@ export const DeleteCommentDialog = <
       setIsDeleting(false);
     }
   };
-
+  console.log(testIdPrefix);
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>

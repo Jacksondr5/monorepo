@@ -84,6 +84,7 @@ CSS-driven interactive states (`:hover`, `:focus`, `:active`) are crucial for a 
     3. Examine the props and variants of the component to determine what visual and interaction tests you will need.
 2. Write the tests.  Ensure there are no linting errors before validating the tests.
 3. Verify your tests.  You have access to the BrowserMCP server.  This lets you interact with the Storybook instance.  Here are some approaches for using the BrowserMCP to check your work:
+    - If you try to call the tool and get a connection error, STOP and ask the user for help.
     - Use the Nx MCP tools to see if a Storybook task is already running before spinning up a new server.  The user likely already has one running.
     - **When validating visual regression tests**: You won't be able to see the story in the normal Storybook UI since Storybook renders the test in an iframe and the accessibility snapshot doesn't render the iframe.  You can navigate to the iframe URL directly to see the story.
     - **When validating interaction tests**: It's usually not as important to see the test yourself, so stay on the main Storybook page.  Instead, focus on the "Interactions" tab to see the output of the test.  You can also click the "Rerun" button to rerun the test.  If the test appears to be running in an unexpected way, try remounting the component by clicking the "Remount component" button in the top bar.

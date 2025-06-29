@@ -1,10 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api";
-import type { Id } from "../../../convex/_generated/dataModel";
-import type { FinalizedProject } from "../../server/zod/finalized-project";
+import { useMutation } from "#lib/convex";
 import type { ZodUser } from "../../server/zod/user";
 import {
   Avatar,
@@ -14,41 +11,60 @@ import {
 } from "@j5/component-library";
 import { ThumbsUp } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
-import { DeleteCommentDialog } from "../shared/delete-comment-dialog";
+import { DeleteCommentDialog } from "./delete-comment-dialog";
 import { CommentId } from "~/server/zod";
 import { processError } from "~/lib/errors";
+import { api } from "../../../convex/_generated/api";
+import { Id } from "#convex/_generated/dataModel.js";
+import { getInitials } from "#src/lib/get-initials.js";
 
-interface FinalizedProjectCommentsProps {
-  comments: FinalizedProject["comments"];
-  currentUser: ZodUser;
-  getInitials: (firstName?: string, lastName?: string) => string;
-  projectId: Id<"finalizedProjects">;
-  userMap: Map<string, ZodUser>;
+interface CommentConfig {
+  type: "project" | "finalizedProject";
+
+  // PostHog event target (e.g., "comment" or "finalized_project_comment")
+  postHogEventTarget: string;
+
+  // Test ID target (e.g., "comment" or "finalized-project-comment")
+  testIdTarget: string;
 }
 
-export function FinalizedProjectComments({
+interface Comment {
+  id: CommentId;
+  authorId: string;
+  createdAt: number;
+  text: string;
+  upvotes: Array<{
+    userId: string;
+    createdAt: number;
+  }>;
+}
+
+type ProjectId = Id<"finalizedProjects" | "projects">;
+
+interface CommentsProps<TProjectId extends ProjectId> {
+  comments: Comment[];
+  currentUser: ZodUser;
+  projectId: TProjectId;
+  userMap: Map<string, ZodUser>;
+  config: CommentConfig;
+}
+
+export function Comments<TProjectId extends ProjectId>({
   comments,
   currentUser,
-  getInitials,
   projectId,
   userMap,
-}: FinalizedProjectCommentsProps) {
+  config,
+}: CommentsProps<TProjectId>) {
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [newCommentText, setNewCommentText] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const addCommentMutation = useMutation(api.comment.addComment);
+  const toggleUpvoteOnCommentMutation = useMutation(
+    api.comment.toggleUpvoteOnComment,
+  );
+  const deleteCommentMutation = useMutation(api.comment.deleteComment);
 
-  const addComment = useMutation(
-    api.finalizedProjects.addCommentToFinalizedProject,
-  );
-  const upvoteCommentMutation = useMutation(
-    api.finalizedProjects.upvoteCommentOnFinalizedProject,
-  );
-  const removeUpvoteFromCommentMutation = useMutation(
-    api.finalizedProjects.removeUpvoteFromCommentOnFinalizedProject,
-  );
-  const deleteCommentMutation = useMutation(
-    api.finalizedProjects.deleteCommentFromFinalizedProject,
-  );
   const postHog = usePostHog();
 
   const handleAddComment = async () => {
@@ -56,7 +72,7 @@ export function FinalizedProjectComments({
 
     setSubmitting(true);
     try {
-      const result = await addComment({
+      const result = await addCommentMutation({
         projectId,
         text: newCommentText.trim(),
       });
@@ -64,7 +80,7 @@ export function FinalizedProjectComments({
         processError(result.error, "Failed to add comment");
         return;
       }
-      postHog.capture("finalized_project_comment_added", {
+      postHog.capture(`${config.postHogEventTarget}_added`, {
         projectId,
         userId: currentUser._id,
       });
@@ -85,26 +101,18 @@ export function FinalizedProjectComments({
     );
 
     let postHogAction = "";
+    const result = await toggleUpvoteOnCommentMutation({
+      projectId,
+      commentId,
+    });
+    if (!result.ok) {
+      processError(result.error, "Failed to remove upvote");
+      return;
+    }
     if (hasUpvoted) {
-      const result = await removeUpvoteFromCommentMutation({
-        projectId,
-        commentId,
-      });
-      if (!result.ok) {
-        processError(result.error, "Failed to remove upvote");
-        return;
-      }
-      postHogAction = "finalized_project_comment_upvote_removed";
+      postHogAction = `${config.postHogEventTarget}_upvote_removed`;
     } else {
-      const result = await upvoteCommentMutation({
-        projectId,
-        commentId,
-      });
-      if (!result.ok) {
-        processError(result.error, "Failed to add upvote");
-        return;
-      }
-      postHogAction = "finalized_project_comment_upvote_added";
+      postHogAction = `${config.postHogEventTarget}_upvote_added`;
     }
     postHog.capture(postHogAction, {
       projectId,
@@ -165,7 +173,7 @@ export function FinalizedProjectComments({
                           className="text-slate-10 hover:text-grass-9 h-auto p-1 disabled:opacity-50"
                           onClick={() => handleUpvoteComment(comment.id)}
                           disabled={!currentUser}
-                          dataTestId={`upvote-finalized-project-comment-${comment.id}-button`}
+                          dataTestId={`upvote-${config.testIdTarget}-${comment.id}-button`}
                         >
                           <ThumbsUp
                             className={`h-4 w-4 ${
@@ -186,8 +194,8 @@ export function FinalizedProjectComments({
                             currentUser={currentUser}
                             postHog={postHog}
                             deleteCommentMutation={deleteCommentMutation}
-                            postHogEventName="finalized_project_comment_deleted"
-                            testIdPrefix="delete-finalized-project-comment"
+                            postHogEventName={`${config.postHogEventTarget}_deleted`}
+                            testIdPrefix={`delete-${config.testIdTarget}-${comment.id}`}
                           />
                         )}
                       </div>
@@ -201,53 +209,51 @@ export function FinalizedProjectComments({
       )}
 
       {/* Add Comment Section */}
-      {currentUser && (
-        <div className="border-slate-6 mt-4 border-t pt-2">
-          {showCommentForm ? (
-            <div className="space-y-2">
-              {/* TODO: replace with component library textarea after hackathon storybook is built */}
-              <textarea
-                className="border-slate-7 bg-slate-3 text-slate-12 focus:ring-grass-9 focus:border-grass-9 w-full rounded-md border p-2 text-sm"
-                rows={3}
-                placeholder="Write a comment..."
-                value={newCommentText}
-                onChange={(e) => setNewCommentText(e.target.value)}
-              />
-              <div className="flex justify-end gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setShowCommentForm(false);
-                    setNewCommentText("");
-                  }}
-                  dataTestId="cancel-finalized-project-comment-button"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="default"
-                  size="sm"
-                  onClick={handleAddComment}
-                  disabled={newCommentText.trim() === "" || submitting}
-                  dataTestId="submit-finalized-project-comment-button"
-                >
-                  {submitting ? "Submitting..." : "Submit Comment"}
-                </Button>
-              </div>
+      <div className="border-slate-6 mt-4 border-t pt-2">
+        {showCommentForm ? (
+          <div className="space-y-2">
+            {/* TODO: replace with component library textarea after hackathon storybook is built */}
+            <textarea
+              className="border-slate-7 bg-slate-3 text-slate-12 focus:ring-grass-9 focus:border-grass-9 w-full rounded-md border p-2 text-sm"
+              rows={3}
+              placeholder="Write a comment..."
+              value={newCommentText}
+              onChange={(e) => setNewCommentText(e.target.value)}
+            />
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setShowCommentForm(false);
+                  setNewCommentText("");
+                }}
+                dataTestId={`cancel-${config.testIdTarget}-button`}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="default"
+                size="sm"
+                onClick={handleAddComment}
+                disabled={newCommentText.trim() === "" || submitting}
+                dataTestId={`submit-${config.testIdTarget}-button`}
+              >
+                {submitting ? "Submitting..." : "Submit Comment"}
+              </Button>
             </div>
-          ) : (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowCommentForm(true)}
-              dataTestId="add-finalized-project-comment-button"
-            >
-              Add Comment
-            </Button>
-          )}
-        </div>
-      )}
+          </div>
+        ) : (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowCommentForm(true)}
+            dataTestId={`add-${config.testIdTarget}-button`}
+          >
+            Add Comment
+          </Button>
+        )}
+      </div>
     </div>
   );
 }
