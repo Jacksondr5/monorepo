@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "@j5/component-library";
 import { ZodUser } from "../../server/zod/user";
-import { PostHog } from "posthog-js/react";
+import { type PostHog } from "posthog-js/react";
 import { CommentId } from "~/server/zod";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";

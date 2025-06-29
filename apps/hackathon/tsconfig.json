@@ -5,7 +5,7 @@
     "noEmit": true,
     "emitDeclarationOnly": false,
     "esModuleInterop": true,
-    "module": "esnext",
+    "module": "preserve",
     "resolveJsonModule": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowSyntheticDefaultImports": true,
@@ -22,7 +22,8 @@
     "outDir": "dist",
     "rootDir": ".",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
-    "allowJs": true
+    "allowJs": true,
+    "moduleDetection": "force"
   },
   "include": [
     ".next/types/**/*.ts",

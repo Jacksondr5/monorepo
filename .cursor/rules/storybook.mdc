@@ -15,6 +15,7 @@ Your goal when working in Storybook is to use it for testing.  While Storybook i
 
 - We are using Storybook 9
 - App Storybooks are using the nextjs-vite framework.  The component-library is using the react-vite.
+- Use Vitest testing methods, imported from `storybook/test`.  Do NOT use Jest testing methods.
 
 ## Types of Storybooks
 This monorepo contains 3 different types of Storybooks:
@@ -47,7 +48,6 @@ We will primarily use **two** types of stories, typically co-located within the 
     - **Purpose:** To test the dynamic behavior, event handling (`onClick`, `onChange`, etc.), accessibility attributes during interaction, and complex state changes of components.
     - **Method:** These stories leverage Storybook's `play` function to simulate user interactions.
     - **Naming:** These tests should start with `Test: ` and have a descriptive name.
-    - **Chromatic Snapshots:** Chromatic will typically snapshot the component at the end of the `play` function execution, and can also capture intermediate steps if the `step` utility from `@storybook/test` is used. These snapshots are valuable for verifying visual changes that occur _as a result_ of interaction.
     - **Granularity:** `play` functions should ideally target specific, focused user flows or interactions.
     - **Use `step` to document tests**: Make good use of the `step` utility to group related testing assertions and actions.  This makes it much easier to debug the test.
     - **Field Component Interactions:** For Field components, interaction tests should verify:
@@ -76,15 +76,25 @@ CSS-driven interactive states (`:hover`, `:focus`, `:active`) are crucial for a 
 - **Clarity over Quantity (for Interaction Tests):** Focus interaction tests on verifying specific behaviors rather than every visual permutation. The visual matrix stories handle the latter.
 - **Accessibility:** Use `play` functions to test keyboard navigation and ensure `aria` attributes are updated correctly during interactions.
 - **Balance:** Continuously evaluate the balance between thoroughness of visual/functional tests and the cost/maintenance overhead of Chromatic snapshots.
-- **Refactoring App Components:** When you're writing a story for an app, first examine what will need to be mocked out.  If there are a lot of things that will need to be mocked, **ask the user** if the component should be refactored into a more pure component.  While it may not be possible to make the component entirely pure, removing difficult to mock dependencies will make testing easier.
 
+# Your Testing Process
+1. Examine the component you're writing tests for:
+    1. Determine the type of Storybook (app vs component-library) and type of story (app component vs base component vs field component).  Use this to determine the approach
+    2. For app components, examine the code and determine what will need to be mocked.  If there are a lot of things that will need to be mocked, **stop and ask the user** if the component should be refactored into a more pure component.  While it may not be possible to make the component entirely pure, removing difficult to mock dependencies will make testing easier.
+    3. Examine the props and variants of the component to determine what visual and interaction tests you will need.
+2. Write the tests.  Ensure there are no linting errors before validating the tests.
+3. Verify your tests.  You have access to the BrowserMCP server.  This lets you interact with the Storybook instance.  Here are some approaches for using the BrowserMCP to check your work:
+    - Use the Nx MCP tools to see if a Storybook task is already running before spinning up a new server.  The user likely already has one running.
+    - **When validating visual regression tests**: You won't be able to see the story in the normal Storybook UI since Storybook renders the test in an iframe and the accessibility snapshot doesn't render the iframe.  You can navigate to the iframe URL directly to see the story.
+    - **When validating interaction tests**: It's usually not as important to see the test yourself, so stay on the main Storybook page.  Instead, focus on the "Interactions" tab to see the output of the test.  You can also click the "Rerun" button to rerun the test.  If the test appears to be running in an unexpected way, try remounting the component by clicking the "Remount component" button in the top bar.
+4. Ask the user which tests should have Chromatic disabled
 
-# Verifying Your Tests
-You have access to the BrowserMCP server.  This lets you interact with the Storybook instance.  Here are some approaches for using the BrowserMCP to check your work:
+# Mocking
+When writing tests for apps, mocking is a delicate thing.  Before doing any mocking, check to see if there are any mocks that already exist.  Look at other stories to find existing patterns.  Mocks are found in the `src/lib` folder and mockable dependencies are imported using sub-paths (imported from a route starting with `#`).  We already have mocks for:
+- PostHog
+- Convex
 
-- Use the Nx MCP tools to see if a Storybook task is already running before spinning up a new server.  The user likely already has one running.
-- **When validating visual regression tests**: You won't be able to see the story in the normal Storybook UI since Storybook renders the test in an iframe and the accessibility snapshot doesn't render the iframe.  You can navigate to the iframe URL directly to see the story.
-- **When validating interaction tests**: It's usually not as important to see the test yourself, so stay on the main Storybook page.  Instead, focus on the "Interactions" tab to see the output of the test.  You can also click the "Rerun" button to rerun the test.  If the test appears to be running in an unexpected way, try remounting the component by clicking the "Remount component" button in the top bar.
+If the mock does not exist in the app you are testing, look for an example in another app.
 
 # Important Reminders
 - Your goal is to write tests that validate the component, not just verify them manually yourself.

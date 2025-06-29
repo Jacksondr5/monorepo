@@ -2,6 +2,21 @@
   "name": "@j5/hackathon",
   "private": true,
   "type": "module",
+  "imports": {
+    "#lib/posthog": {
+      "storybook": "./src/lib/posthog.mock.tsx",
+      "default": "./src/lib/posthog.tsx"
+    },
+    "#lib/convex": {
+      "storybook": "./src/lib/convex.mock.ts",
+      "default": "./src/lib/convex.ts"
+    },
+    "#*": [
+      "./*",
+      "./*.ts",
+      "./*.tsx"
+    ]
+  },
   "dependencies": {
     "@clerk/nextjs": "6.23.1",
     "@j5/component-library": "workspace:*",
