@@ -75,7 +75,6 @@ export const DeleteCommentDialog = <
       setIsDeleting(false);
     }
   };
-  console.log(testIdPrefix);
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
