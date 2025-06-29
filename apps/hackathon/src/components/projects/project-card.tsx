@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation } from "convex/react";
+import { useMutation } from "#lib/convex";
 import { api } from "~/convex/_generated/api";
 import type { Project } from "~/server/zod/project";
 import {
@@ -19,7 +19,7 @@ import { useState } from "react";
 import { ProjectSubmissionForm } from "../project-submission/project-submission-form";
 import { Pencil, ThumbsUp } from "lucide-react";
 import { ZodUser } from "~/server/zod";
-import { usePostHog } from "posthog-js/react";
+import { usePostHog } from "#lib/posthog";
 import { DeleteProjectDialog } from "./delete-project-dialog";
 import { SerializableResult } from "~/convex/model/error";
 import {
