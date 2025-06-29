@@ -32,6 +32,7 @@ const commentMutation = zCustomMutation(mutation, NoOp);
 const isFinalizedProjectId = (
   id: Id<"projects"> | Id<"finalizedProjects">,
 ): id is Id<"finalizedProjects"> => {
+  // Convex IDs include a __tableName property for type discrimination
   return id.__tableName === "finalizedProjects";
 };
 
@@ -78,7 +79,7 @@ const _addCommentHandler = async (
     ctx.db.patch(project._id, {
       comments: [...project.comments, newComment],
     }),
-    "Failed to add comment to finalized project",
+    "Failed to add comment",
   );
   if (patchResult.isErr()) return err(patchResult.error);
 
