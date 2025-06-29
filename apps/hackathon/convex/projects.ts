@@ -1,23 +1,15 @@
 import { z } from "zod";
 import { mutation, query, MutationCtx } from "./_generated/server";
-import { v4 as uuidv4 } from "uuid";
+import { zCustomMutation, zCustomQuery } from "convex-helpers/server/zod";
+import { NoOp } from "convex-helpers/server/customFunctions";
+import { getCurrentUser, GetCurrentUserError } from "./model/users";
 import {
+  HackathonEventIdSchema,
   CreateProjectSchema,
   ProjectId,
   ProjectIdSchema,
   UpdateProjectSchema,
-} from "../src/server/zod/project";
-import { zCustomMutation, zCustomQuery } from "convex-helpers/server/zod";
-import { NoOp } from "convex-helpers/server/customFunctions";
-import { getCurrentUser, GetCurrentUserError } from "./model/users";
-import { HackathonEventIdSchema } from "~/server/zod";
-import {
-  getCommentById,
-  updateComment,
-  GetCommentByIdError,
-  UpdateCommentError,
-  updateCommentUpvotes,
-} from "./model/comments";
+} from "~/server/zod";
 import {
   getProjectById,
   GetProjectByIdError,
@@ -26,8 +18,6 @@ import {
 import {
   fromPromiseUnexpectedError,
   UnexpectedError,
-  NotFoundError,
-  getNotFoundError,
   UnauthorizedError,
   DataIsUnexpectedShapeError,
   serializeResult,
@@ -37,24 +27,8 @@ import { err, ok, Result } from "neverthrow";
 const projectQuery = zCustomQuery(query, NoOp);
 const projectMutation = zCustomMutation(mutation, NoOp);
 
-const CommentTargetArgsSchema = z.object({
-  commentId: z.string(),
-  projectId: ProjectIdSchema,
-});
-
 const ProjectTargetArgsSchema = z.object({
   projectId: ProjectIdSchema,
-});
-
-const AddCommentSchema = z.object({
-  projectId: ProjectIdSchema,
-  text: z.string().min(1, "Comment cannot be empty."),
-});
-
-const UpdateCommentSchema = z.object({
-  commentId: z.string(),
-  projectId: ProjectIdSchema,
-  text: z.string().min(1, "Comment cannot be empty."),
 });
 
 export type CreateProjectError = GetCurrentUserError | UnexpectedError;
@@ -71,20 +45,6 @@ export type DeleteProjectError =
   | UnauthorizedError
   | UnexpectedError;
 
-export type AddCommentToProjectError =
-  | GetCurrentUserError
-  | GetProjectByIdError
-  | UnexpectedError;
-
-export type UpdateCommentOnProjectError = UpdateCommentError;
-
-export type DeleteCommentError =
-  | GetCurrentUserError
-  | GetProjectByIdError
-  | NotFoundError<"COMMENT">
-  | UnauthorizedError
-  | UnexpectedError;
-
 export type UpvoteProjectError =
   | GetCurrentUserError
   | GetProjectByIdError
@@ -94,16 +54,6 @@ export type RemoveUpvoteFromProjectError =
   | GetCurrentUserError
   | GetProjectByIdError
   | UnexpectedError;
-
-export type UpvoteCommentError =
-  | GetCurrentUserError
-  | GetCommentByIdError
-  | UpdateCommentError;
-
-export type RemoveUpvoteFromCommentError =
-  | GetCurrentUserError
-  | GetCommentByIdError
-  | UpdateCommentError;
 
 export type GetProjectsByHackathonEventError =
   | UnexpectedError
@@ -209,99 +159,6 @@ export const deleteProject = projectMutation({
   handler: (ctx, args) => serializeResult(_deleteProjectHandler(ctx, args)),
 });
 
-const _addCommentToProjectHandler = async (
-  ctx: MutationCtx,
-  { projectId, text }: z.infer<typeof AddCommentSchema>,
-): Promise<Result<void, AddCommentToProjectError>> => {
-  const userResult = await getCurrentUser(ctx);
-  if (userResult.isErr()) return err(userResult.error);
-  const user = userResult.value;
-
-  const projectResult = await getProjectById(ctx, projectId);
-  if (projectResult.isErr()) return err(projectResult.error);
-  const project = projectResult.value;
-
-  const newComment = {
-    authorId: user._id,
-    createdAt: Date.now(),
-    id: uuidv4(),
-    text,
-    upvotes: [],
-  };
-
-  const patchResult = await fromPromiseUnexpectedError(
-    ctx.db.patch(project._id, {
-      comments: [...project.comments, newComment],
-    }),
-    "Failed to add comment to project",
-  );
-  if (patchResult.isErr()) return err(patchResult.error);
-
-  return ok();
-};
-
-export const addCommentToProject = projectMutation({
-  args: AddCommentSchema,
-  handler: (ctx, args) =>
-    serializeResult(_addCommentToProjectHandler(ctx, args)),
-});
-
-const _updateCommentOnProjectHandler = async (
-  ctx: MutationCtx,
-  { projectId, commentId, text }: z.infer<typeof UpdateCommentSchema>,
-): Promise<Result<void, UpdateCommentOnProjectError>> => {
-  return updateComment(ctx, projectId, commentId, { text });
-};
-
-export const updateCommentOnProject = projectMutation({
-  args: UpdateCommentSchema,
-  handler: (ctx, args) =>
-    serializeResult(_updateCommentOnProjectHandler(ctx, args)),
-});
-
-const _deleteCommentHandler = async (
-  ctx: MutationCtx,
-  { projectId, commentId }: z.infer<typeof CommentTargetArgsSchema>,
-): Promise<Result<void, DeleteCommentError>> => {
-  const userResult = await getCurrentUser(ctx);
-  if (userResult.isErr()) return err(userResult.error);
-  const user = userResult.value;
-
-  const projectResult = await getProjectById(ctx, projectId);
-  if (projectResult.isErr()) return err(projectResult.error);
-  const project = projectResult.value;
-
-  const comment = project.comments.find((c) => c.id === commentId);
-  if (!comment) {
-    return err(getNotFoundError("COMMENT", commentId));
-  }
-
-  if (comment.authorId !== user._id && project.creatorUserId !== user._id) {
-    return err({
-      type: "UNAUTHORIZED",
-      message:
-        "Unauthorized to delete this comment. Must be comment author or project creator.",
-    } satisfies UnauthorizedError);
-  }
-
-  const updatedComments = project.comments.filter((c) => c.id !== commentId);
-
-  const patchResult = await fromPromiseUnexpectedError(
-    ctx.db.patch(project._id, {
-      comments: updatedComments,
-    }),
-    "Failed to delete comment",
-  );
-  if (patchResult.isErr()) return err(patchResult.error);
-
-  return ok();
-};
-
-export const deleteComment = projectMutation({
-  args: CommentTargetArgsSchema,
-  handler: (ctx, args) => serializeResult(_deleteCommentHandler(ctx, args)),
-});
-
 const _upvoteProjectHandler = async (
   ctx: MutationCtx,
   { projectId }: z.infer<typeof ProjectTargetArgsSchema>,
@@ -376,65 +233,6 @@ export const removeUpvoteFromProject = projectMutation({
   args: ProjectTargetArgsSchema,
   handler: (ctx, args) =>
     serializeResult(_removeUpvoteFromProjectHandler(ctx, args)),
-});
-
-const _upvoteCommentHandler = async (
-  ctx: MutationCtx,
-  { projectId, commentId }: z.infer<typeof CommentTargetArgsSchema>,
-): Promise<Result<void, UpvoteCommentError>> => {
-  const userResult = await getCurrentUser(ctx);
-  if (userResult.isErr()) return err(userResult.error);
-  const user = userResult.value;
-
-  const commentResult = await getCommentById(ctx, projectId, commentId);
-  if (commentResult.isErr()) return err(commentResult.error);
-  const { comment } = commentResult.value;
-
-  const existingUpvote = comment.upvotes.find(
-    (upvote) => upvote.userId === user._id,
-  );
-
-  if (existingUpvote) return ok(); // Already upvoted
-
-  const newUpvote = { createdAt: Date.now(), userId: user._id };
-  const updatedCommentUpvotes = [...comment.upvotes, newUpvote];
-  return updateCommentUpvotes(ctx, projectId, commentId, updatedCommentUpvotes);
-};
-
-export const upvoteComment = projectMutation({
-  args: CommentTargetArgsSchema,
-  handler: (ctx, args) => serializeResult(_upvoteCommentHandler(ctx, args)),
-});
-
-const _removeUpvoteFromCommentHandler = async (
-  ctx: MutationCtx,
-  { projectId, commentId }: z.infer<typeof CommentTargetArgsSchema>,
-): Promise<Result<void, RemoveUpvoteFromCommentError>> => {
-  const userResult = await getCurrentUser(ctx);
-  if (userResult.isErr()) return err(userResult.error);
-  const user = userResult.value;
-
-  const commentResult = await getCommentById(ctx, projectId, commentId);
-  if (commentResult.isErr()) return err(commentResult.error);
-  const { comment } = commentResult.value;
-
-  const existingUpvote = comment.upvotes.find(
-    (upvote) => upvote.userId === user._id,
-  );
-
-  if (!existingUpvote) return ok(); // Not upvoted
-
-  const updatedCommentUpvotes = comment.upvotes.filter(
-    (upvote) => upvote.userId !== user._id,
-  );
-
-  return updateCommentUpvotes(ctx, projectId, commentId, updatedCommentUpvotes);
-};
-
-export const removeUpvoteFromComment = projectMutation({
-  args: CommentTargetArgsSchema,
-  handler: (ctx, args) =>
-    serializeResult(_removeUpvoteFromCommentHandler(ctx, args)),
 });
 
 // --- Queries ---

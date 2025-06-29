@@ -5,7 +5,11 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "jsx": "preserve",
-    "noEmit": false
+    "noEmit": false,
+    "paths": {
+      "~/*": ["./src/*"],
+      "~/convex/*": ["./convex/*"]
+    }
   },
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"],
   "include": [

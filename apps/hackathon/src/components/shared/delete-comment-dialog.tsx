@@ -10,16 +10,15 @@ import {
   Dialog,
   DialogTrigger,
 } from "@j5/component-library";
-import { ZodUser } from "../../server/zod/user";
-import { PostHog } from "posthog-js/react";
+import { ZodUser } from "~/server/zod/user";
+import { type PostHog } from "posthog-js/react";
 import { CommentId } from "~/server/zod";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { processError } from "~/lib/errors";
-import { Id } from "../../../convex/_generated/dataModel";
-import { DeleteCommentError } from "../../../convex/projects";
-import { SerializableResult } from "../../../convex/model/error";
-import { DeleteCommentFromFinalizedProjectError } from "../../../convex/finalizedProjects";
+import { Id } from "~/convex/_generated/dataModel";
+import { SerializableResult } from "~/convex/model/error";
+import { DeleteCommentError } from "~/convex/comment";
 
 export interface DeleteCommentDialogProps<
   TProjectId extends Id<"projects" | "finalizedProjects">,
@@ -31,14 +30,9 @@ export interface DeleteCommentDialogProps<
   deleteCommentMutation: (args: {
     projectId: TProjectId;
     commentId: CommentId;
-  }) => Promise<
-    SerializableResult<
-      void,
-      DeleteCommentError | DeleteCommentFromFinalizedProjectError
-    >
-  >;
+  }) => Promise<SerializableResult<void, DeleteCommentError>>;
   postHogEventName: string;
-  testIdPrefix?: string;
+  testIdPrefix: string;
 }
 
 export const DeleteCommentDialog = <
@@ -50,7 +44,7 @@ export const DeleteCommentDialog = <
   postHog,
   deleteCommentMutation,
   postHogEventName,
-  testIdPrefix = "delete-comment",
+  testIdPrefix,
 }: DeleteCommentDialogProps<TProjectId>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -81,7 +75,6 @@ export const DeleteCommentDialog = <
       setIsDeleting(false);
     }
   };
-
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>

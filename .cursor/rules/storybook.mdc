@@ -1,0 +1,102 @@
+---
+description: working in storybook
+globs: 
+alwaysApply: false
+---
+## Description: Guidelines for effectively working in Storybook.
+
+# Purpose
+
+Your goal when working in Storybook is to use it for testing.  While Storybook is often used for documentation of components or as a component development environment, that is NOT the priority here.  Our goals are:
+- Complete test coverage.  Both our visual regression and interaction tests should fully test the component.
+- Cost-effective testing.  We are running these tests in Chromatic, which charges per story.  You should use the strategies below to reduce the number of tests and keep costs down.
+
+# General rules
+
+- We are using Storybook 9
+- App Storybooks are using the nextjs-vite framework.  The component-library is using the react-vite.
+- Use Vitest testing methods, imported from `storybook/test`.  Do NOT use Jest testing methods.
+
+## Types of Storybooks
+This monorepo contains 3 different types of Storybooks:
+- The `@j5/component-library` Storybook.  This is our component library.  It's goal is to test the base and Field components.  Base components are components that do NOT integrate with forms (Button, DatePicker, Input, etc.).  Field components are wrappers around base components that do integrate with forms.  Their names will always start with Field (FieldInput, FieldTextarea, FieldCheckbox, etc.).
+- The `@j5/chromatic` Storybook.  This Storybook is what collects all the stories in the monorepo to send to Chromatic.  You won't be writing stories here, so don't worry about it.
+- The app Storybooks.  These are Storybooks for full apps, located in the `apps/` directory.  Their goals are to test complex components (usually made of components from the `component-library`) and entire screens.
+
+# Story Types & Their Roles
+
+We will primarily use **two** types of stories, typically co-located within the same `*.stories.tsx` file for a given component or its field variant:
+
+1.  **Component Visual Matrix Story (e.g., `AllVariants` export):**
+
+    - **Purpose:** To capture the visual appearance of a component across its numerous static prop combinations.
+    - **Method:** These stories utilize a custom `render` function within Storybook to display multiple component instances in a single story view.  Display these stories in a grid that's a reasonable size for the size of the component.  Chromatic renders the diff for 2 stories side-by-side, so aim to keep the story less than 40% of the screen width.
+    - **Naming:** These tests should have the prefix `Visual: `.  Normally, you can just have 1 test called `Visual: All States`, but if you need to break the story into multiple stories, use a descriptive name.
+    - **Benefit:** This significantly reduces the number of individual Chromatic snapshots for base components, helping to manage costs while still providing broad visual regression coverage for static states.
+    - **Common Approaches:** 
+        - When working on a component in the component-library:
+            - Carefully examine the props and variants.  Ensure all reasonable combinations are covered.  Report which ones you choose and ignore.
+        - When working on a component that has a form:
+            - Show both an empty and filled state
+        - For all components:
+            - Show an error state if one exists.  For base components in the component-library, this is done through an `erorr` prop.  For Field components in the component-library, this is done through the form state.  For components in Apps, this may be done through form state or by passing props that fail validation.  You will need to choose the right approach.
+            - Show a submitting/loading state if one exists
+            - Show a disabled state if one exists
+            - Label the different states with an appropriate header element.  Be sure to make the test a light color (slate-11 or slate-12), as the background is dark.
+
+2.  **Functional/Interaction Stories (Individual story exports):**
+    - **Purpose:** To test the dynamic behavior, event handling (`onClick`, `onChange`, etc.), accessibility attributes during interaction, and complex state changes of components.
+    - **Method:** These stories leverage Storybook's `play` function to simulate user interactions.
+    - **Naming:** These tests should start with `Test: ` and have a descriptive name.
+    - **Granularity:** `play` functions should ideally target specific, focused user flows or interactions.
+    - **Use `step` to document tests**: Make good use of the `step` utility to group related testing assertions and actions.  This makes it much easier to debug the test.
+    - **Field Component Interactions:** For Field components, interaction tests should verify:
+      - Correct association of `Label` with the input.
+      - Proper propagation of value changes to the form context (e.g., via `handleChange`).
+      - Activation and display of error messages and ARIA attributes (`aria-invalid`, `aria-describedby`) when the form context indicates an error.
+    - **Location:** Reside as individual story exports within the respective component's story file (e.g., `input.stories.tsx` or `field-input.stories.tsx`).
+    - **Disabling Chromatic:** Once the tests are completed, ask the user which interaction tests should have Chromatic disabled.
+    - **Proper Selectors:** When writing selectors, ONLY use data-testids.  If the data-testid does not exist, make it.
+    - **Validating a11y:** To validate a11y, use assertions, NOT selectors.
+    - **Other notes:**:
+      - If you're trying to click a disabled button, use `await userEvent.click(button, { pointerEventsCheck: 0 })`.  Without the `pointerEventsCheck`, the click will fail because the button is not clickable.
+
+## Testing Interactive States (Hover, Focus, Active)
+
+CSS-driven interactive states (`:hover`, `:focus`, `:active`) are crucial for a good user experience. Testing their visual appearance can be approached in a few ways:
+
+1.  **Leverage Functional Stories:** As `play` functions interact with components (e.g., focusing an input, tabbing to a button), Chromatic will capture these states. This often provides good coverage.
+2.  **Dedicated Interaction Stories:** For critical interactive states that might not be fully covered by broader functional tests, create small, dedicated stories. These might use a `play` function to programmatically apply focus or simulate a hover-like state for Chromatic to capture. (e.g. using `userEvent.hover()` and then ensuring the story remains in that state for the snapshot).
+3.  **Storybook's `parameters.pseudo` (If Applicable):** Some Storybook setups allow for `parameters.pseudo` to force pseudo-states. Check if your Storybook version and Chromatic support this effectively for visual snapshots.
+
+**Recommendation:** Prioritize capturing interactive states through well-crafted functional stories. Add dedicated stories for `:hover` or `:focus` visuals if critical styles are not otherwise covered.
+
+# General Guidelines
+
+- **Clarity over Quantity (for Interaction Tests):** Focus interaction tests on verifying specific behaviors rather than every visual permutation. The visual matrix stories handle the latter.
+- **Accessibility:** Use `play` functions to test keyboard navigation and ensure `aria` attributes are updated correctly during interactions.
+- **Balance:** Continuously evaluate the balance between thoroughness of visual/functional tests and the cost/maintenance overhead of Chromatic snapshots.
+
+# Your Testing Process
+1. Examine the component you're writing tests for:
+    1. Determine the type of Storybook (app vs component-library) and type of story (app component vs base component vs field component).  Use this to determine the approach
+    2. For app components, examine the code and determine what will need to be mocked.  If there are a lot of things that will need to be mocked, **stop and ask the user** if the component should be refactored into a more pure component.  While it may not be possible to make the component entirely pure, removing difficult to mock dependencies will make testing easier.
+    3. Examine the props and variants of the component to determine what visual and interaction tests you will need.
+2. Write the tests.  Ensure there are no linting errors before validating the tests.
+3. Verify your tests.  You have access to the BrowserMCP server.  This lets you interact with the Storybook instance.  Here are some approaches for using the BrowserMCP to check your work:
+    - If you try to call the tool and get a connection error, STOP and ask the user for help.
+    - Use the Nx MCP tools to see if a Storybook task is already running before spinning up a new server.  The user likely already has one running.
+    - **When validating visual regression tests**: You won't be able to see the story in the normal Storybook UI since Storybook renders the test in an iframe and the accessibility snapshot doesn't render the iframe.  You can navigate to the iframe URL directly to see the story.
+    - **When validating interaction tests**: It's usually not as important to see the test yourself, so stay on the main Storybook page.  Instead, focus on the "Interactions" tab to see the output of the test.  You can also click the "Rerun" button to rerun the test.  If the test appears to be running in an unexpected way, try remounting the component by clicking the "Remount component" button in the top bar.
+4. Ask the user which tests should have Chromatic disabled
+
+# Mocking
+When writing tests for apps, mocking is a delicate thing.  Before doing any mocking, check to see if there are any mocks that already exist.  Look at other stories to find existing patterns.  Mocks are found in the `src/lib` folder and mockable dependencies are imported using sub-paths (imported from a route starting with `#`).  We already have mocks for:
+- PostHog
+- Convex
+
+If the mock does not exist in the app you are testing, look for an example in another app.
+
+# Important Reminders
+- Your goal is to write tests that validate the component, not just verify them manually yourself.
+- If something doesn't seem to be working properly, ask the user for help.  They're better at troubleshooting issues with the external systems like Storybook, BrowserMCP, etc.

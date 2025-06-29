@@ -19,7 +19,6 @@ export function EventInProgressClientPage({
     api.finalizedProjects.getFinalizedProjectsByHackathonEvent,
     { hackathonEventId: hackathon._id },
   );
-
   const currentUserResult = useQuery(api.users.getCurrentUser, {});
 
   const userMap = useMemo(() => {

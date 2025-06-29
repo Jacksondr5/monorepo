@@ -1,8 +1,8 @@
 "use client";
 
 import { useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api";
-import type { Project } from "../../server/zod/project";
+import { api } from "~/convex/_generated/api";
+import type { Project } from "~/server/zod/project";
 import {
   Card,
   CardContent,
@@ -19,15 +19,16 @@ import { useState } from "react";
 import { ProjectSubmissionForm } from "../project-submission/project-submission-form";
 import { Pencil, ThumbsUp } from "lucide-react";
 import { ZodUser } from "~/server/zod";
-import { ProjectComments } from "./project-comments";
 import { usePostHog } from "posthog-js/react";
 import { DeleteProjectDialog } from "./delete-project-dialog";
-import { SerializableResult } from "../../../convex/model/error";
+import { SerializableResult } from "~/convex/model/error";
 import {
   RemoveUpvoteFromProjectError,
   UpvoteProjectError,
-} from "../../../convex/projects";
+} from "~/convex/projects";
 import { processError } from "~/lib/errors";
+import { Comments } from "../shared/comments";
+import { getInitials } from "~/lib/get-initials";
 
 interface ProjectCardProps {
   currentUser: ZodUser;
@@ -44,7 +45,6 @@ export function ProjectCard({
 }: ProjectCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const updateProjectMutation = useMutation(api.projects.updateProject);
-  const deleteProjectMutation = useMutation(api.projects.deleteProject);
   const upvoteProjectMutation = useMutation(api.projects.upvoteProject);
   const removeUpvoteFromProjectMutation = useMutation(
     api.projects.removeUpvoteFromProject,
@@ -77,12 +77,6 @@ export function ProjectCard({
 
   const creatorName = () => {
     return `${creator.firstName} ${creator.lastName}`.trim() || "Anonymous";
-  };
-
-  const getInitials = (firstName?: string, lastName?: string) => {
-    const firstInitial = firstName?.[0]?.toUpperCase() || "";
-    const lastInitial = lastName?.[0]?.toUpperCase() || "";
-    return `${firstInitial}${lastInitial}` || "??"; // Default to '??' for Unknown User
   };
 
   const hasUpvoted = project.upvotes.some(
@@ -127,11 +121,7 @@ export function ProjectCard({
             >
               <Pencil />
             </Button>
-            <DeleteProjectDialog
-              project={project}
-              deleteProjectMutation={deleteProjectMutation}
-              postHog={postHog}
-            />
+            <DeleteProjectDialog projectId={project._id} />
           </div>
         )}
       </CardHeader>
@@ -142,12 +132,16 @@ export function ProjectCard({
         {/* TODO: Display project images here */}
         {/* {project.imageUrls && project.imageUrls.length > 0 && ( ... )} */}
 
-        <ProjectComments
+        <Comments
           projectId={project._id}
           comments={project.comments}
           currentUser={currentUser}
           userMap={userMap}
-          getInitials={getInitials}
+          config={{
+            type: "project",
+            postHogEventTarget: "project_comment",
+            testIdTarget: "project-comment",
+          }}
         />
       </CardContent>
       <CardFooter className="text-slate-9 flex items-center justify-between text-xs">
