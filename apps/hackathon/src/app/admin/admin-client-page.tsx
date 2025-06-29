@@ -128,9 +128,9 @@ export const AdminClientPage = ({
       {showCreateForm && (
         <div className="mb-6">
           <FinalizedProjectForm
-            onSubmit={handleCreateFinalizedProject}
             isSubmitting={isSubmitting}
             onCancel={() => setShowCreateForm(false)}
+            onSubmit={handleCreateFinalizedProject}
           />
           {submissionError && (
             <p className="mt-4 text-center text-red-700">

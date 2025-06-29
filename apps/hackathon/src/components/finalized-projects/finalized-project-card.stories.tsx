@@ -7,13 +7,9 @@ import type { FinalizedProject } from "../../server/zod/finalized-project";
 import { mockApi, clearMockedApi, getMockedApi } from "../../lib/convex.mock";
 import { api } from "../../../convex/_generated/api";
 import { SerializableResult } from "../../../convex/model/error";
-import {
-  AddInterestedUserError,
-  AssignUserToProjectError,
-} from "../../../convex/finalizedProjects";
+import { AddInterestedUserError } from "../../../convex/finalizedProjects";
 import { usePostHog } from "../../lib/posthog.mock";
 import { Id } from "../../../convex/_generated/dataModel";
-import { GetAllUsersError } from "../../../convex/model/users";
 
 // Mock data
 const mockCurrentUser: ZodUser = {
