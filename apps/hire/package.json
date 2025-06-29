@@ -3,15 +3,15 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@clerk/nextjs": "6.22.0",
+    "@clerk/nextjs": "6.23.1",
     "@dnd-kit/core": "6.3.1",
     "@dnd-kit/sortable": "10.0.0",
     "@dnd-kit/utilities": "3.2.2",
     "@j5/component-library": "workspace:*",
     "@t3-oss/env-nextjs": "0.13.8",
-    "@tanstack/react-form": "1.12.3",
+    "@tanstack/react-form": "1.12.4",
     "@tanstack/zod-form-adapter": "0.42.1",
-    "convex": "1.24.8",
+    "convex": "1.25.0",
     "convex-helpers": "0.1.94",
     "dayjs": "1.11.13",
     "next": "15.3.4",
@@ -20,8 +20,8 @@
     "zod": "3.25.67"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "4.1.10",
+    "@tailwindcss/postcss": "4.1.11",
     "postcss": "8.5.6",
-    "tailwindcss": "4.1.10"
+    "tailwindcss": "4.1.11"
   }
 }
