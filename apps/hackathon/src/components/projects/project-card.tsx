@@ -1,8 +1,8 @@
 "use client";
 
 import { useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api";
-import type { Project } from "../../server/zod/project";
+import { api } from "~/convex/_generated/api";
+import type { Project } from "~/server/zod/project";
 import {
   Card,
   CardContent,
@@ -21,14 +21,14 @@ import { Pencil, ThumbsUp } from "lucide-react";
 import { ZodUser } from "~/server/zod";
 import { usePostHog } from "posthog-js/react";
 import { DeleteProjectDialog } from "./delete-project-dialog";
-import { SerializableResult } from "../../../convex/model/error";
+import { SerializableResult } from "~/convex/model/error";
 import {
   RemoveUpvoteFromProjectError,
   UpvoteProjectError,
-} from "../../../convex/projects";
+} from "~/convex/projects";
 import { processError } from "~/lib/errors";
 import { Comments } from "../shared/comments";
-import { getInitials } from "#src/lib/get-initials.js";
+import { getInitials } from "~/lib/get-initials";
 
 interface ProjectCardProps {
   currentUser: ZodUser;

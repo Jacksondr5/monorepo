@@ -1,8 +1,8 @@
 "use client";
 
 import { useMutation, useQuery } from "convex/react";
-import { api } from "../../../convex/_generated/api";
-import type { FinalizedProject } from "../../server/zod/finalized-project";
+import { api } from "~/convex/_generated/api";
+import type { FinalizedProject } from "~/server/zod/finalized-project";
 import {
   Card,
   CardContent,
@@ -25,7 +25,7 @@ import { usePostHog } from "posthog-js/react";
 import { processError } from "~/lib/errors";
 import { useState } from "react";
 import { Comments } from "../shared/comments";
-import { getInitials } from "#src/lib/get-initials.js";
+import { getInitials } from "~/lib/get-initials";
 
 interface FinalizedProjectCardProps {
   currentUser: ZodUser;

@@ -10,15 +10,15 @@ import {
   Dialog,
   DialogTrigger,
 } from "@j5/component-library";
-import { ZodUser } from "../../server/zod/user";
+import { ZodUser } from "~/server/zod/user";
 import { type PostHog } from "posthog-js/react";
 import { CommentId } from "~/server/zod";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { processError } from "~/lib/errors";
-import { Id } from "../../../convex/_generated/dataModel";
-import { SerializableResult } from "../../../convex/model/error";
-import { DeleteCommentError } from "#convex/comment.js";
+import { Id } from "~/convex/_generated/dataModel";
+import { SerializableResult } from "~/convex/model/error";
+import { DeleteCommentError } from "~/convex/comment";
 
 export interface DeleteCommentDialogProps<
   TProjectId extends Id<"projects" | "finalizedProjects">,

@@ -10,12 +10,7 @@
     "#lib/convex": {
       "storybook": "./src/lib/convex.mock.ts",
       "default": "./src/lib/convex.ts"
-    },
-    "#*": [
-      "./*",
-      "./*.ts",
-      "./*.tsx"
-    ]
+    }
   },
   "dependencies": {
     "@clerk/nextjs": "6.23.1",

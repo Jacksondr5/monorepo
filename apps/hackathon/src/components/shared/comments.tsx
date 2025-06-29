@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useMutation } from "#lib/convex";
-import type { ZodUser } from "../../server/zod/user";
+import type { ZodUser } from "~/server/zod/user";
 import {
   Avatar,
   AvatarFallback,
@@ -14,9 +14,9 @@ import { usePostHog } from "posthog-js/react";
 import { DeleteCommentDialog } from "./delete-comment-dialog";
 import { CommentId } from "~/server/zod";
 import { processError } from "~/lib/errors";
-import { api } from "../../../convex/_generated/api";
-import { Id } from "#convex/_generated/dataModel.js";
-import { getInitials } from "#src/lib/get-initials.js";
+import { api } from "~/convex/_generated/api";
+import { Id } from "~/convex/_generated/dataModel";
+import { getInitials } from "~/lib/get-initials";
 
 interface CommentConfig {
   type: "project" | "finalizedProject";

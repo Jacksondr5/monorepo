@@ -1,9 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FunctionReference, getFunctionName } from "convex/server";
-import { api } from "../../convex/_generated/api";
 import { fn, Mock } from "storybook/test";
-import { DeepPartial } from "./deep-partial";
-
-type FunctionGroup = keyof typeof api;
 
 type MockedApi = Record<string, Mock>;
 

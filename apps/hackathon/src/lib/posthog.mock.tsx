@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React from "react";
 import { fn } from "storybook/test";
-import { PostHog } from "posthog-js";
 import { PostHogProvider as RealPostHogProvider } from "posthog-js/react";
-// import React from "react";
 
 // Mock PostHog instance with all commonly used methods
 const createMockPostHog = {
@@ -26,7 +26,7 @@ const createMockPostHog = {
 // Export the mocked usePostHog hook
 export const usePostHog = fn(() => createMockPostHog).mockName("usePostHog");
 
-// // Mock the PostHogProvider to just render children
+// Mock the PostHogProvider to just render children
 export const MockPostHogProvider = fn(
   ({ children }: { children: React.ReactNode }) => (
     <RealPostHogProvider client={createMockPostHog as any}>
@@ -34,6 +34,3 @@ export const MockPostHogProvider = fn(
     </RealPostHogProvider>
   ),
 ).mockName("PostHogProvider");
-
-// Re-export the server-side PostHog client (unchanged)
-// export { default } from "./posthog";

@@ -1,19 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { expect, userEvent, within, fn, waitFor, screen } from "storybook/test";
+import { expect, userEvent, within, fn, waitFor } from "storybook/test";
 import React from "react";
 import { Comments } from "./comments";
 import type { ZodUser } from "../../server/zod/user";
 import { CommentId } from "../../server/zod/comment";
 import { mockApi, clearMockedApi, getMockedApi } from "../../lib/convex.mock";
 import { api } from "../../../convex/_generated/api";
-import { SerializableResult } from "#convex/model/error.ts";
+import { SerializableResult } from "../../../convex/model/error";
 import {
   AddCommentError,
   ToggleUpvoteOnCommentError,
   DeleteCommentError,
-} from "#convex/comment.ts";
+} from "../../../convex/comment";
 import { usePostHog } from "../../lib/posthog.mock";
-import { Id } from "#convex/_generated/dataModel.js";
+import { Id } from "../../../convex/_generated/dataModel";
 
 // Mock data
 const mockUser: ZodUser = {
@@ -148,7 +148,7 @@ export const AllVariants: Story = {
         </h3>
         <Comments
           comments={mockComments}
-          currentUser={null as any}
+          currentUser={null as unknown as ZodUser}
           projectId={"project-123" as Id<"projects">}
           userMap={mockUserMap}
           config={projectConfig}
