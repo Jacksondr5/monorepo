@@ -69,11 +69,6 @@ export const Default: StoryObj = {
 
 export const InteractiveVariants: StoryObj = {
   name: "Trigger All Variants",
-  parameters: {
-    chromatic: {
-      disable: true,
-    },
-  },
   render: () => {
     const variants: ToastVariant[] = [
       "default",

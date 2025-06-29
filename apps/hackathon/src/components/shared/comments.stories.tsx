@@ -81,7 +81,7 @@ const finalizedProjectConfig = {
 };
 
 const meta: Meta<typeof Comments> = {
-  title: "Components/Shared/Comments",
+  title: "Hackathon/Components/Shared/Comments",
   component: Comments,
   parameters: {
     layout: "padded",
@@ -195,9 +195,6 @@ export const AllVariants: Story = {
 // Interaction Stories
 export const AddCommentFlow: Story = {
   name: "Test: Add Comment Flow",
-  parameters: {
-    chromatic: { disable: true },
-  },
   beforeEach() {
     clearMockedApi();
     mockApi(
@@ -284,9 +281,6 @@ export const AddCommentFlow: Story = {
 
 export const CancelCommentFlow: Story = {
   name: "Test: Cancel Comment Flow",
-  parameters: {
-    chromatic: { disable: true },
-  },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 
@@ -324,9 +318,6 @@ export const CancelCommentFlow: Story = {
 
 export const UpvoteToggleFlow: Story = {
   name: "Test: Upvote Toggle Flow",
-  parameters: {
-    chromatic: { disable: true },
-  },
   beforeEach() {
     clearMockedApi();
     mockApi(
@@ -384,9 +375,6 @@ export const UpvoteToggleFlow: Story = {
 
 export const DeleteCommentFlow: Story = {
   name: "Test: Delete Comment Flow",
-  parameters: {
-    chromatic: { disable: true },
-  },
   beforeEach() {
     clearMockedApi();
     mockApi(
@@ -445,9 +433,6 @@ export const DeleteCommentFlow: Story = {
 
 export const ErrorHandling: Story = {
   name: "Test: Error Handling",
-  parameters: {
-    chromatic: { disable: true },
-  },
   beforeEach() {
     clearMockedApi();
     mockApi(
@@ -500,9 +485,6 @@ export const ErrorHandling: Story = {
 
 export const LoadingState: Story = {
   name: "Test: Loading State",
-  parameters: {
-    chromatic: { disable: true },
-  },
   beforeEach() {
     clearMockedApi();
     mockApi(

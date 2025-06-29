@@ -161,7 +161,7 @@ const setupMocks = () => {
 };
 
 const meta: Meta<typeof ProjectCard> = {
-  title: "Hackathon/Components/ProjectCard",
+  title: "Hackathon/Components/Projects/ProjectCard",
   component: ProjectCard,
   parameters: {
     layout: "padded",
@@ -217,7 +217,7 @@ export const AllVariants: Story = {
             </div>
             <div>
               <h3 className="text-slate-11 mb-2 text-sm font-medium">
-                Project with Others' Upvotes (User Hasn't Upvoted)
+                Project with Others&apos; Upvotes (User Hasn&apos;t Upvoted)
               </h3>
               <ProjectCard
                 {...args}

@@ -10,7 +10,7 @@ const mockOnSubmit = fn(async () => true);
 const mockOnCancel = fn();
 
 const meta: Meta<typeof FinalizedProjectForm> = {
-  title: "Hackathon/Components/FinalizedProjectForm",
+  title: "Hackathon/Components/FinalizedProjects/FinalizedProjectForm",
   component: FinalizedProjectForm,
   parameters: {
     layout: "centered",

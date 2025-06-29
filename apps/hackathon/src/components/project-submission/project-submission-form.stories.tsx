@@ -4,7 +4,7 @@ import React from "react";
 import { ProjectSubmissionForm } from "./project-submission-form";
 
 const meta: Meta<typeof ProjectSubmissionForm> = {
-  title: "Hackathon/ProjectSubmissionForm",
+  title: "Hackathon/Components/ProjectSubmission/ProjectSubmissionForm",
   component: ProjectSubmissionForm,
   parameters: {
     layout: "centered",
@@ -126,9 +126,6 @@ export const AllVariants: Story = {
 
 export const FormSubmission: Story = {
   name: "Test: Form Submission Flow",
-  parameters: {
-    chromatic: { disable: true }, // This is purely functional testing
-  },
   args: {
     isSubmitting: false,
   },
@@ -174,9 +171,6 @@ export const FormSubmission: Story = {
 
 export const CancelFunctionality: Story = {
   name: "Test: Cancel Button",
-  parameters: {
-    chromatic: { disable: true },
-  },
   args: {
     onCancel: fn(),
     submitButtonLabel: "Save Draft",
@@ -206,9 +200,6 @@ export const CancelFunctionality: Story = {
 
 export const FormValidation: Story = {
   name: "Test: Form Validation",
-  parameters: {
-    chromatic: { disable: true },
-  },
   args: {
     isSubmitting: false,
   },
@@ -283,9 +274,6 @@ export const SubmittingState: Story = {
 
 export const KeyboardNavigation: Story = {
   name: "Test: Keyboard Navigation",
-  parameters: {
-    chromatic: { disable: true },
-  },
   args: {
     onCancel: fn(),
   },

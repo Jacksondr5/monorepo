@@ -11,14 +11,14 @@ import {
   DialogTrigger,
 } from "@j5/component-library";
 import { ZodUser } from "~/server/zod/user";
-import { type PostHog } from "posthog-js/react";
 import { CommentId } from "~/server/zod";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { processError } from "~/lib/errors";
 import { Id } from "~/convex/_generated/dataModel";
-import { SerializableResult } from "~/convex/model/error";
-import { DeleteCommentError } from "~/convex/comment";
+import { usePostHog } from "#lib/posthog";
+import { useMutation } from "#lib/convex";
+import { api } from "~/convex/_generated/api";
 
 export interface DeleteCommentDialogProps<
   TProjectId extends Id<"projects" | "finalizedProjects">,
@@ -26,11 +26,6 @@ export interface DeleteCommentDialogProps<
   projectId: TProjectId;
   commentId: CommentId;
   currentUser: ZodUser;
-  postHog: PostHog;
-  deleteCommentMutation: (args: {
-    projectId: TProjectId;
-    commentId: CommentId;
-  }) => Promise<SerializableResult<void, DeleteCommentError>>;
   postHogEventName: string;
   testIdPrefix: string;
 }
@@ -41,13 +36,13 @@ export const DeleteCommentDialog = <
   projectId,
   commentId,
   currentUser,
-  postHog,
-  deleteCommentMutation,
   postHogEventName,
   testIdPrefix,
 }: DeleteCommentDialogProps<TProjectId>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const postHog = usePostHog();
+  const deleteCommentMutation = useMutation(api.comment.deleteComment);
 
   const handleDelete = async () => {
     setIsDeleting(true);

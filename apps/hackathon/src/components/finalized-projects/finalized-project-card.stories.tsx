@@ -163,7 +163,7 @@ const setupMocks = () => {
 };
 
 const meta: Meta<typeof FinalizedProjectCard> = {
-  title: "Components/FinalizedProjects/FinalizedProjectCard",
+  title: "Hackathon/Components/FinalizedProjects/FinalizedProjectCard",
   component: FinalizedProjectCard,
   parameters: {
     layout: "padded",
