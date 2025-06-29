@@ -40,6 +40,6 @@ export const useMutation = fn(
 export const useQuery = fn(
   (ref: FunctionReference<"query", "public", any, any, string | undefined>) => {
     const name = getFunctionName(ref);
-    return mockedApi[name];
+    return mockedApi[name]();
   },
 ).mockName("useQuery");

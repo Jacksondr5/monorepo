@@ -55,7 +55,6 @@ We will primarily use **two** types of stories, typically co-located within the 
       - Proper propagation of value changes to the form context (e.g., via `handleChange`).
       - Activation and display of error messages and ARIA attributes (`aria-invalid`, `aria-describedby`) when the form context indicates an error.
     - **Location:** Reside as individual story exports within the respective component's story file (e.g., `input.stories.tsx` or `field-input.stories.tsx`).
-    - **Disabling Chromatic:** Once the tests are completed, ask the user which interaction tests should have Chromatic disabled.
     - **Proper Selectors:** When writing selectors, ONLY use data-testids.  If the data-testid does not exist, make it.
     - **Validating a11y:** To validate a11y, use assertions, NOT selectors.
     - **Other notes:**:
@@ -84,11 +83,10 @@ CSS-driven interactive states (`:hover`, `:focus`, `:active`) are crucial for a 
     3. Examine the props and variants of the component to determine what visual and interaction tests you will need.
 2. Write the tests.  Ensure there are no linting errors before validating the tests.
 3. Verify your tests.  You have access to the BrowserMCP server.  This lets you interact with the Storybook instance.  Here are some approaches for using the BrowserMCP to check your work:
-    - If you try to call the tool and get a connection error, STOP and ask the user for help.
-    - Use the Nx MCP tools to see if a Storybook task is already running before spinning up a new server.  The user likely already has one running.
+    - If you try to call the BrowserMCP tool and something doesn't work or it doesn't exist, STOP and ask the user for help.
+    - Use the Nx MCP tools to see if a Storybook task is already running before spinning up a new server.  The user likely already has one running.  If you cannot find the port, STOP and ask the user for help.
     - **When validating visual regression tests**: You won't be able to see the story in the normal Storybook UI since Storybook renders the test in an iframe and the accessibility snapshot doesn't render the iframe.  You can navigate to the iframe URL directly to see the story.
     - **When validating interaction tests**: It's usually not as important to see the test yourself, so stay on the main Storybook page.  Instead, focus on the "Interactions" tab to see the output of the test.  You can also click the "Rerun" button to rerun the test.  If the test appears to be running in an unexpected way, try remounting the component by clicking the "Remount component" button in the top bar.
-4. Ask the user which tests should have Chromatic disabled
 
 # Mocking
 When writing tests for apps, mocking is a delicate thing.  Before doing any mocking, check to see if there are any mocks that already exist.  Look at other stories to find existing patterns.  Mocks are found in the `src/lib` folder and mockable dependencies are imported using sub-paths (imported from a route starting with `#`).  We already have mocks for:
