@@ -1,20 +1,20 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { expect, within } from "storybook/test";
 import React from "react";
 import { HackathonInfoView } from "./HackathonInfo";
 import { Id } from "../../convex/_generated/dataModel";
+import { anchorTimestamp } from "../utils/anchor-date";
 
 // Mock hackathon data
 const mockSuccessfulHackathon = {
   _id: "hackathon123" as Id<"hackathonEvents">,
-  _creationTime: Date.now(),
+  _creationTime: anchorTimestamp,
   name: "Spring 2024 AI Hackathon",
   description: "Build amazing AI-powered applications",
   currentPhase: "PROJECT_SUBMISSION" as const,
-  startDate: Date.now() - 86400000, // 1 day ago
-  endDate: Date.now() + 86400000, // 1 day from now
-  submissionDeadline: Date.now() + 43200000, // 12 hours from now
-  votingDeadline: Date.now() + 129600000, // 36 hours from now
+  startDate: anchorTimestamp - 86400000, // 1 day ago
+  endDate: anchorTimestamp + 86400000, // 1 day from now
+  submissionDeadline: anchorTimestamp + 43200000, // 12 hours from now
+  votingDeadline: anchorTimestamp + 129600000, // 36 hours from now
 };
 
 const mockHackathonBuilding = {

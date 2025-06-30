@@ -10,11 +10,12 @@ import { SerializableResult } from "../../../convex/model/error";
 import { AddInterestedUserError } from "../../../convex/finalizedProjects";
 import { usePostHog } from "../../lib/posthog.mock";
 import { Id } from "../../../convex/_generated/dataModel";
+import { anchorTimestamp } from "../../utils/anchor-date";
 
 // Mock data
 const mockCurrentUser: ZodUser = {
   _id: "user-current" as Id<"users">,
-  _creationTime: Date.now(),
+  _creationTime: anchorTimestamp,
   firstName: "Jackson",
   lastName: "Miller",
   avatarUrl: "https://github.com/jacksondr5.png",
@@ -24,7 +25,7 @@ const mockCurrentUser: ZodUser = {
 
 const mockAdminUser: ZodUser = {
   _id: "user-admin" as Id<"users">,
-  _creationTime: Date.now(),
+  _creationTime: anchorTimestamp,
   firstName: "Shadcn",
   lastName: "UI",
   avatarUrl: "https://github.com/shadcn.png",
@@ -34,7 +35,7 @@ const mockAdminUser: ZodUser = {
 
 const mockOtherUser: ZodUser = {
   _id: "user-other" as Id<"users">,
-  _creationTime: Date.now(),
+  _creationTime: anchorTimestamp,
   firstName: "Vercel",
   lastName: "Team",
   avatarUrl: "https://github.com/vercel.png",
@@ -44,7 +45,7 @@ const mockOtherUser: ZodUser = {
 
 const mockThirdUser: ZodUser = {
   _id: "user-third" as Id<"users">,
-  _creationTime: Date.now(),
+  _creationTime: anchorTimestamp,
   firstName: "Abraham",
   lastName: "Oh",
   avatarUrl: "https://github.com/asianham.png",
@@ -54,7 +55,7 @@ const mockThirdUser: ZodUser = {
 
 const mockAssignedUser: ZodUser = {
   _id: "user-assigned" as Id<"users">,
-  _creationTime: Date.now(),
+  _creationTime: anchorTimestamp,
   firstName: "Alice",
   lastName: "Assigned",
   avatarUrl: "https://github.com/jacksondr5.png",
@@ -83,29 +84,29 @@ const standardProjectDetails = {
   description:
     "A sophisticated AI assistant that helps developers write better code through intelligent suggestions, automated testing, and real-time collaboration features. This project includes machine learning models for code completion, automated refactoring capabilities, and integration with popular development environments.",
   hackathonEventId: "hackathon-123" as Id<"hackathonEvents">,
-  _creationTime: Date.now(),
-  updatedAt: Date.now(),
+  _creationTime: anchorTimestamp,
+  updatedAt: anchorTimestamp,
 };
 
 const mockProjectWithInterests: FinalizedProject = {
   _id: "project-with-interests" as Id<"finalizedProjects">,
   ...standardProjectDetails,
   interestedUsers: [
-    { userId: mockCurrentUser._id, createdAt: Date.now() - 3600000 },
-    { userId: mockOtherUser._id, createdAt: Date.now() - 1800000 },
-    { userId: mockThirdUser._id, createdAt: Date.now() - 900000 },
+    { userId: mockCurrentUser._id, createdAt: anchorTimestamp - 3600000 },
+    { userId: mockOtherUser._id, createdAt: anchorTimestamp - 1800000 },
+    { userId: mockThirdUser._id, createdAt: anchorTimestamp - 900000 },
   ],
   assignedUsers: [
-    { userId: mockAssignedUser._id, createdAt: Date.now() - 7200000 },
+    { userId: mockAssignedUser._id, createdAt: anchorTimestamp - 7200000 },
   ],
   comments: [
     {
       id: "comment-1",
       authorId: mockOtherUser._id,
-      createdAt: Date.now() - 3600000,
+      createdAt: anchorTimestamp - 3600000,
       text: "This looks really promising! I'd love to contribute.",
       upvotes: [
-        { userId: mockCurrentUser._id, createdAt: Date.now() - 1800000 },
+        { userId: mockCurrentUser._id, createdAt: anchorTimestamp - 1800000 },
       ],
     },
   ],
@@ -123,8 +124,8 @@ const mockProjectCurrentUserNotInterested: FinalizedProject = {
   _id: "project-others-interested" as Id<"finalizedProjects">,
   ...standardProjectDetails,
   interestedUsers: [
-    { userId: mockOtherUser._id, createdAt: Date.now() - 1800000 },
-    { userId: mockThirdUser._id, createdAt: Date.now() - 900000 },
+    { userId: mockOtherUser._id, createdAt: anchorTimestamp - 1800000 },
+    { userId: mockThirdUser._id, createdAt: anchorTimestamp - 900000 },
   ],
   assignedUsers: [],
   comments: [],

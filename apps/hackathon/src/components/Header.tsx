@@ -6,7 +6,7 @@ import { api } from "../../convex/_generated/api";
 import { Button } from "@j5/component-library";
 import { useAuthStatus } from "~/hooks/useAuthStatus";
 import { Skeleton } from "@j5/component-library";
-import { HackathonInfo, HackathonInfoView } from "./HackathonInfo";
+import { HackathonInfoView } from "./HackathonInfo";
 import { Doc } from "../../convex/_generated/dataModel";
 
 export interface HeaderViewProps {
@@ -59,7 +59,7 @@ export function HeaderView({
 }
 
 export interface HeaderProps {
-  preloadedLatestHackathon?: Preloaded<
+  preloadedLatestHackathon: Preloaded<
     typeof api.hackathonEvents.getLatestHackathonEvent
   >;
 }
@@ -67,29 +67,23 @@ export interface HeaderProps {
 export function Header({ preloadedLatestHackathon }: HeaderProps) {
   const { isAuthenticated, isLoading } = useAuthStatus();
 
-  if (preloadedLatestHackathon) {
-    const latestHackathon = usePreloadedQuery(preloadedLatestHackathon);
+  const latestHackathon = usePreloadedQuery(preloadedLatestHackathon);
 
-    if (latestHackathon.ok) {
-      return (
-        <HeaderView
-          hackathonEvent={latestHackathon.value}
-          isAuthLoading={isLoading}
-          isAuthenticated={isAuthenticated}
-        />
-      );
-    } else {
-      return (
-        <HeaderView
-          hackathonError={latestHackathon.error}
-          isAuthLoading={isLoading}
-          isAuthenticated={isAuthenticated}
-        />
-      );
-    }
+  if (latestHackathon.ok) {
+    return (
+      <HeaderView
+        hackathonEvent={latestHackathon.value}
+        isAuthLoading={isLoading}
+        isAuthenticated={isAuthenticated}
+      />
+    );
+  } else {
+    return (
+      <HeaderView
+        hackathonError={latestHackathon.error}
+        isAuthLoading={isLoading}
+        isAuthenticated={isAuthenticated}
+      />
+    );
   }
-
-  return (
-    <HeaderView isAuthLoading={isLoading} isAuthenticated={isAuthenticated} />
-  );
 }

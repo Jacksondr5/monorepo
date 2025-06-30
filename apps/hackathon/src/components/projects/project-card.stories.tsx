@@ -8,11 +8,12 @@ import { mockApi, clearMockedApi, getMockedApi } from "../../lib/convex.mock";
 import { api } from "../../../convex/_generated/api";
 import { usePostHog } from "../../lib/posthog.mock";
 import { Id } from "../../../convex/_generated/dataModel";
+import { anchorTimestamp } from "../../utils/anchor-date";
 
 // Mock data
 const mockCurrentUser: ZodUser = {
   _id: "user-current" as Id<"users">,
-  _creationTime: Date.now(),
+  _creationTime: anchorTimestamp,
   firstName: "Jackson",
   lastName: "Miller",
   avatarUrl: "https://github.com/jacksondr5.png",
@@ -22,7 +23,7 @@ const mockCurrentUser: ZodUser = {
 
 const mockOtherUser: ZodUser = {
   _id: "user-other" as Id<"users">,
-  _creationTime: Date.now(),
+  _creationTime: anchorTimestamp,
   firstName: "Jane",
   lastName: "Smith",
   avatarUrl: "https://github.com/janesmith.png",
@@ -32,7 +33,7 @@ const mockOtherUser: ZodUser = {
 
 const mockThirdUser: ZodUser = {
   _id: "user-third" as Id<"users">,
-  _creationTime: Date.now(),
+  _creationTime: anchorTimestamp,
   firstName: "Bob",
   lastName: "Wilson",
   avatarUrl: "https://github.com/bobwilson.png",
@@ -51,8 +52,8 @@ const baseProjectData = {
   description:
     "A comprehensive task management application that uses artificial intelligence to prioritize tasks and provide productivity insights. Features include smart scheduling, automated categorization, and team collaboration tools.",
   hackathonEventId: "hackathon-123" as Id<"hackathonEvents">,
-  _creationTime: Date.now() - 86400000, // 1 day ago
-  updatedAt: Date.now() - 3600000, // 1 hour ago
+  _creationTime: anchorTimestamp - 86400000, // 1 day ago
+  updatedAt: anchorTimestamp - 3600000, // 1 hour ago
   creatorUserId: mockOtherUser._id,
 };
 
@@ -60,16 +61,18 @@ const mockProjectWithUpvotes: Project = {
   _id: "project-with-upvotes" as Id<"projects">,
   ...baseProjectData,
   upvotes: [
-    { userId: mockCurrentUser._id, createdAt: Date.now() - 1800000 },
-    { userId: mockThirdUser._id, createdAt: Date.now() - 900000 },
+    { userId: mockCurrentUser._id, createdAt: anchorTimestamp - 1800000 },
+    { userId: mockThirdUser._id, createdAt: anchorTimestamp - 900000 },
   ],
   comments: [
     {
       id: "comment-1",
       authorId: mockCurrentUser._id,
-      createdAt: Date.now() - 3600000,
+      createdAt: anchorTimestamp - 3600000,
       text: "This looks really promising! Great idea.",
-      upvotes: [{ userId: mockOtherUser._id, createdAt: Date.now() - 1800000 }],
+      upvotes: [
+        { userId: mockOtherUser._id, createdAt: anchorTimestamp - 1800000 },
+      ],
     },
   ],
 };
@@ -85,14 +88,14 @@ const mockProjectOthersUpvoted: Project = {
   _id: "project-others-upvoted" as Id<"projects">,
   ...baseProjectData,
   upvotes: [
-    { userId: mockOtherUser._id, createdAt: Date.now() - 1800000 },
-    { userId: mockThirdUser._id, createdAt: Date.now() - 900000 },
+    { userId: mockOtherUser._id, createdAt: anchorTimestamp - 1800000 },
+    { userId: mockThirdUser._id, createdAt: anchorTimestamp - 900000 },
   ],
   comments: [
     {
       id: "comment-2",
       authorId: mockThirdUser._id,
-      createdAt: Date.now() - 2700000,
+      createdAt: anchorTimestamp - 2700000,
       text: "Really cool concept! Looking forward to seeing this develop.",
       upvotes: [],
     },
@@ -103,7 +106,9 @@ const mockEditableProject: Project = {
   _id: "project-editable" as Id<"projects">,
   ...baseProjectData,
   creatorUserId: mockCurrentUser._id, // Current user is the creator
-  upvotes: [{ userId: mockOtherUser._id, createdAt: Date.now() - 1800000 }],
+  upvotes: [
+    { userId: mockOtherUser._id, createdAt: anchorTimestamp - 1800000 },
+  ],
   comments: [],
 };
 

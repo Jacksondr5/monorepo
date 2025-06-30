@@ -6,11 +6,12 @@ import { mockApi, clearMockedApi, getMockedApi } from "../../lib/convex.mock";
 import { usePostHog } from "../../lib/posthog.mock";
 import { Id } from "../../../convex/_generated/dataModel";
 import { api } from "../../../convex/_generated/api";
+import { anchorTimestamp } from "../../utils/anchor-date";
 import { ZodUser } from "../../server/zod/user";
 
 const mockUser = {
   _id: "user123" as Id<"users">,
-  _creationTime: Date.now(),
+  _creationTime: anchorTimestamp,
   firstName: "John",
   lastName: "Doe",
   avatarUrl: "https://github.com/shadcn.png",

@@ -14,11 +14,12 @@ import {
 } from "../../../convex/comment";
 import { usePostHog } from "../../lib/posthog.mock";
 import { Id } from "../../../convex/_generated/dataModel";
+import { anchorTimestamp } from "../../utils/anchor-date";
 
 // Mock data
 const mockUser: ZodUser = {
   _id: "user-123" as Id<"users">,
-  _creationTime: Date.now(),
+  _creationTime: anchorTimestamp,
   firstName: "John",
   lastName: "Doe",
   avatarUrl: "https://example.com/avatar.jpg",
@@ -28,7 +29,7 @@ const mockUser: ZodUser = {
 
 const mockOtherUser: ZodUser = {
   _id: "user-456" as Id<"users">,
-  _creationTime: Date.now(),
+  _creationTime: anchorTimestamp,
   firstName: "Jane",
   lastName: "Smith",
   avatarUrl: "https://example.com/avatar2.jpg",
@@ -45,24 +46,24 @@ const mockComments = [
   {
     id: "comment-1" as CommentId,
     authorId: "user-123",
-    createdAt: Date.now() - 86400000, // 1 day ago
+    createdAt: anchorTimestamp - 86400000, // 1 day ago
     text: "This is a great project! Really impressive work.",
-    upvotes: [{ userId: "user-456", createdAt: Date.now() - 3600000 }],
+    upvotes: [{ userId: "user-456", createdAt: anchorTimestamp - 3600000 }],
   },
   {
     id: "comment-2" as CommentId,
     authorId: "user-456",
-    createdAt: Date.now() - 3600000, // 1 hour ago
+    createdAt: anchorTimestamp - 3600000, // 1 hour ago
     text: "I agree! The implementation is very clean and well-documented.",
     upvotes: [
-      { userId: "user-123", createdAt: Date.now() - 1800000 },
-      { userId: "user-456", createdAt: Date.now() - 1800000 },
+      { userId: "user-123", createdAt: anchorTimestamp - 1800000 },
+      { userId: "user-456", createdAt: anchorTimestamp - 1800000 },
     ],
   },
   {
     id: "comment-3" as CommentId,
     authorId: "user-123",
-    createdAt: Date.now() - 1800000, // 30 minutes ago
+    createdAt: anchorTimestamp - 1800000, // 30 minutes ago
     text: "Thanks for the feedback! I'm planning to add more features soon.\n\nThis is a multi-line comment to test text wrapping and formatting.",
     upvotes: [],
   },
