@@ -5,6 +5,7 @@ import { previewConfigVite } from "@j5/component-library/storybook";
 import { MockPostHogProvider } from "../src/lib/posthog.mock";
 import { type Preview } from "@storybook/nextjs-vite";
 import { TooltipProvider } from "@j5/component-library";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const preview: Preview = {
   ...previewConfigVite,
@@ -12,7 +13,9 @@ const preview: Preview = {
     (Story) => (
       <MockPostHogProvider>
         <TooltipProvider>
-          <Story />
+          <ClerkProvider>
+            <Story />
+          </ClerkProvider>
         </TooltipProvider>
       </MockPostHogProvider>
     ),
