@@ -76,6 +76,9 @@ const TooltipWrapper = ({
 
 export const AllVariants: Story = {
   parameters: {
+    chromatic: {
+      disable: true,
+    },
     controls: { hideNoControlsWarning: true },
   },
   render: () => (

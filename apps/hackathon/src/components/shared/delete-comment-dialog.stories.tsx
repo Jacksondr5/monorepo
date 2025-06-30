@@ -6,15 +6,17 @@ import { mockApi, clearMockedApi, getMockedApi } from "../../lib/convex.mock";
 import { usePostHog } from "../../lib/posthog.mock";
 import { Id } from "../../../convex/_generated/dataModel";
 import { api } from "../../../convex/_generated/api";
+import { ZodUser } from "../../server/zod/user";
 
 const mockUser = {
   _id: "user123" as Id<"users">,
   _creationTime: Date.now(),
-  name: "John Doe",
-  email: "john@example.com",
-  image: "https://example.com/avatar.jpg",
+  firstName: "John",
+  lastName: "Doe",
+  avatarUrl: "https://github.com/shadcn.png",
+  role: "USER",
   clerkUserId: "clerk_user_123",
-};
+} satisfies ZodUser;
 
 const mockProjectId = "project123" as Id<"projects">;
 const mockCommentId = "comment123";
