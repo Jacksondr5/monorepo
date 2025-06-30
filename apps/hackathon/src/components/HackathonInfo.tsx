@@ -1,33 +1,35 @@
 "use client";
 
-import { Preloaded, usePreloadedQuery } from "convex/react";
+import { Preloaded, usePreloadedQuery } from "#lib/convex";
 import { api } from "../../convex/_generated/api";
 import { projectStatusMessages } from "~/utils/messages";
 import { processError } from "~/lib/errors";
+import { Doc } from "../../convex/_generated/dataModel";
 
-export interface HackathonInfoProps {
-  preloadedLatestHackathon: Preloaded<
-    typeof api.hackathonEvents.getLatestHackathonEvent
-  >;
+export interface HackathonInfoViewProps {
+  hackathonEvent?: Doc<"hackathonEvents">;
+  error?: {
+    type: string;
+    message: string;
+  };
 }
 
-export function HackathonInfo({
-  preloadedLatestHackathon,
-}: HackathonInfoProps) {
-  const latestHackathon = usePreloadedQuery(preloadedLatestHackathon);
-
+export function HackathonInfoView({
+  hackathonEvent,
+  error,
+}: HackathonInfoViewProps) {
   let hackathonName = "";
   let hackathonCurrentPhase: keyof typeof projectStatusMessages | undefined;
 
-  if (latestHackathon.ok) {
-    hackathonName = latestHackathon.value.name;
-    hackathonCurrentPhase = latestHackathon.value.currentPhase;
-  } else {
-    if (latestHackathon.error.type === "HACKATHON_EVENT_NOT_FOUND") {
+  if (hackathonEvent) {
+    hackathonName = hackathonEvent.name;
+    hackathonCurrentPhase = hackathonEvent.currentPhase;
+  } else if (error) {
+    if (error.type === "HACKATHON_EVENT_NOT_FOUND") {
       hackathonName = "No hackathon event";
     } else {
       hackathonName = "Error loading hackathon event";
-      processError(latestHackathon.error, "Error loading hackathon event");
+      processError(error, "Error loading hackathon event");
     }
   }
 
@@ -46,4 +48,22 @@ export function HackathonInfo({
       )}
     </div>
   );
+}
+
+export interface HackathonInfoProps {
+  preloadedLatestHackathon: Preloaded<
+    typeof api.hackathonEvents.getLatestHackathonEvent
+  >;
+}
+
+export function HackathonInfo({
+  preloadedLatestHackathon,
+}: HackathonInfoProps) {
+  const latestHackathon = usePreloadedQuery(preloadedLatestHackathon);
+
+  if (latestHackathon.ok) {
+    return <HackathonInfoView hackathonEvent={latestHackathon.value} />;
+  } else {
+    return <HackathonInfoView error={latestHackathon.error} />;
+  }
 }

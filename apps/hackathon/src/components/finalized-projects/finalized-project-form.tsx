@@ -14,22 +14,18 @@ const FinalizedProjectFormSchema = CreateFinalizedProjectSchema.pick({
 type FinalizedProjectFormValues = z.infer<typeof FinalizedProjectFormSchema>;
 
 export type FinalizedProjectFormProps = {
-  defaultData?: FinalizedProjectFormValues;
-  isSubmitting?: boolean;
-  onCancel?: () => void;
+  isSubmitting: boolean;
+  onCancel: () => void;
   onSubmit: (data: FinalizedProjectFormValues) => Promise<boolean>;
-  submitButtonLabel?: string;
 };
 
 export function FinalizedProjectForm({
-  defaultData,
   onCancel,
   onSubmit,
-  isSubmitting = false,
-  submitButtonLabel = "Create Finalized Project",
+  isSubmitting,
 }: FinalizedProjectFormProps) {
   const form = useAppForm({
-    defaultValues: defaultData ?? {
+    defaultValues: {
       title: "",
       description: "",
     },
@@ -85,17 +81,18 @@ export function FinalizedProjectForm({
 
           <form.AppForm>
             <form.SubmitButton
-              label={isSubmitting ? "Creating..." : submitButtonLabel}
+              label={isSubmitting ? "Creating..." : "Create Finalized Project"}
             />
-            {onCancel && (
-              <Button
-                onClick={onCancel}
-                variant="outline"
-                dataTestId="finalized-project-form-cancel-button"
-              >
-                Cancel
-              </Button>
-            )}
+
+            <Button
+              type="button"
+              onClick={onCancel}
+              variant="outline"
+              disabled={isSubmitting}
+              dataTestId="finalized-project-form-cancel-button"
+            >
+              Cancel
+            </Button>
           </form.AppForm>
         </div>
       </form>

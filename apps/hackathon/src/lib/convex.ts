@@ -1,1 +1,2 @@
-export { useMutation, useQuery } from "convex/react";
+export { useMutation, useQuery, usePreloadedQuery } from "convex/react";
+export type { Preloaded } from "convex/react";

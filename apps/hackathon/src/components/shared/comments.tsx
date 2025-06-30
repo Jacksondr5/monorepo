@@ -63,7 +63,6 @@ export function Comments<TProjectId extends ProjectId>({
   const toggleUpvoteOnCommentMutation = useMutation(
     api.comment.toggleUpvoteOnComment,
   );
-  const deleteCommentMutation = useMutation(api.comment.deleteComment);
 
   const postHog = usePostHog();
 
@@ -192,8 +191,6 @@ export function Comments<TProjectId extends ProjectId>({
                             projectId={projectId}
                             commentId={comment.id}
                             currentUser={currentUser}
-                            postHog={postHog}
-                            deleteCommentMutation={deleteCommentMutation}
                             postHogEventName={`${config.postHogEventTarget}_deleted`}
                             testIdPrefix={`delete-${config.testIdTarget}-${comment.id}`}
                           />

@@ -50,8 +50,6 @@ export const AllVariants: Story = {
   parameters: {
     // Disabling controls for this story as it's a matrix display
     controls: { hideNoControlsWarning: true, sort: "requiredFirst" },
-    // Increase Chromatic delay if needed for complex renders, though usually not necessary
-    // chromatic: { delay: 300 },
   },
   render: (args) => {
     const variants = Object.keys(
@@ -208,7 +206,6 @@ export const AllVariants: Story = {
 // 2. Functional/Interaction Stories
 
 export const PrimaryClickable: Story = {
-  parameters: { chromatic: { disable: true } },
   name: "Test: Primary Click & Keyboard",
   args: {
     variant: "default",
@@ -269,7 +266,6 @@ export const DestructiveInteraction: Story = {
 };
 
 export const DisabledNoInteraction: Story = {
-  parameters: { chromatic: { disable: true } },
   name: "Test: Disabled Button No Interaction",
   args: {
     variant: "default",
@@ -320,7 +316,6 @@ export const LoadingNoClick: Story = {
 };
 
 export const AsChildLink: Story = {
-  parameters: { chromatic: { disable: true } },
   name: "Test: asChild with Link",
   args: {
     variant: "link",

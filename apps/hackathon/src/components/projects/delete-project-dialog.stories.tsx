@@ -5,12 +5,12 @@ import { DeleteProjectDialog } from "./delete-project-dialog";
 import { ProjectId } from "../../server/zod";
 import { mockApi, clearMockedApi, getMockedApi } from "../../lib/convex.mock";
 import { api } from "../../../convex/_generated/api";
-import { SerializableResult } from "#convex/model/error.ts";
-import { DeleteProjectError } from "#convex/projects.ts";
 import { usePostHog } from "../../lib/posthog.mock";
+import { SerializableResult } from "../../../convex/model/error";
+import { DeleteProjectError } from "../../../convex/projects";
 
 const meta: Meta<typeof DeleteProjectDialog> = {
-  title: "Components/Projects/DeleteProjectDialog",
+  title: "Hackathon/Components/Projects/DeleteProjectDialog",
   component: DeleteProjectDialog,
   parameters: {
     layout: "centered",
@@ -48,9 +48,6 @@ export const AllVariants: Story = {
 // Interaction Stories
 export const DialogInteraction: Story = {
   name: "Test: Dialog Open/Close Flow",
-  parameters: {
-    chromatic: { disable: true },
-  },
   beforeEach() {
     clearMockedApi();
     mockApi(
@@ -109,9 +106,6 @@ export const DialogInteraction: Story = {
 
 export const SuccessfulDeletion: Story = {
   name: "Test: Successful Deletion Flow",
-  parameters: {
-    chromatic: { disable: true },
-  },
   beforeEach() {
     clearMockedApi();
     mockApi(
@@ -166,9 +160,6 @@ export const SuccessfulDeletion: Story = {
 
 export const FailedDeletion: Story = {
   name: "Test: Failed Deletion Handling",
-  parameters: {
-    chromatic: { disable: true },
-  },
   beforeEach() {
     clearMockedApi();
     mockApi(
@@ -225,9 +216,6 @@ export const FailedDeletion: Story = {
 
 export const KeyboardNavigation: Story = {
   name: "Test: Keyboard Navigation",
-  parameters: {
-    chromatic: { disable: true },
-  },
   play: async ({ canvasElement, step }) => {
     const canvas = within(canvasElement);
 

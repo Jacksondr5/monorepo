@@ -93,6 +93,7 @@ export function ProjectSubmissionForm({
             />
             {onCancel && (
               <Button
+                type="button"
                 onClick={onCancel}
                 variant="outline"
                 dataTestId="project-submission-cancel-button"
