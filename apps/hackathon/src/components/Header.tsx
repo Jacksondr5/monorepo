@@ -69,21 +69,12 @@ export function Header({ preloadedLatestHackathon }: HeaderProps) {
 
   const latestHackathon = usePreloadedQuery(preloadedLatestHackathon);
 
-  if (latestHackathon.ok) {
-    return (
-      <HeaderView
-        hackathonEvent={latestHackathon.value}
-        isAuthLoading={isLoading}
-        isAuthenticated={isAuthenticated}
-      />
-    );
-  } else {
-    return (
-      <HeaderView
-        hackathonError={latestHackathon.error}
-        isAuthLoading={isLoading}
-        isAuthenticated={isAuthenticated}
-      />
-    );
-  }
+  return (
+    <HeaderView
+      hackathonEvent={latestHackathon.ok ? latestHackathon.value : undefined}
+      hackathonError={latestHackathon.ok ? undefined : latestHackathon.error}
+      isAuthLoading={isLoading}
+      isAuthenticated={isAuthenticated}
+    />
+  );
 }
