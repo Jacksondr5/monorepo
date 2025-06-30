@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FunctionReference, getFunctionName } from "convex/server";
 import { fn, Mock } from "storybook/test";
+import { Preloaded } from "convex/react";
+
+export type { Preloaded };
 
 type MockedApi = Record<string, Mock>;
 
@@ -43,3 +46,14 @@ export const useQuery = fn(
     return mockedApi[name]();
   },
 ).mockName("useQuery");
+
+export const usePreloadedQuery = fn(
+  (
+    preloaded: Preloaded<
+      FunctionReference<"query", "public", any, any, string | undefined>
+    >,
+  ) => {
+    const name = getFunctionName(preloaded.__type);
+    return mockedApi[name]();
+  },
+).mockName("usePreloadedQuery");
