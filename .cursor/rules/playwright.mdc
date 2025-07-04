@@ -1,0 +1,30 @@
+---
+description: when writing Playwright tests
+globs: 
+alwaysApply: false
+---
+# Goals
+Your goal when writing Playwright tests is to achieve maximum coverage of the functions of the app.  You must also write reusable tests that adhear to the Page Object Model approach.
+
+# Rules
+- Every piece of UI must be encapsulated in a POM
+- Every selector MUST be a data test ID, unless this is not feasible, then another approach can be used.  Analyze the source code to find the right data test IDs.
+- Every time you add or modify a test, you MUST validate that it runs successfully by viewing it in the browser using the method outlined below
+
+# Running and viewing the test results
+The user will set up a headed Playwright server that you can access using the Browser MCP tool.  This server will display the Playwright UI mode interface.  DO NOT ATTEMPT TO LAUNCH YOUR OWN SERVER.  If the Brower MCP tool is not working for whatever reason, STOP and ask the user for help.  The app can be found at `localhost:3000`.
+
+# Testing Process
+Follow this process to build the tests:
+1. Analyze the code and come up with a set of test cases, if not already provided.
+    1. Ensure that you have all the data test IDs you need, add them if any are missing.  If you are unsure whether the test ID exists or where to add it, ask the user.
+2. Write out a skeleton test file and POM.  Make sure the test file includes skipped versions of all the tests you plan to write.  Ensure the POM has skeletons for all the methods you think you'll need.
+    1. The POM should live in the testing app's `src/pages` directory and have `.page.ts` as a file extension.
+3. Go through each test, one at a time, and implement them.  When you're done with a test, validate it using the Browser MCP tools to access the Playwright UI.
+    1.
+4. Once you've completed a test file, analyze it and see if there are any common pieces of code that you can extract to a reusable function within the file.
+5. STOP and ask the user to validate your work before moving on. Provide a summary of all the changes you made to the source code and all the tests you wrote.
+
+# Test Scope
+When deciding on test cases, focus on user journies.  We have already covered most simple error cases (form validation, loading errors) in Storybook tests, so our focus here is on broad user interactions.
+ 
