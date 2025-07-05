@@ -5,4 +5,4 @@ alwaysApply: true
 ---
 Always alphabetize objects by their keys.
 
-If you want to start a long running process, like a dev server, ask me to do it instead of doing it yourself through a tool call.
+If you want to start a long running process, like a dev server, ask the user to do it instead of doing it yourself through a tool call.

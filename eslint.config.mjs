@@ -21,6 +21,8 @@ const config = [
       "**/.next",
       "**/storybook-static",
       "**/out-tsc",
+      "**/playwright-report",
+      "**/test-output",
     ],
   },
   { plugins: { "@nx": nxEslintPlugin } },
