@@ -62,10 +62,8 @@ export async function signOutUser(page: Page): Promise<void> {
 export async function isUserSignedIn(page: Page): Promise<boolean> {
   try {
     // Check if UserButton is visible (indicates signed in)
-    await page.waitForSelector('[data-clerk-component="UserButton"]', {
-      state: "visible",
-      timeout: 5000,
-    });
+    const userButton = page.locator('[data-clerk-component="UserButton"]');
+    await userButton.waitFor({ state: "visible", timeout: 5000 });
     return true;
   } catch {
     return false;

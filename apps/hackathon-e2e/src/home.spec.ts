@@ -15,8 +15,9 @@ test.describe("Home Page", () => {
       await expect(page).toHaveTitle("Welcome to hackathon");
 
       // Check that header is visible with sign-in button
-      await expect(homePage.getHeader()).toBeVisible();
-      const headerText = await page.locator("header").textContent();
+      const header = homePage.getHeader();
+      await expect(header).toBeVisible();
+      const headerText = await header.textContent();
       expect(headerText).toContain("Sign In");
       await expect(homePage.getHeaderSignInButton()).toBeVisible();
 
@@ -31,6 +32,9 @@ test.describe("Home Page", () => {
 
       // Navigate to home page
       await homePage.navigateToHome();
+
+      // Ensure the header sign-in button is available before keyboard navigation
+      await expect(homePage.getHeaderSignInButton()).toBeVisible();
 
       // Try to focus on the sign-in button using keyboard
       await page.keyboard.press("Tab");

@@ -1,7 +1,6 @@
 import { test, expect } from "@playwright/test";
 import {
   signInUser,
-  signOutUser,
   isUserSignedIn,
   ensureUserSignedIn,
   ensureUserSignedOut,
@@ -29,7 +28,7 @@ test.describe("Authentication Utilities", () => {
     // Verify we don't see authenticated UI elements
     await expect(
       page.locator('[data-clerk-component="UserButton"]'),
-    ).not.toBeVisible();
+    ).toBeHidden();
   });
 
   test("should handle authenticated state correctly", async ({ page }) => {
@@ -49,12 +48,10 @@ test.describe("Authentication Utilities", () => {
     ).toBeVisible();
 
     // Verify we don't see unauthenticated UI elements
-    await expect(
-      page.locator('[data-testid="signed-out-ui"]'),
-    ).not.toBeVisible();
+    await expect(page.locator('[data-testid="signed-out-ui"]')).toBeHidden();
     await expect(
       page.locator('[data-testid="header-sign-in-button"]'),
-    ).not.toBeVisible();
+    ).toBeHidden();
   });
 
   test("should handle ensure functions correctly", async ({ page }) => {

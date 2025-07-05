@@ -3,7 +3,6 @@ import { api } from "../../convex/_generated/api";
 import NoHackathon from "./no-hackathon";
 import { getAuthToken } from "./auth";
 import { processError } from "~/lib/errors";
-import { redirect } from "next/navigation";
 import { ProjectSubmissionServerPage } from "./phases/project-submission-server-page";
 import { ProjectVotingServerPage } from "./phases/project-voting-server-page";
 import { EventInProgressServerPage } from "./phases/event-in-progress-server-page";
