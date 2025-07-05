@@ -1,9 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 import { nxE2EPreset } from "@nx/playwright/preset";
 import { workspaceRoot } from "@nx/devkit";
-import { env } from "./src/env";
 
-const baseURL = env.BASE_URL;
+const baseURL = process.env.BASE_URL || "http://localhost:3000";
 
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: "./src" }),

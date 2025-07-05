@@ -8,7 +8,7 @@ test.describe("Home Page", () => {
     }) => {
       const homePage = new HomePage(page);
 
-      // Navigate to home page
+      // Navigate to home page (assuming user starts unauthenticated)
       await homePage.navigateToHome();
 
       // Check page title
@@ -20,7 +20,7 @@ test.describe("Home Page", () => {
       expect(headerText).toContain("Sign In");
       await expect(homePage.getHeaderSignInButton()).toBeVisible();
 
-      // Check that signed out UI is displayed
+      // Check that signed-out UI is displayed
       await expect(homePage.getSignedOutUI()).toBeVisible();
     });
   });
