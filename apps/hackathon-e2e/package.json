@@ -6,5 +6,14 @@
     "implicitDependencies": [
       "@j5/hackathon"
     ]
+  },
+  "devDependencies": {
+    "@clerk/testing": "^1.9.2"
+  },
+  "dependencies": {
+    "@t3-oss/env-core": "0.13.8",
+    "@t3-oss/env-nextjs": "0.13.8",
+    "dotenv": "^17.0.1",
+    "zod": "3.25.67"
   }
 }

@@ -1,28 +1,16 @@
 import { defineConfig, devices } from "@playwright/test";
 import { nxE2EPreset } from "@nx/playwright/preset";
 import { workspaceRoot } from "@nx/devkit";
+import { env } from "./src/env";
 
-// For CI, you may want to set BASE_URL to the deployed application.
-const baseURL = process.env["BASE_URL"] || "http://localhost:3000";
+const baseURL = env.BASE_URL;
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// require('dotenv').config();
-
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: "./src" }),
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL,
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
   },
-  /* Run your local dev server before starting the tests */
   webServer: {
     command: "pnpm exec nx run @j5/hackathon:start",
     url: "http://localhost:3000",
@@ -31,37 +19,46 @@ export default defineConfig({
   },
   projects: [
     {
+      name: "setup",
+      testMatch: /.*\.setup\.ts/,
+    },
+    {
       name: "chromium",
+      dependencies: ["setup"],
       use: { ...devices["Desktop Chrome"] },
     },
 
-    {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-    },
+    // {
+    //   name: "firefox",
+    //   dependencies: ["setup"],
+    //   use: { ...devices["Desktop Firefox"] },
+    // },
 
-    {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
-    },
+    // {
+    //   name: "webkit",
+    //   dependencies: ["setup"],
+    //   use: { ...devices["Desktop Safari"] },
+    // },
 
-    // Uncomment for mobile browsers support
     /* {
       name: 'Mobile Chrome',
+      dependencies: ["setup"],
       use: { ...devices['Pixel 5'] },
     },
     {
       name: 'Mobile Safari',
+      dependencies: ["setup"],
       use: { ...devices['iPhone 12'] },
     }, */
 
-    // Uncomment for branded browsers
     /* {
       name: 'Microsoft Edge',
+      dependencies: ["setup"],
       use: { ...devices['Desktop Edge'], channel: 'msedge' },
     },
     {
       name: 'Google Chrome',
+      dependencies: ["setup"],
       use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     } */
   ],

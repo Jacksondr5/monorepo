@@ -8,6 +8,7 @@ import { ProjectSubmissionServerPage } from "./phases/project-submission-server-
 import { ProjectVotingServerPage } from "./phases/project-voting-server-page";
 import { EventInProgressServerPage } from "./phases/event-in-progress-server-page";
 import { EventEndedServerPage } from "./phases/event-ended-server-page";
+import { SignedOutUI } from "~/components/SignedOutUI";
 
 export default async function HomePage() {
   const tokenResult = await getAuthToken();
@@ -15,11 +16,11 @@ export default async function HomePage() {
   // If we can't get a token, redirect to sign-in
   if (tokenResult.isErr()) {
     if (tokenResult.error.type === "UNAUTHENTICATED") {
-      redirect("/sign-in");
+      return <SignedOutUI />;
     } else {
       // Handle unexpected errors
       processError(tokenResult.error, "Failed to get authentication token");
-      redirect("/sign-in");
+      return <SignedOutUI />;
     }
   }
 

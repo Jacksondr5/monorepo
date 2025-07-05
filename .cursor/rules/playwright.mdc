@@ -1,30 +1,123 @@
 ---
 description: when writing Playwright tests
-globs: 
+globs:
 alwaysApply: false
 ---
+
 # Goals
-Your goal when writing Playwright tests is to achieve maximum coverage of the functions of the app.  You must also write reusable tests that adhear to the Page Object Model approach.
+
+Your goal when writing Playwright tests is to achieve maximum coverage of the functions of the app. You must also write reusable tests that adhere to the Page Object Model approach with clean, efficient test organization.
 
 # Rules
+
+## Page Object Model (POM) Guidelines
+
 - Every piece of UI must be encapsulated in a POM
-- Every selector MUST be a data test ID, unless this is not feasible, then another approach can be used.  Analyze the source code to find the right data test IDs.
-- Every time you add or modify a test, you MUST validate that it runs successfully by viewing it in the browser using the method outlined below
+- POM methods should return Playwright `Locator` objects, not boolean or other values
+- Example POM pattern:
+
+  ```typescript
+  getSignedOutUI() {
+    return this.getByTestId("signed-out-ui");
+  }
+
+  async clickHeaderSignInButton(): Promise<void> {
+    await this.getHeaderSignInButton().click();
+  }
+  ```
+
+## Selector Strategy
+
+- Every selector MUST be a data-testid, unless this is not feasible
+- Add data-testid attributes to components when missing: `data-testid="component-name"`
+- Use semantic HTML selectors as fallback: `page.locator("header")`, `page.locator("main")`
+- Analyze the source code to find the right data test IDs
+
+## Test Organization and Efficiency
+
+- **Combine related assertions** into single tests when they test the same page state
+- Group tests logically with `test.describe()` blocks
+- Prefer comprehensive tests over many small tests to reduce page loads
+- Example structure:
+  ```typescript
+  test.describe("Page Name", () => {
+    test.describe("State/Context", () => {
+      test("should verify all related functionality", async ({ page }) => {
+        // Multiple related assertions in one test
+      });
+    });
+  });
+  ```
+
+## Test Patterns
+
+- Navigate once per test and verify multiple aspects of that state
+- Include accessibility checks (keyboard navigation, semantic HTML)
+- Validate page titles and core UI elements
+- Example test pattern:
+
+  ```typescript
+  test("should display all unauthenticated UI elements correctly", async ({
+    page,
+  }) => {
+    const homePage = new HomePage(page);
+
+    await homePage.navigateToHome();
+
+    // Check page title
+    await expect(page).toHaveTitle("Expected Title");
+
+    // Check multiple UI elements
+    await expect(homePage.getHeader()).toBeVisible();
+    await expect(homePage.getSignedOutUI()).toBeVisible();
+  });
+  ```
+
+## Validation Requirements
+
+- Every time you add or modify a test, you MUST validate that it runs successfully
+- Run tests with `--reporter=list` for clean output
+- Test stability with `--repeat-each=2` when needed
 
 # Running and viewing the test results
-The user will set up a headed Playwright server that you can access using the Browser MCP tool.  This server will display the Playwright UI mode interface.  DO NOT ATTEMPT TO LAUNCH YOUR OWN SERVER.  If the Brower MCP tool is not working for whatever reason, STOP and ask the user for help.  The app can be found at `localhost:3000`.
+
+The user will set up a headed Playwright server that you can access using the Browser MCP tool. This server will display the Playwright UI mode interface. DO NOT ATTEMPT TO LAUNCH YOUR OWN SERVER. If the Brower MCP tool is not working for whatever reason, STOP and ask the user for help. The app can be found at `localhost:3000`.
 
 # Testing Process
+
 Follow this process to build the tests:
-1. Analyze the code and come up with a set of test cases, if not already provided.
-    1. Ensure that you have all the data test IDs you need, add them if any are missing.  If you are unsure whether the test ID exists or where to add it, ask the user.
-2. Write out a skeleton test file and POM.  Make sure the test file includes skipped versions of all the tests you plan to write.  Ensure the POM has skeletons for all the methods you think you'll need.
-    1. The POM should live in the testing app's `src/pages` directory and have `.page.ts` as a file extension.
-3. Go through each test, one at a time, and implement them.  When you're done with a test, validate it using the Browser MCP tools to access the Playwright UI.
-    1.
-4. Once you've completed a test file, analyze it and see if there are any common pieces of code that you can extract to a reusable function within the file.
-5. STOP and ask the user to validate your work before moving on. Provide a summary of all the changes you made to the source code and all the tests you wrote.
+
+1. **Analyze and Plan**
+   - Analyze the code and come up with a set of test cases, if not already provided
+   - Identify missing data-testid attributes and add them to components
+   - Plan test groupings to minimize redundant page loads
+
+2. **Build POM and Test Structure**
+   - Create POM in the testing app's `src/pages` directory with `.page.ts` extension
+   - Use getter functions only, avoid redundant `isVisible()` methods
+   - Write test structure with logical `describe` blocks
+
+3. **Implement and Validate**
+   - Write comprehensive tests that verify multiple related aspects
+   - Combine assertions that test the same page state
+   - Run and validate each test as you complete it
+
+4. **Refactor and Optimize**
+   - Look for opportunities to combine related tests
+   - Extract common patterns to reusable functions
+   - Ensure POM methods are consistent and clean
+
+5. **Final Validation**
+   - Run full test suite to ensure stability
+   - Provide summary of changes and test coverage
 
 # Test Scope
-When deciding on test cases, focus on user journies.  We have already covered most simple error cases (form validation, loading errors) in Storybook tests, so our focus here is on broad user interactions.
- 
+
+Focus on user journeys and page states rather than individual component behaviors:
+
+- **Page-level functionality**: Navigation, layout, core UI elements
+- **User workflows**: Authentication states, form submissions, data flows
+- **Accessibility**: Keyboard navigation, semantic HTML structure
+- **Cross-cutting concerns**: Page titles, error states, loading states
+
+Avoid testing individual component validation (covered in Storybook) and focus on integration-level user interactions.
