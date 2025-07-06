@@ -44,7 +44,9 @@ export function HeaderView({
           {isAuthLoading ? (
             <Skeleton className="h-10 w-20 rounded-md" />
           ) : isAuthenticated ? (
-            <UserButton />
+            <span data-testid="user-button">
+              <UserButton />
+            </span>
           ) : (
             <SignInButton mode="modal" signUpForceRedirectUrl="/sign-up">
               <Button variant="default" dataTestId="header-sign-in-button">

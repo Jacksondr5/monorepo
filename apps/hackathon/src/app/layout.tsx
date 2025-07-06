@@ -7,6 +7,7 @@ import { preloadQuery } from "convex/nextjs";
 import { api } from "../../convex/_generated/api";
 import { Toaster } from "@j5/component-library";
 import { PostHogIdentify } from "./posthog-identify";
+import { SignedOutUI } from "~/components/SignedOutUI";
 
 export const metadata = {
   title: "Welcome to hackathon",
@@ -32,9 +33,7 @@ export default async function RootLayout({
         <Providers authToken={token}>
           <Header preloadedLatestHackathon={latestHackathonPreloaded} />
           <SignedOut>
-            <div className="text-slate-11 mt-8 w-full text-center text-3xl">
-              You need to sign in to view this app
-            </div>
+            <SignedOutUI />
           </SignedOut>
           <SignedIn>
             <PostHogIdentify />
