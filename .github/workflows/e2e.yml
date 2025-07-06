@@ -47,7 +47,12 @@ jobs:
       # Uncomment this line to enable task distribution
       - name: Enable Task Distribution
         if: env.PROJECT_NAME != 'hackathon'
-        run: pnpm dlx nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="build" --with-env-vars="CHROMATIC_PROJECT_TOKEN,CHROMATIC_BRANCH,CHROMATIC_SHA,CHROMATIC_SLUG"
+        run: pnpm dlx nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="e2e-ci" --with-env-vars="BASE_URL"
+
+      # Don't distribute the hackathon e2e tests, because they are sequential.
+      - name: Enable Task Distribution
+        if: env.PROJECT_NAME == 'hackathon'
+        run: pnpm dlx nx-cloud start-ci-run --stop-agents-after="e2e" --with-env-vars="BASE_URL"
 
       # Install dependencies
       - name: Install Dependencies
