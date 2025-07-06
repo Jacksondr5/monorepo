@@ -1,12 +1,12 @@
 name: Run E2E Tests (test)
 
 on:
-  workflow_dispatch:
-    inputs:
-      project:
-        description: "The project to run the E2E tests for"
-        required: true
-        default: "hackathon"
+  #   workflow_dispatch:
+  #     inputs:
+  #       project:
+  #         description: "The project to run the E2E tests for"
+  #         required: true
+  #         default: "hackathon"
   push:
     branches:
       - feature/hackathon-e2e-2
@@ -19,7 +19,8 @@ permissions:
 env:
   CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
-  PROJECT_NAME: ${{ inputs.project }}
+  PROJECT_NAME: hackathon
+#   PROJECT_NAME: hire
 
 jobs:
   main:
