@@ -1,0 +1,75 @@
+name: Run E2E Tests (test)
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: "The project to run the E2E tests for"
+        required: true
+        default: "hackathon"
+
+# Needed for nx-set-shas when run on the main branch
+permissions:
+  actions: read
+  contents: read
+
+env:
+  CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
+  PROJECT_NAME: ${{ inputs.project }}
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # with:
+        #   ref: ${{ github.event.client_payload.git.sha }}
+
+      - name: Log data
+        run: |
+          echo "Project: ${{ env.PROJECT_NAME }}"
+          echo "Environment: ${{ github.event.client_payload.environment }}"
+          echo "Git Ref: ${{ github.event.client_payload.git.ref }}"
+          echo "Git SHA: ${{ github.event.client_payload.git.sha }}"
+          echo "Git Short SHA: ${{ github.event.client_payload.git.shortSha }}"
+          echo "URL: ${{ github.event.client_payload.url }}"
+
+      - uses: pnpm/action-setup@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: "pnpm"
+
+      # This enables task distribution via Nx Cloud
+      # Run this command as early as possible, before dependencies are installed
+      # Learn more at https://nx.dev/ci/reference/nx-cloud-cli#npx-nxcloud-startcirun
+      # Uncomment this line to enable task distribution
+      - name: Enable Task Distribution
+        if: env.PROJECT_NAME != 'hackathon'
+        run: pnpm dlx nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="e2e-ci" --with-env-vars="BASE_URL"
+
+      # Don't distribute the hackathon e2e tests, because they are sequential.
+      - name: Enable Task Distribution
+        if: env.PROJECT_NAME == 'hackathon'
+        run: pnpm dlx nx-cloud start-ci-run --stop-agents-after="e2e" --with-env-vars="BASE_URL"
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Set Shas
+        uses: nrwl/nx-set-shas@v4
+
+      # Run the hackathon e2e tests sequentially, because the app has a global state
+      # that makes it hard to shard the tests.
+      - name: Run E2E Tests for hackathon
+        if: env.PROJECT_NAME == 'hackathon'
+        run: pnpm nx e2e hackathon-e2e --verbose
+
+      - name: Run E2E Tests
+        if: env.PROJECT_NAME != 'hackathon'
+        run: pnpm nx e2e-ci ${{ env.PROJECT_NAME }}-e2e --verbose
