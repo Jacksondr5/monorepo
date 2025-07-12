@@ -1,24 +1,7 @@
 {
   "name": "todo",
-  "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": {
-    "build": "next build",
-    "check": "next lint && tsc --noEmit",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio",
-    "dev": "next dev --turbo",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-    "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
-    "preview": "next build && next start",
-    "start": "next start",
-    "test:unit": "vitest",
-    "typecheck": "tsc --noEmit"
-  },
   "dependencies": {
     "@auth/drizzle-adapter": "1.10.0",
     "@clerk/nextjs": "6.24.0",
@@ -33,6 +16,7 @@
     "@trpc/server": "11.4.3",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
+    "convex": "1.25.2",
     "dayjs": "1.11.13",
     "drizzle-orm": "0.44.2",
     "geist": "1.4.2",

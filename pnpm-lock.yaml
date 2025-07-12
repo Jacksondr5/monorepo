@@ -501,6 +501,9 @@ importers:
       clsx:
         specifier: 2.1.1
         version: 2.1.1
+      convex:
+        specifier: 1.25.2
+        version: 1.25.2(@clerk/clerk-react@5.33.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       dayjs:
         specifier: 1.11.13
         version: 1.11.13
