@@ -13,7 +13,7 @@ import {
 
 function SignInOutButton({ type }: { type: "signin" | "signout" }) {
   return (
-    <button className="absolute top-4 right-4 rounded-full bg-grass-9 px-6 py-2 font-semibold no-underline transition hover:bg-grass-10">
+    <button className="bg-grass-9 hover:bg-grass-10 absolute right-4 top-4 rounded-full px-6 py-2 font-semibold no-underline transition">
       {type === "signin" ? "Sign in" : "Sign out"}
     </button>
   );
@@ -42,7 +42,7 @@ export default async function Home() {
               <SignInButton>
                 <SignInOutButton type="signin" />
               </SignInButton>
-              <div className="mt-12 text-2xl text-olive-12">
+              <div className="text-olive-12 mt-12 text-2xl">
                 Sign in to start
               </div>
             </SignedOut>

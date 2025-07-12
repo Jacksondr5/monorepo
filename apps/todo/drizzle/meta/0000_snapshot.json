@@ -103,12 +103,8 @@
           "name": "todo_dev_account_user_id_todo_dev_user_id_fk",
           "tableFrom": "todo_dev_account",
           "tableTo": "todo_dev_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -116,10 +112,7 @@
       "compositePrimaryKeys": {
         "todo_dev_account_provider_provider_account_id_pk": {
           "name": "todo_dev_account_provider_provider_account_id_pk",
-          "columns": [
-            "provider",
-            "provider_account_id"
-          ]
+          "columns": ["provider", "provider_account_id"]
         }
       },
       "uniqueConstraints": {},
@@ -172,12 +165,8 @@
           "name": "todo_dev_session_user_id_todo_dev_user_id_fk",
           "tableFrom": "todo_dev_session",
           "tableTo": "todo_dev_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -260,10 +249,7 @@
       "compositePrimaryKeys": {
         "todo_dev_verification_token_identifier_token_pk": {
           "name": "todo_dev_verification_token_identifier_token_pk",
-          "columns": [
-            "identifier",
-            "token"
-          ]
+          "columns": ["identifier", "token"]
         }
       },
       "uniqueConstraints": {},
@@ -356,12 +342,8 @@
           "name": "todo_dev_task_created_by_todo_dev_user_id_fk",
           "tableFrom": "todo_dev_task",
           "tableTo": "todo_dev_user",
-          "columnsFrom": [
-            "created_by"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["created_by"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }

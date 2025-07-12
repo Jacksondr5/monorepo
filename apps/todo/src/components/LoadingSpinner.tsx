@@ -11,7 +11,7 @@ export const LoadingSpinner = () => {
   if (!isLoading) return null;
 
   return (
-    <div className="fixed top-4 left-4 text-olive-11">
+    <div className="text-olive-11 fixed left-4 top-4">
       <Loader2 className="h-6 w-6 animate-spin" />
     </div>
   );

@@ -169,7 +169,7 @@ export const TaskView = ({
   return (
     <div
       className={cn(
-        "flex w-full flex-col gap-2 rounded-md border px-4 py-2 text-olive-12 focus:outline-2",
+        "text-olive-12 flex w-full flex-col gap-2 rounded-md border px-4 py-2 focus:outline-2",
         "border-olive-6 bg-olive-2 focus:bg-olive-5 focus:outline-olive-7",
         isBlocked && "border-red-6 bg-red-2 focus:bg-red-5 focus:outline-red-7",
         isDone &&

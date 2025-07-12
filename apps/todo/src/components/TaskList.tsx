@@ -40,7 +40,7 @@ export const TaskList = () => {
 
   return (
     <div
-      className="mx-20 mt-18 flex w-full flex-col items-center border-2 border-grass-3 p-6"
+      className="mt-18 border-grass-3 mx-20 flex w-full flex-col items-center border-2 p-6"
       tabIndex={0}
       ref={listRef}
       onKeyDown={handleKeyDown}
@@ -52,8 +52,8 @@ export const TaskList = () => {
         ))}
       </div>
       {oldTasks.length > 0 && (
-        <div className="mt-4 flex w-5/6 flex-col items-center justify-center gap-2 rounded-lg border-4 border-orange-3 p-2 xl:w-1/2">
-          <h2 className="text-2xl font-bold text-olive-11">
+        <div className="border-orange-3 mt-4 flex w-5/6 flex-col items-center justify-center gap-2 rounded-lg border-4 p-2 xl:w-1/2">
+          <h2 className="text-olive-11 text-2xl font-bold">
             Review these tasks
           </h2>
           {oldTasks.map((task) => (
