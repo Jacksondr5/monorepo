@@ -348,14 +348,14 @@ importers:
         specifier: 0.13.8
         version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.67)
       dotenv:
-        specifier: ^17.2.0
+        specifier: 17.2.0
         version: 17.2.0
       zod:
         specifier: 3.25.67
         version: 3.25.67
     devDependencies:
       '@clerk/testing':
-        specifier: ^1.9.3
+        specifier: 1.9.3
         version: 1.9.3(@playwright/test@1.54.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
   apps/hire:
@@ -18122,7 +18122,7 @@ snapshots:
 
   dotenv-expand@11.0.7:
     dependencies:
-      dotenv: 16.4.7
+      dotenv: 16.6.1
 
   dotenv@16.4.7: {}
 
