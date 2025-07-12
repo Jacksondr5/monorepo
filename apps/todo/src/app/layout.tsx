@@ -16,15 +16,15 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <ClerkProvider>
-      <html lang="en" className={`${GeistSans.variable}`}>
-        <body className="min-h-screen bg-grass-1">
+    <html lang="en" className={`${GeistSans.variable}`}>
+      <body className="bg-grass-1 min-h-screen">
+        <ClerkProvider>
           <TRPCReactProvider>
             <LoadingSpinner />
             {children}
           </TRPCReactProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }
