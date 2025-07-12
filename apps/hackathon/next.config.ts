@@ -4,6 +4,7 @@ import { withSentryConfig } from "@sentry/nextjs";
 // Importing the file to validate env during build
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { env } from "./src/env";
+// import path from "path";
 
 const nextConfig = {
   nx: {
@@ -21,6 +22,8 @@ const nextConfig = {
       },
     ],
   },
+  // output: "standalone",
+  // outputFileTracingRoot: path.join(import.meta.dirname, "../../"),
   // Rewrites to proxy PostHog ingestion and static assets
   async rewrites() {
     return [

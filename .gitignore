@@ -50,6 +50,7 @@ vitest.config.*.timestamp*
 # Next.js
 .next
 out
+.vercel
 
 test-output
 test-results
