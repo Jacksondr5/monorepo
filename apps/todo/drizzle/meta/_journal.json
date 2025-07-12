@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1736711858497,
+      "tag": "0000_lonely_terrax",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1736718426726,
+      "tag": "0001_broken_speed",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1736744674626,
+      "tag": "0002_dashing_silk_fever",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1737413728114,
+      "tag": "0003_sour_tyger_tiger",
+      "breakpoints": true
+    }
+  ]
+}
