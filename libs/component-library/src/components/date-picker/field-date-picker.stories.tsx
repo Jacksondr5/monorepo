@@ -164,7 +164,7 @@ export const InteractionTest: Story = {
       await userEvent.click(datePickerTrigger);
 
       // Select a date that will trigger an error (this is simulated)
-      const errorDate = screen.getByRole("gridcell", { name: "30" });
+      const errorDate = screen.getByRole("gridcell", { name: "21" });
       await userEvent.click(errorDate);
 
       await waitFor(() => {
@@ -178,7 +178,7 @@ export const InteractionTest: Story = {
 
   render: () => {
     const [value, setValue] = useState<number | undefined>(undefined);
-    const isInvalidDate = value && new Date(value).getDate() === 30;
+    const isInvalidDate = value && new Date(value).getDate() === 21;
 
     return (
       <MockFieldProvider
