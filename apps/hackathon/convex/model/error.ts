@@ -59,7 +59,7 @@ export const safeParseConvexObject = <T extends z.ZodRawShape>(
   }
   return err({
     type: "DATA_IS_UNEXPECTED_SHAPE",
-    message: JSON.stringify(result.error.format()),
+    message: JSON.stringify(z.prettifyError(result.error)),
   });
 };
 
@@ -73,7 +73,7 @@ export const safeParseConvexArray = <T extends z.ZodRawShape>(
   }
   return err({
     type: "DATA_IS_UNEXPECTED_SHAPE",
-    message: JSON.stringify(result.error.format()),
+    message: JSON.stringify(z.prettifyError(result.error)),
   });
 };
 
