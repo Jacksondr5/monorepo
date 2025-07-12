@@ -4,10 +4,10 @@ import "dotenv/config";
 
 export const env = createEnv({
   server: {
-    BASE_URL: z.string().url(),
+    BASE_URL: z.url(),
     CLERK_PUBLISHABLE_KEY: z.string().min(1),
     CLERK_SECRET_KEY: z.string().min(1),
-    PLAYWRIGHT_USER_EMAIL: z.string().email(),
+    PLAYWRIGHT_USER_EMAIL: z.email(),
     PLAYWRIGHT_USER_PASSWORD: z.string().min(1),
   },
   client: {},

@@ -14,7 +14,7 @@ export const ProjectSchema = z.object({
   comments: z.array(CommentSchema),
   description: z.string().min(1),
   // TODO: add imageUrls
-  // imageUrls: z.array(z.string().url()).optional(),
+  // imageUrls: z.array(z.url()).optional(),
   hackathonEventId: HackathonEventIdSchema,
   title: z.string().min(1),
   updatedAt: z.number(),
