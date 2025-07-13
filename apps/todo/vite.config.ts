@@ -7,6 +7,6 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [tailwindcss(), tsconfigPaths(), react(), nxViteTsPaths()],
   test: {
-    exclude: ["node_modules", ".next"],
+    exclude: ["node_modules", ".next", "dist", "storybook-static", "coverage"],
   },
 });

@@ -9,9 +9,14 @@ export const partition = <T>(
   array: T[],
   predicate: (item: T) => boolean,
 ): [T[], T[]] => {
-  return array.reduce<[T[], T[]]>(
-    ([pass, fail], elem) =>
-      predicate(elem) ? [[...pass, elem], fail] : [pass, [...fail, elem]],
-    [[], []],
-  );
+  const pass: T[] = [];
+  const fail: T[] = [];
+  for (const elem of array) {
+    if (predicate(elem)) {
+      pass.push(elem);
+    } else {
+      fail.push(elem);
+    }
+  }
+  return [pass, fail];
 };

@@ -50,7 +50,6 @@ export const Task = ({
   };
 
   const handleDescriptionChange = (value: string) => {
-    console.log("id", _id);
     if (_id !== NEW_TASK_ID) {
       dispatch({ type: "edit-description", taskId: _id, value });
     }

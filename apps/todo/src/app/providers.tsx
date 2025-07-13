@@ -6,6 +6,8 @@ import { env } from "~/env";
 import { ConvexReactClient } from "convex/react";
 import { useMemo } from "react";
 
+const client = new ConvexReactClient(env.NEXT_PUBLIC_CONVEX_URL);
+
 export const Providers = ({
   children,
   authToken,
@@ -15,7 +17,6 @@ export const Providers = ({
 }) => {
   // Convex client setup
   const convex = useMemo(() => {
-    const client = new ConvexReactClient(env.NEXT_PUBLIC_CONVEX_URL);
     if (authToken) {
       client.setAuth(async () => authToken);
     }

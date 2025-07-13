@@ -74,7 +74,7 @@ const _createTaskHandler = async (
 
   if (taskResult.isErr()) return err(taskResult.error);
 
-  return ok(taskResult.value as Id<"tasks">);
+  return ok(taskResult.value);
 };
 
 export const createTask = taskMutation({
@@ -89,14 +89,11 @@ const _setDescriptionHandler = async (
   ctx: MutationCtx,
   args: z.infer<typeof SetTaskDescriptionSchema>,
 ): Promise<Result<void, SetDescriptionError>> => {
-  const ownershipResult = await ensureTaskOwnership(
-    ctx,
-    args.id as Id<"tasks">,
-  );
+  const ownershipResult = await ensureTaskOwnership(ctx, args.id);
   if (ownershipResult.isErr()) return err(ownershipResult.error);
 
   const updateResult = await fromPromiseUnexpectedError(
-    ctx.db.patch(args.id as Id<"tasks">, {
+    ctx.db.patch(args.id, {
       description: args.description,
       updatedAt: Date.now(),
     }),
@@ -120,14 +117,11 @@ const _setIsBlockedHandler = async (
   ctx: MutationCtx,
   args: z.infer<typeof SetTaskBlockedSchema>,
 ): Promise<Result<void, SetIsBlockedError>> => {
-  const ownershipResult = await ensureTaskOwnership(
-    ctx,
-    args.id as Id<"tasks">,
-  );
+  const ownershipResult = await ensureTaskOwnership(ctx, args.id);
   if (ownershipResult.isErr()) return err(ownershipResult.error);
 
   const updateResult = await fromPromiseUnexpectedError(
-    ctx.db.patch(args.id as Id<"tasks">, {
+    ctx.db.patch(args.id, {
       isBlocked: args.isBlocked,
       updatedAt: Date.now(),
     }),
@@ -151,14 +145,11 @@ const _setIsDoneHandler = async (
   ctx: MutationCtx,
   args: z.infer<typeof SetTaskDoneSchema>,
 ): Promise<Result<void, SetIsDoneError>> => {
-  const ownershipResult = await ensureTaskOwnership(
-    ctx,
-    args.id as Id<"tasks">,
-  );
+  const ownershipResult = await ensureTaskOwnership(ctx, args.id);
   if (ownershipResult.isErr()) return err(ownershipResult.error);
 
   const updateResult = await fromPromiseUnexpectedError(
-    ctx.db.patch(args.id as Id<"tasks">, {
+    ctx.db.patch(args.id, {
       isDone: args.isDone,
       updatedAt: Date.now(),
     }),
@@ -182,14 +173,11 @@ const _setIsImportantHandler = async (
   ctx: MutationCtx,
   args: z.infer<typeof SetTaskImportantSchema>,
 ): Promise<Result<void, SetIsImportantError>> => {
-  const ownershipResult = await ensureTaskOwnership(
-    ctx,
-    args.id as Id<"tasks">,
-  );
+  const ownershipResult = await ensureTaskOwnership(ctx, args.id);
   if (ownershipResult.isErr()) return err(ownershipResult.error);
 
   const updateResult = await fromPromiseUnexpectedError(
-    ctx.db.patch(args.id as Id<"tasks">, {
+    ctx.db.patch(args.id, {
       isImportant: args.isImportant,
       updatedAt: Date.now(),
     }),
@@ -213,14 +201,11 @@ const _setIsUrgentHandler = async (
   ctx: MutationCtx,
   args: z.infer<typeof SetTaskUrgentSchema>,
 ): Promise<Result<void, SetIsUrgentError>> => {
-  const ownershipResult = await ensureTaskOwnership(
-    ctx,
-    args.id as Id<"tasks">,
-  );
+  const ownershipResult = await ensureTaskOwnership(ctx, args.id);
   if (ownershipResult.isErr()) return err(ownershipResult.error);
 
   const updateResult = await fromPromiseUnexpectedError(
-    ctx.db.patch(args.id as Id<"tasks">, {
+    ctx.db.patch(args.id, {
       isUrgent: args.isUrgent,
       updatedAt: Date.now(),
     }),
@@ -244,14 +229,11 @@ const _setTitleHandler = async (
   ctx: MutationCtx,
   args: z.infer<typeof SetTaskTitleSchema>,
 ): Promise<Result<void, SetTitleError>> => {
-  const ownershipResult = await ensureTaskOwnership(
-    ctx,
-    args.id as Id<"tasks">,
-  );
+  const ownershipResult = await ensureTaskOwnership(ctx, args.id);
   if (ownershipResult.isErr()) return err(ownershipResult.error);
 
   const updateResult = await fromPromiseUnexpectedError(
-    ctx.db.patch(args.id as Id<"tasks">, {
+    ctx.db.patch(args.id, {
       title: args.title,
       updatedAt: Date.now(),
     }),
@@ -275,14 +257,11 @@ const _deleteTaskHandler = async (
   ctx: MutationCtx,
   args: z.infer<typeof DeleteTaskSchema>,
 ): Promise<Result<void, DeleteTaskError>> => {
-  const ownershipResult = await ensureTaskOwnership(
-    ctx,
-    args.id as Id<"tasks">,
-  );
+  const ownershipResult = await ensureTaskOwnership(ctx, args.id);
   if (ownershipResult.isErr()) return err(ownershipResult.error);
 
   const deleteResult = await fromPromiseUnexpectedError(
-    ctx.db.delete(args.id as Id<"tasks">),
+    ctx.db.delete(args.id),
     "Failed to delete task",
   );
 

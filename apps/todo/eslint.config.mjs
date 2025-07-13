@@ -21,7 +21,7 @@ const config = [
   {
     files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
     rules: {
-      "@next/next/no-html-link-for-pages": ["error", "apps/hackathon/pages"],
+      "@next/next/no-html-link-for-pages": ["error", "apps/todo/pages"],
     },
   },
   {

@@ -24,7 +24,6 @@ export const mockApi = (
 ) => {
   const name = getFunctionName(ref);
   mockedApi[name] = mockedFunction;
-  console.log(ref._type);
   if (shouldMockWithOptimisticUpdate) {
     mockedApi[name].withOptimisticUpdate = mockedFunction;
   }

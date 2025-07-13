@@ -43,10 +43,17 @@ const keybindingHelps: KeybindingHelp[] = [
 
 export const KeybindingsHelp = () => {
   return (
-    <div className="bg-olive-5 absolute bottom-4 right-4 rounded-md p-4">
-      <h2 className="text-olive-12 text-2xl font-bold">Keybindings</h2>
+    <div
+      className="bg-olive-5 absolute bottom-4 right-4 rounded-md p-4"
+      role="dialog"
+      aria-labelledby="keybindings-title"
+      aria-describedby="keybindings-list"
+    >
+      <h2 className="text-olive-12 text-2xl font-bold" id="keybindings-title">
+        Keybindings
+      </h2>
       <Separator className="bg-olive-7 m-1.5" />
-      <ul className="text-olive-11 list-none">
+      <ul className="text-olive-11 list-none" id="keybindings-list">
         {keybindingHelps.map((help) => (
           <li key={help.key}>
             {help.key}: {help.description}

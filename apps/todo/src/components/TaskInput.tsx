@@ -32,6 +32,10 @@ export const TaskInput = ({
     }
   }, [ref]);
 
+  useEffect(() => {
+    setValue(defaultValue);
+  }, [defaultValue]);
+
   const sharedProps = {
     onChange: (e: React.ChangeEvent<TaskInputRef>) => setValue(e.target.value),
     onKeyDown: handleKeyDown,

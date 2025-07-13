@@ -17,6 +17,8 @@ export const Urgent = ({ className, isUrgent }: UrgentProps) => {
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
+      role="img"
+      aria-label={isUrgent ? "Urgent task" : "Not urgent task"}
     >
       <circle cx="12" cy="12" r="10" />
       <polyline points="12 6 12 12 16 14" />

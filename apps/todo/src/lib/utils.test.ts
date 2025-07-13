@@ -16,4 +16,12 @@ describe("partition", () => {
     expect(truthy).toEqual([]);
     expect(falsy).toEqual([]);
   });
+
+  it("should handle array with all elements passing the predicate", () => {
+    const numbers = [2, 4, 6, 8];
+    const [evens, odds] = partition(numbers, (n) => n % 2 === 0);
+
+    expect(evens).toEqual(numbers);
+    expect(odds).toEqual([]);
+  });
 });

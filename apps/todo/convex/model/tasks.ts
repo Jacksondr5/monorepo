@@ -52,7 +52,7 @@ export type GetUserTasksError =
   | DataIsUnexpectedShapeError;
 
 export const getUserTasks = async (
-  ctx: QueryCtx,
+  ctx: QueryCtx | MutationCtx,
 ): Promise<Result<ZodTask[], GetUserTasksError>> => {
   const identityResult = await getCurrentUserIdentity(ctx);
   if (identityResult.isErr()) return err(identityResult.error);

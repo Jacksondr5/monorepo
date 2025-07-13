@@ -17,6 +17,8 @@ export const Important = ({ className, isImportant }: ImportantProps) => {
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
+      role="img"
+      aria-label={isImportant ? "Important task" : "Not important task"}
     >
       <circle cx="12" cy="12" r="10" />
       <line x1="12" x2="12" y1="8" y2="12" />

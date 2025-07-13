@@ -11,29 +11,14 @@ import { useQuery, useMutation } from "#lib/convex";
 import { api } from "../../convex/_generated/api";
 import { type Id } from "../../convex/_generated/dataModel";
 import { type SerializableResult } from "../../convex/model/error";
+import { type ZodTask, type ZodCreateTask } from "../server/zod/task";
+import { OptimisticLocalStore } from "convex/browser";
 
-type Task = {
-  _id: Id<"tasks">;
-  _creationTime: number;
-  title: string;
-  description?: string;
-  isBlocked: boolean;
-  isDone: boolean;
-  isImportant?: boolean;
-  isUrgent?: boolean;
-  createdById: string;
-  updatedAt: number;
-};
-
-type NewTask = {
+type NewTask = ZodCreateTask & {
   _id: typeof NEW_TASK_ID;
   _creationTime: number;
-  title: string;
-  description?: string;
   isBlocked: boolean;
   isDone: boolean;
-  isImportant?: boolean;
-  isUrgent?: boolean;
   createdById: string;
   updatedAt: number;
 };
@@ -58,7 +43,7 @@ export const NEW_TASK_ID = "new-task" as const;
 
 type TaskContextType = {
   dispatch: (action: Action) => void;
-  tasks: (Task | NewTask)[];
+  tasks: (ZodTask | NewTask)[];
   focusedTaskId?: Id<"tasks"> | typeof NEW_TASK_ID;
 };
 
@@ -79,15 +64,20 @@ const handleResult = <T, E>(
 };
 
 // Optimistic update helper functions
-const getTasksFromLocalStore = (localStore: any): Task[] | null => {
+const getTasksFromLocalStore = (
+  localStore: OptimisticLocalStore,
+): ZodTask[] | null => {
   const existingTasks = localStore.getQuery(api.tasks.getTasks);
-  if (existingTasks && existingTasks.ok) {
+  if (existingTasks?.ok) {
     return existingTasks.value;
   }
   return null;
 };
 
-const updateTasksInLocalStore = (localStore: any, updatedTasks: Task[]) => {
+const updateTasksInLocalStore = (
+  localStore: OptimisticLocalStore,
+  updatedTasks: ZodTask[],
+) => {
   localStore.setQuery(
     api.tasks.getTasks,
     {},
@@ -98,12 +88,12 @@ const updateTasksInLocalStore = (localStore: any, updatedTasks: Task[]) => {
   );
 };
 
-const updateTaskProperty = <T extends keyof Task>(
+const updateTaskProperty = <T extends keyof ZodTask>(
   property: T,
-  value: Task[T],
+  value: ZodTask[T],
   taskId: Id<"tasks">,
 ) => {
-  return (tasks: Task[]) =>
+  return (tasks: ZodTask[]) =>
     tasks.map((task) =>
       task._id === taskId
         ? { ...task, [property]: value, updatedAt: Date.now() }
@@ -125,7 +115,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
     : null;
 
   // Combine real tasks with new tasks
-  const tasks: (Task | NewTask)[] = [...(taskData || []), ...newTasks];
+  const tasks: (ZodTask | NewTask)[] = [...(taskData || []), ...newTasks];
 
   // Set up mutations with optimistic updates
   const createTask = useMutation(api.tasks.createTask).withOptimisticUpdate(

@@ -22,6 +22,7 @@ export const env = createEnv({
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
     NEXT_PUBLIC_CLERK_FRONTEND_API_URL: z.string().min(1),
     NEXT_PUBLIC_CONVEX_URL: z.string().min(1),
+    NEXT_PUBLIC_SENTRY_DSN: z.string().min(1),
   },
 
   /**
@@ -35,6 +36,7 @@ export const env = createEnv({
     NEXT_PUBLIC_CLERK_FRONTEND_API_URL:
       process.env.NEXT_PUBLIC_CLERK_FRONTEND_API_URL,
     NEXT_PUBLIC_CONVEX_URL: process.env.NEXT_PUBLIC_CONVEX_URL,
+    NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
     NODE_ENV: process.env.NODE_ENV,
   },
   /**
