@@ -38,7 +38,7 @@ export function OrganizationSelect() {
         await setActive({ organization: newOrgId });
       } catch (error) {
         console.error("Failed to switch organization:", error);
-        // TODO: Show toast notification
+        // TODO: Show toast notification (JAC-46)
       }
     }
   };

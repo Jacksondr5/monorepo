@@ -28,7 +28,7 @@ export const ProjectSubmissionClientPage = ({
   );
   const postHog = usePostHog();
 
-  // TODO: actually handle error
+  // TODO: actually handle error (JAC-62)
   const projectSubmissionData = unwrapSerializableResult(
     projectSubmissionDataResult,
     "Failed to fetch project submission data",

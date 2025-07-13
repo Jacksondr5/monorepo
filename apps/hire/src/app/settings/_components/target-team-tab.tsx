@@ -74,7 +74,7 @@ export function TargetTeamTab({ orgId }: { orgId: string }) {
               orgId,
               targetTeamIds: newTeams.map((t) => t.id),
             });
-            // TODO: Add toast notification on success or failure
+            // TODO: Add toast notification on success or failure (JAC-46)
           }}
           onTagDeleted={(tagId) => deleteTargetTeam({ orgId, _id: tagId })}
         />

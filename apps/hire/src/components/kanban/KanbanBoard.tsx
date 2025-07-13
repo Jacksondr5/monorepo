@@ -66,7 +66,7 @@ export function KanbanBoard({
     }
 
     if (candidate.kanbanStageId !== newStageId) {
-      // TODO: Add loading and error state handling
+      // TODO: Add loading and error state handling (JAC-67)
       updateCandidateStage({
         candidateId: candidateId,
         kanbanStageId: newStageId,
@@ -96,7 +96,7 @@ export function KanbanBoard({
       handleCloseEditSheet();
     } catch (error) {
       console.error("Failed to update candidate:", error);
-      // TODO: Add toast notification
+      // TODO: Add toast notification (JAC-46)
     }
   };
 

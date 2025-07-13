@@ -31,7 +31,7 @@ export const getProjectById = (
       if (!project) {
         return err(getNotFoundError("PROJECT", projectId));
       }
-      // TODO: remove after the migration
+      // TODO: remove after the migration (JAC-77)
       return ok({
         ...project,
         comments: project.comments || [],
@@ -71,7 +71,7 @@ export const getProjectsByHackathonEvent = async (
   if (projectsResult.isErr()) return err(projectsResult.error);
 
   const projects = projectsResult.value
-    // TODO: remove after migration
+    // TODO: remove after migration (JAC-77)
     .map((project) => ({
       ...project,
       comments: project.comments || [],
@@ -81,7 +81,7 @@ export const getProjectsByHackathonEvent = async (
   const userIds = new Set<ZodUserId>();
   projects.forEach((project) => {
     userIds.add(project.creatorUserId);
-    // TODO: remove after migration
+    // TODO: remove after migration (JAC-77)
     if (project.comments) {
       project.comments.forEach((comment) => {
         userIds.add(comment.authorId);

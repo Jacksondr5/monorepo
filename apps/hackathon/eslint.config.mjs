@@ -15,7 +15,7 @@ const config = [
     "plugin:@nx/react-typescript",
     "next",
     "next/core-web-vitals",
-    // TODO: enable: https://github.com/mdbetancourt/eslint-plugin-neverthrow/issues/21
+    // TODO: enable: https://github.com/mdbetancourt/eslint-plugin-neverthrow/issues/21 (JAC-79)
     // "plugin:neverthrow/recommended",
   ),
   {

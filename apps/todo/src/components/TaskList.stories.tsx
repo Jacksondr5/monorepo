@@ -444,7 +444,7 @@ export const TestErrorHandling: Story = {
 
       // Verify the error was logged (this depends on TaskContext implementation)
       // For now, just verify the component renders without crashing
-      // TODO: Add error handling tests once we add toasts
+      // TODO: Add error handling tests once we add toasts (JAC-82)
       expect(canvasElement).toBeInTheDocument();
     });
   },
