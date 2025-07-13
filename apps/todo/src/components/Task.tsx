@@ -7,26 +7,30 @@ import { TaskInput } from "./TaskInput";
 import { cn } from "~/lib/utils";
 import { type EditingState, useEditing } from "../contexts/EditingContext";
 import { NEW_TASK_ID, useTasks } from "~/contexts/TaskContext";
+import { type Id } from "../../convex/_generated/dataModel";
+
 export type TaskProps = {
-  createdAt: Date;
+  _id: Id<"tasks"> | typeof NEW_TASK_ID;
+  _creationTime: number;
   description?: string;
-  id: number;
   isBlocked: boolean;
   isDone: boolean;
   isImportant?: boolean;
   isUrgent?: boolean;
   title: string;
+  updatedAt: number;
 };
 
 export const Task = ({
-  createdAt,
+  _id,
+  _creationTime,
   description,
-  id,
   isBlocked,
   isDone,
   isImportant,
   isUrgent,
   title,
+  updatedAt,
 }: TaskProps) => {
   const { editingState, setEditingState } = useEditing();
   const { dispatch, focusedTaskId } = useTasks();
@@ -36,16 +40,21 @@ export const Task = ({
   const descriptionEditRef = useRef<HTMLTextAreaElement>(null);
 
   const handleTitleChange = (value: string) => {
-    if (id === NEW_TASK_ID) {
-      dispatch({ type: "create", value: { createdAt, title: value } });
+    if (_id === NEW_TASK_ID) {
+      dispatch({
+        type: "create",
+        value: { createdAt: new Date(_creationTime), title: value },
+      });
     } else {
-      dispatch({ type: "edit-title", taskId: id, value });
+      dispatch({ type: "edit-title", taskId: _id, value });
     }
     taskRef.current?.focus();
   };
 
   const handleDescriptionChange = (value: string) => {
-    dispatch({ type: "edit-description", taskId: id, value });
+    if (_id !== NEW_TASK_ID) {
+      dispatch({ type: "edit-description", taskId: _id, value });
+    }
     taskRef.current?.focus();
   };
 
@@ -59,76 +68,77 @@ export const Task = ({
       e.preventDefault();
     }
 
-    if (e.key === "i") {
+    if (e.key === "i" && _id !== NEW_TASK_ID) {
       switch (isImportant) {
         case true:
-          dispatch({ type: "edit-important", taskId: id, value: false });
+          dispatch({ type: "edit-important", taskId: _id, value: false });
           break;
         case false:
-          dispatch({ type: "edit-important", taskId: id, value: undefined });
+          dispatch({ type: "edit-important", taskId: _id, value: undefined });
           break;
         case undefined:
-          dispatch({ type: "edit-important", taskId: id, value: true });
+          dispatch({ type: "edit-important", taskId: _id, value: true });
           break;
       }
-    } else if (e.key === "u") {
+    } else if (e.key === "u" && _id !== NEW_TASK_ID) {
       switch (isUrgent) {
         case true:
-          dispatch({ type: "edit-urgent", taskId: id, value: false });
+          dispatch({ type: "edit-urgent", taskId: _id, value: false });
           break;
         case false:
-          dispatch({ type: "edit-urgent", taskId: id, value: undefined });
+          dispatch({ type: "edit-urgent", taskId: _id, value: undefined });
           break;
         case undefined:
-          dispatch({ type: "edit-urgent", taskId: id, value: true });
+          dispatch({ type: "edit-urgent", taskId: _id, value: true });
           break;
       }
-    } else if (e.key === "b") {
-      dispatch({ type: "edit-blocked", taskId: id, value: !isBlocked });
+    } else if (e.key === "b" && _id !== NEW_TASK_ID) {
+      dispatch({ type: "edit-blocked", taskId: _id, value: !isBlocked });
     } else if (e.key === "e") {
       setEditingState({
         target: "title",
-        taskCreatedAtTimestamp: createdAt.toISOString(),
+        taskCreatedAtTimestamp: new Date(_creationTime).toISOString(),
       });
       titleEditRef.current?.focus();
     } else if (e.key === "d") {
       setEditingState({
         target: "description",
-        taskCreatedAtTimestamp: createdAt.toISOString(),
+        taskCreatedAtTimestamp: new Date(_creationTime).toISOString(),
       });
       descriptionEditRef.current?.focus();
-    } else if (e.key === "q") {
-      dispatch({ type: "edit-done", taskId: id, value: !isDone });
-    } else if (e.key === "x") {
-      dispatch({ type: "delete-task", taskId: id });
+    } else if (e.key === "q" && _id !== NEW_TASK_ID) {
+      dispatch({ type: "edit-done", taskId: _id, value: !isDone });
+    } else if (e.key === "x" && _id !== NEW_TASK_ID) {
+      dispatch({ type: "delete-task", taskId: _id });
     }
   };
 
   useEffect(() => {
     // When a new task is created, focus the title input
-    if (id === NEW_TASK_ID) {
+    if (_id === NEW_TASK_ID) {
       setEditingState({
         target: "title",
-        taskCreatedAtTimestamp: createdAt.toISOString(),
+        taskCreatedAtTimestamp: new Date(_creationTime).toISOString(),
       });
       titleEditRef.current?.focus();
-    } else if (id === focusedTaskId) {
+    } else if (_id === focusedTaskId) {
       taskRef.current?.focus();
     }
     // This is fine, we only need to run this when the task is created or focused
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, focusedTaskId]);
+  }, [_id, focusedTaskId]);
 
   return (
     <TaskView
-      id={id}
-      createdAt={createdAt}
+      _id={_id}
+      _creationTime={_creationTime}
       isBlocked={isBlocked}
       isDone={isDone}
       isImportant={isImportant}
       isUrgent={isUrgent}
       description={description}
       title={title}
+      updatedAt={updatedAt}
       editingState={editingState}
       handleKeyDown={handleKeyDown}
       handleTitleChange={handleTitleChange}
@@ -151,13 +161,15 @@ export type TaskViewProps = TaskProps & {
 };
 
 export const TaskView = ({
-  createdAt,
+  _id,
+  _creationTime,
   description,
   isBlocked,
   isDone,
   isImportant,
   isUrgent,
   title,
+  updatedAt,
   editingState,
   handleKeyDown,
   handleTitleChange,
@@ -180,7 +192,8 @@ export const TaskView = ({
       ref={taskRef}
     >
       <div className="flex items-center justify-between gap-2">
-        {editingState?.taskCreatedAtTimestamp === createdAt.toISOString() &&
+        {editingState?.taskCreatedAtTimestamp ===
+          new Date(_creationTime).toISOString() &&
         editingState?.target === "title" ? (
           <TaskInput
             type="input"
@@ -200,7 +213,8 @@ export const TaskView = ({
           )}
         </div>
       </div>
-      {editingState?.taskCreatedAtTimestamp === createdAt.toISOString() &&
+      {editingState?.taskCreatedAtTimestamp ===
+        new Date(_creationTime).toISOString() &&
       editingState?.target === "description" ? (
         <TaskInput
           type="textarea"

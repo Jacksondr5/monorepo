@@ -13,7 +13,7 @@ export const TaskList = () => {
 
   const now = dayjs();
   const [oldTasks, newTasks] = partition(tasks, (task) => {
-    const diff = now.diff(task.updatedAt, "week");
+    const diff = now.diff(dayjs(task.updatedAt), "week");
     return diff >= 1;
   });
 
@@ -47,8 +47,8 @@ export const TaskList = () => {
     >
       <div className="flex w-5/6 flex-col items-center justify-center gap-2 xl:w-1/2">
         {newTasks.map((task) => (
-          // Use createdAt as the key to avoid losing focus when a new task is created
-          <Task key={task.createdAt.toISOString()} {...task} />
+          // Use _creationTime as the key to avoid losing focus when a new task is created
+          <Task key={task._creationTime.toString()} {...task} />
         ))}
       </div>
       {oldTasks.length > 0 && (
@@ -57,7 +57,7 @@ export const TaskList = () => {
             Review these tasks
           </h2>
           {oldTasks.map((task) => (
-            <Task key={task.createdAt.toISOString()} {...task} />
+            <Task key={task._creationTime.toString()} {...task} />
           ))}
         </div>
       )}
