@@ -1,0 +1,14 @@
+{
+  "name": "@j5/todo",
+  "projectType": "application",
+  "sourceRoot": "apps/todo/src",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["next dev --turbo"],
+        "cwd": "apps/todo"
+      }
+    }
+  }
+}
