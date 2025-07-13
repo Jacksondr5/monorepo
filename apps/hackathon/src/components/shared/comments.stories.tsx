@@ -299,9 +299,7 @@ export const CancelCommentFlow: Story = {
       await userEvent.click(cancelButton);
 
       // Form should be closed
-      expect(
-        canvas.queryByTestId("comment-textarea"),
-      ).not.toBeInTheDocument();
+      expect(canvas.queryByTestId("comment-textarea")).not.toBeInTheDocument();
       expect(canvas.getByTestId("add-comment-button")).toBeInTheDocument();
     });
 
@@ -466,9 +464,7 @@ export const ErrorHandling: Story = {
 
       // Form should remain open after error
       await waitFor(() => {
-        expect(
-          canvas.getByTestId("comment-textarea"),
-        ).toBeInTheDocument();
+        expect(canvas.getByTestId("comment-textarea")).toBeInTheDocument();
       });
     });
 
