@@ -44,9 +44,6 @@ export function BoardsTab({ orgId }: { orgId: string }) {
   // Assuming a mutation like addBoard exists in your convex/boards.ts
   const addBoard = useMutation(api.boards.addBoard);
   const deleteBoardMutation = useMutation(api.boards.deleteBoard);
-  // TODO: add reorder functionality
-  // Placeholder for future mutations
-  // const reorderBoards = useMutation(api.boards.reorderBoards);
 
   // Create a map for quick lookup of stage names by ID
   const stageNameMap = useMemo(() => {
@@ -69,7 +66,7 @@ export function BoardsTab({ orgId }: { orgId: string }) {
       setBoardName("");
     } catch (error) {
       console.error("Failed to add board:", error);
-      // TODO: add toast
+      // TODO: add toast (JAC-46)
     }
   };
 
@@ -82,10 +79,10 @@ export function BoardsTab({ orgId }: { orgId: string }) {
     if (!boardToDeleteId || !orgId) return;
     try {
       await deleteBoardMutation({ boardId: boardToDeleteId, orgId });
-      // TODO: add toast success
+      // TODO: add toast success (JAC-46)
     } catch (error) {
       console.error("Failed to delete board:", error);
-      // TODO: add toast error
+      // TODO: add toast error (JAC-46)
     }
     setIsDeleteDialogOpen(false);
     setBoardToDeleteId(null);

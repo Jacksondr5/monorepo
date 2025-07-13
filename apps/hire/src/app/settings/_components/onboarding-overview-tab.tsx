@@ -48,7 +48,7 @@ export function OnboardingOverviewTab({ orgId }: OnboardingOverviewTabProps) {
       });
     } catch (error) {
       console.error("Failed to update onboarding overview stages:", error);
-      // TODO: Add toast notification
+      // TODO: Add toast notification (JAC-46)
     }
   };
 

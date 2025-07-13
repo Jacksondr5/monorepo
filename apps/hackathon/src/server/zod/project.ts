@@ -13,7 +13,7 @@ export const ProjectSchema = z.object({
   creatorUserId: UserIdSchema,
   comments: z.array(CommentSchema),
   description: z.string().min(1),
-  // TODO: add imageUrls
+  // TODO: add imageUrls (JAC-74)
   // imageUrls: z.array(z.string().url()).optional(),
   hackathonEventId: HackathonEventIdSchema,
   title: z.string().min(1),

@@ -209,7 +209,7 @@ export function Comments<TProjectId extends ProjectId>({
       <div className="border-slate-6 mt-4 border-t pt-2">
         {showCommentForm ? (
           <div className="space-y-2">
-            {/* TODO: replace with component library textarea after hackathon storybook is built */}
+            {/* TODO: replace with component library textarea after hackathon storybook is built (JAC-76) */}
             <textarea
               className="border-slate-7 bg-slate-3 text-slate-12 focus:ring-grass-9 focus:border-grass-9 w-full rounded-md border p-2 text-sm"
               rows={3}

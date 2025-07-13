@@ -38,7 +38,7 @@ export const AdminClientPage = ({
   const [showCreateForm, setShowCreateForm] = useState(false);
   const postHog = usePostHog();
 
-  // TODO: actually handle error
+  // TODO: actually handle error (JAC-62)
   const finalizedProjectsResultValue = unwrapSerializableResult(
     finalizedProjectsResult,
     "Failed to fetch finalized projects",

@@ -12,7 +12,7 @@ export const j5Theme: ThemeVars = create({
   barSelectedColor: "#46a758", // Radix Grass Dark 9
   barTextColor: "#c8cdd3", // Radix Slate Dark 11
   base: "dark",
-  brandImage: "https://storybook.js.org/images/placeholders/350x150.png", // TODO: Add J5 logo
+  brandImage: "https://storybook.js.org/images/placeholders/350x150.png", // TODO: Add J5 logo (JAC-72)
   brandTarget: "_self",
   brandTitle: "J5 Component Library",
   brandUrl: "https://jackson.codes",

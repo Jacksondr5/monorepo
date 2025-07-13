@@ -212,7 +212,7 @@ export function CandidateForm<T extends AcceptableSchemas>({
             )}
           </form.AppField>
         </div>
-        {/* TODO: Resume upload functionality - planned for future release */}
+        {/* TODO: Resume upload functionality - planned for future release (JAC-52) */}
         {/* <div className="space-y-2">
           <label className="text-slate-12 text-sm font-medium">Resume</label>
         </div> */}
@@ -223,7 +223,7 @@ export function CandidateForm<T extends AcceptableSchemas>({
               variant="outline"
               disabled={isSubmitting}
               onClick={() => {
-                // TODO: implement
+                // TODO: implement (JAC-52)
                 console.log("cancelled");
               }}
               dataTestId="candidate-form-cancel-button"

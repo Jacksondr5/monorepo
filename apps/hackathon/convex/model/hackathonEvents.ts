@@ -19,7 +19,7 @@ export type GetLatestHackathonEventError =
   | NotFoundError<"HACKATHON_EVENT">
   | UnexpectedError;
 
-// TODO: Replace this with a better way of selecting the current hackathon event
+// TODO: Replace this with a better way of selecting the current hackathon event (JAC-78)
 export const getLatestHackathonEvent = async (
   ctx: QueryCtx,
 ): Promise<Result<HackathonEvent, GetLatestHackathonEventError>> => {

@@ -18,14 +18,14 @@ export default function AddCandidatePage() {
   }
 
   const onSubmit = async (data: ZodCreateCandidate) => {
-    // TODO: add loading state
+    // TODO: add loading state (JAC-67)
     try {
       await addCandidateMutation({
         orgId: organizationId,
         newCandidate: data,
       });
     } catch (error) {
-      // TODO: replace with toast
+      // TODO: replace with toast (JAC-46)
       console.error("Error adding candidate:", error);
     }
   };
