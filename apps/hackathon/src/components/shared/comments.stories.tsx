@@ -229,7 +229,7 @@ export const AddCommentFlow: Story = {
       await userEvent.click(addButton);
 
       // Form should be visible
-      const textarea = canvas.getByPlaceholderText("Write a comment...");
+      const textarea = canvas.getByTestId("comment-textarea");
       expect(textarea).toBeInTheDocument();
       expect(textarea).toBeVisible();
 
@@ -241,7 +241,7 @@ export const AddCommentFlow: Story = {
     });
 
     await step("Type comment and submit", async () => {
-      const textarea = canvas.getByPlaceholderText("Write a comment...");
+      const textarea = canvas.getByTestId("comment-textarea");
       await userEvent.type(textarea, "This is a test comment!");
 
       // Submit button should now be enabled
@@ -253,7 +253,7 @@ export const AddCommentFlow: Story = {
       // Form should close
       await waitFor(() => {
         expect(
-          canvas.queryByPlaceholderText("Write a comment..."),
+          canvas.queryByTestId("comment-textarea"),
         ).not.toBeInTheDocument();
       });
 
@@ -291,7 +291,7 @@ export const CancelCommentFlow: Story = {
       await userEvent.click(addButton);
 
       // Type some text
-      const textarea = canvas.getByPlaceholderText("Write a comment...");
+      const textarea = canvas.getByTestId("comment-textarea");
       await userEvent.type(textarea, "This text should be cleared");
 
       // Cancel
@@ -300,7 +300,7 @@ export const CancelCommentFlow: Story = {
 
       // Form should be closed
       expect(
-        canvas.queryByPlaceholderText("Write a comment..."),
+        canvas.queryByTestId("comment-textarea"),
       ).not.toBeInTheDocument();
       expect(canvas.getByTestId("add-comment-button")).toBeInTheDocument();
     });
@@ -311,7 +311,7 @@ export const CancelCommentFlow: Story = {
       await userEvent.click(addButton);
 
       // Text should be empty
-      const textarea = canvas.getByPlaceholderText("Write a comment...");
+      const textarea = canvas.getByTestId("comment-textarea");
       expect(textarea).toHaveValue("");
     });
   },
@@ -458,7 +458,7 @@ export const ErrorHandling: Story = {
       const addButton = canvas.getByTestId("add-comment-button");
       await userEvent.click(addButton);
 
-      const textarea = canvas.getByPlaceholderText("Write a comment...");
+      const textarea = canvas.getByTestId("comment-textarea");
       await userEvent.type(textarea, "This will fail");
 
       const submitButton = canvas.getByTestId("submit-comment-button");
@@ -467,7 +467,7 @@ export const ErrorHandling: Story = {
       // Form should remain open after error
       await waitFor(() => {
         expect(
-          canvas.getByPlaceholderText("Write a comment..."),
+          canvas.getByTestId("comment-textarea"),
         ).toBeInTheDocument();
       });
     });
@@ -508,7 +508,7 @@ export const LoadingState: Story = {
       const addButton = canvas.getByTestId("add-comment-button");
       await userEvent.click(addButton);
 
-      const textarea = canvas.getByPlaceholderText("Write a comment...");
+      const textarea = canvas.getByTestId("comment-textarea");
       await userEvent.type(textarea, "Loading test");
 
       const submitButton = canvas.getByTestId("submit-comment-button");
@@ -526,7 +526,7 @@ export const LoadingState: Story = {
       await waitFor(
         () => {
           expect(
-            canvas.queryByPlaceholderText("Write a comment..."),
+            canvas.queryByTestId("comment-textarea"),
           ).not.toBeInTheDocument();
         },
         { timeout: 2000 },
