@@ -1,4 +1,4 @@
-import { Separator } from "../ui/separator";
+import { Separator } from "@j5/component-library";
 
 export const keybindings = {
   EDIT_TITLE: "e",

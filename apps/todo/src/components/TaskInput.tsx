@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
+import { Input, Textarea } from "@j5/component-library";
 
 export type TaskInputProps = {
   type: "input" | "textarea";
@@ -41,9 +40,14 @@ export const TaskInput = ({
   return type === "textarea" ? (
     <Textarea
       ref={ref as React.RefObject<HTMLTextAreaElement>}
+      dataTestId="task-textarea"
       {...sharedProps}
     />
   ) : (
-    <Input ref={ref as React.RefObject<HTMLInputElement>} {...sharedProps} />
+    <Input
+      ref={ref as React.RefObject<HTMLInputElement>}
+      dataTestId="task-input"
+      {...sharedProps}
+    />
   );
 };
