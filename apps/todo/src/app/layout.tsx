@@ -2,7 +2,6 @@ import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import { LoadingSpinner } from "~/components/LoadingSpinner";
 import { Providers } from "./providers";
 import { getAuthToken } from "./auth";
 
@@ -20,10 +19,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body className="bg-grass-1 min-h-screen">
-        <Providers authToken={token}>
-          <LoadingSpinner />
-          {children}
-        </Providers>
+        <Providers authToken={token}>{children}</Providers>
       </body>
     </html>
   );

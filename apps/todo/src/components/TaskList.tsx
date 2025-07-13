@@ -44,6 +44,7 @@ export const TaskList = () => {
       tabIndex={0}
       ref={listRef}
       onKeyDown={handleKeyDown}
+      data-testid="task-list"
     >
       <div className="flex w-5/6 flex-col items-center justify-center gap-2 xl:w-1/2">
         {newTasks.map((task) => (

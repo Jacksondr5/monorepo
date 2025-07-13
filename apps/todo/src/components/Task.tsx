@@ -18,7 +18,6 @@ export type TaskProps = {
   isImportant?: boolean;
   isUrgent?: boolean;
   title: string;
-  updatedAt: number;
 };
 
 export const Task = ({
@@ -30,7 +29,6 @@ export const Task = ({
   isImportant,
   isUrgent,
   title,
-  updatedAt,
 }: TaskProps) => {
   const { editingState, setEditingState } = useEditing();
   const { dispatch, focusedTaskId } = useTasks();
@@ -52,6 +50,7 @@ export const Task = ({
   };
 
   const handleDescriptionChange = (value: string) => {
+    console.log("id", _id);
     if (_id !== NEW_TASK_ID) {
       dispatch({ type: "edit-description", taskId: _id, value });
     }
@@ -138,7 +137,6 @@ export const Task = ({
       isUrgent={isUrgent}
       description={description}
       title={title}
-      updatedAt={updatedAt}
       editingState={editingState}
       handleKeyDown={handleKeyDown}
       handleTitleChange={handleTitleChange}
@@ -150,7 +148,7 @@ export const Task = ({
   );
 };
 
-export type TaskViewProps = TaskProps & {
+export type TaskViewProps = Omit<TaskProps, "updatedAt"> & {
   descriptionEditRef: React.RefObject<HTMLTextAreaElement | null>;
   editingState: EditingState | undefined;
   handleDescriptionChange: (value: string) => void;
@@ -169,7 +167,6 @@ export const TaskView = ({
   isImportant,
   isUrgent,
   title,
-  updatedAt,
   editingState,
   handleKeyDown,
   handleTitleChange,
@@ -190,6 +187,7 @@ export const TaskView = ({
       onKeyDown={handleKeyDown}
       tabIndex={0}
       ref={taskRef}
+      data-testid={`task-${_id}`}
     >
       <div className="flex items-center justify-between gap-2">
         {editingState?.taskCreatedAtTimestamp ===

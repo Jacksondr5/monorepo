@@ -1,8 +1,2 @@
-"use client";
-
-import { ConvexReactClient } from "convex/react";
-import { env } from "~/env";
-
-const convex = new ConvexReactClient(env.NEXT_PUBLIC_CONVEX_URL);
-
-export { convex };
+export { useMutation, useQuery, usePreloadedQuery } from "convex/react";
+export type { Preloaded } from "convex/react";

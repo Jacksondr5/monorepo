@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 import { useEditing } from "~/contexts/EditingContext";
-import { useQuery, useMutation } from "convex/react";
+import { useQuery, useMutation } from "#lib/convex";
 import { api } from "../../convex/_generated/api";
 import { type Id } from "../../convex/_generated/dataModel";
 import { type SerializableResult } from "../../convex/model/error";
