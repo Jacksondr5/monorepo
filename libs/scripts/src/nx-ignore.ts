@@ -1,6 +1,7 @@
 import { spawnSync } from "child_process";
 
 const cwd = process.cwd();
+console.log("VERCEL_GIT_PREVIOUS_SHA", process.env.VERCEL_GIT_PREVIOUS_SHA);
 console.log(`CWD: ${cwd}`);
 console.log(`Switching to root of monorepo`);
 process.chdir("../../");

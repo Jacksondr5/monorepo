@@ -37,23 +37,19 @@ export interface TextareaProps
   dataTestId: string;
 }
 
-const Textarea: React.FC<TextareaProps> = ({
-  className,
-  size,
-  resize,
-  error,
-  dataTestId,
-  ...props
-}) => {
-  return (
-    <textarea
-      data-slot="textarea"
-      data-testid={dataTestId}
-      className={cn(textareaClassName({ size, resize, error, className }))}
-      {...props}
-    />
-  );
-};
+const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ className, size, resize, error, dataTestId, ...props }, ref) => {
+    return (
+      <textarea
+        data-slot="textarea"
+        data-testid={dataTestId}
+        className={cn(textareaClassName({ size, resize, error, className }))}
+        ref={ref}
+        {...props}
+      />
+    );
+  },
+);
 Textarea.displayName = "Textarea";
 
 export { Textarea };

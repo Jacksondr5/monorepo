@@ -3,18 +3,18 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 import * as Sentry from "@sentry/nextjs";
-import posthog from "posthog-js";
+// import posthog from "posthog-js";
 import { env } from "./env";
 
-posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
-  api_host: "/ingest",
-  ui_host: env.NEXT_PUBLIC_POSTHOG_HOST,
-  capture_pageview: false, // manual pageview capture
-  capture_pageleave: true,
-  capture_exceptions: true,
-  debug: env.NEXT_PUBLIC_POSTHOG_DEBUG,
-  defaults: "2025-05-24",
-});
+// posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
+//   api_host: "/ingest",
+//   ui_host: env.NEXT_PUBLIC_POSTHOG_HOST,
+//   capture_pageview: false, // manual pageview capture
+//   capture_pageleave: true,
+//   capture_exceptions: true,
+//   debug: env.NEXT_PUBLIC_POSTHOG_DEBUG,
+//   defaults: "2025-05-24",
+// });
 
 Sentry.init({
   dsn: env.NEXT_PUBLIC_SENTRY_DSN,
