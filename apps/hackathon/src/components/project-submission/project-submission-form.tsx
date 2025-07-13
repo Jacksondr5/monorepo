@@ -83,7 +83,7 @@ export function ProjectSubmissionForm({
             )}
           </form.AppField>
 
-          {/* TODO: Add image upload functionality here */}
+          {/* TODO: Add image upload functionality here (JAC-74) */}
           <p className="text-slate-9 text-sm">
             Image uploads will be supported soon.
           </p>

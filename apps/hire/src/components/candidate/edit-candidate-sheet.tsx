@@ -47,7 +47,7 @@ export function EditCandidateSheet({
       onOpenChange(false); // Close sheet on successful submit
     } catch (error) {
       console.error("Failed to update candidate:", error);
-      // TODO: Add toast notification
+      // TODO: Add toast notification (JAC-46)
     } finally {
       setIsSubmitting(false);
     }
@@ -61,7 +61,7 @@ export function EditCandidateSheet({
       });
     } catch (error) {
       console.error("Failed to toggle onboarding step:", error);
-      // TODO: Add toast notification
+      // TODO: Add toast notification (JAC-46)
     }
   };
 

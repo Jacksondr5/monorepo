@@ -32,8 +32,8 @@ export function AddCandidateDialog() {
   }
 
   const onSubmit = async (data: ZodCreateCandidate) => {
-    // TODO: add loading state
-    // TODO: add toast notifications for success/error
+    // TODO: add loading state (JAC-67)
+    // TODO: add toast notifications for success/error (JAC-46)
     try {
       await addCandidateMutation({
         orgId: organizationId,

@@ -62,7 +62,7 @@ export function EditBoardSheet({
         onOpenChange(false); // Close sheet on success
       } catch (error) {
         console.error("Failed to update board:", error);
-        // TODO: add toast
+        // TODO: add toast (JAC-46)
       }
     },
   });

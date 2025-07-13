@@ -25,7 +25,7 @@ export function Sidebar({
   side = "left",
   variant = "sidebar",
   collapsible = "offcanvas",
-  // TODO: this is never used, fix that
+  // TODO: this is never used, fix that (JAC-73)
   defaultOpen = true,
   className,
   children,
