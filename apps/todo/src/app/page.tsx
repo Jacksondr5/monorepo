@@ -12,7 +12,6 @@ import {
 } from "@clerk/nextjs";
 import { Button } from "@j5/component-library";
 
-
 export default function Home() {
   return (
     <EditingProvider>
