@@ -5,7 +5,7 @@ import { Preloaded } from "convex/react";
 
 export type { Preloaded };
 
-type MockedApi = Record<string, Mock>;
+type MockedApi = Record<string, Mock & { withOptimisticUpdate?: Mock }>;
 
 let mockedApi: MockedApi = {};
 
@@ -17,9 +17,17 @@ type GenericFunctionReference = FunctionReference<
   string | undefined
 >;
 
-export const mockApi = (ref: GenericFunctionReference, fn: Mock) => {
+export const mockApi = (
+  ref: GenericFunctionReference,
+  mockedFunction: Mock,
+  shouldMockWithOptimisticUpdate = false,
+) => {
   const name = getFunctionName(ref);
-  mockedApi[name] = fn;
+  mockedApi[name] = mockedFunction;
+  console.log(ref._type);
+  if (shouldMockWithOptimisticUpdate) {
+    mockedApi[name].withOptimisticUpdate = mockedFunction;
+  }
 };
 
 export const clearMockedApi = () => {

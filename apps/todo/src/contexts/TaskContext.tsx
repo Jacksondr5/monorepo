@@ -78,9 +78,42 @@ const handleResult = <T, E>(
   }
 };
 
+// Optimistic update helper functions
+const getTasksFromLocalStore = (localStore: any): Task[] | null => {
+  const existingTasks = localStore.getQuery(api.tasks.getTasks);
+  if (existingTasks && existingTasks.ok) {
+    return existingTasks.value;
+  }
+  return null;
+};
+
+const updateTasksInLocalStore = (localStore: any, updatedTasks: Task[]) => {
+  localStore.setQuery(
+    api.tasks.getTasks,
+    {},
+    {
+      ok: true,
+      value: updatedTasks,
+    },
+  );
+};
+
+const updateTaskProperty = <T extends keyof Task>(
+  property: T,
+  value: Task[T],
+  taskId: Id<"tasks">,
+) => {
+  return (tasks: Task[]) =>
+    tasks.map((task) =>
+      task._id === taskId
+        ? { ...task, [property]: value, updatedAt: Date.now() }
+        : task,
+    );
+};
+
 export function TaskProvider({ children }: { children: ReactNode }) {
   const taskQueryResult = useQuery(api.tasks.getTasks);
-  const [tasks, setTasks] = useState<(Task | NewTask)[]>([]);
+  const [newTasks, setNewTasks] = useState<NewTask[]>([]);
   const [focusedTaskId, setFocusedTaskId] = useState<
     Id<"tasks"> | typeof NEW_TASK_ID | undefined
   >(undefined);
@@ -91,28 +124,130 @@ export function TaskProvider({ children }: { children: ReactNode }) {
     ? handleResult(taskQueryResult, "getTasks")
     : null;
 
-  // Update local tasks when Convex data changes
-  React.useEffect(() => {
-    if (taskData) {
-      setTasks(taskData as Task[]);
-    }
-  }, [taskData]);
+  // Combine real tasks with new tasks
+  const tasks: (Task | NewTask)[] = [...(taskData || []), ...newTasks];
 
-  const createTask = useMutation(api.tasks.createTask);
-  const setTitle = useMutation(api.tasks.setTitle);
-  const setDescription = useMutation(api.tasks.setDescription);
-  const setIsBlocked = useMutation(api.tasks.setIsBlocked);
-  const setIsImportant = useMutation(api.tasks.setIsImportant);
-  const setIsUrgent = useMutation(api.tasks.setIsUrgent);
-  const setIsDone = useMutation(api.tasks.setIsDone);
-  const deleteTask = useMutation(api.tasks.deleteTask);
+  // Set up mutations with optimistic updates
+  const createTask = useMutation(api.tasks.createTask).withOptimisticUpdate(
+    (localStore, args) => {
+      const tasksData = getTasksFromLocalStore(localStore);
+      if (tasksData) {
+        const now = Date.now();
+        const newTask = {
+          _id: crypto.randomUUID() as Id<"tasks">,
+          _creationTime: now,
+          title: args.title,
+          isBlocked: false,
+          isDone: false,
+          createdById: "", // Will be set by server
+          updatedAt: now,
+        };
+        const updatedTasks = [...tasksData, newTask];
+        updateTasksInLocalStore(localStore, updatedTasks);
+      }
+    },
+  );
+
+  const setTitle = useMutation(api.tasks.setTitle).withOptimisticUpdate(
+    (localStore, args) => {
+      const tasksData = getTasksFromLocalStore(localStore);
+      if (tasksData) {
+        const updatedTasks = updateTaskProperty(
+          "title",
+          args.title,
+          args.id,
+        )(tasksData);
+        updateTasksInLocalStore(localStore, updatedTasks);
+      }
+    },
+  );
+
+  const setDescription = useMutation(
+    api.tasks.setDescription,
+  ).withOptimisticUpdate((localStore, args) => {
+    const tasksData = getTasksFromLocalStore(localStore);
+    if (tasksData) {
+      const updatedTasks = updateTaskProperty(
+        "description",
+        args.description,
+        args.id,
+      )(tasksData);
+      updateTasksInLocalStore(localStore, updatedTasks);
+    }
+  });
+
+  const setIsBlocked = useMutation(api.tasks.setIsBlocked).withOptimisticUpdate(
+    (localStore, args) => {
+      const tasksData = getTasksFromLocalStore(localStore);
+      if (tasksData) {
+        const updatedTasks = updateTaskProperty(
+          "isBlocked",
+          args.isBlocked,
+          args.id,
+        )(tasksData);
+        updateTasksInLocalStore(localStore, updatedTasks);
+      }
+    },
+  );
+
+  const setIsImportant = useMutation(
+    api.tasks.setIsImportant,
+  ).withOptimisticUpdate((localStore, args) => {
+    const tasksData = getTasksFromLocalStore(localStore);
+    if (tasksData) {
+      const updatedTasks = updateTaskProperty(
+        "isImportant",
+        args.isImportant,
+        args.id,
+      )(tasksData);
+      updateTasksInLocalStore(localStore, updatedTasks);
+    }
+  });
+
+  const setIsUrgent = useMutation(api.tasks.setIsUrgent).withOptimisticUpdate(
+    (localStore, args) => {
+      const tasksData = getTasksFromLocalStore(localStore);
+      if (tasksData) {
+        const updatedTasks = updateTaskProperty(
+          "isUrgent",
+          args.isUrgent,
+          args.id,
+        )(tasksData);
+        updateTasksInLocalStore(localStore, updatedTasks);
+      }
+    },
+  );
+
+  const setIsDone = useMutation(api.tasks.setIsDone).withOptimisticUpdate(
+    (localStore, args) => {
+      const tasksData = getTasksFromLocalStore(localStore);
+      if (tasksData) {
+        const updatedTasks = updateTaskProperty(
+          "isDone",
+          args.isDone,
+          args.id,
+        )(tasksData);
+        updateTasksInLocalStore(localStore, updatedTasks);
+      }
+    },
+  );
+
+  const deleteTask = useMutation(api.tasks.deleteTask).withOptimisticUpdate(
+    (localStore, args) => {
+      const tasksData = getTasksFromLocalStore(localStore);
+      if (tasksData) {
+        const updatedTasks = tasksData.filter((task) => task._id !== args.id);
+        updateTasksInLocalStore(localStore, updatedTasks);
+      }
+    },
+  );
 
   const dispatch = async (action: Action) => {
     const now = new Date();
     switch (action.type) {
       case "new-task":
-        setTasks([
-          ...tasks,
+        setNewTasks([
+          ...newTasks,
           {
             _id: NEW_TASK_ID,
             _creationTime: now.getTime(),
@@ -128,17 +263,19 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         ]);
         break;
       case "create":
-        setTasks(
-          tasks.map((task) =>
-            task._creationTime === action.value.createdAt.getTime()
-              ? { ...task, title: action.value.title }
-              : task,
+        // Remove the new task from local state
+        setNewTasks(
+          newTasks.filter(
+            (task) => task._creationTime !== action.value.createdAt.getTime(),
           ),
         );
         setEditingState(undefined);
         try {
           const result = await createTask({ title: action.value.title });
-          handleResult(result, "createTask");
+          const taskId = handleResult(result, "createTask");
+          if (taskId) {
+            setFocusedTaskId(taskId);
+          }
         } catch (error) {
           console.error("Failed to create task:", error);
         }
@@ -153,15 +290,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
               id: action.taskId,
               title: action.value,
             });
-            if (handleResult(result, "setTitle") !== null) {
-              setTasks(
-                tasks.map((task) =>
-                  task._id === action.taskId
-                    ? { ...task, title: action.value }
-                    : task,
-                ),
-              );
-            }
+            handleResult(result, "setTitle");
           } catch (error) {
             console.error("Failed to update title:", error);
           }
@@ -174,15 +303,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
             id: action.taskId,
             description: action.value,
           });
-          if (handleResult(result, "setDescription") !== null) {
-            setTasks(
-              tasks.map((task) =>
-                task._id === action.taskId
-                  ? { ...task, description: action.value }
-                  : task,
-              ),
-            );
-          }
+          handleResult(result, "setDescription");
         } catch (error) {
           console.error("Failed to update description:", error);
         }
@@ -194,15 +315,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
             id: action.taskId,
             isBlocked: action.value,
           });
-          if (handleResult(result, "setIsBlocked") !== null) {
-            setTasks(
-              tasks.map((task) =>
-                task._id === action.taskId
-                  ? { ...task, isBlocked: action.value }
-                  : task,
-              ),
-            );
-          }
+          handleResult(result, "setIsBlocked");
         } catch (error) {
           console.error("Failed to update blocked status:", error);
         }
@@ -213,15 +326,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
             id: action.taskId,
             isImportant: action.value,
           });
-          if (handleResult(result, "setIsImportant") !== null) {
-            setTasks(
-              tasks.map((task) =>
-                task._id === action.taskId
-                  ? { ...task, isImportant: action.value }
-                  : task,
-              ),
-            );
-          }
+          handleResult(result, "setIsImportant");
         } catch (error) {
           console.error("Failed to update importance:", error);
         }
@@ -232,15 +337,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
             id: action.taskId,
             isUrgent: action.value,
           });
-          if (handleResult(result, "setIsUrgent") !== null) {
-            setTasks(
-              tasks.map((task) =>
-                task._id === action.taskId
-                  ? { ...task, isUrgent: action.value }
-                  : task,
-              ),
-            );
-          }
+          handleResult(result, "setIsUrgent");
         } catch (error) {
           console.error("Failed to update urgency:", error);
         }
@@ -251,15 +348,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
             id: action.taskId,
             isDone: action.value,
           });
-          if (handleResult(result, "setIsDone") !== null) {
-            setTasks(
-              tasks.map((task) =>
-                task._id === action.taskId
-                  ? { ...task, isDone: action.value }
-                  : task,
-              ),
-            );
-          }
+          handleResult(result, "setIsDone");
         } catch (error) {
           console.error("Failed to update done status:", error);
         }
@@ -277,7 +366,6 @@ export function TaskProvider({ children }: { children: ReactNode }) {
                 ? deletedIndex - 1
                 : deletedIndex + 1;
             const nextTaskId = tasks[nextIndex]?._id;
-            setTasks(tasks.filter((task) => task._id !== action.taskId));
             setFocusedTaskId(nextTaskId);
           }
         } catch (error) {

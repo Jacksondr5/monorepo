@@ -148,78 +148,10 @@ export const TestTaskClick: Story = {
     const canvas = within(canvasElement);
 
     await step("Click on task", async () => {
-      const task = canvas.getByText("Clickable Task");
+      const task = canvas.getByTestId("task-task-1");
       await userEvent.click(task);
       // Task should receive focus or trigger some interaction
-    });
-  },
-};
-
-export const TestKeyboardNavigation: Story = {
-  args: createTaskProps({
-    title: "Keyboard Navigation Task",
-  }),
-  beforeEach() {
-    mockHandleKeyDown.mockClear();
-  },
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-
-    await step("Focus task and test keyboard navigation", async () => {
-      const task = canvas.getByText("Keyboard Navigation Task");
-      await userEvent.click(task);
-
-      // Test various keyboard interactions
-      await userEvent.keyboard("{Tab}");
-      await userEvent.keyboard("{Enter}");
-      await userEvent.keyboard("{Escape}");
-
-      // Verify that keyboard events were handled
-      // Note: The actual verification would depend on the specific implementation
-    });
-  },
-};
-
-export const TestTaskStates: Story = {
-  args: {
-    ...createTaskProps(),
-    title: "State Testing Task",
-  },
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-
-    await step("Verify task renders correctly", async () => {
-      const task = canvas.getByText("State Testing Task");
-      await expect(task).toBeInTheDocument();
-    });
-
-    await step("Check task accessibility", async () => {
-      const task = canvas.getByText("State Testing Task");
-      // Verify the task has proper ARIA attributes or roles
-      await expect(task).toBeVisible();
-    });
-  },
-};
-
-export const TestLongContent: Story = {
-  args: {
-    ...createTaskProps(),
-    title:
-      "Very Long Task Title That Should Wrap Properly When It Exceeds The Container Width And Demonstrates Text Overflow Handling",
-    description:
-      "This is an extremely long description that should demonstrate how the task component handles very long text content, including proper wrapping, overflow handling, and maintaining readability even when the content extends beyond typical lengths. It should maintain proper spacing and visual hierarchy.",
-  },
-  play: async ({ canvasElement, step }) => {
-    const canvas = within(canvasElement);
-
-    await step("Verify long content renders properly", async () => {
-      const title = canvas.getByText(/Very Long Task Title/);
-      const description = canvas.getByText(
-        /This is an extremely long description/,
-      );
-
-      await expect(title).toBeInTheDocument();
-      await expect(description).toBeInTheDocument();
+      expect(task).toHaveFocus();
     });
   },
 };

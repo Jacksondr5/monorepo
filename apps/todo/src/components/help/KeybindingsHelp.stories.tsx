@@ -6,7 +6,7 @@ import { HelpWrapper } from "./HelpWrapper";
 import { EditingProvider } from "../../contexts/EditingContext";
 
 const meta: Meta<typeof KeybindingsHelp> = {
-  title: "Todo/Help/KeybindingsHelp",
+  title: "Todo/KeybindingsHelp",
   component: KeybindingsHelp,
   parameters: {
     layout: "fullscreen",

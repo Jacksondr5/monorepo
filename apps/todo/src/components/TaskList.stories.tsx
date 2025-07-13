@@ -96,6 +96,7 @@ const setupMocks = (tasks: ZodTask[] = mockTasks) => {
       ok: true,
       value: "new-task-id" as Id<"tasks">,
     })).mockName("createTask"),
+    true,
   );
 
   mockApi(
@@ -104,6 +105,7 @@ const setupMocks = (tasks: ZodTask[] = mockTasks) => {
       ok: true,
       value: undefined,
     })).mockName("setTitle"),
+    true,
   );
 
   mockApi(
@@ -112,6 +114,7 @@ const setupMocks = (tasks: ZodTask[] = mockTasks) => {
       ok: true,
       value: undefined,
     })).mockName("setDescription"),
+    true,
   );
 
   mockApi(
@@ -120,6 +123,7 @@ const setupMocks = (tasks: ZodTask[] = mockTasks) => {
       ok: true,
       value: undefined,
     })).mockName("setIsBlocked"),
+    true,
   );
 
   mockApi(
@@ -128,6 +132,7 @@ const setupMocks = (tasks: ZodTask[] = mockTasks) => {
       ok: true,
       value: undefined,
     })).mockName("setIsImportant"),
+    true,
   );
 
   mockApi(
@@ -136,6 +141,7 @@ const setupMocks = (tasks: ZodTask[] = mockTasks) => {
       ok: true,
       value: undefined,
     })).mockName("setIsUrgent"),
+    true,
   );
 
   mockApi(
@@ -144,6 +150,7 @@ const setupMocks = (tasks: ZodTask[] = mockTasks) => {
       ok: true,
       value: undefined,
     })).mockName("setIsDone"),
+    true,
   );
 
   mockApi(
@@ -152,6 +159,7 @@ const setupMocks = (tasks: ZodTask[] = mockTasks) => {
       ok: true,
       value: undefined,
     })).mockName("deleteTask"),
+    true,
   );
 };
 
@@ -414,6 +422,8 @@ export const TestErrorHandling: Story = {
   name: "Test: Error Handling",
   beforeEach() {
     clearMockedApi();
+    setupMocks();
+
     // Mock getTasks to return an error
     mockApi(
       api.tasks.getTasks,
