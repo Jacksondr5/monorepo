@@ -30,7 +30,7 @@ function OnboardingTable({
       });
     } catch (error) {
       console.error("Failed to toggle onboarding step:", error);
-      // TODO: Add toast notification
+      // TODO: Add toast notification (JAC-46)
     }
   };
 

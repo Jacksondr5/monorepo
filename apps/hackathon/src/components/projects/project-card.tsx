@@ -129,7 +129,7 @@ export function ProjectCard({
         <p className="text-slate-11 whitespace-pre-wrap text-sm">
           {project.description}
         </p>
-        {/* TODO: Display project images here */}
+        {/* TODO: Display project images here (JAC-74) */}
         {/* {project.imageUrls && project.imageUrls.length > 0 && ( ... )} */}
 
         <Comments

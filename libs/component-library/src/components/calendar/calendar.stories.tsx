@@ -25,20 +25,6 @@ export const AllVariants: Story = {
       {/* Default Calendar */}
       <h2 className="text-slate-12">Default Calendar</h2>
       <Calendar {...defaultProps} />
-      {/* TODO: implement later */}
-      {/* Range Selection */}
-      {/* <h2 className="text-slate-12">Range Selection</h2>
-      <Calendar
-        {...defaultProps}
-        mode="range"
-        selected={{
-          from: targetDate,
-          to: new Date(targetDate.getTime() + 86400000 * 4),
-        }}
-      /> */}
-      {/* Disabled Days */}
-      {/* <h2 className="text-slate-12">Disabled Days</h2>
-      <Calendar {...defaultProps} disabled={[{ dayOfWeek: [0, 6] }]} /> */}
     </div>
   ),
 };

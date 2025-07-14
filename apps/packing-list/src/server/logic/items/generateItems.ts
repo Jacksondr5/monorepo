@@ -16,7 +16,7 @@ export const generateItems = (
   userItems: PackingListItem[],
   selectedLuggage: Luggage, // Allow undefined if no luggage selected/possible
 ): PackingList => {
-  // TODO: Implement item generation logic
+  // TODO: Implement item generation logic (JAC-80)
   console.log(
     "Generating items for context:",
     context,

@@ -17,7 +17,7 @@ export const VotingClientPage = ({
 }: VotingClientPageProps) => {
   const projectVotingDataResult = usePreloadedQuery(preloadedProjectVotingData);
 
-  // TODO: actually handle error
+  // TODO: actually handle error (JAC-62)
   const projectVotingData = unwrapSerializableResult(
     projectVotingDataResult,
     "Failed to fetch project voting data",

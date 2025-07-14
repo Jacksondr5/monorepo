@@ -14,7 +14,7 @@ export const testUsers = {
     password: env.PLAYWRIGHT_USER_PASSWORD,
     role: "USER" as const,
   },
-  // TODO: Add admin user when needed
+  // TODO: Add admin user when needed (JAC-61)
   // admin: {
   //   email: env.PLAYWRIGHT_ADMIN_EMAIL,
   //   password: env.PLAYWRIGHT_ADMIN_PASSWORD,

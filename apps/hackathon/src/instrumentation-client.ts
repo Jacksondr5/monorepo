@@ -17,7 +17,7 @@ posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
 });
 
 Sentry.init({
-  dsn: "https://ee7abcddd5da3fe9f9508375d9d43332@o4509432002772992.ingest.us.sentry.io/4509432004149248",
+  dsn: env.NEXT_PUBLIC_SENTRY_DSN,
 
   // Add optional integrations for additional features
   integrations: [Sentry.replayIntegration()],
