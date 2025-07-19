@@ -45,7 +45,7 @@ async function createNodesInternal(
     parallelism: false,
     cache: true,
     inputs: ["{projectRoot}/**"],
-    outputs: ["{projectRoot}/.vercel/**"],
+    outputs: [`${context.workspaceRoot}/.vercel/**`],
     dependsOn: ["convex-deploy", "^build"],
   };
 

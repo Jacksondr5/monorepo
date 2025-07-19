@@ -9,5 +9,8 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.1.11"
+  },
+  "scripts": {
+    "vercel-build": "next build"
   }
 }
