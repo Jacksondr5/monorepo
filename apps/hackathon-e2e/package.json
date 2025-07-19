@@ -9,7 +9,7 @@
     "zod": "3.25.67"
   },
   "devDependencies": {
-    "@clerk/testing": "1.9.3"
+    "@clerk/testing": "1.10.4"
   },
   "nx": {
     "implicitDependencies": [
