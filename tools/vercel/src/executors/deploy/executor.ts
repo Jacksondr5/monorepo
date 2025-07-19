@@ -9,7 +9,7 @@ import simpleGit from "simple-git";
 type SecretGroup = Required<SecretsListResponse>["secrets"];
 type Secret = Required<SecretGroup["USER"]>;
 
-const doppler = new DopplerSDK({ accessToken: env.DOPPLER_KEY });
+const doppler = new DopplerSDK({ accessToken: env.DOPPLER_TOKEN });
 
 export default async function* deployExecutor(
   _: unknown,

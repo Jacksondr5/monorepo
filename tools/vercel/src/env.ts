@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
-    DOPPLER_KEY: z.string().min(1),
+    DOPPLER_TOKEN: z.string().min(1),
   },
 
   /**
@@ -13,7 +13,7 @@ export const env = createEnv({
   //   clientPrefix: "PUBLIC_",
 
   //   client: {
-  //     PUBLIC_DOPPLER_KEY: z.string().min(1),
+  //     PUBLIC_DOPPLER_TOKEN: z.string().min(1),
   //   },
 
   /**
