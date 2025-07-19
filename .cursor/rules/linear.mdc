@@ -1,0 +1,9 @@
+---
+description: when working with Linear tasks
+alwaysApply: false
+---
+Before you start working on an issue, be sure there are no git changes present.  If there are, STOP and tell the user to give you a clean git state.
+
+When you start working on an issue, set it's status to "In Progress".
+
+When you finish working on an issue, ask the user if they're ready to open a PR.  

@@ -1,0 +1,122 @@
+---
+description: when you're committing changes and opening a PR
+alwaysApply: false
+---
+
+# PR Creation Workflow
+
+## Pre-Commit Checklist
+
+1. **Verify you're not on main branch** - If you are, create a new branch (ideally with the Linear issue name if you have one)
+2. **Run formatter** - BEFORE YOU COMMIT, run `pnpm nx format` from the root of the monorepo.  Run the command EXACTLY AS IS, do not pass it any other args.
+3. **Run verification checks** - Ensure code quality before committing:
+   ```bash
+   pnpm nx affected --parallel 8 -t typecheck lint 
+   ```
+
+## Branch Naming Convention
+
+Use the Linear issue branch name when available (found in Linear ticket details):
+- Format: `jackson/jac-XX-descriptive-name`
+- Example: `jackson/jac-76-replace-with-component-library-textarea-in-hackathon`
+
+## Commit Message Format
+
+Follow conventional commits format with Linear issue reference:
+```
+<type>: <description>
+
+<body with bullet points of changes>
+
+Fixes JAC-XX
+```
+
+**Example:**
+```
+feat: replace temporary textarea with component library Textarea
+
+- Replace temporary textarea implementation with @j5/component-library Textarea
+- Add proper dataTestId prop for consistent testing
+- Update all Storybook stories to use test IDs instead of placeholder text
+- Remove TODO comment
+
+Fixes JAC-76
+```
+
+## Creating the PR
+
+1. **Push the branch:**
+   ```bash
+   git push origin <branch-name>
+   ```
+
+2. **Create PR with GitHub CLI:**
+   ```bash
+   gh pr create --title "<type>: <description> (JAC-XX)" --body "<PR description>"
+   ```
+
+## PR Description Template
+
+Use this template for comprehensive PR descriptions:
+
+```markdown
+## Summary
+
+Brief description of what this PR does.
+
+## Changes Made
+
+- ✅ Change 1
+- ✅ Change 2  
+- ✅ Change 3
+
+## Testing
+
+- ✅ TypeScript compilation passes
+- ✅ ESLint passes
+- ✅ All existing functionality preserved
+- ✅ [Any specific testing done]
+
+## Linear Ticket
+
+Fixes [JAC-XX](https://linear.app/jacksondr5/issue/JAC-XX)
+```
+
+## Post-PR Creation
+
+1. **Update Linear ticket status** to "In Review"
+2. **Link PR to Linear ticket** (add PR URL to ticket links)
+3. **Add comment to Linear ticket** documenting the PR creation
+
+## Commands Summary
+
+Complete workflow commands:
+```bash
+# 1. Check status and create branch
+git status
+git checkout -b jackson/jac-XX-descriptive-name
+
+# 2. Format and verify
+pnpm nx format
+pnpm nx typecheck <project>
+pnpm nx lint <project>
+
+# 3. Commit and push
+git add -a # Prefer adding all the files so that we don't lose anything
+git commit -m "feat: description
+
+- Change 1
+- Change 2
+
+Fixes JAC-XX"
+git push origin jackson/jac-XX-descriptive-name
+
+# 4. Create PR
+gh pr create --title "feat: description (JAC-XX)" --body "..."
+```
+
+## Notes
+
+- Use the exact Linear issue branch name when available for consistency
+- Always run formatter before committing to avoid CI failures
+- Verify all checks pass locally before pushing to avoid failed CI builds
