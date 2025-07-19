@@ -46,6 +46,7 @@ async function createNodesInternal(
     cache: true,
     inputs: ["{projectRoot}/**"],
     outputs: ["{projectRoot}/.vercel/**"],
+    dependsOn: ["convex-deploy", "^build"],
   };
 
   // Inferred task final output

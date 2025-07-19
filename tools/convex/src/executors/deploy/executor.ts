@@ -17,14 +17,24 @@ export default async function* deployExecutor(
 ) {
   // Get convex deploy key from Doppler
   const project = context.projectName?.split("/")[1];
+  if (!project) {
+    throw logAndCreateError(
+      `Invalid project name format: ${context.projectName}`,
+    );
+  }
   console.info(`Running convex deploy for project: ${project}`);
   const projectRoot = `${context.root}/apps/${project}`;
   const convexDeployKeyName = `CONVEX_DEPLOY_KEY_${project?.toUpperCase()}`;
   console.info(`Convex deploy key name: ${convexDeployKeyName}`);
 
   const git = simpleGit(projectRoot);
-  const branch = await git.revparse(["--abbrev-ref", "HEAD"]);
-  console.info(`Current branch: ${branch}`);
+  let branch: string;
+  try {
+    branch = await git.revparse(["--abbrev-ref", "HEAD"]);
+    console.info(`Current branch: ${branch}`);
+  } catch (error) {
+    throw logAndCreateError(`Failed to get current branch: ${error}`);
+  }
 
   const dopplerProject = branch === "main" ? "prd" : "stg";
   console.info(`Doppler project: ${dopplerProject}`);

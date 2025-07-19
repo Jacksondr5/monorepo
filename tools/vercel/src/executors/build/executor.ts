@@ -22,6 +22,11 @@ export default async function* buildExecutor(
 ) {
   // Get vercel key from Doppler
   const project = context.projectName?.split("/")[1];
+  if (!project) {
+    throw logAndCreateError(
+      `Invalid project name format: ${context.projectName}`,
+    );
+  }
   console.info(`Running vercel build for project: ${project}`);
   const projectRoot = `${context.root}/apps/${project}`;
   console.info(`Project Root: ${projectRoot}`);
@@ -29,8 +34,13 @@ export default async function* buildExecutor(
   console.info(`Vercel key name: ${vercelKeyName}`);
 
   const git = simpleGit(projectRoot);
-  const branch = await git.revparse(["--abbrev-ref", "HEAD"]);
-  console.info(`Current branch: ${branch}`);
+  let branch: string;
+  try {
+    branch = await git.revparse(["--abbrev-ref", "HEAD"]);
+    console.info(`Current branch: ${branch}`);
+  } catch (error) {
+    throw logAndCreateError(`Failed to get current branch: ${error}`);
+  }
 
   const dopplerProject = branch === "main" ? "prd" : "stg";
   console.info(`Doppler project: ${dopplerProject}`);
