@@ -50,6 +50,7 @@ vitest.config.*.timestamp*
 # Next.js
 .next
 out
+.vercel
 
 test-output
 test-results
@@ -57,3 +58,4 @@ test-results
 storybook-static
 .env*
 !.env.example
+.convex-url

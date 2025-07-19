@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "type": "object",
+  "properties": {},
+  "title": "Deploy Convex Project",
+  "description": "Deploy Convex project to the cloud."
+}
