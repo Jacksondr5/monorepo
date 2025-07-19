@@ -35,6 +35,13 @@
     },
     {
       "path": "./apps/todo"
+    },
+
+    {
+      "path": "./tools/convex"
+    },
+    {
+      "path": "./tools/vercel"
     }
   ],
   "ts-node": {

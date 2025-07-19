@@ -1,5 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "useDaemonProcess": false,
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
@@ -87,6 +88,12 @@
         "testStorybookTargetName": "test-storybook",
         "staticStorybookTargetName": "static-storybook"
       }
+    },
+    {
+      "plugin": "./tools/convex/plugin.ts"
+    },
+    {
+      "plugin": "./tools/vercel/plugin.ts"
     }
   ],
   "targetDefaults": {
@@ -110,24 +117,10 @@
     "storybook": {
       "dependsOn": ["^build"]
     },
-    "convex-deploy": {
-      "cache": false,
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "pnpm dlx convex deploy -v --cmd 'pnpm nx build-next @j5/hackathon --prod' --cmd-url-env-var-name NEXT_PUBLIC_CONVEX_URL"
-      },
-      "outputs": ["{projectRoot}/.convex-url"]
-    },
-    "vercel-build": {
-      "cache": false,
-      "dependsOn": ["^build", "convex-deploy"],
-      "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/.vercel"]
-    },
-    "vercel-deploy": {
-      "cache": false,
-      "dependsOn": ["^build", "vercel-build"],
-      "inputs": ["{workspaceRoot}/.vercel"]
+    "@nx/js:tsc": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     }
   },
   "generators": {
