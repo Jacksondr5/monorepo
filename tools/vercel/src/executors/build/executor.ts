@@ -70,12 +70,11 @@ export default async function* buildExecutor(
   // Run build command
   console.info(`Building project ${project} with Vercel`);
   const { stdout: buildStdout, stderr: buildStderr } = await promisify(exec)(
-    `pnpm vercel build --yes`,
+    `pnpm vercel build --yes --token ${vercelKey}`,
     {
       cwd: context.root,
       env: {
         ...process.env,
-        VERCEL_KEY: vercelKey,
         NEXT_PUBLIC_CONVEX_URL: convexUrl,
       },
     },
