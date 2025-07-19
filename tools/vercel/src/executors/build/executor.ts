@@ -48,12 +48,11 @@ export default async function* buildExecutor(
   // Run link command
   console.info(`Linking project ${project} to Vercel`);
   const { stdout: linkStdout, stderr: linkStderr } = await promisify(exec)(
-    `pnpm vercel link --yes --project ${project}`,
+    `pnpm vercel link --yes --project ${project} --token ${vercelKey}`,
     {
       cwd: context.root,
       env: {
         ...process.env,
-        VERCEL_KEY: vercelKey,
       },
     },
   );
