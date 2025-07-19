@@ -56,6 +56,7 @@ async function createNodesInternal(
     cache: true,
     inputs: ["{projectRoot}/**"],
     outputs: [`{projectRoot}/.vercel-url`],
+    dependsOn: ["vercel-build"],
   };
 
   // Project configuration to be merged into the rest of the Nx configuration

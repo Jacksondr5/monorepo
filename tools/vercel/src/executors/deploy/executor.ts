@@ -6,15 +6,13 @@ import { promisify } from "util";
 import { exec } from "child_process";
 import simpleGit from "simple-git";
 
-export interface VercelDeployExecutorOptions {}
-
 type SecretGroup = Required<SecretsListResponse>["secrets"];
 type Secret = Required<SecretGroup["USER"]>;
 
 const doppler = new DopplerSDK({ accessToken: env.DOPPLER_KEY });
 
 export default async function* deployExecutor(
-  _: VercelDeployExecutorOptions,
+  _: unknown,
   context: ExecutorContext,
 ) {
   // Get vercel key from Doppler
@@ -55,5 +53,5 @@ export default async function* deployExecutor(
   );
   console.log(stdout);
   console.error(stderr);
-  return { success: true };
+  yield { success: true };
 }

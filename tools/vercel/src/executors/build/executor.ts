@@ -83,5 +83,5 @@ export default async function* buildExecutor(
   );
   console.log(buildStdout);
   console.error(buildStderr);
-  return { success: true };
+  yield { success: true };
 }
