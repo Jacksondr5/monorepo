@@ -705,6 +705,9 @@ importers:
       '@t3-oss/env-core':
         specifier: 0.13.8
         version: 0.13.8(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.67)
+      '@vercel/sdk':
+        specifier: ^1.10.0
+        version: 1.10.0(zod@3.25.67)
       simple-git:
         specifier: 3.28.0
         version: 3.28.0
@@ -5094,6 +5097,16 @@ packages:
 
   '@vercel/ruby@2.2.1':
     resolution: {integrity: sha512-DsmTCggOa/Uvt/9JkafXx9U+Bz5eNIb6Bs422EOQo2zKwcxW88ITSh8mM5m0dQ0+B4k02X/moVim6iFa4sjazg==}
+
+  '@vercel/sdk@1.10.0':
+    resolution: {integrity: sha512-Z3bTFhDkQoEt2wviWxbvmkrkTPxVCYZaRlkV2Y3O/oRwVRnYiZ1tAK7NkjnSNtc19vARRkEAma/DfiaqVMlPzQ==}
+    hasBin: true
+    peerDependencies:
+      '@modelcontextprotocol/sdk': '>=1.5.0 <1.10.0'
+      zod: ^3
+    peerDependenciesMeta:
+      '@modelcontextprotocol/sdk':
+        optional: true
 
   '@vercel/static-build@2.7.16':
     resolution: {integrity: sha512-vRIY1tLTuGSkQaMdCaV1cb5wBCC+HU081TtwjlGQQETdjZcqgkl+kJEOFfICzk5iSVluRRMTkUslc0wHM7vqXQ==}
@@ -17086,6 +17099,10 @@ snapshots:
       - supports-color
 
   '@vercel/ruby@2.2.1': {}
+
+  '@vercel/sdk@1.10.0(zod@3.25.67)':
+    dependencies:
+      zod: 3.25.67
 
   '@vercel/static-build@2.7.16':
     dependencies:

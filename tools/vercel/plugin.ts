@@ -53,7 +53,7 @@ async function createNodesInternal(
 
   // Inferred task final output
   const vercelDeployTarget: TargetConfiguration = {
-    cache: true,
+    cache: false,
     dependsOn: ["vercel-build"],
     executor: "@j5/vercel:deploy",
     inputs: ["default", "^production"],

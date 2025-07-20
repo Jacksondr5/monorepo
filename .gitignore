@@ -1,6 +1,9 @@
 # See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
-# CUSTOM IGNORE
+
+# J5 custom stuff
+.convex-url
+.vercel-url
 apps/certificate-rotater/certs
 
 # compiled output
@@ -58,4 +61,3 @@ test-results
 storybook-static
 .env*
 !.env.example
-.convex-url

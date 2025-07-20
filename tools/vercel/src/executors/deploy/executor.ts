@@ -5,6 +5,8 @@ import { env } from "../../env";
 import { promisify } from "util";
 import { exec } from "child_process";
 import simpleGit from "simple-git";
+import { Vercel } from "@vercel/sdk";
+import { writeFile } from "fs/promises";
 
 type SecretGroup = Required<SecretsListResponse>["secrets"];
 type Secret = Required<SecretGroup["USER"]>;
@@ -35,6 +37,13 @@ export default async function deployExecutor(
   } catch (error) {
     throw logAndCreateError(`Failed to get current branch: ${error}`);
   }
+  let commitSha: string;
+  try {
+    commitSha = await git.revparse(["HEAD"]);
+    console.info(`Current commit SHA: ${commitSha}`);
+  } catch (error) {
+    throw logAndCreateError(`Failed to get current commit SHA: ${error}`);
+  }
 
   const dopplerProject = branch === "main" ? "prd" : "stg";
   console.info(`Doppler project: ${dopplerProject}`);
@@ -49,6 +58,10 @@ export default async function deployExecutor(
     throw logAndCreateError(`Vercel key not found: ${vercelKeyName}`);
   }
 
+  const vercel = new Vercel({
+    bearerToken: vercelKey,
+  });
+
   // Run deploy command
   console.info(`Project Root: ${projectRoot}`);
   const { stdout, stderr } = await promisify(exec)(
@@ -62,5 +75,29 @@ export default async function deployExecutor(
   );
   console.log(stdout);
   console.error(stderr);
+
+  console.info("Deployed successfully");
+  const recentDeployments = (
+    await vercel.deployments.getDeployments({
+      app: project,
+      sha: commitSha,
+      state: "READY",
+    })
+  ).deployments.sort((a, b) => b.created - a.created);
+  console.info(`Recent deployments: ${JSON.stringify(recentDeployments)}`);
+  if (recentDeployments.length === 0) {
+    throw logAndCreateError("No deployments found");
+  }
+  if (recentDeployments.length > 1) {
+    throw logAndCreateError("Multiple deployments found");
+  }
+  const deployment = recentDeployments[0];
+  console.info(`Deployment: ${JSON.stringify(deployment)}`);
+  const deploymentUrl = deployment.url;
+  console.info(`Deployment URL: ${deploymentUrl}`);
+
+  console.info(`Writing deployment URL to .vercel-url`);
+  await writeFile(`${projectRoot}/.vercel-url`, deploymentUrl);
+  console.info(`Deployment URL written to .vercel-url`);
   return { success: true };
 }
