@@ -16,7 +16,7 @@ type Secret = Required<SecretGroup["USER"]>;
 
 const doppler = new DopplerSDK({ accessToken: env.DOPPLER_TOKEN });
 
-export default async function* buildExecutor(
+export default async function buildExecutor(
   options: VercelBuildExecutorOptions,
   context: ExecutorContext,
 ) {
@@ -91,5 +91,5 @@ export default async function* buildExecutor(
   );
   console.log(buildStdout);
   console.error(buildStderr);
-  yield { success: true };
+  return { success: true };
 }

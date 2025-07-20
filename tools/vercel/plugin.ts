@@ -1,7 +1,9 @@
-import { createNodesFromFiles } from "@nx/devkit";
-import { CreateNodesContextV2 } from "@nx/devkit";
-import { TargetConfiguration } from "@nx/devkit";
-import { CreateNodesV2 } from "@nx/devkit";
+import {
+  createNodesFromFiles,
+  CreateNodesContextV2,
+  TargetConfiguration,
+  CreateNodesV2,
+} from "@nx/devkit";
 import { readdirSync } from "fs";
 import { dirname, join } from "path";
 
@@ -39,25 +41,22 @@ async function createNodesInternal(
   }
 
   const vercelBuildTarget: TargetConfiguration = {
-    // command: `vercel build --yes`,
-    // options: { cwd: context.workspaceRoot },
-    executor: "@j5/vercel:build",
-    parallelism: false,
-    cache: false,
-    inputs: ["{projectRoot}/**"],
-    outputs: [`{workspaceRoot}/.vercel`],
+    cache: true,
     dependsOn: ["convex-deploy", "^build"],
+    executor: "@j5/vercel:build",
+    inputs: ["default", "^production"],
+    outputs: [`{workspaceRoot}/.vercel`],
+    parallelism: false,
   };
 
   // Inferred task final output
   const vercelDeployTarget: TargetConfiguration = {
-    // options: { cwd: context.workspaceRoot },
-    executor: "@j5/vercel:deploy",
-    parallelism: false,
     cache: true,
-    inputs: ["{projectRoot}/**"],
-    outputs: [`{projectRoot}/.vercel-url`],
     dependsOn: ["vercel-build"],
+    executor: "@j5/vercel:deploy",
+    inputs: ["default", "^production"],
+    outputs: [`{projectRoot}/.vercel-url`],
+    parallelism: false,
   };
 
   // Project configuration to be merged into the rest of the Nx configuration

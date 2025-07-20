@@ -11,7 +11,7 @@ type Secret = Required<SecretGroup["USER"]>;
 
 const doppler = new DopplerSDK({ accessToken: env.DOPPLER_TOKEN });
 
-export default async function* deployExecutor(
+export default async function deployExecutor(
   _: unknown,
   context: ExecutorContext,
 ) {
@@ -65,5 +65,5 @@ export default async function* deployExecutor(
   );
   console.log(stdout);
   console.error(stderr);
-  yield { success: true };
+  return { success: true };
 }

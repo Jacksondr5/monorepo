@@ -1,7 +1,9 @@
-import { createNodesFromFiles } from "@nx/devkit";
-import { CreateNodesContextV2 } from "@nx/devkit";
-import { TargetConfiguration } from "@nx/devkit";
-import { CreateNodesV2 } from "@nx/devkit";
+import {
+  createNodesFromFiles,
+  CreateNodesContextV2,
+  TargetConfiguration,
+  CreateNodesV2,
+} from "@nx/devkit";
 import { readdirSync } from "fs";
 import { dirname, join } from "path";
 
