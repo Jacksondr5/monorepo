@@ -52,12 +52,11 @@ export default async function deployExecutor(
   // Run deploy command
   console.info(`Project Root: ${projectRoot}`);
   const { stdout, stderr } = await promisify(exec)(
-    `pnpm vercel --prebuilt --archive=tgz --yes`,
+    `pnpm vercel --prebuilt --archive=tgz --yes --token ${vercelKey}`,
     {
       cwd: context.root,
       env: {
         ...process.env,
-        VERCEL_TOKEN: vercelKey,
       },
     },
   );
