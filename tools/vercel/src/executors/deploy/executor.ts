@@ -7,6 +7,7 @@ import { exec } from "child_process";
 import simpleGit from "simple-git";
 import { Vercel } from "@vercel/sdk";
 import { writeFile } from "fs/promises";
+import { existsSync } from "fs";
 
 type SecretGroup = Required<SecretsListResponse>["secrets"];
 type Secret = Required<SecretGroup["USER"]>;
@@ -88,16 +89,24 @@ export default async function deployExecutor(
   if (recentDeployments.length === 0) {
     throw logAndCreateError("No deployments found");
   }
-  if (recentDeployments.length > 1) {
-    throw logAndCreateError("Multiple deployments found");
-  }
+  // if (recentDeployments.length > 1) {
+  //   throw logAndCreateError("Multiple deployments found");
+  // }
   const deployment = recentDeployments[0];
   console.info(`Deployment: ${JSON.stringify(deployment)}`);
   const deploymentUrl = deployment.url;
   console.info(`Deployment URL: ${deploymentUrl}`);
 
-  console.info(`Writing deployment URL to .vercel-url`);
-  await writeFile(`${projectRoot}/.vercel-url`, deploymentUrl);
-  console.info(`Deployment URL written to .vercel-url`);
+  // Check to see if an e2e project exists
+  const e2eProject = `${project}-e2e`;
+  const e2eProjectRoot = `${projectRoot}-e2e`;
+  const e2eProjectExists = existsSync(e2eProjectRoot);
+  if (!e2eProjectExists) {
+    console.info(`E2E project does not exist: ${e2eProject}`);
+    return { success: true };
+  }
+  console.info(`Writing deployment URL to .vercel-url for e2e project`);
+  await writeFile(`${e2eProjectRoot}/.vercel-url`, deploymentUrl);
+  console.info(`Deployment URL written to .vercel-url for e2e project`);
   return { success: true };
 }
