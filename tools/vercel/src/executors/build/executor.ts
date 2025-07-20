@@ -58,11 +58,12 @@ export default async function buildExecutor(
   // Run link command
   console.info(`Linking project ${project} to Vercel`);
   const { stdout: linkStdout, stderr: linkStderr } = await promisify(exec)(
-    `pnpm vercel link --yes --project ${project} --token ${vercelKey}`,
+    `pnpm vercel link --yes --project ${project}`,
     {
       cwd: context.root,
       env: {
         ...process.env,
+        VERCEL_TOKEN: vercelKey,
       },
     },
   );
@@ -80,12 +81,13 @@ export default async function buildExecutor(
   // Run build command
   console.info(`Building project ${project} with Vercel`);
   const { stdout: buildStdout, stderr: buildStderr } = await promisify(exec)(
-    `pnpm vercel build --yes --token ${vercelKey}`,
+    `pnpm vercel build --yes`,
     {
       cwd: context.root,
       env: {
         ...process.env,
         NEXT_PUBLIC_CONVEX_URL: convexUrl,
+        VERCEL_TOKEN: vercelKey,
       },
     },
   );
