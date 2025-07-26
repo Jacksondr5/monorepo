@@ -53,7 +53,9 @@ async function createNodesInternal(
 
   // Inferred task final output
   const vercelDeployTarget: TargetConfiguration = {
-    cache: true,
+    // Cannot be cached because cache will trigger on a new branch, which
+    // should get a new preview environment and thus be re-run.
+    cache: false,
     dependsOn: ["vercel-build"],
     executor: "@j5/vercel:deploy",
     inputs: ["default", "^production"],
