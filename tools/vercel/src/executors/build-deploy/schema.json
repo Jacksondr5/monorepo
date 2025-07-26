@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "type": "object",
+  "properties": {
+    "hasConvex": {
+      "type": "boolean",
+      "description": "Whether the project has Convex"
+    }
+  },
+  "title": "Build and Deploy Vercel Project",
+  "description": "Build and deploy Vercel project."
+}

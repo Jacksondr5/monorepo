@@ -40,24 +40,12 @@ async function createNodesInternal(
     return {};
   }
 
-  const vercelBuildTarget: TargetConfiguration = {
+  const vercelBuildDeployTarget: TargetConfiguration = {
     // Cannot be true because it seems like Nx has issues restoring the cache
     // on top of a previous build.  This crashes the entire pipeline.
     cache: false,
     dependsOn: ["convex-deploy", "^build"],
-    executor: "@j5/vercel:build",
-    inputs: ["default", "^production"],
-    outputs: [`{workspaceRoot}/.vercel`],
-    parallelism: false,
-  };
-
-  // Inferred task final output
-  const vercelDeployTarget: TargetConfiguration = {
-    // Cannot be cached because cache will trigger on a new branch, which
-    // should get a new preview environment and thus be re-run.
-    cache: false,
-    dependsOn: ["vercel-build"],
-    executor: "@j5/vercel:deploy",
+    executor: "@j5/vercel:build-deploy",
     inputs: ["default", "^production"],
     outputs: [`{projectRoot}/.vercel-url`],
     parallelism: false,
@@ -68,8 +56,7 @@ async function createNodesInternal(
     projects: {
       [projectRoot]: {
         targets: {
-          "vercel-build": vercelBuildTarget,
-          "vercel-deploy": vercelDeployTarget,
+          "vercel-build-deploy": vercelBuildDeployTarget,
         },
       },
     },

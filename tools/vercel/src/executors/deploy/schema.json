@@ -1,7 +1,0 @@
-{
-  "$schema": "https://json-schema.org/schema",
-  "type": "object",
-  "properties": {},
-  "title": "Deploy Vercel Project",
-  "description": "Deploy Vercel project to the cloud."
-}
