@@ -10,7 +10,7 @@
         "cwd": "apps/hire"
       }
     },
-    "vercel-build": {
+    "vercel-build-deploy": {
       "options": {
         "hasConvex": true
       }
