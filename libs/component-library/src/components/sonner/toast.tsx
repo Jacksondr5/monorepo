@@ -111,6 +111,8 @@ export function Toast(props: ToastProps) {
         "flex w-full items-start rounded-lg border p-4 shadow-lg sm:w-96",
         currentVariantStyle.base,
       )}
+      role="alert"
+      aria-live="polite"
     >
       {iconElement && <div className="shrink-0 pt-0.5">{iconElement}</div>}
       <div className={cn("ml-3 flex-1", { "ml-0": !iconElement })}>

@@ -5,6 +5,7 @@ import { api } from "../../../convex/_generated/api";
 import { useMemo } from "react";
 import { FinalizedProjectCard } from "~/components/finalized-projects/finalized-project-card";
 import { unwrapSerializableResult } from "~/lib/errors";
+import { ErrorState } from "~/components/ErrorState";
 
 export interface VotingClientPageProps {
   preloadedProjectVotingData: Preloaded<
@@ -17,7 +18,6 @@ export const VotingClientPage = ({
 }: VotingClientPageProps) => {
   const projectVotingDataResult = usePreloadedQuery(preloadedProjectVotingData);
 
-  // TODO: actually handle error (JAC-62)
   const projectVotingData = unwrapSerializableResult(
     projectVotingDataResult,
     "Failed to fetch project voting data",
@@ -56,9 +56,16 @@ export const VotingClientPage = ({
     return new Map(visibleUsersArray.map((user) => [user._id, user]));
   }, [visibleUsersArray]);
 
-  // Early return after all hooks have been called
+  // Show error state if critical data failed to load
   if (!projectVotingData || !latestHackathon || !currentUser) {
-    return null;
+    return (
+      <ErrorState
+        title="Project Voting"
+        errorTitle="Unable to Load Project Voting Data"
+        errorMessage="There was an error loading the project voting data."
+        dataTestId="project-voting-error-state"
+      />
+    );
   }
 
   const hasProjects = projects.length > 0;

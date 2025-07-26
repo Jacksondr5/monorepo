@@ -8,6 +8,7 @@ import { FinalizedProjectForm } from "~/components/finalized-projects/finalized-
 import { unwrapSerializableResult, processError } from "~/lib/errors";
 import { Button } from "@j5/component-library";
 import { usePostHog } from "posthog-js/react";
+import { ErrorState } from "~/components/ErrorState";
 
 export interface AdminClientPageProps {
   preloadedLatestHackathon: Preloaded<
@@ -38,7 +39,6 @@ export const AdminClientPage = ({
   const [showCreateForm, setShowCreateForm] = useState(false);
   const postHog = usePostHog();
 
-  // TODO: actually handle error (JAC-62)
   const finalizedProjectsResultValue = unwrapSerializableResult(
     finalizedProjectsResult,
     "Failed to fetch finalized projects",
@@ -52,8 +52,16 @@ export const AdminClientPage = ({
     "Failed to fetch current user",
   );
 
+  // Show error state if any critical data failed to load
   if (!finalizedProjectsResultValue || !latestHackathon || !currentUser) {
-    return null;
+    return (
+      <ErrorState
+        title="Admin Panel"
+        errorTitle="Unable to Load Admin Panel"
+        errorMessage="There was an error loading the required data for the admin panel."
+        dataTestId="admin-error-state"
+      />
+    );
   }
 
   // Check if user is admin
