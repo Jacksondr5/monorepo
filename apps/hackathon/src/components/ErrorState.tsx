@@ -29,7 +29,7 @@ export function ErrorState({
     : errorMessage;
 
   return (
-    <div className={containerClassName} data-testid={dataTestId}>
+    <div className={containerClassName} data-testid={dataTestId} role="alert">
       <div className="mb-8 text-center">
         <h1 className="text-slate-11 text-4xl font-bold">{title}</h1>
         <p className="text-slate-11 text-lg">Unable to Load Data</p>

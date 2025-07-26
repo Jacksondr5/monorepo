@@ -4,19 +4,12 @@
       "url": "http://localhost:9119/sse"
     },
     "convex": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "convex@latest",
-        "mcp",
-        "start"
-      ]
+      "command": "pnpm dlx",
+      "args": ["-y", "convex@latest", "mcp", "start"]
     },
     "browsermcp": {
-      "command": "npx",
-      "args": [
-        "@browsermcp/mcp@latest"
-      ]
+      "command": "pnpm dlx",
+      "args": ["@browsermcp/mcp@latest"]
     }
   }
 }
