@@ -10,7 +10,7 @@
         "cwd": "apps/todo"
       }
     },
-    "vercel-build": {
+    "vercel-build-deploy": {
       "executor": "@j5/vercel:build",
       "options": {
         "hasConvex": true
