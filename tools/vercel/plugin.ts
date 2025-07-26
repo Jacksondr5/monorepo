@@ -44,7 +44,7 @@ async function createNodesInternal(
     // Cannot be true because it seems like Nx has issues restoring the cache
     // on top of a previous build.  This crashes the entire pipeline.
     cache: false,
-    dependsOn: ["convex-deploy", "^build"],
+    dependsOn: ["convex-deploy", "^build", "build-next"],
     executor: "@j5/vercel:build",
     inputs: ["default", "^production"],
     outputs: [`{workspaceRoot}/.vercel`],
