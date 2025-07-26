@@ -7,6 +7,7 @@ import { ProjectCard } from "~/components/projects/project-card";
 import { ProjectSubmissionForm } from "~/components/project-submission/project-submission-form";
 import { usePostHog } from "posthog-js/react";
 import { processError, unwrapSerializableResult } from "~/lib/errors";
+import { ErrorState } from "~/components/ErrorState";
 
 export interface ProjectSubmissionClientPageProps {
   preloadedProjectSubmissionData: Preloaded<
@@ -28,14 +29,22 @@ export const ProjectSubmissionClientPage = ({
   );
   const postHog = usePostHog();
 
-  // TODO: actually handle error (JAC-62)
   const projectSubmissionData = unwrapSerializableResult(
     projectSubmissionDataResult,
     "Failed to fetch project submission data",
   );
 
+  // Show error state if critical data failed to load
   if (!projectSubmissionData) {
-    return null;
+    return (
+      <ErrorState
+        title="Project Submission"
+        errorTitle="Unable to Load Project Submission Data"
+        errorMessage="There was an error loading the project submission data."
+        containerClassName=""
+        dataTestId="project-submission-error-state"
+      />
+    );
   }
 
   const {
