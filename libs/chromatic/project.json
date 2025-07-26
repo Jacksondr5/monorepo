@@ -9,7 +9,8 @@
       "options": {
         "commands": ["git fetch --unshallow && chromatic"]
       },
-      "dependsOn": ["build-storybook"]
+      "dependsOn": ["build-storybook"],
+      "cache": false
     },
     "build-storybook": {
       "cache": true,
