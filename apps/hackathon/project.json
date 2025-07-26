@@ -11,7 +11,7 @@
       }
     },
     "vercel-build-deploy": {
-      "executor": "@j5/vercel:build",
+      "executor": "@j5/vercel:build-deploy",
       "options": {
         "hasConvex": true
       }
