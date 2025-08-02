@@ -148,7 +148,11 @@ export default async function buildExecutor(
     return { success: true };
   }
   console.info(`Writing deployment URL to .vercel-url for e2e project`);
-  await writeFile(`${e2eProjectRoot}/.vercel-url`, deploymentUrl);
+  try {
+    await writeFile(`${e2eProjectRoot}/.vercel-url`, deploymentUrl);
+  } catch (error) {
+    throw logAndCreateError(`Failed to write .vercel-url file: ${error}`);
+  }
   console.info(`Deployment URL written to .vercel-url for e2e project`);
   return { success: true };
 }

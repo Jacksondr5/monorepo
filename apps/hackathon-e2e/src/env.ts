@@ -29,10 +29,10 @@ export const env = createEnv({
     PLAYWRIGHT_USER_PASSWORD: z.string().min(1),
   },
   runtimeEnv: {
-    BASE_URL: process.env.BASE_URL,
-    CLERK_PUBLISHABLE_KEY: process.env.CLERK_PUBLISHABLE_KEY,
-    CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
-    PLAYWRIGHT_USER_EMAIL: process.env.PLAYWRIGHT_USER_EMAIL,
-    PLAYWRIGHT_USER_PASSWORD: process.env.PLAYWRIGHT_USER_PASSWORD,
+    BASE_URL: secrets.BASE_URL?.computed,
+    CLERK_PUBLISHABLE_KEY: secrets.CLERK_PUBLISHABLE_KEY?.computed,
+    CLERK_SECRET_KEY: secrets.CLERK_SECRET_KEY?.computed,
+    PLAYWRIGHT_USER_EMAIL: secrets.PLAYWRIGHT_USER_EMAIL?.computed,
+    PLAYWRIGHT_USER_PASSWORD: secrets.PLAYWRIGHT_USER_PASSWORD?.computed,
   },
 });
