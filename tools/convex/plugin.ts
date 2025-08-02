@@ -42,11 +42,12 @@ async function createNodesInternal(
   }
   // Inferred task final output
   const convexDeployTarget: TargetConfiguration = {
-    // command: `convex deploy -v --cmd 'echo $CONVEX_URL > ${projectRoot}/.convex-url'`,
     options: { cwd: projectRoot },
     executor: "@j5/convex:deploy",
     parallelism: false,
-    cache: true,
+    // Cannot be cached because cache will trigger on a new branch, which
+    // should get a new preview environment and thus be re-run.
+    cache: false,
     inputs: ["{projectRoot}/convex/**"],
     outputs: [`{projectRoot}/.convex-url`],
   };

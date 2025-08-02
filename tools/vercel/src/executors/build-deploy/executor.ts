@@ -8,14 +8,19 @@ import simpleGit from "simple-git";
 import { Vercel } from "@vercel/sdk";
 import { writeFile } from "fs/promises";
 import { existsSync } from "fs";
+import { readFile } from "fs/promises";
+
+export interface VercelBuildExecutorOptions {
+  hasConvex: boolean;
+}
 
 type SecretGroup = Required<SecretsListResponse>["secrets"];
 type Secret = Required<SecretGroup["USER"]>;
 
 const doppler = new DopplerSDK({ accessToken: env.DOPPLER_TOKEN });
 
-export default async function deployExecutor(
-  _: unknown,
+export default async function buildExecutor(
+  options: VercelBuildExecutorOptions,
   context: ExecutorContext,
 ) {
   // Get vercel key from Doppler
@@ -25,8 +30,9 @@ export default async function deployExecutor(
       `Invalid project name format: ${context.projectName}`,
     );
   }
-  console.info(`Running vercel deploy for project: ${project}`);
+  console.info(`Running vercel build for project: ${project}`);
   const projectRoot = `${context.root}/apps/${project}`;
+  console.info(`Project Root: ${projectRoot}`);
   const vercelKeyName = "VERCEL_CLI_TOKEN";
   console.info(`Vercel key name: ${vercelKeyName}`);
 
@@ -59,9 +65,42 @@ export default async function deployExecutor(
     throw logAndCreateError(`Vercel key not found: ${vercelKeyName}`);
   }
 
-  const vercel = new Vercel({
-    bearerToken: vercelKey,
-  });
+  // Run link command
+  console.info(`Linking project ${project} to Vercel`);
+  const { stdout: linkStdout, stderr: linkStderr } = await promisify(exec)(
+    `pnpm vercel link --yes --project ${project} --token ${vercelKey}`,
+    {
+      cwd: context.root,
+      env: {
+        ...process.env,
+      },
+    },
+  );
+  console.log(linkStdout);
+  console.error(linkStderr);
+
+  // If hasConvex, get convex URL from .convex-url
+  let convexUrl = "";
+  if (options.hasConvex) {
+    console.info(`Reading convex URL from .convex-url`);
+    convexUrl = (await readFile(`${projectRoot}/.convex-url`, "utf8")).trim();
+    console.info(`Convex URL: ${convexUrl}`);
+  }
+
+  // Run build command
+  console.info(`Building project ${project} with Vercel`);
+  const { stdout: buildStdout, stderr: buildStderr } = await promisify(exec)(
+    `pnpm vercel build --yes --token ${vercelKey}`,
+    {
+      cwd: context.root,
+      env: {
+        ...process.env,
+        NEXT_PUBLIC_CONVEX_URL: convexUrl,
+      },
+    },
+  );
+  console.log(buildStdout);
+  console.error(buildStderr);
 
   // Run deploy command
   console.info(`Project Root: ${projectRoot}`);
@@ -78,6 +117,9 @@ export default async function deployExecutor(
   console.error(stderr);
 
   console.info("Deployed successfully");
+
+  const vercel = new Vercel({ bearerToken: vercelKey });
+  console.info(`Getting deployments for project: ${project}`);
   const recentDeployments = (
     await vercel.deployments.getDeployments({
       app: project,

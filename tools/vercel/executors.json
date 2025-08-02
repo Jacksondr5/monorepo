@@ -1,15 +1,10 @@
 {
   "name": "@j5/vercel",
   "executors": {
-    "build": {
-      "implementation": "./src/executors/build/executor.ts",
-      "schema": "./src/executors/build/schema.json",
-      "description": "Build Vercel project."
-    },
-    "deploy": {
-      "implementation": "./src/executors/deploy/executor.ts",
-      "schema": "./src/executors/deploy/schema.json",
-      "description": "Deploy Vercel project to the cloud."
+    "build-deploy": {
+      "implementation": "./src/executors/build-deploy/executor.ts",
+      "schema": "./src/executors/build-deploy/schema.json",
+      "description": "Build and deploy Vercel project."
     }
   }
 }
