@@ -5,6 +5,9 @@ import { env } from "../../env";
 import { promisify } from "util";
 import { exec } from "child_process";
 import simpleGit from "simple-git";
+import { Vercel } from "@vercel/sdk";
+import { writeFile } from "fs/promises";
+import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 
 export interface VercelBuildExecutorOptions {
@@ -40,6 +43,13 @@ export default async function buildExecutor(
     console.info(`Current branch: ${branch}`);
   } catch (error) {
     throw logAndCreateError(`Failed to get current branch: ${error}`);
+  }
+  let commitSha: string;
+  try {
+    commitSha = await git.revparse(["HEAD"]);
+    console.info(`Current commit SHA: ${commitSha}`);
+  } catch (error) {
+    throw logAndCreateError(`Failed to get current commit SHA: ${error}`);
   }
 
   const dopplerProject = branch === "main" ? "prd" : "stg";
@@ -105,5 +115,44 @@ export default async function buildExecutor(
   );
   console.log(stdout);
   console.error(stderr);
+
+  console.info("Deployed successfully");
+
+  const vercel = new Vercel({ bearerToken: vercelKey });
+  console.info(`Getting deployments for project: ${project}`);
+  const recentDeployments = (
+    await vercel.deployments.getDeployments({
+      app: project,
+      sha: commitSha,
+      state: "READY",
+    })
+  ).deployments.sort((a, b) => b.created - a.created);
+  console.info(`Recent deployments: ${JSON.stringify(recentDeployments)}`);
+  if (recentDeployments.length === 0) {
+    throw logAndCreateError("No deployments found");
+  }
+  // if (recentDeployments.length > 1) {
+  //   throw logAndCreateError("Multiple deployments found");
+  // }
+  const deployment = recentDeployments[0];
+  console.info(`Deployment: ${JSON.stringify(deployment)}`);
+  const deploymentUrl = deployment.url;
+  console.info(`Deployment URL: ${deploymentUrl}`);
+
+  // Check to see if an e2e project exists
+  const e2eProject = `${project}-e2e`;
+  const e2eProjectRoot = `${projectRoot}-e2e`;
+  const e2eProjectExists = existsSync(e2eProjectRoot);
+  if (!e2eProjectExists) {
+    console.info(`E2E project does not exist: ${e2eProject}`);
+    return { success: true };
+  }
+  console.info(`Writing deployment URL to .vercel-url for e2e project`);
+  try {
+    await writeFile(`${e2eProjectRoot}/.vercel-url`, deploymentUrl);
+  } catch (error) {
+    throw logAndCreateError(`Failed to write .vercel-url file: ${error}`);
+  }
+  console.info(`Deployment URL written to .vercel-url for e2e project`);
   return { success: true };
 }

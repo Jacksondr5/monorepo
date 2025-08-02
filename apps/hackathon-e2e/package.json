@@ -2,6 +2,7 @@
   "name": "@j5/hackathon-e2e",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@t3-oss/env-core": "0.13.8",
     "@t3-oss/env-nextjs": "0.13.8",

@@ -2,8 +2,33 @@ import { defineConfig, devices } from "@playwright/test";
 import { nxE2EPreset } from "@nx/playwright/preset";
 import { workspaceRoot } from "@nx/devkit";
 
-// For CI, you may want to set BASE_URL to the deployed application.
-const baseURL = process.env["BASE_URL"] || "http://localhost:3000";
+import { readFileSync, existsSync } from "fs";
+import { join } from "path";
+
+function getBaseURL(): string {
+  // 1. Check environment variable first
+  if (process.env.BASE_URL) {
+    return process.env.BASE_URL;
+  }
+
+  // 2. Check .vercel-url file
+  const vercelUrlPath = join(__dirname, ".vercel-url");
+  if (existsSync(vercelUrlPath)) {
+    try {
+      const url = readFileSync(vercelUrlPath, "utf-8").trim();
+      if (url) {
+        return url;
+      }
+    } catch (error) {
+      console.warn("Failed to read .vercel-url file:", error);
+    }
+  }
+
+  // 3. Fall back to localhost:3000
+  return "http://localhost:3000";
+}
+
+const baseURL = getBaseURL();
 
 /**
  * Read environment variables from file.
