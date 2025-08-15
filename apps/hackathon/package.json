@@ -20,7 +20,7 @@
     "@tanstack/react-form": "1.14.1",
     "@tanstack/zod-form-adapter": "0.42.1",
     "convex": "1.25.2",
-    "convex-helpers": "0.1.99",
+    "convex-helpers": "0.1.104",
     "fast-deep-equal": "3.1.3",
     "neverthrow": "8.2.0",
     "next": "15.3.5",
