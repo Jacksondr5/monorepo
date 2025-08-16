@@ -1,16 +1,14 @@
 {
   "mcpServers": {
     "nx-mcp": {
-      "command": "npx",
+      "command": "pnpm dlx",
       "args": [
-        "-y",
         "nx-mcp@latest"
       ]
     },
     "convex": {
       "command": "pnpm dlx",
       "args": [
-        "-y",
         "convex@latest",
         "mcp",
         "start"
