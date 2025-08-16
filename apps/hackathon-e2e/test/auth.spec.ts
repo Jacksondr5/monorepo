@@ -5,7 +5,7 @@ import {
   ensureUserSignedIn,
   ensureUserSignedOut,
   testUsers,
-} from "./auth-utils";
+} from "../src/auth-utils";
 
 test.describe("Authentication Utilities", () => {
   test("should handle unauthenticated state correctly", async ({ page }) => {
