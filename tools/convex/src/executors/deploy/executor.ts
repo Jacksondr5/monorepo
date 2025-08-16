@@ -56,7 +56,7 @@ export default async function deployExecutor(
   const previewCreate = branch === "main" ? "" : `--preview-create "${branch}"`;
   console.info(`Project Root: ${projectRoot}`);
   const { stdout, stderr } = await promisify(exec)(
-    `pnpm dlx convex deploy -v --cmd-url-env-var-name CONVEX_URL --cmd 'echo $CONVEX_URL > .convex-url' ${previewCreate}`,
+    `pnpm convex deploy -v --cmd-url-env-var-name CONVEX_URL --cmd 'echo $CONVEX_URL > .convex-url' ${previewCreate}`,
     {
       cwd: projectRoot,
       env: {
