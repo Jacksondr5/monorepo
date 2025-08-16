@@ -1,15 +1,24 @@
 {
   "mcpServers": {
     "nx-mcp": {
-      "url": "http://localhost:9119/sse"
+      "command": "pnpm dlx",
+      "args": [
+        "nx-mcp@latest"
+      ]
     },
     "convex": {
       "command": "pnpm dlx",
-      "args": ["-y", "convex@latest", "mcp", "start"]
+      "args": [
+        "convex@latest",
+        "mcp",
+        "start"
+      ]
     },
     "browsermcp": {
       "command": "pnpm dlx",
-      "args": ["@browsermcp/mcp@latest"]
+      "args": [
+        "@browsermcp/mcp@latest"
+      ]
     }
   }
 }
