@@ -5,6 +5,7 @@ import { env } from "../../env";
 import { promisify } from "util";
 import { exec } from "child_process";
 import simpleGit from "simple-git";
+import fs from "fs/promises";
 
 type SecretGroup = Required<SecretsListResponse>["secrets"];
 type Secret = Required<SecretGroup["USER"]>;
@@ -66,5 +67,14 @@ export default async function deployExecutor(
   );
   console.log(stdout);
   console.error(stderr);
+
+  // Get the convex url from the .convex-url file
+  try {
+    const convexUrl = await fs.readFile(`${projectRoot}/.convex-url`, "utf8");
+    console.info(`Convex URL: ${convexUrl}`);
+  } catch (error) {
+    throw logAndCreateError(`Failed to get convex url: ${error}`);
+  }
+
   return { success: true };
 }
