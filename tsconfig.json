@@ -36,12 +36,14 @@
     {
       "path": "./apps/todo"
     },
-
     {
       "path": "./tools/convex"
     },
     {
       "path": "./tools/vercel"
+    },
+    {
+      "path": "./tools/playwright-env"
     }
   ],
   "ts-node": {

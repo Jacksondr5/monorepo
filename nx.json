@@ -57,12 +57,7 @@
         "watchDepsTargetName": "watch-deps"
       }
     },
-    {
-      "plugin": "@nx/playwright/plugin",
-      "options": {
-        "targetName": "e2e"
-      }
-    },
+
     {
       "plugin": "@nx/next/plugin",
       "options": {
@@ -94,6 +89,9 @@
     },
     {
       "plugin": "./tools/vercel/plugin.ts"
+    },
+    {
+      "plugin": "./tools/playwright-env/plugin.ts"
     }
   ],
   "targetDefaults": {

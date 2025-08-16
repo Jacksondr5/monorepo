@@ -11,7 +11,7 @@ function getBaseURL(): string {
   }
 
   // 2. Check .vercel-url file
-  const vercelUrlPath = join(__dirname, ".vercel-url");
+  const vercelUrlPath = join(import.meta.dirname, ".vercel-url");
   if (existsSync(vercelUrlPath)) {
     try {
       const url = readFileSync(vercelUrlPath, "utf-8").trim();
@@ -30,7 +30,7 @@ function getBaseURL(): string {
 const baseURL = getBaseURL();
 
 export default defineConfig({
-  ...nxE2EPreset(__filename, { testDir: "./src" }),
+  ...nxE2EPreset(import.meta.dirname, { testDir: "./src" }),
   use: {
     baseURL,
     trace: "on-first-retry",

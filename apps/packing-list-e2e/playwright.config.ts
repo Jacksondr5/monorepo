@@ -12,7 +12,7 @@ function getBaseURL(): string {
   }
 
   // 2. Check .vercel-url file
-  const vercelUrlPath = join(__dirname, ".vercel-url");
+  const vercelUrlPath = join(import.meta.dirname, ".vercel-url");
   if (existsSync(vercelUrlPath)) {
     try {
       const url = readFileSync(vercelUrlPath, "utf-8").trim();
@@ -40,7 +40,7 @@ const baseURL = getBaseURL();
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  ...nxE2EPreset(__filename, { testDir: "./src" }),
+  ...nxE2EPreset(import.meta.dirname, { testDir: "./src" }),
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL,

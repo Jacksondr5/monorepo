@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "E2E CI Executor",
+  "type": "object",
+  "properties": {
+    "command": {
+      "type": "string",
+      "description": "Original atomized command to run"
+    },
+    "cwd": {
+      "type": "string",
+      "description": "Working directory for the command"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,10 @@
+{
+  "name": "@j5/playwright-env",
+  "executors": {
+    "e2e-ci": {
+      "implementation": "./src/executors/e2e-ci/executor.ts",
+      "schema": "./src/executors/e2e-ci/schema.json",
+      "description": "Run Playwright E2E with injected env"
+    }
+  }
+}

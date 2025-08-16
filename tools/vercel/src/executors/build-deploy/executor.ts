@@ -131,6 +131,7 @@ export default async function buildExecutor(
   if (recentDeployments.length === 0) {
     throw logAndCreateError("No deployments found");
   }
+  // TODO: uncomment before merging
   // if (recentDeployments.length > 1) {
   //   throw logAndCreateError("Multiple deployments found");
   // }
