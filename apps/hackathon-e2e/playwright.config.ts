@@ -7,6 +7,10 @@ import { join } from "path";
 function getBaseURL(): string {
   // 1. Check environment variable first
   if (process.env.BASE_URL) {
+    console.log(
+      "Using BASE_URL from environment variable:",
+      process.env.BASE_URL,
+    );
     return process.env.BASE_URL;
   }
 
@@ -16,6 +20,7 @@ function getBaseURL(): string {
     try {
       const url = readFileSync(vercelUrlPath, "utf-8").trim();
       if (url) {
+        console.log("Using BASE_URL from .vercel-url file:", url);
         return url;
       }
     } catch (error) {
@@ -24,13 +29,14 @@ function getBaseURL(): string {
   }
 
   // 3. Fall back to localhost:3000
+  console.log("Using BASE_URL from localhost:3000");
   return "http://localhost:3000";
 }
 
 const baseURL = getBaseURL();
 
 export default defineConfig({
-  ...nxE2EPreset(import.meta.dirname, { testDir: "./src" }),
+  ...nxE2EPreset(import.meta.dirname, { testDir: "./test" }),
   use: {
     baseURL,
     trace: "on-first-retry",
@@ -38,8 +44,8 @@ export default defineConfig({
   webServer: {
     command: "pnpm exec nx run @j5/hackathon:start",
     url: "http://localhost:3000",
-    reuseExistingServer: true,
-    cwd: workspaceRoot,
+    reuseExistingServer: !process.env.CI,
+    // cwd: workspaceRoot,
   },
   projects: [
     {

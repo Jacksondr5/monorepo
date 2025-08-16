@@ -2,15 +2,11 @@ import {
   createNodesFromFiles,
   CreateNodesContextV2,
   CreateNodesV2,
-  TargetConfiguration,
 } from "@nx/devkit";
 import { createNodesV2 as playwrightCreateNodesV2 } from "@nx/playwright/plugin";
 
 // We leverage the @nx/playwright/plugin's createNodesV2 and then rewrite the
 // atomized e2e-ci tasks to target our custom executor.
-
-type AnyRecord = Record<string, unknown>;
-
 export interface PlaywrightEnvPluginOptions {
   projectName?: string;
 }
@@ -42,6 +38,13 @@ async function createNodesInternal(
   // Rewrite atomized e2e-ci tasks to our executor and pass original command
   for (const [projectName, projectConfig] of Object.entries(base.projects)) {
     const targets = projectConfig.targets ?? {};
+    base.projects[projectName].targets!["e2e-ui-host"] = {
+      command: "playwright test --ui --ui-host 0.0.0.0",
+      // command: `echo ${context.workspaceRoot}/${projectName}`,
+      options: {
+        cwd: `${context.workspaceRoot}/${projectName}`,
+      },
+    };
     for (const [targetName, target] of Object.entries(targets)) {
       if (!targetName.startsWith("e2e-ci--")) continue;
       const options = target.options ?? {};

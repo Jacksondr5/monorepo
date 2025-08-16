@@ -8,6 +8,10 @@ import { join } from "path";
 function getBaseURL(): string {
   // 1. Check environment variable first
   if (process.env.BASE_URL) {
+    console.log(
+      "Using BASE_URL from environment variable:",
+      process.env.BASE_URL,
+    );
     return process.env.BASE_URL;
   }
 
@@ -17,6 +21,7 @@ function getBaseURL(): string {
     try {
       const url = readFileSync(vercelUrlPath, "utf-8").trim();
       if (url) {
+        console.log("Using BASE_URL from .vercel-url file:", url);
         return url;
       }
     } catch (error) {
@@ -25,34 +30,23 @@ function getBaseURL(): string {
   }
 
   // 3. Fall back to localhost:3000
+  console.log("Using BASE_URL from localhost:3000");
   return "http://localhost:3000";
 }
 
 const baseURL = getBaseURL();
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// require('dotenv').config();
-
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
 export default defineConfig({
   ...nxE2EPreset(import.meta.dirname, { testDir: "./src" }),
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL,
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
   },
-  /* Run your local dev server before starting the tests */
   webServer: {
     command: "pnpm exec nx run @j5/packing-list:start",
     url: "http://localhost:3000",
-    reuseExistingServer: true,
-    cwd: workspaceRoot,
+    reuseExistingServer: !process.env.CI,
+    // cwd: workspaceRoot,
   },
   projects: [
     {
