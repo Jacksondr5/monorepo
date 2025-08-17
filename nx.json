@@ -91,7 +91,7 @@
       "plugin": "./tools/vercel/plugin.ts"
     },
     {
-      "plugin": "@nx/playwright/plugin"
+      "plugin": "./tools/playwright-env/plugin.ts"
     }
   ],
   "targetDefaults": {

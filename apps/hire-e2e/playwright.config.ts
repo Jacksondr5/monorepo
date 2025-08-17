@@ -1,7 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
 import { nxE2EPreset } from "@nx/playwright/preset";
-import { workspaceRoot } from "@nx/devkit";
-
 import { readFileSync, existsSync } from "fs";
 import { join } from "path";
 
@@ -46,7 +44,6 @@ export default defineConfig({
     command: "pnpm exec nx run @j5/hire:start",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
-    // cwd: workspaceRoot,
   },
   projects: [
     {

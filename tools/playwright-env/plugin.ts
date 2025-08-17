@@ -40,7 +40,6 @@ async function createNodesInternal(
     const targets = projectConfig.targets ?? {};
     base.projects[projectName].targets!["e2e-ui-host"] = {
       command: "playwright test --ui --ui-host 0.0.0.0",
-      // command: `echo ${context.workspaceRoot}/${projectName}`,
       options: {
         cwd: `${context.workspaceRoot}/${projectName}`,
       },
@@ -48,7 +47,7 @@ async function createNodesInternal(
     for (const [targetName, target] of Object.entries(targets)) {
       if (!targetName.startsWith("e2e-ci--")) continue;
       const options = target.options ?? {};
-      const command = options["command"];
+      const command = target.command ?? "no command";
 
       // Swap executor to our custom one and preserve other target props
       base.projects[projectName].targets![targetName] = {

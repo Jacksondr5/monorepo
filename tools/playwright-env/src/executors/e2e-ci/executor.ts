@@ -10,6 +10,7 @@ import { logAndCreateError } from "../../utils";
 export interface E2eCiExecutorOptions {
   command?: string;
   cwd?: string;
+  env?: Record<string, string>;
 }
 
 type SecretGroup = Required<SecretsListResponse>["secrets"];
@@ -21,39 +22,50 @@ export default async function e2eCiExecutor(
   options: E2eCiExecutorOptions,
   context: ExecutorContext,
 ) {
-  const project = context.projectName?.split("/")[1];
-  if (!project) {
+  const e2eTestProject = context.projectName?.split("/")[1];
+  if (!e2eTestProject) {
     console.error(`Invalid project name format: ${context.projectName}`);
     return { success: false };
   }
+  const appProject = e2eTestProject.replace("-e2e", "");
+  console.info(
+    `Running e2e tests for project: ${appProject}, e2e test project: ${e2eTestProject}`,
+  );
+  console.info(`Options: ${JSON.stringify(options)}`);
 
   const e2eRoot =
     context.projectsConfigurations?.projects?.[context.projectName!]?.root;
   const cwd = options.cwd ?? join(context.root, e2eRoot ?? "");
+  console.info(`Running e2e tests in cwd: ${cwd}`);
 
   // BASE_URL: from .vercel-url if present
   const vercelUrlPath = join(cwd, ".vercel-url");
   if (existsSync(vercelUrlPath)) {
     try {
+      console.info(`Reading BASE_URL from .vercel-url: ${vercelUrlPath}`);
       process.env.BASE_URL = readFileSync(vercelUrlPath, "utf8").trim();
+      console.info(`BASE_URL: ${process.env.BASE_URL}`);
     } catch (e) {
       throw logAndCreateError(`Failed to read .vercel-url: ${e}`);
     }
   }
 
   // Doppler: select config based on branch
+  console.info(`Reading branch from git`);
   const { stdout: branchStdout } = await promisify(exec)(
     "git rev-parse --abbrev-ref HEAD",
     { cwd },
   );
+  console.info(`Branch: ${branchStdout}`);
   const branch = branchStdout.trim();
   if (!branch) {
     throw logAndCreateError("Failed to resolve current git branch");
   }
   const dopplerProject = branch === "main" ? "prd" : "stg";
+  console.info(`Doppler project: ${dopplerProject}`);
 
-  // Fetch JSON secret: <APP>_E2E_SECRETS
-  const keyName = `${project.toUpperCase()}_E2E_SECRETS`;
+  const keyName = `${appProject.toUpperCase()}_E2E_SECRETS`;
+  console.info(`Reading Doppler secrets for key: ${keyName}`);
   const result = await doppler.secrets.list("ci", dopplerProject);
   const secrets = result.secrets as Record<string, Secret> | undefined;
   if (!secrets) {
@@ -72,15 +84,17 @@ export default async function e2eCiExecutor(
   Object.assign(process.env, parsed);
 
   // Ensure HTML reporter
-  const baseCommand = options.command ?? "pnpm exec playwright test";
+  const baseCommand = options.command ?? "pnpm playwright test";
+  console.info(`Base command: ${baseCommand}`);
   const withReporter = baseCommand.includes("--reporter")
     ? baseCommand
     : `${baseCommand} --reporter=html`;
-
+  console.info(`With reporter: ${withReporter}`);
   const { stdout, stderr } = await promisify(exec)(withReporter, {
     cwd,
     env: {
       ...process.env,
+      ...options.env,
     },
   });
   console.log(stdout);
