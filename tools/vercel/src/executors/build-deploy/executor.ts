@@ -7,7 +7,6 @@ import { exec } from "child_process";
 import simpleGit from "simple-git";
 import { Vercel } from "@vercel/sdk";
 import { writeFile } from "fs/promises";
-import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 
 export interface VercelBuildExecutorOptions {
