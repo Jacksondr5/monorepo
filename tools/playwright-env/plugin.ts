@@ -30,6 +30,7 @@ async function createNodesInternal(
   // Call the official plugin createNodesV2 for this file
   const [, handler] = playwrightCreateNodesV2;
   const baseArray = await handler([matchingFile], undefined, context);
+  console.info("baseArray", JSON.stringify(baseArray, null, 2));
   const resultArray = baseArray.map(([_, result]) => result);
   // This is an assumption that there is only 1 Playwright config file
   const base = resultArray[0];
@@ -38,6 +39,7 @@ async function createNodesInternal(
   // Rewrite atomized e2e-ci tasks to our executor and pass original command
   for (const [projectName, projectConfig] of Object.entries(base.projects)) {
     const targets = projectConfig.targets ?? {};
+    const appProject = projectName.replace("apps", "@j5").replace("-e2e", "");
     base.projects[projectName].targets!["e2e-ui-host"] = {
       command: "playwright test --ui --ui-host 0.0.0.0",
       options: {
@@ -52,8 +54,12 @@ async function createNodesInternal(
       // Swap executor to our custom one and preserve other target props
       base.projects[projectName].targets![targetName] = {
         ...target,
-        executor: "@j5/playwright-env:e2e-ci",
         command: undefined,
+        dependsOn: [
+          // ...(target.dependsOn ?? []),
+          { projects: [appProject], target: "vercel-build-deploy" },
+        ],
+        executor: "@j5/playwright-env:e2e-ci",
         options: {
           ...options,
           command,
@@ -61,6 +67,6 @@ async function createNodesInternal(
       };
     }
   }
-
+  console.info("new base", JSON.stringify(base, null, 2));
   return base;
 }
