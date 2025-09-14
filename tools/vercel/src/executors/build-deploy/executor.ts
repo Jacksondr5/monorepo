@@ -141,19 +141,20 @@ export default async function buildExecutor(
   console.info(`Deployment URL: ${deploymentUrl}`);
 
   // Check to see if an e2e project exists
-  const e2eProject = `${project}-e2e`;
-  const e2eProjectRoot = `${projectRoot}-e2e`;
-  const e2eProjectExists = existsSync(e2eProjectRoot);
-  if (!e2eProjectExists) {
-    console.info(`E2E project does not exist: ${e2eProject}`);
-    return { success: true };
-  }
-  console.info(`Writing deployment URL to .vercel-url for e2e project`);
+  // const e2eProject = `${project}-e2e`;
+  // const e2eProjectRoot = `${projectRoot}-e2e`;
+  // const e2eProjectExists = existsSync(e2eProjectRoot);
+  // if (!e2eProjectExists) {
+  //   console.info(`E2E project does not exist: ${e2eProject}`);
+  //   return { success: true };
+  // }
+  const vercelUrlPath = `${context.root}/vercel-urls/${project}.vercel-url`;
+  console.info(`Writing deployment URL to ${vercelUrlPath} for project`);
   try {
-    await writeFile(`${e2eProjectRoot}/.vercel-url`, deploymentUrl);
+    await writeFile(vercelUrlPath, deploymentUrl);
   } catch (error) {
     throw logAndCreateError(`Failed to write .vercel-url file: ${error}`);
   }
-  console.info(`Deployment URL written to .vercel-url for e2e project`);
+  console.info(`Deployment URL written to ${vercelUrlPath} for project`);
   return { success: true };
 }

@@ -14,8 +14,13 @@ function getBaseURL(): string {
   }
 
   // 2. Check .vercel-url file
-  const vercelUrlPath = join(import.meta.dirname, ".vercel-url");
+  const vercelUrlPath = join(
+    import.meta.dirname,
+    "../../vercel-urls/hackathon.vercel-url",
+  );
+  console.log("Checking .vercel-url file:", vercelUrlPath);
   if (existsSync(vercelUrlPath)) {
+    console.log("Found .vercel-url file:", vercelUrlPath);
     try {
       const url = readFileSync(vercelUrlPath, "utf-8").trim();
       if (url) {

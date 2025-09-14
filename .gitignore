@@ -5,6 +5,7 @@
 .convex-url
 .vercel-url
 apps/certificate-rotater/certs
+vercel-urls/
 
 # compiled output
 dist
@@ -57,6 +58,7 @@ out
 
 test-output
 test-results
+playwright-report
 
 storybook-static
 .env*
