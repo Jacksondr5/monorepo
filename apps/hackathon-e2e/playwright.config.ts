@@ -45,11 +45,11 @@ export default defineConfig({
     baseURL,
     trace: "on-first-retry",
   },
-  webServer: {
-    command: "pnpm exec nx run @j5/hackathon:start",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-  },
+  // webServer: {
+  //   command: "pnpm exec nx run @j5/hackathon:start",
+  //   url: baseURL,
+  //   reuseExistingServer: true,
+  // },
   projects: [
     {
       name: "setup",
