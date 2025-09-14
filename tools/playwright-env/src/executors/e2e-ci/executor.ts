@@ -6,6 +6,25 @@ import { exec } from "child_process";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { logAndCreateError } from "../../utils";
+import { spawn } from "node:child_process";
+
+export function run(
+  cmd: string,
+  opts: { cwd?: string; env?: NodeJS.ProcessEnv } = {},
+): Promise<{ code: number | null }> {
+  return new Promise((resolve, reject) => {
+    const child = spawn(cmd, {
+      stdio: "inherit",
+      cwd: opts.cwd,
+      env: opts.env,
+    });
+
+    child.once("error", reject);
+    child.once("exit", (code) => {
+      resolve({ code });
+    });
+  });
+}
 
 export interface E2eCiExecutorOptions {
   command?: string;
@@ -93,14 +112,14 @@ export default async function e2eCiExecutor(
     ? baseCommand
     : `${baseCommand} --reporter=html`;
   console.info(`With reporter: ${withReporter}`);
-  const { stdout, stderr } = await promisify(exec)(withReporter, {
+  console.info(`cwd: ${cwd}`);
+  const { code } = await run(withReporter, {
     cwd,
     env: {
       ...process.env,
       ...options.env,
     },
   });
-  console.log(stdout);
-  console.error(stderr);
-  return { success: true };
+  console.info(`Command finished with exit code ${code}`);
+  return { success: code === 0 };
 }
