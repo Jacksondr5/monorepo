@@ -139,14 +139,6 @@ export default async function buildExecutor(
   const deploymentUrl = deployment.url;
   console.info(`Deployment URL: ${deploymentUrl}`);
 
-  // Check to see if an e2e project exists
-  // const e2eProject = `${project}-e2e`;
-  // const e2eProjectRoot = `${projectRoot}-e2e`;
-  // const e2eProjectExists = existsSync(e2eProjectRoot);
-  // if (!e2eProjectExists) {
-  //   console.info(`E2E project does not exist: ${e2eProject}`);
-  //   return { success: true };
-  // }
   const vercelUrlPath = `${context.root}/vercel-urls/${project}.vercel-url`;
   console.info(`Writing deployment URL to ${vercelUrlPath} for project`);
   try {
