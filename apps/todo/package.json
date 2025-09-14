@@ -9,21 +9,21 @@
     }
   },
   "dependencies": {
-    "@clerk/nextjs": "6.31.1",
+    "@clerk/nextjs": "6.32.0",
     "@j5/component-library": "workspace:*",
     "@radix-ui/colors": "3.0.0",
     "@radix-ui/react-separator": "1.1.7",
-    "@sentry/nextjs": "10.5.0",
+    "@sentry/nextjs": "10.11.0",
     "@t3-oss/env-nextjs": "0.13.8",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
-    "convex": "1.25.4",
+    "convex": "1.27.0",
     "convex-helpers": "0.1.104",
-    "dayjs": "1.11.13",
-    "geist": "1.4.2",
+    "dayjs": "1.11.18",
+    "geist": "1.5.1",
     "lucide-react": "0.539.0",
     "neverthrow": "8.2.0",
-    "next": "15.4.6",
+    "next": "15.5.3",
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "tailwind-merge": "3.3.1",
@@ -31,10 +31,10 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
-    "@storybook/nextjs-vite": "9.1.2",
-    "@tailwindcss/postcss": "4.1.12",
-    "@tailwindcss/vite": "4.1.12",
+    "@storybook/nextjs-vite": "9.1.5",
+    "@tailwindcss/postcss": "4.1.13",
+    "@tailwindcss/vite": "4.1.13",
     "postcss": "8.5.6",
-    "tailwindcss": "4.1.12"
+    "tailwindcss": "4.1.13"
   }
 }
