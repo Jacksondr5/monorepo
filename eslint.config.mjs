@@ -23,6 +23,7 @@ const config = [
       "**/out-tsc",
       "**/playwright-report",
       "**/test-output",
+      "**/next-env.d.ts",
     ],
   },
   { plugins: { "@nx": nxEslintPlugin } },

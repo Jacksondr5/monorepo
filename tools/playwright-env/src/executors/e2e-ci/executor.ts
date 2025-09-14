@@ -15,6 +15,7 @@ export function run(
   return new Promise((resolve, reject) => {
     const child = spawn(cmd, {
       stdio: "inherit",
+      shell: true,
       cwd: opts.cwd,
       env: opts.env,
     });
