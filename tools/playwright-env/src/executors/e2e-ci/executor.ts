@@ -84,8 +84,11 @@ export default async function e2eCiExecutor(
   Object.assign(process.env, parsed);
 
   // Ensure HTML reporter
-  const baseCommand = options.command ?? "pnpm playwright test";
+  let baseCommand = options.command ?? "pnpm playwright test";
   console.info(`Base command: ${baseCommand}`);
+  if (!baseCommand.startsWith("pnpm ")) {
+    baseCommand = `pnpm ${baseCommand}`;
+  }
   const withReporter = baseCommand.includes("--reporter")
     ? baseCommand
     : `${baseCommand} --reporter=html`;

@@ -30,7 +30,7 @@ async function createNodesInternal(
   // Call the official plugin createNodesV2 for this file
   const [, handler] = playwrightCreateNodesV2;
   const baseArray = await handler([matchingFile], undefined, context);
-  console.info("baseArray", JSON.stringify(baseArray, null, 2));
+  // console.info("baseArray", JSON.stringify(baseArray, null, 2));
   const resultArray = baseArray.map(([_, result]) => result);
   // This is an assumption that there is only 1 Playwright config file
   const base = resultArray[0];
@@ -67,6 +67,6 @@ async function createNodesInternal(
       };
     }
   }
-  console.info("new base", JSON.stringify(base, null, 2));
+  // console.info("new base", JSON.stringify(base, null, 2));
   return base;
 }
