@@ -25,6 +25,9 @@ function getBaseURL(): string {
       const url = readFileSync(vercelUrlPath, "utf-8").trim();
       if (url) {
         console.log("Using BASE_URL from .vercel-url file:", url);
+        if (!url.startsWith("http")) {
+          return `https://${url}`;
+        }
         return url;
       }
     } catch (error) {
