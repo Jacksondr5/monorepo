@@ -1,38 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 import { nxE2EPreset } from "@nx/playwright/preset";
-import { readFileSync, existsSync } from "fs";
-import { join } from "path";
+import { getBaseURL } from "../../tools/shared/src";
 
-function getBaseURL(): string {
-  // 1. Check environment variable first
-  if (process.env.BASE_URL) {
-    console.log(
-      "Using BASE_URL from environment variable:",
-      process.env.BASE_URL,
-    );
-    return process.env.BASE_URL;
-  }
-
-  // 2. Check .vercel-url file
-  const vercelUrlPath = join(import.meta.dirname, ".vercel-url");
-  if (existsSync(vercelUrlPath)) {
-    try {
-      const url = readFileSync(vercelUrlPath, "utf-8").trim();
-      if (url) {
-        console.log("Using BASE_URL from .vercel-url file:", url);
-        return url;
-      }
-    } catch (error) {
-      console.warn("Failed to read .vercel-url file:", error);
-    }
-  }
-
-  // 3. Fall back to localhost:3000
-  console.log("Using BASE_URL from localhost:3000");
-  return "http://localhost:3000";
-}
-
-const baseURL = getBaseURL();
+const baseURL = getBaseURL(import.meta.dirname, "packing-list");
 
 export default defineConfig({
   ...nxE2EPreset(import.meta.dirname, { testDir: "./src" }),
