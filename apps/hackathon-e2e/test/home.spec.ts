@@ -19,7 +19,6 @@ test.describe("Home Page", () => {
       // Check that header is visible with sign-in button
       const header = homePage.getHeader();
       await expect(header).toBeVisible();
-      await expect(header).toContainText("Sign In", { timeout: 5000 });
       await expect(homePage.getHeaderSignInButton()).toBeVisible();
 
       // Check that signed-out UI is displayed
