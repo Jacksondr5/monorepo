@@ -1,12 +1,15 @@
 import { ExecutorContext } from "@nx/devkit";
-import DopplerSDK, { type SecretsListResponse } from "@dopplerhq/node-sdk";
 import { env } from "../../env";
 import { promisify } from "util";
 import { exec } from "child_process";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
-import { logAndCreateError } from "../../utils";
 import { spawn } from "node:child_process";
+import {
+  logAndCreateError,
+  getDopplerSecrets,
+  getCurrentBranch,
+} from "@j5/shared-tools";
 
 export function run(
   cmd: string,
@@ -32,11 +35,6 @@ export interface E2eCiExecutorOptions {
   cwd?: string;
   env?: Record<string, string>;
 }
-
-type SecretGroup = Required<SecretsListResponse>["secrets"];
-type Secret = Required<SecretGroup["USER"]>;
-
-const doppler = new DopplerSDK({ accessToken: env.DOPPLER_TOKEN });
 
 export default async function e2eCiExecutor(
   options: E2eCiExecutorOptions,
@@ -70,27 +68,8 @@ export default async function e2eCiExecutor(
     }
   }
 
-  // Doppler: select config based on branch
-  console.info(`Reading branch from git`);
-  const { stdout: branchStdout } = await promisify(exec)(
-    "git rev-parse --abbrev-ref HEAD",
-    { cwd },
-  );
-  console.info(`Branch: ${branchStdout}`);
-  const branch = branchStdout.trim();
-  if (!branch) {
-    throw logAndCreateError("Failed to resolve current git branch");
-  }
-  const dopplerProject = branch === "main" ? "prd" : "stg";
-  console.info(`Doppler project: ${dopplerProject}`);
-
-  const keyName = `${appProject.toUpperCase()}_E2E_SECRETS`;
-  console.info(`Reading Doppler secrets for key: ${keyName}`);
-  const result = await doppler.secrets.list("ci", dopplerProject);
-  const secrets = result.secrets as Record<string, Secret> | undefined;
-  if (!secrets) {
-    throw logAndCreateError("No secrets returned from Doppler");
-  }
+  const secrets = await getDopplerSecrets(cwd, env.DOPPLER_TOKEN);
+  const keyName = `${appProject.toUpperCase().replace("-", "_")}_E2E_SECRETS`;
   const raw = secrets[keyName]?.computed;
   if (!raw) {
     throw logAndCreateError(`Required Doppler secret not found: ${keyName}`);

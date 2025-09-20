@@ -1,22 +1,18 @@
 import { ExecutorContext } from "@nx/devkit";
-import { logAndCreateError } from "../../utils";
-import DopplerSDK, { type SecretsListResponse } from "@dopplerhq/node-sdk";
 import { env } from "../../env";
 import { promisify } from "util";
 import { exec } from "child_process";
-import simpleGit from "simple-git";
 import { Vercel } from "@vercel/sdk";
 import { writeFile } from "fs/promises";
 import { readFile } from "fs/promises";
-
+import {
+  getDopplerSecrets,
+  getCurrentCommitSha,
+  logAndCreateError,
+} from "@j5/shared-tools";
 export interface VercelBuildExecutorOptions {
   hasConvex: boolean;
 }
-
-type SecretGroup = Required<SecretsListResponse>["secrets"];
-type Secret = Required<SecretGroup["USER"]>;
-
-const doppler = new DopplerSDK({ accessToken: env.DOPPLER_TOKEN });
 
 export default async function buildExecutor(
   options: VercelBuildExecutorOptions,
@@ -35,30 +31,9 @@ export default async function buildExecutor(
   const vercelKeyName = "VERCEL_CLI_TOKEN";
   console.info(`Vercel key name: ${vercelKeyName}`);
 
-  const git = simpleGit(projectRoot);
-  let branch: string;
-  try {
-    branch = await git.revparse(["--abbrev-ref", "HEAD"]);
-    console.info(`Current branch: ${branch}`);
-  } catch (error) {
-    throw logAndCreateError(`Failed to get current branch: ${error}`);
-  }
-  let commitSha: string;
-  try {
-    commitSha = await git.revparse(["HEAD"]);
-    console.info(`Current commit SHA: ${commitSha}`);
-  } catch (error) {
-    throw logAndCreateError(`Failed to get current commit SHA: ${error}`);
-  }
+  const commitSha = await getCurrentCommitSha(projectRoot);
 
-  const dopplerProject = branch === "main" ? "prd" : "stg";
-  console.info(`Doppler project: ${dopplerProject}`);
-
-  const result = await doppler.secrets.list("ci", dopplerProject);
-  const secrets = result.secrets as Record<string, Secret> | undefined;
-  if (!secrets) {
-    throw logAndCreateError("No secrets found");
-  }
+  const secrets = await getDopplerSecrets(projectRoot, env.DOPPLER_TOKEN);
   const vercelKey = secrets[vercelKeyName]?.computed;
   if (!vercelKey) {
     throw logAndCreateError(`Vercel key not found: ${vercelKeyName}`);

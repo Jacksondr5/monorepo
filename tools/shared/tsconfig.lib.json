@@ -2,15 +2,13 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "rootDir": "src",
     "outDir": "dist",
     "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
     "emitDeclarationOnly": false,
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "types": ["node"],
-    "paths": {
-      "@j5/shared-tools": ["../shared/src"]
-    }
+    "types": ["node"]
   },
   "include": ["src/**/*.ts"],
   "references": [],
