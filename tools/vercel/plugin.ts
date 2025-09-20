@@ -42,9 +42,7 @@ async function createNodesInternal(
   }
 
   const vercelBuildDeployTarget: TargetConfiguration = {
-    // Cannot be true because it seems like Nx has issues restoring the cache
-    // on top of a previous build.  This crashes the entire pipeline.
-    cache: false,
+    cache: true,
     dependsOn: ["convex-deploy", "^build"],
     executor: "@j5/vercel:build-deploy",
     inputs: ["default", "^production"],
