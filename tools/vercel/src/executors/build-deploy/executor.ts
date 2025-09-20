@@ -58,11 +58,6 @@ export default async function buildExecutor(
   console.info(`Project JSON: ${projectJson}`);
   // Log .vercel/.env.preview.local
   console.info(`Reading .vercel/.env.preview.local`);
-  const envPreviewLocal = await readFile(
-    `${context.root}/.vercel/.env.preview.local`,
-    "utf8",
-  );
-  console.info(`Env Preview Local: ${envPreviewLocal}`);
 
   // If hasConvex, get convex URL from .convex-url
   let convexUrl = "";
