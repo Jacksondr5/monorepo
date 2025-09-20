@@ -9,6 +9,11 @@ export default defineConfig({
   ...nxE2EPreset(import.meta.dirname, { testDir: "./src" }),
   use: {
     baseURL,
+    extraHTTPHeaders: {
+      "x-vercel-protection-bypass":
+        process.env.VERCEL_AUTOMATION_BYPASS_SECRET || "",
+      // 'x-vercel-set-bypass-cookie': true | 'samesitenone'
+    },
     trace: "on-first-retry",
   },
   webServer: {

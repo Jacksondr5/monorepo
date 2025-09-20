@@ -1,6 +1,7 @@
 {
   "name": "@j5/vercel",
   "private": true,
+  "type": "module",
   "exports": {
     "./package.json": "./package.json",
     ".": {

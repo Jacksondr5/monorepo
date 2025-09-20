@@ -6,8 +6,6 @@
     "outDir": "dist",
     "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
     "emitDeclarationOnly": false,
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
     "types": ["node"]
   },
   "include": ["src/**/*.ts", "../shared/src/**/*.ts"],

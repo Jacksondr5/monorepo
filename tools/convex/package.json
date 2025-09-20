@@ -1,6 +1,7 @@
 {
   "name": "@j5/convex",
   "private": true,
+  "type": "module",
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -35,7 +36,7 @@
           "outputPath": "tools/convex/dist",
           "main": "tools/convex/src/index.ts",
           "tsConfig": "tools/convex/tsconfig.lib.json",
-          "rootDir": "tools/convex/src",
+          "rootDir": "tools",
           "generatePackageJson": false,
           "assets": [
             {

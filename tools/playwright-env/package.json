@@ -1,6 +1,7 @@
 {
   "name": "@j5/playwright-env",
   "private": true,
+  "type": "module",
   "exports": {
     "./package.json": "./package.json",
     ".": {

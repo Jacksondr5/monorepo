@@ -1,16 +1,13 @@
 import { ExecutorContext } from "@nx/devkit";
-import { logAndCreateError } from "../../utils";
-import DopplerSDK, { type SecretsListResponse } from "@dopplerhq/node-sdk";
+import {
+  logAndCreateError,
+  getDopplerSecrets,
+  getCurrentBranch,
+} from "../../../../shared/src/index";
 import { env } from "../../env";
 import { promisify } from "util";
 import { exec } from "child_process";
-import simpleGit from "simple-git";
 import { readFile } from "fs/promises";
-
-type SecretGroup = Required<SecretsListResponse>["secrets"];
-type Secret = Required<SecretGroup["USER"]>;
-
-const doppler = new DopplerSDK({ accessToken: env.DOPPLER_TOKEN });
 
 export default async function deployExecutor(
   _: unknown,
@@ -28,23 +25,7 @@ export default async function deployExecutor(
   const convexDeployKeyName = `CONVEX_DEPLOY_KEY_${project?.toUpperCase()}`;
   console.info(`Convex deploy key name: ${convexDeployKeyName}`);
 
-  const git = simpleGit(projectRoot);
-  let branch: string;
-  try {
-    branch = await git.revparse(["--abbrev-ref", "HEAD"]);
-    console.info(`Current branch: ${branch}`);
-  } catch (error) {
-    throw logAndCreateError(`Failed to get current branch: ${error}`);
-  }
-
-  const dopplerProject = branch === "main" ? "prd" : "stg";
-  console.info(`Doppler project: ${dopplerProject}`);
-
-  const result = await doppler.secrets.list("ci", dopplerProject);
-  const secrets = result.secrets as Record<string, Secret> | undefined;
-  if (!secrets) {
-    throw logAndCreateError("No secrets found");
-  }
+  const secrets = await getDopplerSecrets(projectRoot, env.DOPPLER_TOKEN);
   const convexDeployKey = secrets[convexDeployKeyName]?.computed;
   if (!convexDeployKey) {
     throw logAndCreateError(
@@ -53,6 +34,7 @@ export default async function deployExecutor(
   }
 
   // Run deploy command
+  const branch = await getCurrentBranch(projectRoot);
   const previewCreate = branch === "main" ? "" : `--preview-create "${branch}"`;
   console.info(`Project Root: ${projectRoot}`);
   const { stdout, stderr } = await promisify(exec)(
