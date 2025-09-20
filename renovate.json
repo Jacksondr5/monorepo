@@ -15,19 +15,21 @@
       "matchUpdateTypes": ["major"]
     },
     {
+      "automerge": true,
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch",
+      "matchCurrentVersion": "!/^0/",
       "matchPackageNames": ["*"],
       "matchUpdateTypes": ["minor", "patch"],
-      "matchCurrentVersion": "!/^0/",
-      "automerge": true
+      "minimumReleaseAge": "1 month"
     },
     {
-      "matchCurrentVersion": "/^0/",
-      "dependencyDashboardApproval": true,
       "groupName": "all v0 dependencies",
+      "dependencyDashboardApproval": true,
+      "matchCurrentVersion": "/^0/",
       "matchPackageNames": ["*"],
-      "matchUpdateTypes": ["major"]
+      "matchUpdateTypes": ["major"],
+      "minimumReleaseAge": "1 month"
     }
   ],
   "schedule": ["* 1 * * 0"],
