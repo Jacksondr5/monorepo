@@ -18,6 +18,7 @@ export default async function buildExecutor(
   options: VercelBuildExecutorOptions,
   context: ExecutorContext,
 ) {
+  console.info(`Running vercel build for project: ${context.projectName}`);
   // Get vercel key from Doppler
   const project = getProjectSlug(context);
   console.info(`Running vercel build for project: ${project}`);
