@@ -46,6 +46,19 @@ export default async function buildExecutor(
     throw logAndCreateError("vercel link failed");
   }
 
+  // Log .vercel/project.json
+  const projectJson = await readFile(
+    `${projectRoot}/.vercel/project.json`,
+    "utf8",
+  );
+  console.info(`Project JSON: ${projectJson}`);
+  // Log .vercel/.env.preview.local
+  const envPreviewLocal = await readFile(
+    `${projectRoot}/.vercel/.env.preview.local`,
+    "utf8",
+  );
+  console.info(`Env Preview Local: ${envPreviewLocal}`);
+
   // If hasConvex, get convex URL from .convex-url
   let convexUrl = "";
   if (options.hasConvex) {
