@@ -766,6 +766,9 @@ importers:
 
   tools/vercel:
     dependencies:
+      '@j5/shared-tools':
+        specifier: workspace:*
+        version: link:../shared
       '@nx/devkit':
         specifier: 21.5.2
         version: 21.5.2(nx@21.5.2(@swc-node/register@1.11.1(@swc/core@1.13.5(@swc/helpers@0.5.17))(@swc/types@0.1.25)(typescript@5.9.2))(@swc/core@1.13.5(@swc/helpers@0.5.17)))

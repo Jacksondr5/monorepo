@@ -1,5 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 import { nxE2EPreset } from "@nx/playwright/preset";
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { getBaseURL } from "../../tools/shared/src";
 
 const baseURL = getBaseURL(import.meta.dirname, "hackathon");
