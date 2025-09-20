@@ -6,7 +6,7 @@ export default function HomePage() {
           Coming Soon
         </h1>
         <p className="text-center text-lg">
-          This site is still under construction. Check back later for updates.
+          This site is still under construction. Check back later for updates!
         </p>
       </div>
     </main>
