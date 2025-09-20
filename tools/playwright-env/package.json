@@ -34,7 +34,7 @@
           "outputPath": "tools/playwright-env/dist",
           "main": "tools/playwright-env/src/index.ts",
           "tsConfig": "tools/playwright-env/tsconfig.lib.json",
-          "rootDir": "tools/playwright-env/src",
+          "rootDir": "tools",
           "generatePackageJson": false,
           "assets": [
             {

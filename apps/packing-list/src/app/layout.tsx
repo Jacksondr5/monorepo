@@ -2,14 +2,14 @@ import "../styles/global.css";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+// import {
+//   ClerkProvider,
+//   SignInButton,
+//   SignUpButton,
+//   SignedIn,
+//   SignedOut,
+//   UserButton,
+// } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "Packing List App",
