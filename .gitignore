@@ -5,8 +5,8 @@
 .convex-url
 .vercel-url
 apps/certificate-rotater/certs
-vercel-urls/*
-!vercel-urls/.gitkeep
+/vercel-urls/*
+!/vercel-urls/.gitkeep
 
 # compiled output
 dist

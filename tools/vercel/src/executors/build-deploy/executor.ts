@@ -47,17 +47,6 @@ export default async function buildExecutor(
     throw logAndCreateError("vercel link failed");
   }
   console.info(`Linked project ${project} to Vercel`);
-  console.info(`Reading .vercel/project.json`);
-
-  // Log .vercel/project.json
-  console.info(`Reading .vercel/project.json`);
-  const projectJson = await readFile(
-    `${context.root}/.vercel/project.json`,
-    "utf8",
-  );
-  console.info(`Project JSON: ${projectJson}`);
-  // Log .vercel/.env.preview.local
-  console.info(`Reading .vercel/.env.preview.local`);
 
   // If hasConvex, get convex URL from .convex-url
   let convexUrl = "";

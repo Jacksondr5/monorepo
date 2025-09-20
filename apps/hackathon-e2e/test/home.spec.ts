@@ -5,9 +5,7 @@ test.describe("Home Page", () => {
   test.describe("Unauthenticated State", () => {
     test("should display all unauthenticated UI elements correctly", async ({
       page,
-      baseURL,
     }) => {
-      console.log("baseURL", baseURL);
       const homePage = new HomePage(page);
 
       // Navigate to home page (assuming user starts unauthenticated)

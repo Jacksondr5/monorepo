@@ -433,8 +433,8 @@ importers:
   apps/hire-e2e:
     devDependencies:
       '@clerk/testing':
-        specifier: 1.11.0
-        version: 1.11.0(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: 1.12.6
+        version: 1.12.6(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@j5/shared-tools':
         specifier: workspace:*
         version: link:../../tools/shared
@@ -442,8 +442,8 @@ importers:
         specifier: 0.13.8
         version: 0.13.8(arktype@2.1.20)(typescript@5.9.2)(zod@3.25.76)
       dotenv:
-        specifier: 17.2.1
-        version: 17.2.1
+        specifier: 17.2.2
+        version: 17.2.2
       zod:
         specifier: 3.25.76
         version: 3.25.76
@@ -491,8 +491,8 @@ importers:
   apps/packing-list-e2e:
     devDependencies:
       '@clerk/testing':
-        specifier: 1.11.0
-        version: 1.11.0(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: 1.12.6
+        version: 1.12.6(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@j5/shared-tools':
         specifier: workspace:*
         version: link:../../tools/shared
@@ -500,8 +500,8 @@ importers:
         specifier: 0.13.8
         version: 0.13.8(arktype@2.1.20)(typescript@5.9.2)(zod@3.25.76)
       dotenv:
-        specifier: 17.2.1
-        version: 17.2.1
+        specifier: 17.2.2
+        version: 17.2.2
       zod:
         specifier: 3.25.76
         version: 3.25.76
@@ -741,7 +741,7 @@ importers:
         version: 21.2.3(nx@21.5.2(@swc-node/register@1.11.1(@swc/core@1.13.5(@swc/helpers@0.5.17))(@swc/types@0.1.25)(typescript@5.9.2))(@swc/core@1.13.5(@swc/helpers@0.5.17)))
       '@t3-oss/env-core':
         specifier: 0.13.8
-        version: 0.13.8(arktype@2.1.20)(typescript@5.9.2)(zod@3.25.67)
+        version: 0.13.8(arktype@2.1.20)(typescript@5.9.2)(zod@3.25.76)
       simple-git:
         specifier: 3.28.0
         version: 3.28.0
@@ -749,8 +749,12 @@ importers:
         specifier: 2.8.1
         version: 2.8.1
       zod:
-        specifier: 3.25.67
-        version: 3.25.67
+        specifier: 3.25.76
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^20.14.10
+        version: 20.19.17
 
   tools/shared:
     dependencies:
@@ -1524,10 +1528,6 @@ packages:
     resolution: {integrity: sha512-EaPXIaOb3IVyn+3NRX9GVZeKk1eL1ugWOiyPzy7hfJvxRYhTBatZrwd32+nCkQ6igvRpRG4O+o5vWS1tSErbrg==}
     engines: {node: '>=18.17.0'}
 
-  '@clerk/backend@2.9.1':
-    resolution: {integrity: sha512-ZRvy4cHpCrOORtyB3xixifek5/Tsc+X5pkC4vVBrZyqntcRsqhO58eSwb4O4rba6gE9UpVhTYnP1+DVLLiyTJw==}
-    engines: {node: '>=18.17.0'}
-
   '@clerk/clerk-react@5.47.0':
     resolution: {integrity: sha512-of2Y6dg36eL7TwAP4DbGOMWW6DJpJSIuCn6g1jJqJkh4NGljHC7vz3H18OERRM5UQXmBG3twjC8CNAQxQrquRA==}
     engines: {node: '>=18.17.0'}
@@ -1543,18 +1543,6 @@ packages:
       react: ^18.0.0 || ^19.0.0 || ^19.0.0-0
       react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-0
 
-  '@clerk/shared@3.21.0':
-    resolution: {integrity: sha512-BlIjPLsw2ral0V2sDDTNxoSK3SLLT6tfKiTJG2I3vQILnrGPEwkiEaMY1+bJtOze7EHdpP2KSsTzzjFTP1UDOg==}
-    engines: {node: '>=18.17.0'}
-    peerDependencies:
-      react: ^18.0.0 || ^19.0.0 || ^19.0.0-0
-      react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-0
-    peerDependenciesMeta:
-      react:
-        optional: true
-      react-dom:
-        optional: true
-
   '@clerk/shared@3.25.0':
     resolution: {integrity: sha512-2Vb6NQqBA+1g7kfGct/OlSFmzU54/s4BQp3qeHwDqW1FgaU4MuXbqfBClI6AatxOC8Ux8W16Rvf705ViwFSxlw==}
     engines: {node: '>=18.17.0'}
@@ -1565,18 +1553,6 @@ packages:
       react:
         optional: true
       react-dom:
-        optional: true
-
-  '@clerk/testing@1.11.0':
-    resolution: {integrity: sha512-nR9YZtu7wNSftw2KDoZPuPSmi+VQFVEqqN+lM5GL3yTcmnMZdtu/3iKQPRNYpzc0TX3VXLLTPxGj5nBsAJHjxw==}
-    engines: {node: '>=18.17.0'}
-    peerDependencies:
-      '@playwright/test': ^1
-      cypress: ^13 || ^14
-    peerDependenciesMeta:
-      '@playwright/test':
-        optional: true
-      cypress:
         optional: true
 
   '@clerk/testing@1.12.6':
@@ -1590,10 +1566,6 @@ packages:
         optional: true
       cypress:
         optional: true
-
-  '@clerk/types@4.78.0':
-    resolution: {integrity: sha512-wj52aLAH8RrZmHSNTNJIvxwyCuBMNRP2THOshFwpt0Vg62GQi6NtMLRqNH3Pc5y+zrg42SzLiO31PTNZh3ddpQ==}
-    engines: {node: '>=18.17.0'}
 
   '@clerk/types@4.86.0':
     resolution: {integrity: sha512-YFaOYIAZWbpXehAmtgUB0YNf1v5b/hlwePvdqxlD5vdwrNsap28RpupWZat0hp1+PTtb9uAwSa5AFCOxkYLUJQ==}
@@ -5102,6 +5074,9 @@ packages:
 
   '@types/node@16.18.11':
     resolution: {integrity: sha512-3oJbGBUWuS6ahSnEq1eN2XrCyf4YsWI8OyCvo7c64zQJNplk3mO84t53o8lfTk+2ji59g5ycfc6qQ3fdHliHuA==}
+
+  '@types/node@20.19.17':
+    resolution: {integrity: sha512-gfehUI8N1z92kygssiuWvLiwcbOB3IRktR6hTDgJlXMYh5OvkPSRmgfoBUmfZt+vhwJtX7v1Yw4KvvAf7c5QKQ==}
 
   '@types/node@24.4.0':
     resolution: {integrity: sha512-gUuVEAK4/u6F9wRLznPUU4WGUacSEBDPoC2TrBkw3GAnOLHBL45QdfHOXp1kJ4ypBGLxTOB+t7NJLpKoC3gznQ==}
@@ -12096,6 +12071,9 @@ packages:
   unbzip2-stream@1.4.3:
     resolution: {integrity: sha512-mlExGW4w71ebDJviH16lQLtZS32VKqsSfk80GCfUlwT/4/hNRFsoscrF/c++9xinkMzECL1uL9DDwXqFWkruPg==}
 
+  undici-types@6.21.0:
+    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+
   undici-types@7.11.0:
     resolution: {integrity: sha512-kt1ZriHTi7MU+Z/r9DOdAI3ONdaR3M3csEaRc6ewa4f4dTvX4cQCbJ4NkEn0ohE4hHtq85+PhPSTY+pO/1PwgA==}
 
@@ -12730,9 +12708,6 @@ packages:
   yocto-queue@1.2.1:
     resolution: {integrity: sha512-AyeEbWOu/TAXdxlV9wmGcR0+yh2j3vYPGOECcIj2S7MkrLyC7ne+oye2BKTItt0ii2PHk4cDy+95+LshzbXnGg==}
     engines: {node: '>=12.20'}
-
-  zod@3.25.67:
-    resolution: {integrity: sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==}
 
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
@@ -13672,17 +13647,6 @@ snapshots:
       - react
       - react-dom
 
-  '@clerk/backend@2.9.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
-    dependencies:
-      '@clerk/shared': 3.21.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@clerk/types': 4.78.0
-      cookie: 1.0.2
-      standardwebhooks: 1.0.0
-      tslib: 2.8.1
-    transitivePeerDependencies:
-      - react
-      - react-dom
-
   '@clerk/clerk-react@5.47.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
       '@clerk/shared': 3.25.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -13703,18 +13667,6 @@ snapshots:
       server-only: 0.0.1
       tslib: 2.8.1
 
-  '@clerk/shared@3.21.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
-    dependencies:
-      '@clerk/types': 4.78.0
-      dequal: 2.0.3
-      glob-to-regexp: 0.4.1
-      js-cookie: 3.0.5
-      std-env: 3.9.0
-      swr: 2.3.4(react@19.1.1)
-    optionalDependencies:
-      react: 19.1.1
-      react-dom: 19.1.1(react@19.1.1)
-
   '@clerk/shared@3.25.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
       '@clerk/types': 4.86.0
@@ -13727,18 +13679,6 @@ snapshots:
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
 
-  '@clerk/testing@1.11.0(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
-    dependencies:
-      '@clerk/backend': 2.9.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@clerk/shared': 3.21.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@clerk/types': 4.78.0
-      dotenv: 17.2.1
-    optionalDependencies:
-      '@playwright/test': 1.55.0
-    transitivePeerDependencies:
-      - react
-      - react-dom
-
   '@clerk/testing@1.12.6(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
       '@clerk/backend': 2.14.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -13750,10 +13690,6 @@ snapshots:
     transitivePeerDependencies:
       - react
       - react-dom
-
-  '@clerk/types@4.78.0':
-    dependencies:
-      csstype: 3.1.3
 
   '@clerk/types@4.86.0':
     dependencies:
@@ -17442,12 +17378,6 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@t3-oss/env-core@0.13.8(arktype@2.1.20)(typescript@5.9.2)(zod@3.25.67)':
-    optionalDependencies:
-      arktype: 2.1.20
-      typescript: 5.9.2
-      zod: 3.25.67
-
   '@t3-oss/env-core@0.13.8(arktype@2.1.20)(typescript@5.9.2)(zod@3.25.76)':
     optionalDependencies:
       arktype: 2.1.20
@@ -17779,6 +17709,10 @@ snapshots:
       '@types/node': 24.4.0
 
   '@types/node@16.18.11': {}
+
+  '@types/node@20.19.17':
+    dependencies:
+      undici-types: 6.21.0
 
   '@types/node@24.4.0':
     dependencies:
@@ -26122,6 +26056,8 @@ snapshots:
       buffer: 5.7.1
       through: 2.3.8
 
+  undici-types@6.21.0: {}
+
   undici-types@7.11.0: {}
 
   undici@5.28.4:
@@ -26875,7 +26811,5 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   yocto-queue@1.2.1: {}
-
-  zod@3.25.67: {}
 
   zod@3.25.76: {}

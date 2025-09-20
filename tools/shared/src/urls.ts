@@ -10,18 +10,22 @@ export function getWorkspaceVercelUrlPath(
   workspaceRoot: string,
   project: string,
 ): string {
-  return join(workspaceRoot, VERCEL_URLS_DIR, `${project}.vercel-url`);
+  return join(
+    workspaceRoot,
+    VERCEL_URLS_DIR,
+    `${project}${VERCEL_URL_FILENAME}`,
+  );
 }
 
 export function readWorkspaceVercelUrl(
   workspaceRoot: string,
   project: string,
 ): string | null {
-  const p = getWorkspaceVercelUrlPath(workspaceRoot, project);
-  if (!existsSync(p)) return null;
-  const v = readFileSync(p, "utf8").trim();
-  if (!v) return null;
-  return v.startsWith("http") ? v : `https://${v}`;
+  const vercelUrlFilePath = getWorkspaceVercelUrlPath(workspaceRoot, project);
+  if (!existsSync(vercelUrlFilePath)) return null;
+  const vercelUrl = readFileSync(vercelUrlFilePath, "utf8").trim();
+  if (!vercelUrl) return null;
+  return vercelUrl.startsWith("http") ? vercelUrl : `https://${vercelUrl}`;
 }
 
 export function writeWorkspaceVercelUrl(
@@ -30,18 +34,23 @@ export function writeWorkspaceVercelUrl(
   url: string,
 ): void {
   try {
-    const p = getWorkspaceVercelUrlPath(workspaceRoot, project);
-    console.info(`Writing deployment URL to ${p} for project ${project}`);
+    const vercelUrlFilePath = getWorkspaceVercelUrlPath(workspaceRoot, project);
+    console.info(
+      `Writing deployment URL to ${vercelUrlFilePath} for project ${project}`,
+    );
     console.info(`URL: ${url}`);
-    writeFileSync(p, url);
+    writeFileSync(vercelUrlFilePath, url);
   } catch (error) {
-    throw logAndCreateError(`Failed to write .vercel-url file: ${error}`);
+    throw logAndCreateError(`Failed to write vercel url file: ${error}`);
   }
 }
 
 export function readConvexUrl(projectRoot: string): string {
-  const p = join(projectRoot, CONVEX_URL_FILENAME);
-  const v = readFileSync(p, "utf8").trim();
-  if (!v) throw new Error("Empty convex url file");
-  return v;
+  const convexFilePath = join(projectRoot, CONVEX_URL_FILENAME);
+  if (!existsSync(convexFilePath)) {
+    throw logAndCreateError(`Missing convex url file at ${convexFilePath}`);
+  }
+  const convexUrl = readFileSync(convexFilePath, "utf8").trim();
+  if (!convexUrl) throw logAndCreateError("Empty convex url file");
+  return convexUrl;
 }

@@ -3,9 +3,8 @@ import { logAndCreateError } from "./logAndCreateError";
 
 export const getCurrentBranch = async (baseDir: string) => {
   const git = simpleGit(baseDir);
-  let branch: string;
   try {
-    branch = await git.revparse(["--abbrev-ref", "HEAD"]);
+    const branch = await git.revparse(["--abbrev-ref", "HEAD"]);
     console.info(`Current branch: ${branch}`);
     return branch;
   } catch (error) {
@@ -15,9 +14,8 @@ export const getCurrentBranch = async (baseDir: string) => {
 
 export const getCurrentCommitSha = async (baseDir: string) => {
   const git = simpleGit(baseDir);
-  let commitSha: string;
   try {
-    commitSha = await git.revparse(["HEAD"]);
+    const commitSha = await git.revparse(["HEAD"]);
     console.info(`Current commit SHA: ${commitSha}`);
     return commitSha;
   } catch (error) {
