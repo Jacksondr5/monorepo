@@ -353,6 +353,9 @@ importers:
       '@clerk/testing':
         specifier: 1.12.6
         version: 1.12.6(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@j5/shared-tools':
+        specifier: workspace:*
+        version: link:../../tools/shared
       '@playwright/test':
         specifier: 1.55.0
         version: 1.55.0
@@ -432,6 +435,9 @@ importers:
       '@clerk/testing':
         specifier: 1.11.0
         version: 1.11.0(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@j5/shared-tools':
+        specifier: workspace:*
+        version: link:../../tools/shared
       '@t3-oss/env-core':
         specifier: 0.13.8
         version: 0.13.8(arktype@2.1.20)(typescript@5.9.2)(zod@3.25.76)
@@ -487,6 +493,9 @@ importers:
       '@clerk/testing':
         specifier: 1.11.0
         version: 1.11.0(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@j5/shared-tools':
+        specifier: workspace:*
+        version: link:../../tools/shared
       '@t3-oss/env-core':
         specifier: 0.13.8
         version: 0.13.8(arktype@2.1.20)(typescript@5.9.2)(zod@3.25.76)

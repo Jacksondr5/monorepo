@@ -4,6 +4,7 @@
   "type": "module",
   "devDependencies": {
     "@clerk/testing": "1.11.0",
+    "@j5/shared-tools": "workspace:*",
     "@t3-oss/env-core": "0.13.8",
     "dotenv": "17.2.1",
     "zod": "3.25.76"
