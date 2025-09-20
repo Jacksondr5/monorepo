@@ -1,31 +1,14 @@
 import { ExecutorContext } from "@nx/devkit";
 import { env } from "../../env";
-import { existsSync, readFileSync } from "fs";
 import { join } from "path";
-import { spawn } from "node:child_process";
+import { z } from "zod";
 import {
-  logAndCreateError,
-  getDopplerSecrets,
-} from "../../../../shared/src/index";
-
-export function run(
-  cmd: string,
-  opts: { cwd?: string; env?: NodeJS.ProcessEnv } = {},
-): Promise<{ code: number | null }> {
-  return new Promise((resolve, reject) => {
-    const child = spawn(cmd, {
-      stdio: "inherit",
-      shell: true,
-      cwd: opts.cwd,
-      env: opts.env,
-    });
-
-    child.once("error", reject);
-    child.once("exit", (code) => {
-      resolve({ code });
-    });
-  });
-}
+  buildProjectScopedKey,
+  createSecretsReader,
+} from "../../../../shared/src/doppler";
+import { getProjectSlug } from "../../../../shared/src/nx";
+import { run } from "../../../../shared/src/run";
+import { readWorkspaceVercelUrl } from "../../../../shared/src/urls";
 
 export interface E2eCiExecutorOptions {
   command?: string;
@@ -37,11 +20,7 @@ export default async function e2eCiExecutor(
   options: E2eCiExecutorOptions,
   context: ExecutorContext,
 ) {
-  const e2eTestProject = context.projectName?.split("/")[1];
-  if (!e2eTestProject) {
-    console.error(`Invalid project name format: ${context.projectName}`);
-    return { success: false };
-  }
+  const e2eTestProject = getProjectSlug(context);
   const appProject = e2eTestProject.replace("-e2e", "");
   console.info(
     `Running e2e tests for project: ${appProject}, e2e test project: ${e2eTestProject}`,
@@ -54,30 +33,19 @@ export default async function e2eCiExecutor(
   console.info(`Running e2e tests in cwd: ${cwd}`);
 
   // BASE_URL: from .vercel-url if present
-  const vercelUrlPath = join(cwd, ".vercel-url");
-  if (existsSync(vercelUrlPath)) {
-    try {
-      console.info(`Reading BASE_URL from .vercel-url: ${vercelUrlPath}`);
-      process.env.BASE_URL = readFileSync(vercelUrlPath, "utf8").trim();
-      console.info(`BASE_URL: ${process.env.BASE_URL}`);
-    } catch (e) {
-      throw logAndCreateError(`Failed to read .vercel-url: ${e}`);
-    }
+  const maybeUrl = readWorkspaceVercelUrl(context.root, appProject);
+  if (maybeUrl) {
+    process.env.BASE_URL = maybeUrl;
+    console.info(`BASE_URL: ${process.env.BASE_URL}`);
   }
 
-  const secrets = await getDopplerSecrets(cwd, env.DOPPLER_TOKEN);
-  const keyName = `${appProject.toUpperCase().replace("-", "_")}_E2E_SECRETS`;
-  const raw = secrets[keyName]?.computed;
-  if (!raw) {
-    throw logAndCreateError(`Required Doppler secret not found: ${keyName}`);
-  }
-  let parsed: Record<string, string>;
-  try {
-    parsed = JSON.parse(raw) as Record<string, string>;
-  } catch (e) {
-    throw logAndCreateError(`Failed to parse JSON for ${keyName}: ${e}`);
-  }
-  Object.assign(process.env, parsed);
+  const keyName = buildProjectScopedKey(appProject, "E2E_SECRETS");
+  const E2ESecretsSchema = z.record(z.string());
+  const secrets = await createSecretsReader(cwd, env.DOPPLER_TOKEN);
+  const e2eSecrets = secrets.getJson(keyName, {
+    parse: (input) => E2ESecretsSchema.parse(input),
+  });
+  Object.assign(process.env, e2eSecrets);
 
   // Ensure HTML reporter
   let baseCommand = options.command ?? "pnpm playwright test";

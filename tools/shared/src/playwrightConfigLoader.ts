@@ -1,7 +1,11 @@
-import { existsSync, readFileSync } from "fs";
+import { readWorkspaceVercelUrl } from "./urls";
+import { existsSync } from "fs";
 import { join } from "path";
 
-export function getBaseURL(dirname: string, projectName: string): string {
+export function getBaseURL(
+  workspaceOrNearbyDir: string,
+  projectName: string,
+): string {
   // 1. Check environment variable first
   if (process.env.BASE_URL) {
     console.log(
@@ -11,29 +15,18 @@ export function getBaseURL(dirname: string, projectName: string): string {
     return process.env.BASE_URL;
   }
 
-  // 2. Check .vercel-url file
-  const vercelUrlPath = join(
-    dirname,
-    `../../vercel-urls/${projectName}.vercel-url`,
-  );
-  console.log("Checking .vercel-url file:", vercelUrlPath);
-  if (existsSync(vercelUrlPath)) {
-    console.log("Found .vercel-url file:", vercelUrlPath);
-    try {
-      const url = readFileSync(vercelUrlPath, "utf-8").trim();
-      if (url) {
-        console.log("Using BASE_URL from .vercel-url file:", url);
-        if (!url.startsWith("http")) {
-          return `https://${url}`;
-        }
-        return url;
-      }
-    } catch (error) {
-      console.warn("Failed to read .vercel-url file:", error);
-    }
+  // 2. Auto-detect workspace root if needed
+  let workspaceRoot = workspaceOrNearbyDir;
+  const candidate = join(workspaceOrNearbyDir, "../../vercel-urls");
+  if (existsSync(candidate)) {
+    workspaceRoot = join(workspaceOrNearbyDir, "../../");
   }
 
-  // 3. Fall back to localhost:3000
+  // 3. Check workspace vercel-urls directory
+  const url = readWorkspaceVercelUrl(workspaceRoot, projectName);
+  if (url) return url;
+
+  // 4. Fall back to localhost:3000
   console.log("Using BASE_URL from localhost:3000");
   return "http://localhost:3000";
 }

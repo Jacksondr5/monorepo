@@ -1,15 +1,15 @@
 import { ExecutorContext } from "@nx/devkit";
 import { env } from "../../env";
-import { promisify } from "util";
-import { exec } from "child_process";
 import { Vercel } from "@vercel/sdk";
-import { writeFile } from "fs/promises";
 import { readFile } from "fs/promises";
 import {
-  getDopplerSecrets,
   getCurrentCommitSha,
   logAndCreateError,
 } from "../../../../shared/src/index";
+import { createSecretsReader } from "../../../../shared/src/doppler";
+import { getProjectRoot, getProjectSlug } from "../../../../shared/src/nx";
+import { writeWorkspaceVercelUrl } from "../../../../shared/src/urls";
+import { run } from "../../../../shared/src/run";
 export interface VercelBuildExecutorOptions {
   hasConvex: boolean;
 }
@@ -19,29 +19,21 @@ export default async function buildExecutor(
   context: ExecutorContext,
 ) {
   // Get vercel key from Doppler
-  const project = context.projectName?.split("/")[1];
-  if (!project) {
-    throw logAndCreateError(
-      `Invalid project name format: ${context.projectName}`,
-    );
-  }
+  const project = getProjectSlug(context);
   console.info(`Running vercel build for project: ${project}`);
-  const projectRoot = `${context.root}/apps/${project}`;
+  const projectRoot = getProjectRoot(context);
   console.info(`Project Root: ${projectRoot}`);
   const vercelKeyName = "VERCEL_CLI_TOKEN";
   console.info(`Vercel key name: ${vercelKeyName}`);
 
   const commitSha = await getCurrentCommitSha(projectRoot);
 
-  const secrets = await getDopplerSecrets(projectRoot, env.DOPPLER_TOKEN);
-  const vercelKey = secrets[vercelKeyName]?.computed;
-  if (!vercelKey) {
-    throw logAndCreateError(`Vercel key not found: ${vercelKeyName}`);
-  }
+  const secrets = await createSecretsReader(projectRoot, env.DOPPLER_TOKEN);
+  const vercelKey = secrets.get(vercelKeyName);
 
   // Run link command
   console.info(`Linking project ${project} to Vercel`);
-  const { stdout: linkStdout, stderr: linkStderr } = await promisify(exec)(
+  const linkResult = await run(
     `pnpm vercel link --yes --project ${project} --token ${vercelKey}`,
     {
       cwd: context.root,
@@ -50,8 +42,9 @@ export default async function buildExecutor(
       },
     },
   );
-  console.log(linkStdout);
-  console.error(linkStderr);
+  if (linkResult.code !== 0) {
+    throw logAndCreateError("vercel link failed");
+  }
 
   // If hasConvex, get convex URL from .convex-url
   let convexUrl = "";
@@ -63,7 +56,7 @@ export default async function buildExecutor(
 
   // Run build command
   console.info(`Building project ${project} with Vercel`);
-  const { stdout: buildStdout, stderr: buildStderr } = await promisify(exec)(
+  const buildResult = await run(
     `pnpm vercel build --yes --token ${vercelKey}`,
     {
       cwd: context.root,
@@ -73,12 +66,13 @@ export default async function buildExecutor(
       },
     },
   );
-  console.log(buildStdout);
-  console.error(buildStderr);
+  if (buildResult.code !== 0) {
+    throw logAndCreateError("vercel build failed");
+  }
 
   // Run deploy command
   console.info(`Project Root: ${projectRoot}`);
-  const { stdout, stderr } = await promisify(exec)(
+  const deployResult = await run(
     `pnpm vercel --prebuilt --archive=tgz --yes --token ${vercelKey}`,
     {
       cwd: context.root,
@@ -87,8 +81,9 @@ export default async function buildExecutor(
       },
     },
   );
-  console.log(stdout);
-  console.error(stderr);
+  if (deployResult.code !== 0) {
+    throw logAndCreateError("vercel deploy failed");
+  }
 
   console.info("Deployed successfully");
 
@@ -114,13 +109,8 @@ export default async function buildExecutor(
   const deploymentUrl = deployment.url;
   console.info(`Deployment URL: ${deploymentUrl}`);
 
-  const vercelUrlPath = `${context.root}/vercel-urls/${project}.vercel-url`;
-  console.info(`Writing deployment URL to ${vercelUrlPath} for project`);
-  try {
-    await writeFile(vercelUrlPath, deploymentUrl);
-  } catch (error) {
-    throw logAndCreateError(`Failed to write .vercel-url file: ${error}`);
-  }
-  console.info(`Deployment URL written to ${vercelUrlPath} for project`);
+  console.info(`Writing deployment URL to vercel-urls for project`);
+  writeWorkspaceVercelUrl(context.root, project, deploymentUrl);
+  console.info(`Deployment URL written for project ${project}`);
   return { success: true };
 }
