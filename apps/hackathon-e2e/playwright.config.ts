@@ -16,11 +16,11 @@ export default defineConfig({
     },
     trace: "on-first-retry",
   },
-  // webServer: {
-  //   command: "pnpm exec nx run @j5/hackathon:start",
-  //   url: baseURL,
-  //   reuseExistingServer: true,
-  // },
+  webServer: {
+    command: "pnpm exec nx run @j5/hackathon:start",
+    url: baseURL,
+    reuseExistingServer: true,
+  },
   projects: [
     {
       name: "setup",

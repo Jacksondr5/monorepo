@@ -7,7 +7,6 @@ hackathon
 issues
 
 - we don't want to have cross-ocean teams working on things
--
 
 ideas
 

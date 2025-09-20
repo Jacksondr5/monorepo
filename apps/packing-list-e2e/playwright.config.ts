@@ -13,8 +13,8 @@ export default defineConfig({
   },
   webServer: {
     command: "pnpm exec nx run @j5/packing-list:start",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
+    url: baseURL,
+    reuseExistingServer: true,
   },
   projects: [
     {
