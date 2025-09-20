@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 import { nxE2EPreset } from "@nx/playwright/preset";
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { getBaseURL } from "../../tools/shared/src";
+import { getBaseURL } from "../../tools/shared/src/index.js";
 
 const baseURL = getBaseURL(import.meta.dirname, "packing-list");
 
