@@ -46,6 +46,9 @@ export default async function buildExecutor(
   if (linkResult.code !== 0) {
     throw logAndCreateError("vercel link failed");
   }
+  console.info(`Linked project ${project} to Vercel`);
+
+  console.info(`Reading .vercel/project.json`);
 
   // Log .vercel/project.json
   console.info(`Reading .vercel/project.json`);
