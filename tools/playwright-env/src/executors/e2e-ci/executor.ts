@@ -1,15 +1,12 @@
 import { ExecutorContext } from "@nx/devkit";
 import { env } from "../../env";
-import { promisify } from "util";
-import { exec } from "child_process";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { spawn } from "node:child_process";
 import {
   logAndCreateError,
   getDopplerSecrets,
-  getCurrentBranch,
-} from "@j5/shared-tools";
+} from "../../../../shared/src/index";
 
 export function run(
   cmd: string,

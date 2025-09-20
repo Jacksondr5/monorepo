@@ -9,7 +9,7 @@ import {
   getDopplerSecrets,
   getCurrentCommitSha,
   logAndCreateError,
-} from "@j5/shared-tools";
+} from "../../../../shared/src/index";
 export interface VercelBuildExecutorOptions {
   hasConvex: boolean;
 }
