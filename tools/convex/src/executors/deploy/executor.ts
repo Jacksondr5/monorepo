@@ -1,61 +1,38 @@
 import { ExecutorContext } from "@nx/devkit";
-import { logAndCreateError } from "../../utils";
-import DopplerSDK, { type SecretsListResponse } from "@dopplerhq/node-sdk";
 import { env } from "../../env";
-import { promisify } from "util";
-import { exec } from "child_process";
-import simpleGit from "simple-git";
-import { readFile } from "fs/promises";
-
-type SecretGroup = Required<SecretsListResponse>["secrets"];
-type Secret = Required<SecretGroup["USER"]>;
-
-const doppler = new DopplerSDK({ accessToken: env.DOPPLER_TOKEN });
+import {
+  getProjectSlug,
+  getProjectRoot,
+  run,
+  createSecretsReader,
+  getCurrentBranch,
+  readConvexUrl,
+  logAndCreateError,
+  buildProjectScopedKey,
+} from "../../../../shared/src/index";
 
 export default async function deployExecutor(
   _: unknown,
   context: ExecutorContext,
 ) {
   // Get convex deploy key from Doppler
-  const project = context.projectName?.split("/")[1];
-  if (!project) {
-    throw logAndCreateError(
-      `Invalid project name format: ${context.projectName}`,
-    );
-  }
+  const project = getProjectSlug(context);
   console.info(`Running convex deploy for project: ${project}`);
-  const projectRoot = `${context.root}/apps/${project}`;
-  const convexDeployKeyName = `CONVEX_DEPLOY_KEY_${project?.toUpperCase()}`;
+  const projectRoot = getProjectRoot(context);
+  const convexDeployKeyName = buildProjectScopedKey(
+    project,
+    "CONVEX_DEPLOY_KEY",
+  );
   console.info(`Convex deploy key name: ${convexDeployKeyName}`);
 
-  const git = simpleGit(projectRoot);
-  let branch: string;
-  try {
-    branch = await git.revparse(["--abbrev-ref", "HEAD"]);
-    console.info(`Current branch: ${branch}`);
-  } catch (error) {
-    throw logAndCreateError(`Failed to get current branch: ${error}`);
-  }
-
-  const dopplerProject = branch === "main" ? "prd" : "stg";
-  console.info(`Doppler project: ${dopplerProject}`);
-
-  const result = await doppler.secrets.list("ci", dopplerProject);
-  const secrets = result.secrets as Record<string, Secret> | undefined;
-  if (!secrets) {
-    throw logAndCreateError("No secrets found");
-  }
-  const convexDeployKey = secrets[convexDeployKeyName]?.computed;
-  if (!convexDeployKey) {
-    throw logAndCreateError(
-      `Convex deploy key not found: ${convexDeployKeyName}`,
-    );
-  }
+  const secrets = await createSecretsReader(projectRoot, env.DOPPLER_TOKEN);
+  const convexDeployKey = secrets.get(convexDeployKeyName);
 
   // Run deploy command
+  const branch = await getCurrentBranch(projectRoot);
   const previewCreate = branch === "main" ? "" : `--preview-create "${branch}"`;
   console.info(`Project Root: ${projectRoot}`);
-  const { stdout, stderr } = await promisify(exec)(
+  const result = await run(
     `pnpm convex deploy -v --cmd-url-env-var-name CONVEX_URL --cmd 'echo $CONVEX_URL > .convex-url' ${previewCreate}`,
     {
       cwd: projectRoot,
@@ -65,15 +42,15 @@ export default async function deployExecutor(
       },
     },
   );
-  console.log(stdout);
-  console.error(stderr);
+  if (result.code !== 0) {
+    throw logAndCreateError("convex deploy failed");
+  }
 
   // Get the convex url from the .convex-url file
-  try {
-    const convexUrl = await readFile(`${projectRoot}/.convex-url`, "utf8");
-    console.info(`Convex URL: ${convexUrl}`);
-  } catch (error) {
-    throw logAndCreateError(`Failed to get convex url: ${error}`);
+  const convexUrl = readConvexUrl(projectRoot);
+  console.info(`Convex URL: ${convexUrl}`);
+  if (!convexUrl) {
+    throw logAndCreateError("Failed to get convex url");
   }
 
   return { success: true };

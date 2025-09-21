@@ -1,5 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "useDaemonProcess": false,
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
@@ -57,12 +58,6 @@
       }
     },
     {
-      "plugin": "@nx/playwright/plugin",
-      "options": {
-        "targetName": "e2e"
-      }
-    },
-    {
       "plugin": "@nx/next/plugin",
       "options": {
         "startTargetName": "start",
@@ -93,6 +88,9 @@
     },
     {
       "plugin": "./tools/vercel/plugin.ts"
+    },
+    {
+      "plugin": "./tools/playwright-env/plugin.ts"
     }
   ],
   "targetDefaults": {
@@ -105,7 +103,7 @@
       "dependsOn": ["^build"]
     },
     "e2e-ci--**/*": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^vercel-build-deploy", "^build"]
     },
     "build-storybook": {
       "dependsOn": ["^build"]

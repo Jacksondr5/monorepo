@@ -12,7 +12,7 @@ import {
 export default function DiscoverPage() {
   const organization = useOrganization();
   return (
-    <main
+    <div
       className={
         "col-span-2 flex h-full w-full items-center justify-center space-y-6 pt-6"
       }
@@ -37,6 +37,6 @@ export default function DiscoverPage() {
         <h1 className="mb-4 mt-20">Create Organization</h1>
         <CreateOrganization />
       </div>
-    </main>
+    </div>
   );
 }

@@ -5,7 +5,7 @@ import {
   CreateNodesV2,
 } from "@nx/devkit";
 import { readdirSync } from "fs";
-import { dirname, join } from "path";
+import { basename, dirname, join } from "path";
 
 export interface VercelPluginOptions {
   projectName: string;
@@ -30,6 +30,7 @@ async function createNodesInternal(
   context: CreateNodesContextV2,
 ) {
   const projectRoot = dirname(matchingFile);
+  const project = basename(projectRoot);
 
   // Do not create a project if package.json or project.json isn't there.
   const siblingFiles = readdirSync(join(context.workspaceRoot, projectRoot));
@@ -41,13 +42,13 @@ async function createNodesInternal(
   }
 
   const vercelBuildDeployTarget: TargetConfiguration = {
-    // Cannot be true because it seems like Nx has issues restoring the cache
-    // on top of a previous build.  This crashes the entire pipeline.
+    // Cannot be cached because cache will trigger on a new branch, which
+    // should get a new preview environment and thus be re-run.
     cache: false,
     dependsOn: ["convex-deploy", "^build"],
     executor: "@j5/vercel:build-deploy",
     inputs: ["default", "^production"],
-    outputs: [`{projectRoot}/.vercel-url`],
+    outputs: [`{workspaceRoot}/vercel-urls/${project}.vercel-url`],
     parallelism: false,
   };
 

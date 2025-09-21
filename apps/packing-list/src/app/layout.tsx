@@ -2,14 +2,14 @@ import "../styles/global.css";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+// import {
+//   ClerkProvider,
+//   SignInButton,
+//   SignUpButton,
+//   SignedIn,
+//   SignedOut,
+//   UserButton,
+// } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "Packing List App",
@@ -28,8 +28,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable}`}>
       <body>
-        <ClerkProvider>
-          <header className="flex h-16 items-center justify-end gap-4 p-4">
+        {/* <ClerkProvider> */}
+        {/* <header className="flex h-16 items-center justify-end gap-4 p-4">
             <SignedOut>
               <SignInButton />
               <SignUpButton />
@@ -37,9 +37,9 @@ export default function RootLayout({
             <SignedIn>
               <UserButton />
             </SignedIn>
-          </header>
-          {children}
-        </ClerkProvider>
+          </header> */}
+        {children}
+        {/* </ClerkProvider> */}
       </body>
     </html>
   );
