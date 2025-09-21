@@ -27,6 +27,11 @@ export function getBaseURL(
   if (url) return url;
 
   // 4. Fall back to localhost:3000
+  if (process.env.CI) {
+    throw new Error(
+      `BASE_URL not found for project "${projectName}", but CI is set. Set BASE_URL or persist a vercel-urls entry in the workspace root.`,
+    );
+  }
   console.log("Using BASE_URL from localhost:3000");
   return "http://localhost:3000";
 }

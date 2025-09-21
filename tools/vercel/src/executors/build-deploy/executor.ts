@@ -20,7 +20,6 @@ export default async function buildExecutor(
   options: VercelBuildExecutorOptions,
   context: ExecutorContext,
 ) {
-  console.info(`Running vercel build for project: ${context.projectName}`);
   // Get vercel key from Doppler
   const project = getProjectSlug(context);
   console.info(`Running vercel build for project: ${project}`);
@@ -70,7 +69,6 @@ export default async function buildExecutor(
   }
 
   // Run deploy command
-  console.info(`Project Root: ${projectRoot}`);
   const deployResult = await run(
     `pnpm vercel --prebuilt --archive=tgz --yes --token ${vercelKey}`,
     {
