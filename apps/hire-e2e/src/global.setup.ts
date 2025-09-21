@@ -1,4 +1,3 @@
-import { clerkSetup } from "@clerk/testing/playwright";
 import { test as setup } from "@playwright/test";
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { addVercelBypassHeader } from "../../../tools/shared";
@@ -7,6 +6,5 @@ import { addVercelBypassHeader } from "../../../tools/shared";
 setup.describe.configure({ mode: "serial" });
 
 setup("global setup", async () => {
-  await clerkSetup();
   addVercelBypassHeader();
 });

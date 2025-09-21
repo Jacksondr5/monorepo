@@ -51,7 +51,7 @@ export default async function buildExecutor(
   console.info(`Linked project ${project} to Vercel`);
 
   // If hasConvex, get convex URL from .convex-url
-  const convexUrl = readConvexUrl(projectRoot);
+  const convexUrl = options.hasConvex ? readConvexUrl(projectRoot) : null;
 
   // Run build command
   console.info(`Building project ${project} with Vercel`);

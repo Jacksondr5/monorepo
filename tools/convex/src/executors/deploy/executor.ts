@@ -1,11 +1,14 @@
 import { ExecutorContext } from "@nx/devkit";
-import { logAndCreateError } from "../../../../shared/src/index";
-import { createSecretsReader } from "../../../../shared/src/doppler";
-import { getCurrentBranch } from "../../../../shared/src/gitUtils";
-import { getProjectSlug, getProjectRoot } from "../../../../shared/src/nx";
-import { readConvexUrl } from "../../../../shared/src/urls";
 import { env } from "../../env";
-import { run } from "../../../../shared/src/index";
+import {
+  getProjectSlug,
+  getProjectRoot,
+  run,
+  createSecretsReader,
+  getCurrentBranch,
+  readConvexUrl,
+  logAndCreateError,
+} from "../../../../shared/src/index";
 
 export default async function deployExecutor(
   _: unknown,
