@@ -103,7 +103,7 @@
       "dependsOn": ["^build"]
     },
     "e2e-ci--**/*": {
-      "dependsOn": ["^vercel-build-deploy"]
+      "dependsOn": ["^vercel-build-deploy", "^build"]
     },
     "build-storybook": {
       "dependsOn": ["^build"]

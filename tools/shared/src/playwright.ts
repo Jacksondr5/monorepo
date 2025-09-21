@@ -30,12 +30,3 @@ export function getBaseURL(
   console.log("Using BASE_URL from localhost:3000");
   return "http://localhost:3000";
 }
-
-export function optionallyAddVercelBypassHeader(): Record<string, string> {
-  if (process.env.VERCEL_AUTOMATION_BYPASS_SECRET) {
-    return {
-      "x-vercel-protection-bypass": process.env.VERCEL_AUTOMATION_BYPASS_SECRET,
-    };
-  }
-  return {};
-}

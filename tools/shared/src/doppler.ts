@@ -8,7 +8,6 @@ import { logAndCreateError } from "./logAndCreateError";
 type SecretGroup = Required<SecretsListResponse>["secrets"];
 type Secret = Required<SecretGroup["USER"]>;
 
-// TODO: add type validation for the secrets
 export const getDopplerSecrets = async (
   baseDir: string,
   dopplerToken: string,

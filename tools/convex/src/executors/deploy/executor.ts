@@ -18,7 +18,7 @@ export default async function deployExecutor(
   const project = getProjectSlug(context);
   console.info(`Running convex deploy for project: ${project}`);
   const projectRoot = getProjectRoot(context);
-  const convexDeployKeyName = `CONVEX_DEPLOY_KEY_${project?.toUpperCase()}`;
+  const convexDeployKeyName = `CONVEX_DEPLOY_KEY_${project.toUpperCase()}`;
   console.info(`Convex deploy key name: ${convexDeployKeyName}`);
 
   const secrets = await createSecretsReader(projectRoot, env.DOPPLER_TOKEN);

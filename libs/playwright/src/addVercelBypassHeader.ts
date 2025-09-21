@@ -1,8 +1,7 @@
 import type { Page } from "@playwright/test";
 
 export const addVercelBypassHeader = async (page: Page, baseURL?: string) => {
-  const secret = "vA7e0dKZky8NrLqyFp0aFAXcEb4jQHWV";
-  // const secret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
+  const secret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
   if (!secret || !baseURL) {
     return;
   }
