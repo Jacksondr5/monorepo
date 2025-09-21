@@ -45,10 +45,10 @@ export function writeWorkspaceVercelUrl(
   }
 }
 
-export function readConvexUrl(projectRoot: string): string {
+export function readConvexUrl(projectRoot: string): string | null {
   const convexFilePath = join(projectRoot, CONVEX_URL_FILENAME);
   if (!existsSync(convexFilePath)) {
-    throw logAndCreateError(`Missing convex url file at ${convexFilePath}`);
+    return null;
   }
   const convexUrl = readFileSync(convexFilePath, "utf8").trim();
   if (!convexUrl) throw logAndCreateError("Empty convex url file");

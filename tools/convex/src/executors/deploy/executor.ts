@@ -40,11 +40,10 @@ export default async function deployExecutor(
   }
 
   // Get the convex url from the .convex-url file
-  try {
-    const convexUrl = readConvexUrl(projectRoot);
-    console.info(`Convex URL: ${convexUrl}`);
-  } catch (error) {
-    throw logAndCreateError(`Failed to get convex url: ${error}`);
+  const convexUrl = readConvexUrl(projectRoot);
+  console.info(`Convex URL: ${convexUrl}`);
+  if (!convexUrl) {
+    throw logAndCreateError("Failed to get convex url");
   }
 
   return { success: true };

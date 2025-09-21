@@ -20,8 +20,8 @@ export default defineConfig({
   },
   webServer: {
     command: "pnpm exec nx run @j5/packing-list:start",
-    url: baseURL,
     reuseExistingServer: true,
+    url: baseURL,
   },
   projects: [
     {

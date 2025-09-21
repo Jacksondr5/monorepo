@@ -8,7 +8,10 @@ import {
 } from "../../../../shared/src/index";
 import { createSecretsReader } from "../../../../shared/src/doppler";
 import { getProjectRoot, getProjectSlug } from "../../../../shared/src/nx";
-import { writeWorkspaceVercelUrl } from "../../../../shared/src/urls";
+import {
+  readConvexUrl,
+  writeWorkspaceVercelUrl,
+} from "../../../../shared/src/urls";
 import { run } from "../../../../shared/src/run";
 export interface VercelBuildExecutorOptions {
   hasConvex: boolean;
@@ -49,12 +52,7 @@ export default async function buildExecutor(
   console.info(`Linked project ${project} to Vercel`);
 
   // If hasConvex, get convex URL from .convex-url
-  let convexUrl = "";
-  if (options.hasConvex) {
-    console.info(`Reading convex URL from .convex-url`);
-    convexUrl = (await readFile(`${projectRoot}/.convex-url`, "utf8")).trim();
-    console.info(`Convex URL: ${convexUrl}`);
-  }
+  const convexUrl = readConvexUrl(projectRoot);
 
   // Run build command
   console.info(`Building project ${project} with Vercel`);
@@ -64,7 +62,7 @@ export default async function buildExecutor(
       cwd: context.root,
       env: {
         ...process.env,
-        NEXT_PUBLIC_CONVEX_URL: convexUrl,
+        ...(convexUrl ? { NEXT_PUBLIC_CONVEX_URL: convexUrl } : {}),
       },
     },
   );
