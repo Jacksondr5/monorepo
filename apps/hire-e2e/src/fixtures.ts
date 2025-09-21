@@ -1,5 +1,5 @@
 import { test as base } from "@playwright/test";
-import { addVercelBypassHeader } from "../../../tools/shared/src/playwright";
+import { addVercelBypassHeader } from "@j5/playwright";
 
 export const test = base.extend({
   page: async ({ page, baseURL }, use) => {

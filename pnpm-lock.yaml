@@ -353,9 +353,9 @@ importers:
       '@clerk/testing':
         specifier: 1.12.6
         version: 1.12.6(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@j5/shared-tools':
+      '@j5/playwright':
         specifier: workspace:*
-        version: link:../../tools/shared
+        version: link:../../libs/playwright
       '@playwright/test':
         specifier: 1.55.0
         version: 1.55.0
@@ -435,9 +435,9 @@ importers:
       '@clerk/testing':
         specifier: 1.12.6
         version: 1.12.6(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@j5/shared-tools':
+      '@j5/playwright':
         specifier: workspace:*
-        version: link:../../tools/shared
+        version: link:../../libs/playwright
       '@t3-oss/env-core':
         specifier: 0.13.8
         version: 0.13.8(arktype@2.1.20)(typescript@5.9.2)(zod@3.25.76)
@@ -493,9 +493,9 @@ importers:
       '@clerk/testing':
         specifier: 1.12.6
         version: 1.12.6(@playwright/test@1.55.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@j5/shared-tools':
+      '@j5/playwright':
         specifier: workspace:*
-        version: link:../../tools/shared
+        version: link:../../libs/playwright
       '@t3-oss/env-core':
         specifier: 0.13.8
         version: 0.13.8(arktype@2.1.20)(typescript@5.9.2)(zod@3.25.76)
@@ -703,6 +703,15 @@ importers:
         specifier: 1.3.8
         version: 1.3.8
 
+  libs/playwright:
+    dependencies:
+      '@playwright/test':
+        specifier: 1.55.0
+        version: 1.55.0
+      tslib:
+        specifier: 2.8.1
+        version: 2.8.1
+
   libs/scripts:
     dependencies:
       tslib:
@@ -764,9 +773,6 @@ importers:
       '@nx/devkit':
         specifier: 21.5.2
         version: 21.5.2(nx@21.5.2(@swc-node/register@1.11.1(@swc/core@1.13.5(@swc/helpers@0.5.17))(@swc/types@0.1.25)(typescript@5.9.2))(@swc/core@1.13.5(@swc/helpers@0.5.17)))
-      '@playwright/test':
-        specifier: 1.55.0
-        version: 1.55.0
       simple-git:
         specifier: 3.28.0
         version: 3.28.0
