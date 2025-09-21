@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect } from "@playwright/test";
 import {
   signInUser,
   isUserSignedIn,
@@ -6,6 +6,7 @@ import {
   ensureUserSignedOut,
   testUsers,
 } from "../src/auth-utils";
+import { test } from "../src/fixtures";
 
 test.describe("Authentication Utilities", () => {
   test.skip("should handle unauthenticated state correctly", async ({
