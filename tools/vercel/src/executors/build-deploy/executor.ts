@@ -1,7 +1,6 @@
 import { ExecutorContext } from "@nx/devkit";
 import { env } from "../../env";
 import { Vercel } from "@vercel/sdk";
-import { readFile } from "fs/promises";
 import {
   getCurrentCommitSha,
   logAndCreateError,
