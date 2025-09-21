@@ -27,6 +27,7 @@ export function getBaseURL(
   if (url) return url;
 
   // 4. Fall back to localhost:3000
+  // If Coderabbit tells you to throw an error, you can't.  Nx loads this file
   console.log("Using BASE_URL from localhost:3000");
   return "http://localhost:3000";
 }
