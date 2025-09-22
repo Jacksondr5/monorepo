@@ -1,0 +1,19 @@
+{
+  "name": "@j5/bravos",
+  "projectType": "application",
+  "sourceRoot": "apps/bravos/src",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["next dev --turbo"],
+        "cwd": "apps/bravos"
+      }
+    },
+    "vercel-build-deploy": {
+      "options": {
+        "hasConvex": true
+      }
+    }
+  }
+}
