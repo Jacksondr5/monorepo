@@ -11,5 +11,11 @@
     "eslint-plugin-storybook": "9.1.5",
     "storybook": "9.1.5",
     "tailwindcss": "4.1.13"
+  },
+  "nx": {
+    "implicitDependencies": [
+      "@j5/hackathon",
+      "@j5/todo"
+    ]
   }
 }
