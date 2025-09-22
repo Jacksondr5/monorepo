@@ -50,6 +50,9 @@
     },
     {
       "path": "./libs/playwright"
+    },
+    {
+      "path": "./apps/bravos"
     }
   ],
   "ts-node": {
