@@ -53,6 +53,9 @@
     },
     {
       "path": "./apps/bravos"
+    },
+    {
+      "path": "./apps/todo-e2e"
     }
   ],
   "ts-node": {
