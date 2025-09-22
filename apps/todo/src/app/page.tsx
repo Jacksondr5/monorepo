@@ -30,7 +30,7 @@ export default function Home() {
               <Button dataTestId="sign-in-button">Sign In</Button>
             </SignInButton>
             <div
-              className="text-olive-12 mt-12 text-2xl"
+              className="text-slate-12 mt-12 text-2xl"
               data-testid="signed-out-ui"
             >
               Sign in to start
