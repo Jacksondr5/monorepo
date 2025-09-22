@@ -50,6 +50,9 @@
     },
     {
       "path": "./libs/playwright"
+    },
+    {
+      "path": "./apps/todo-e2e"
     }
   ],
   "ts-node": {
