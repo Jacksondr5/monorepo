@@ -9,11 +9,6 @@
         "commands": ["next dev --turbo"],
         "cwd": "apps/bravos"
       }
-    },
-    "vercel-build-deploy": {
-      "options": {
-        "hasConvex": true
-      }
     }
   }
 }

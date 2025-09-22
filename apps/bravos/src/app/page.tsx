@@ -20,7 +20,12 @@ export default function Home() {
         <SignInButton mode="modal">
           <Button dataTestId="sign-in-button">Sign In</Button>
         </SignInButton>
-        <div className="text-olive-12 mt-12 text-2xl">Sign in to start</div>
+        <div
+          className="text-olive-12 mt-12 text-2xl"
+          data-testid="signed-out-ui"
+        >
+          Sign in to start
+        </div>
       </SignedOut>
     </main>
   );
