@@ -768,8 +768,8 @@ importers:
         specifier: 1.3.0
         version: 1.3.0
       '@nx/devkit':
-        specifier: 21.2.3
-        version: 21.2.3(nx@21.5.2(@swc-node/register@1.11.1(@swc/core@1.13.5(@swc/helpers@0.5.17))(@swc/types@0.1.25)(typescript@5.9.2))(@swc/core@1.13.5(@swc/helpers@0.5.17)))
+        specifier: 21.4.1
+        version: 21.4.1(nx@21.5.2(@swc-node/register@1.11.1(@swc/core@1.13.5(@swc/helpers@0.5.17))(@swc/types@0.1.25)(typescript@5.9.2))(@swc/core@1.13.5(@swc/helpers@0.5.17)))
       '@t3-oss/env-core':
         specifier: 0.13.8
         version: 0.13.8(arktype@2.1.20)(typescript@5.9.2)(zod@3.25.76)
@@ -814,8 +814,8 @@ importers:
         specifier: 0.13.8
         version: 0.13.8(arktype@2.1.20)(typescript@5.9.2)(zod@3.25.76)
       '@vercel/sdk':
-        specifier: 1.10.0
-        version: 1.10.0(zod@3.25.76)
+        specifier: 1.10.6
+        version: 1.10.6
       tslib:
         specifier: 2.8.1
         version: 2.8.1
@@ -2922,10 +2922,10 @@ packages:
       cypress:
         optional: true
 
-  '@nx/devkit@21.2.3':
-    resolution: {integrity: sha512-H5Hk0qeZwqhxQmqcWaLpMc+otU4TroUzDYoV6kFpZdvcwGnXQKHCuGzZoI18kh9wPXvKFmb1BWmr9as3lHUw3Q==}
+  '@nx/devkit@21.4.1':
+    resolution: {integrity: sha512-rWgMNG2e0tSG5L3vffuMH/aRkn+i9vYHelWkgVAslGBOaqriEg1dCSL/W9I3Fd5lnucHy3DrG1f19uDjv7Dm0A==}
     peerDependencies:
-      nx: 21.2.3
+      nx: '>= 20 <= 22'
 
   '@nx/devkit@21.5.2':
     resolution: {integrity: sha512-coNOyRBHeB6XHbEYeJ8bd/vhPqGx1+KhXojEsQv9vN9sgONqgWEUk0p/XnIplIvI0E7M/hm8zheydhZNYC9xSQ==}
@@ -5457,12 +5457,11 @@ packages:
   '@vercel/ruby@2.2.1':
     resolution: {integrity: sha512-DsmTCggOa/Uvt/9JkafXx9U+Bz5eNIb6Bs422EOQo2zKwcxW88ITSh8mM5m0dQ0+B4k02X/moVim6iFa4sjazg==}
 
-  '@vercel/sdk@1.10.0':
-    resolution: {integrity: sha512-Z3bTFhDkQoEt2wviWxbvmkrkTPxVCYZaRlkV2Y3O/oRwVRnYiZ1tAK7NkjnSNtc19vARRkEAma/DfiaqVMlPzQ==}
+  '@vercel/sdk@1.10.6':
+    resolution: {integrity: sha512-aNNA8v7A89/J10LRMgsGzRGMS+Vu1+QpFAJVMbq4n0IMkYot6ay4PT0qmC3BdU7iIjp8fWOshSICEut6aokFOg==}
     hasBin: true
     peerDependencies:
       '@modelcontextprotocol/sdk': '>=1.5.0 <1.10.0'
-      zod: ^3
     peerDependenciesMeta:
       '@modelcontextprotocol/sdk':
         optional: true
@@ -15042,7 +15041,7 @@ snapshots:
       - typescript
       - verdaccio
 
-  '@nx/devkit@21.2.3(nx@21.5.2(@swc-node/register@1.11.1(@swc/core@1.13.5(@swc/helpers@0.5.17))(@swc/types@0.1.25)(typescript@5.9.2))(@swc/core@1.13.5(@swc/helpers@0.5.17)))':
+  '@nx/devkit@21.4.1(nx@21.5.2(@swc-node/register@1.11.1(@swc/core@1.13.5(@swc/helpers@0.5.17))(@swc/types@0.1.25)(typescript@5.9.2))(@swc/core@1.13.5(@swc/helpers@0.5.17)))':
     dependencies:
       ejs: 3.1.10
       enquirer: 2.3.6
@@ -18237,7 +18236,7 @@ snapshots:
 
   '@vercel/ruby@2.2.1': {}
 
-  '@vercel/sdk@1.10.0(zod@3.25.76)':
+  '@vercel/sdk@1.10.6':
     dependencies:
       zod: 3.25.76
 
