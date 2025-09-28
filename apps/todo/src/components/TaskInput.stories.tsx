@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { expect, userEvent, within, fn } from "storybook/test";
+import { expect, userEvent, within, fn, waitFor } from "storybook/test";
 import React, { useRef } from "react";
 import { TaskInput } from "./TaskInput";
 
@@ -183,7 +183,9 @@ export const TestDefaultValue: Story = {
       const input = canvas.getByTestId("task-input");
       await userEvent.clear(input);
       await userEvent.type(input, "Modified value");
-      await expect(input).toHaveValue("Modified value");
+      await waitFor(() => {
+        expect(input).toHaveValue("Modified value");
+      });
     });
   },
 };
