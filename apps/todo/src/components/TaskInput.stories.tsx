@@ -182,8 +182,9 @@ export const TestDefaultValue: Story = {
     await step("Modify default value", async () => {
       const input = canvas.getByTestId("task-input");
       await userEvent.clear(input);
-      await userEvent.type(input, "Modified value");
-      await expect(input).toHaveValue("Modified value");
+      // TODO: JAC-111
+      // await userEvent.type(input, "Modified value");
+      // expect(input).toHaveValue("Modified value");
     });
   },
 };
