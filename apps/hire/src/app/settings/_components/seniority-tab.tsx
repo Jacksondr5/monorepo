@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input } from "@j5/component-library";
+import { Button, Input } from "@jacksondr5/component-library";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useEffect, useState, useMemo } from "react";

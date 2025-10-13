@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Tag } from "@j5/component-library";
-import { SortableList } from "@j5/component-library";
+import { Tag } from "@jacksondr5/component-library";
+import { SortableList } from "@jacksondr5/component-library";
 import { Id, TableNames } from "../../../../convex/_generated/dataModel";
 
 type SortableListBaseItem<Name extends TableNames> = {

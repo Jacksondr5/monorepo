@@ -6,7 +6,7 @@ import { useState } from "react";
 import { FinalizedProjectCard } from "~/components/finalized-projects/finalized-project-card";
 import { FinalizedProjectForm } from "~/components/finalized-projects/finalized-project-form";
 import { unwrapSerializableResult, processError } from "~/lib/errors";
-import { Button } from "@j5/component-library";
+import { Button } from "@jacksondr5/component-library";
 import { usePostHog } from "posthog-js/react";
 import { ErrorState } from "~/components/ErrorState";
 

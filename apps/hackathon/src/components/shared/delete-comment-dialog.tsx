@@ -9,7 +9,7 @@ import {
   Button,
   Dialog,
   DialogTrigger,
-} from "@j5/component-library";
+} from "@jacksondr5/component-library";
 import { ZodUser } from "~/server/zod/user";
 import { CommentId } from "~/server/zod";
 import { Trash2 } from "lucide-react";

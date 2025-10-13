@@ -3,7 +3,7 @@ import { j5Theme } from "./j5-sb-theme";
 import { MockPostHogProvider } from "./providers/posthog.mock";
 import { TooltipProvider } from "../components/tooltip/tooltip";
 
-export const previewConfigVite = {
+export const previewConfigVite: PreviewVite = {
   parameters: {
     backgrounds: {
       options: {

@@ -11,7 +11,7 @@ import {
   SidebarMenuSkeleton,
   SidebarGroupLabel,
   SidebarMenu,
-} from "@j5/component-library";
+} from "@jacksondr5/component-library";
 import { api } from "../../convex/_generated/api";
 
 const Group = ({

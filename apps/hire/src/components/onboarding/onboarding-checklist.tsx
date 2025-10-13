@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { Checkbox } from "@j5/component-library";
+import { Checkbox } from "@jacksondr5/component-library";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import type { ZodOnboardingStep } from "~/server/zod/onboardingStep";

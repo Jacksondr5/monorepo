@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogFooter,
   DialogClose,
-} from "@j5/component-library";
+} from "@jacksondr5/component-library";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";

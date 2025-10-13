@@ -10,7 +10,7 @@ import {
   SignedIn,
   SignOutButton,
 } from "@clerk/nextjs";
-import { Button } from "@j5/component-library";
+import { Button } from "@jacksondr5/component-library";
 
 export default function Home() {
   return (

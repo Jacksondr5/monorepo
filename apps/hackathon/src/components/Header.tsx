@@ -3,9 +3,9 @@
 import { UserButton, SignInButton } from "@clerk/nextjs";
 import { Preloaded, usePreloadedQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { Button } from "@j5/component-library";
+import { Button } from "@jacksondr5/component-library";
 import { useAuthStatus } from "~/hooks/useAuthStatus";
-import { Skeleton } from "@j5/component-library";
+import { Skeleton } from "@jacksondr5/component-library";
 import { HackathonInfoView } from "./HackathonInfo";
 import { Doc } from "../../convex/_generated/dataModel";
 

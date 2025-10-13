@@ -19,7 +19,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@j5/component-library";
+} from "@jacksondr5/component-library";
 import { ZodUser, ZodUserId, HackathonPhase } from "~/server/zod";
 import { usePostHog } from "posthog-js/react";
 import { processError } from "~/lib/errors";

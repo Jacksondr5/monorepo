@@ -1,7 +1,7 @@
 "use client";
 
 import { z } from "zod";
-import { Button, Card, useAppForm } from "@j5/component-library";
+import { Button, Card, useAppForm } from "@jacksondr5/component-library";
 import { CreateFinalizedProjectSchema } from "../../server/zod/finalized-project";
 
 // Define the schema for the form values, picking only title and description

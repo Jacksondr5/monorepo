@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogFooter,
   DialogClose,
-} from "@j5/component-library";
+} from "@jacksondr5/component-library";
 import { Trash2 } from "lucide-react";
 import { ProjectId } from "~/server/zod";
 import { usePostHog } from "#lib/posthog";

@@ -1,3 +1,3 @@
-import { configureManager } from "@j5/component-library/storybook";
+import { configureManager } from "@jacksondr5/component-library/storybook";
 
 configureManager();

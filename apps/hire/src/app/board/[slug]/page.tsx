@@ -6,7 +6,7 @@ import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { use } from "react";
 import Link from "next/link";
-import { Button } from "@j5/component-library";
+import { Button } from "@jacksondr5/component-library";
 
 export default function BoardPage({
   params,

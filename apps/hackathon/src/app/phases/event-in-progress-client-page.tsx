@@ -3,7 +3,7 @@
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { FinalizedProjectCard } from "~/components/finalized-projects/finalized-project-card";
-import { Skeleton } from "@j5/component-library";
+import { Skeleton } from "@jacksondr5/component-library";
 import type { HackathonEvent } from "~/server/zod";
 import { unwrapSerializableResult } from "~/lib/errors";
 import { useMemo } from "react";

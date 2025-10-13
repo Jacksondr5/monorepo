@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "name": "@j5/component-library",
+  "name": "@jacksondr5/component-library",
   "projectType": "library",
   "sourceRoot": "libs/component-library/src",
   "targets": {

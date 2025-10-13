@@ -8,21 +8,23 @@ alwaysApply: false
 ## Pre-Commit Checklist
 
 1. **Verify you're not on main branch** - If you are, create a new branch (ideally with the Linear issue name if you have one)
-2. **Run formatter** - BEFORE YOU COMMIT, run `pnpm nx format` from the root of the monorepo.  Run the command EXACTLY AS IS, do not pass it any other args.
+2. **Run formatter** - BEFORE YOU COMMIT, run `pnpm nx format` from the root of the monorepo. Run the command EXACTLY AS IS, do not pass it any other args.
 3. **Run verification checks** - Ensure code quality before committing:
    ```bash
-   pnpm nx affected --parallel 8 -t typecheck lint 
+   pnpm nx affected --parallel 8 -t typecheck lint
    ```
 
 ## Branch Naming Convention
 
 Use the Linear issue branch name when available (found in Linear ticket details):
+
 - Format: `jackson/jac-XX-descriptive-name`
 - Example: `jackson/jac-76-replace-with-component-library-textarea-in-hackathon`
 
 ## Commit Message Format
 
 Follow conventional commits format with Linear issue reference:
+
 ```
 <type>: <description>
 
@@ -32,10 +34,11 @@ Fixes JAC-XX
 ```
 
 **Example:**
+
 ```
 feat: replace temporary textarea with component library Textarea
 
-- Replace temporary textarea implementation with @j5/component-library Textarea
+- Replace temporary textarea implementation with @jacksondr5/component-library Textarea
 - Add proper dataTestId prop for consistent testing
 - Update all Storybook stories to use test IDs instead of placeholder text
 - Remove TODO comment
@@ -46,6 +49,7 @@ Fixes JAC-76
 ## Creating the PR
 
 1. **Push the branch:**
+
    ```bash
    git push origin <branch-name>
    ```
@@ -67,7 +71,7 @@ Brief description of what this PR does.
 ## Changes Made
 
 - ✅ Change 1
-- ✅ Change 2  
+- ✅ Change 2
 - ✅ Change 3
 
 ## Testing
@@ -91,6 +95,7 @@ Fixes [JAC-XX](https://linear.app/jacksondr5/issue/JAC-XX)
 ## Commands Summary
 
 Complete workflow commands:
+
 ```bash
 # 1. Check status and create branch
 git status
