@@ -1,6 +1,7 @@
 {
   "name": "@j5/component-library",
-  "private": true,
+  "version": "0.1.0",
+  "private": false,
   "type": "module",
   "exports": {
     "./package.json": "./package.json",
