@@ -7,9 +7,9 @@ import {
   SelectValue,
   Separator,
   useAppForm,
-} from "@j5/component-library";
-import { Button } from "@j5/component-library";
-import { Card } from "@j5/component-library";
+} from "@jacksondr5/component-library";
+import { Button } from "@jacksondr5/component-library";
+import { Card } from "@jacksondr5/component-library";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import {

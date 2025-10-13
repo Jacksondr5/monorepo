@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import React from "react";
 import { ErrorState } from "./ErrorState";
-import { Separator } from "@j5/component-library";
+import { Separator } from "@jacksondr5/component-library";
 
 const meta: Meta<typeof ErrorState> = {
   title: "Hackathon/Components/ErrorState",

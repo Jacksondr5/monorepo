@@ -9,7 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@j5/component-library";
+} from "@jacksondr5/component-library";
 import { SettingsIcon, ClipboardListIcon } from "lucide-react";
 import Link from "next/link";
 import { BoardsMenu } from "./boards-menu";

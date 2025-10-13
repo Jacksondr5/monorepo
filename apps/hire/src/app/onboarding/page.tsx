@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, Checkbox } from "@j5/component-library";
+import { Card, CardContent, Checkbox } from "@jacksondr5/component-library";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useOrganization } from "@clerk/nextjs";

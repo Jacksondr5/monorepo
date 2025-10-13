@@ -4,7 +4,7 @@ import { ClerkProvider, useAuth } from "@clerk/nextjs";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { ConvexReactClient } from "convex/react";
 import { env } from "../env";
-import { TooltipProvider } from "@j5/component-library";
+import { TooltipProvider } from "@jacksondr5/component-library";
 import { useMemo, useEffect, Suspense } from "react";
 import posthog from "posthog-js";
 import { PostHogProvider as PHProvider, usePostHog } from "posthog-js/react";

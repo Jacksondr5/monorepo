@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Input, Textarea } from "@j5/component-library";
+import { Input, Textarea } from "@jacksondr5/component-library";
 
 export type TaskInputProps = {
   type: "input" | "textarea";

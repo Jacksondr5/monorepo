@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
   Skeleton,
-} from "@j5/component-library";
+} from "@jacksondr5/component-library";
 import Image from "next/image";
 
 const defaultOrganization = {

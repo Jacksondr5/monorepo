@@ -9,7 +9,7 @@ import {
   AvatarImage,
   Button,
   Textarea,
-} from "@j5/component-library";
+} from "@jacksondr5/component-library";
 import { ThumbsUp } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 import { DeleteCommentDialog } from "./delete-comment-dialog";

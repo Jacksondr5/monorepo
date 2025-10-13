@@ -5,7 +5,10 @@ import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { ConvexReactClient } from "convex/react";
 import { env } from "../env";
 import { useAuth } from "@clerk/nextjs";
-import { SidebarProvider, TooltipProvider } from "@j5/component-library";
+import {
+  SidebarProvider,
+  TooltipProvider,
+} from "@jacksondr5/component-library";
 
 const convex = new ConvexReactClient(env.NEXT_PUBLIC_CONVEX_URL);
 

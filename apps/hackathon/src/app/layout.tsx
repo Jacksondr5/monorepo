@@ -5,7 +5,7 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { getAuthToken } from "./auth";
 import { preloadQuery } from "convex/nextjs";
 import { api } from "../../convex/_generated/api";
-import { Toaster } from "@j5/component-library";
+import { Toaster } from "@jacksondr5/component-library";
 import { PostHogIdentify } from "./posthog-identify";
 import { SignedOutUI } from "~/components/SignedOutUI";
 

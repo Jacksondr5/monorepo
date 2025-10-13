@@ -3,7 +3,7 @@
 import { useUser } from "@clerk/nextjs";
 import { LoaderCircle, User } from "lucide-react";
 import { z } from "zod";
-import { Card, useAppForm, toast } from "@j5/component-library";
+import { Card, useAppForm, toast } from "@jacksondr5/component-library";
 import { CreateUserSchema, ZodCreateUser } from "../../server/zod/user";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";

@@ -1,6 +1,6 @@
 ---
 description: when writing code for fields in the component-library
-globs: 
+globs:
 alwaysApply: false
 ---
 
@@ -8,7 +8,7 @@ alwaysApply: false
 
 ## Overview
 
-This document outlines the standards and patterns for developing field components in the `@j5/component-library`. These rules ensure consistency, maintainability, and proper integration with form systems.
+This document outlines the standards and patterns for developing field components in the `@jacksondr5/component-library`. These rules ensure consistency, maintainability, and proper integration with form systems.
 
 ## Field Component Architecture
 

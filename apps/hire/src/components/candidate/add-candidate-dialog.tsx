@@ -18,7 +18,7 @@ import {
   DialogTitle,
   DialogTrigger,
   Skeleton,
-} from "@j5/component-library";
+} from "@jacksondr5/component-library";
 import { PlusIcon } from "lucide-react";
 
 export function AddCandidateDialog() {

@@ -14,7 +14,7 @@ import {
   AvatarFallback,
   AvatarImage,
   Button,
-} from "@j5/component-library";
+} from "@jacksondr5/component-library";
 import { useState } from "react";
 import { ProjectSubmissionForm } from "../project-submission/project-submission-form";
 import { Pencil, ThumbsUp } from "lucide-react";

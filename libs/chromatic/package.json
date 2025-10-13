@@ -6,11 +6,11 @@
     "./package.json": "./package.json"
   },
   "devDependencies": {
-    "@j5/component-library": "workspace:*",
-    "@tailwindcss/vite": "4.1.13",
+    "@jacksondr5/component-library": "workspace:*",
+    "@tailwindcss/vite": "4.1.14",
     "eslint-plugin-storybook": "9.1.5",
-    "storybook": "9.1.5",
-    "tailwindcss": "4.1.13"
+    "storybook": "9.1.10",
+    "tailwindcss": "4.1.14"
   },
   "nx": {
     "implicitDependencies": [

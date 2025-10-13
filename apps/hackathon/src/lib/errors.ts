@@ -1,4 +1,4 @@
-import { toast } from "@j5/component-library";
+import { toast } from "@jacksondr5/component-library";
 import { J5BaseError, SerializableResult } from "../../convex/model/error";
 import { captureException } from "@sentry/nextjs";
 
