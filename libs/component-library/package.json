@@ -1,7 +1,12 @@
 {
-  "name": "@j5/component-library",
+  "name": "@jacksondr5/component-library",
   "version": "0.1.0",
-  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jacksondr5/monorepo"
+  },
+  "license": "MIT",
+  "author": "Jackson Miller",
   "type": "module",
   "exports": {
     "./package.json": "./package.json",
