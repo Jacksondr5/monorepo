@@ -12,7 +12,7 @@
     "@tanstack/react-form": "1.20.0",
     "@tanstack/zod-form-adapter": "0.42.1",
     "convex": "1.27.0",
-    "convex-helpers": "0.1.104",
+    "convex-helpers": "0.1.111",
     "dayjs": "1.11.18",
     "next": "15.5.3",
     "react": "19.1.1",
