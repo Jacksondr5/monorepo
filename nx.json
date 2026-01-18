@@ -47,7 +47,6 @@
       "plugin": "@nx/vite/plugin",
       "options": {
         "buildTargetName": "build",
-        "testTargetName": "test",
         "serveTargetName": "serve",
         "devTargetName": "dev",
         "previewTargetName": "preview",
@@ -91,6 +90,12 @@
     },
     {
       "plugin": "./tools/playwright-env/plugin.ts"
+    },
+    {
+      "plugin": "@nx/vitest",
+      "options": {
+        "testTargetName": "test"
+      }
     }
   ],
   "targetDefaults": {

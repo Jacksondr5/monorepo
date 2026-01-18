@@ -6,7 +6,7 @@
     "dev": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["next dev --turbo"],
+        "commands": ["next dev"],
         "cwd": "apps/hackathon"
       }
     },

@@ -13,30 +13,30 @@
     }
   },
   "dependencies": {
-    "@clerk/nextjs": "6.36.8",
+    "@clerk/nextjs": "catalog:",
     "@j5/component-library": "workspace:*",
     "@sentry/nextjs": "10.34.0",
-    "@t3-oss/env-nextjs": "0.13.10",
+    "@t3-oss/env-nextjs": "catalog:",
     "@tanstack/react-form": "1.27.7",
     "@tanstack/zod-form-adapter": "0.42.1",
-    "convex": "1.31.5",
-    "convex-helpers": "0.1.111",
+    "convex": "catalog:",
+    "convex-helpers": "catalog:",
     "fast-deep-equal": "3.1.3",
     "neverthrow": "8.2.0",
-    "next": "15.5.3",
+    "next": "catalog:",
     "posthog-js": "1.328.0",
     "posthog-node": "5.21.1",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
+    "react": "catalog:",
+    "react-dom": "catalog:",
     "uuid": "13.0.0",
-    "zod": "3.25.76"
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "@storybook/nextjs-vite": "9.1.5",
-    "@tailwindcss/postcss": "4.1.18",
-    "@tailwindcss/vite": "4.1.18",
+    "@storybook/nextjs-vite": "catalog:",
+    "@tailwindcss/postcss": "catalog:",
+    "@tailwindcss/vite": "catalog:",
     "eslint-plugin-neverthrow": "1.1.4",
-    "postcss": "8.5.6",
-    "tailwindcss": "4.1.18"
+    "postcss": "catalog:",
+    "tailwindcss": "catalog:"
   }
 }

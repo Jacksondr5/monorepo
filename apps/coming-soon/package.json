@@ -3,11 +3,11 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "next": "15.5.3",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "4.1.18"
+    "@tailwindcss/postcss": "catalog:"
   }
 }
