@@ -116,6 +116,7 @@ Use `storybook/test` imports (Vitest methods), not Jest. Stories should use `dat
 2. Run `pnpm nx format` before committing
 3. Run `pnpm nx affected -t typecheck lint` to verify
 4. Commit with conventional format and Linear reference:
+
    ```
    feat: description
 
@@ -124,4 +125,5 @@ Use `storybook/test` imports (Vitest methods), not Jest. Stories should use `dat
 
    Fixes JAC-XX
    ```
+
 5. Create PR with `gh pr create`

@@ -68,12 +68,6 @@
       }
     },
     {
-      "plugin": "@nx/jest/plugin",
-      "options": {
-        "targetName": "test"
-      }
-    },
-    {
       "plugin": "@nx/storybook/plugin",
       "options": {
         "serveStorybookTargetName": "storybook",
