@@ -59,7 +59,7 @@ jobs:
         # Nx Affected runs only tasks affected by the changes in this PR/commit. Learn more: https://nx.dev/ci/features/affected
       - name: Run Affected Tasks
         # run: pnpm nx affected -t lint test build build-storybook chromatic vercel-build-deploy e2e-ci --verbose
-        run: pnpm nx affected -t lint test build build-storybook chromatic convex-deploy --verbose
+        run: pnpm nx affected -t lint test build build-storybook chromatic vercel-build-deploy --verbose
         # next-build is run by the Vercel preview deployments
 
       - name: Check Formatting
