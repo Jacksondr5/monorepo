@@ -9,9 +9,24 @@ catalogs:
     '@clerk/nextjs':
       specifier: 6.36.8
       version: 6.36.8
+    '@dopplerhq/node-sdk':
+      specifier: 1.3.0
+      version: 1.3.0
+    '@playwright/test':
+      specifier: 1.57.0
+      version: 1.57.0
+    '@radix-ui/react-separator':
+      specifier: 1.1.8
+      version: 1.1.8
+    '@sentry/nextjs':
+      specifier: 10.34.0
+      version: 10.34.0
     '@storybook/nextjs-vite':
       specifier: 10.1.11
       version: 10.1.11
+    '@t3-oss/env-core':
+      specifier: 0.13.10
+      version: 0.13.10
     '@t3-oss/env-nextjs':
       specifier: 0.13.10
       version: 0.13.10
@@ -21,27 +36,72 @@ catalogs:
     '@tailwindcss/vite':
       specifier: 4.1.18
       version: 4.1.18
+    class-variance-authority:
+      specifier: 0.7.1
+      version: 0.7.1
+    clsx:
+      specifier: 2.1.1
+      version: 2.1.1
     convex:
       specifier: 1.31.5
       version: 1.31.5
     convex-helpers:
       specifier: 0.1.111
       version: 0.1.111
+    dayjs:
+      specifier: 1.11.19
+      version: 1.11.19
+    dotenv:
+      specifier: 17.2.3
+      version: 17.2.3
+    eslint-plugin-storybook:
+      specifier: 10.1.11
+      version: 10.1.11
+    geist:
+      specifier: 1.5.1
+      version: 1.5.1
+    lucide-react:
+      specifier: 0.562.0
+      version: 0.562.0
+    neverthrow:
+      specifier: 8.2.0
+      version: 8.2.0
     next:
       specifier: 16.1.3
       version: 16.1.3
     postcss:
       specifier: 8.5.6
       version: 8.5.6
+    posthog-js:
+      specifier: 1.328.0
+      version: 1.328.0
     react:
       specifier: 19.2.3
       version: 19.2.3
     react-dom:
       specifier: 19.2.3
       version: 19.2.3
+    simple-git:
+      specifier: 3.30.0
+      version: 3.30.0
+    storybook:
+      specifier: 10.1.11
+      version: 10.1.11
+    tailwind-merge:
+      specifier: 3.4.0
+      version: 3.4.0
     tailwindcss:
       specifier: 4.1.18
       version: 4.1.18
+    tailwindcss-animate:
+      specifier: 1.0.7
+      version: 1.0.7
+    tslib:
+      specifier: 2.8.1
+      version: 2.8.1
+    vite:
+      specifier: 7.3.1
+      version: 7.3.1
     vite-tsconfig-paths:
       specifier: 6.0.4
       version: 6.0.4
@@ -57,46 +117,46 @@ importers:
   .:
     dependencies:
       '@dopplerhq/node-sdk':
-        specifier: 1.3.0
+        specifier: 'catalog:'
         version: 1.3.0
       '@radix-ui/react-separator':
-        specifier: 1.1.8
+        specifier: 'catalog:'
         version: 1.1.8(@types/react-dom@19.2.3(@types/react@19.2.8))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@t3-oss/env-core':
-        specifier: 0.13.10
+        specifier: 'catalog:'
         version: 0.13.10(arktype@2.1.20)(typescript@5.9.3)(zod@3.25.76)
       '@t3-oss/env-nextjs':
-        specifier: 0.13.10
+        specifier: 'catalog:'
         version: 0.13.10(arktype@2.1.20)(typescript@5.9.3)(zod@3.25.76)
       class-variance-authority:
-        specifier: 0.7.1
+        specifier: 'catalog:'
         version: 0.7.1
       clsx:
-        specifier: 2.1.1
+        specifier: 'catalog:'
         version: 2.1.1
       convex:
-        specifier: 1.31.5
+        specifier: 'catalog:'
         version: 1.31.5(@clerk/clerk-react@5.59.4(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3)
       geist:
-        specifier: 1.5.1
+        specifier: 'catalog:'
         version: 1.5.1(next@16.1.3(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(babel-plugin-macros@3.1.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.89.2))
       lucide-react:
-        specifier: 0.562.0
+        specifier: 'catalog:'
         version: 0.562.0(react@19.2.3)
       next:
         specifier: 'catalog:'
         version: 16.1.3(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(babel-plugin-macros@3.1.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.89.2)
       react:
-        specifier: 19.2.3
+        specifier: 'catalog:'
         version: 19.2.3
       react-dom:
-        specifier: 19.2.3
+        specifier: 'catalog:'
         version: 19.2.3(react@19.2.3)
       tailwind-merge:
-        specifier: 3.4.0
+        specifier: 'catalog:'
         version: 3.4.0
       zod:
-        specifier: 3.25.76
+        specifier: 'catalog:'
         version: 3.25.76
     devDependencies:
       '@babel/core':
@@ -160,10 +220,10 @@ importers:
         specifier: 22.3.3
         version: 22.3.3(@babel/traverse@7.28.6)(@swc-node/register@1.11.1(@swc/core@1.15.8(@swc/helpers@0.5.18))(@swc/types@0.1.25)(typescript@5.9.3))(@swc/core@1.15.8(@swc/helpers@0.5.18))(nx@22.3.3(@swc-node/register@1.11.1(@swc/core@1.15.8(@swc/helpers@0.5.18))(@swc/types@0.1.25)(typescript@5.9.3))(@swc/core@1.15.8(@swc/helpers@0.5.18)))
       '@playwright/test':
-        specifier: 1.57.0
+        specifier: 'catalog:'
         version: 1.57.0
       '@storybook/nextjs-vite':
-        specifier: 10.1.11
+        specifier: 'catalog:'
         version: 10.1.11(@babel/core@7.28.6)(babel-plugin-macros@3.1.0)(esbuild@0.27.2)(next@16.1.3(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(babel-plugin-macros@3.1.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.89.2))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(rollup@4.55.1)(storybook@10.1.11(@testing-library/dom@10.4.1)(prettier@3.8.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.9)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(sass-embedded@1.89.2)(sass@1.89.2)(stylus@0.64.0)(terser@5.43.1)(tsx@4.21.0)(yaml@2.8.0))(webpack@5.101.3(@swc/core@1.15.8(@swc/helpers@0.5.18))(esbuild@0.27.2))
       '@storybook/react-vite':
         specifier: 10.1.11
@@ -184,7 +244,7 @@ importers:
         specifier: 0.5.18
         version: 0.5.18
       '@tailwindcss/vite':
-        specifier: 4.1.18
+        specifier: 'catalog:'
         version: 4.1.18(vite@7.3.1(@types/node@25.0.9)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(sass-embedded@1.89.2)(sass@1.89.2)(stylus@0.64.0)(terser@5.43.1)(tsx@4.21.0)(yaml@2.8.0))
       '@testing-library/dom':
         specifier: 10.4.1
@@ -244,7 +304,7 @@ importers:
         specifier: 7.0.1
         version: 7.0.1(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-storybook:
-        specifier: 10.1.11
+        specifier: 'catalog:'
         version: 10.1.11(eslint@9.39.2(jiti@2.6.1))(storybook@10.1.11(@testing-library/dom@10.4.1)(prettier@3.8.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)
       jiti:
         specifier: 2.6.1
@@ -259,7 +319,7 @@ importers:
         specifier: 22.3.3
         version: 22.3.3(@swc-node/register@1.11.1(@swc/core@1.15.8(@swc/helpers@0.5.18))(@swc/types@0.1.25)(typescript@5.9.3))(@swc/core@1.15.8(@swc/helpers@0.5.18))
       postcss:
-        specifier: 8.5.6
+        specifier: 'catalog:'
         version: 8.5.6
       prettier:
         specifier: 3.8.0
@@ -271,16 +331,16 @@ importers:
         specifier: 0.7.2
         version: 0.7.2(prettier@3.8.0)
       storybook:
-        specifier: 10.1.11
+        specifier: 'catalog:'
         version: 10.1.11(@testing-library/dom@10.4.1)(prettier@3.8.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       tailwindcss:
-        specifier: 4.1.18
+        specifier: 'catalog:'
         version: 4.1.18
       tailwindcss-animate:
-        specifier: 1.0.7
+        specifier: 'catalog:'
         version: 1.0.7(tailwindcss@4.1.18)
       tslib:
-        specifier: 2.8.1
+        specifier: 'catalog:'
         version: 2.8.1
       tsx:
         specifier: 4.21.0
@@ -295,13 +355,13 @@ importers:
         specifier: 50.4.5
         version: 50.4.5(@swc/core@1.15.8(@swc/helpers@0.5.18))(encoding@0.1.13)(rollup@4.55.1)(typescript@5.9.3)
       vite:
-        specifier: 7.3.1
+        specifier: 'catalog:'
         version: 7.3.1(@types/node@25.0.9)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(sass-embedded@1.89.2)(sass@1.89.2)(stylus@0.64.0)(terser@5.43.1)(tsx@4.21.0)(yaml@2.8.0)
       vite-plugin-dts:
         specifier: 4.5.4
         version: 4.5.4(@types/node@25.0.9)(rollup@4.55.1)(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.9)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(sass-embedded@1.89.2)(sass@1.89.2)(stylus@0.64.0)(terser@5.43.1)(tsx@4.21.0)(yaml@2.8.0))
       vite-tsconfig-paths:
-        specifier: 6.0.4
+        specifier: 'catalog:'
         version: 6.0.4(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.9)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(sass-embedded@1.89.2)(sass@1.89.2)(stylus@0.64.0)(terser@5.43.1)(tsx@4.21.0)(yaml@2.8.0))
       vitest:
         specifier: 'catalog:'
@@ -332,7 +392,7 @@ importers:
         specifier: workspace:*
         version: link:../../libs/component-library
       '@sentry/nextjs':
-        specifier: 10.34.0
+        specifier: 'catalog:'
         version: 10.34.0(@opentelemetry/context-async-hooks@2.4.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.4.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.4.0(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@16.1.3(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(babel-plugin-macros@3.1.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.89.2))(react@19.2.3)(webpack@5.101.3(@swc/core@1.15.8(@swc/helpers@0.5.18))(esbuild@0.27.2))
       '@t3-oss/env-nextjs':
         specifier: 'catalog:'
@@ -353,13 +413,13 @@ importers:
         specifier: 3.1.3
         version: 3.1.3
       neverthrow:
-        specifier: 8.2.0
+        specifier: 'catalog:'
         version: 8.2.0
       next:
         specifier: 'catalog:'
         version: 16.1.3(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(babel-plugin-macros@3.1.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.89.2)
       posthog-js:
-        specifier: 1.328.0
+        specifier: 'catalog:'
         version: 1.328.0
       posthog-node:
         specifier: 5.21.1
@@ -405,19 +465,19 @@ importers:
         specifier: workspace:*
         version: link:../../libs/playwright
       '@playwright/test':
-        specifier: 1.57.0
+        specifier: 'catalog:'
         version: 1.57.0
       '@t3-oss/env-core':
-        specifier: 0.13.10
+        specifier: 'catalog:'
         version: 0.13.10(arktype@2.1.20)(typescript@5.9.3)(zod@3.25.76)
       '@t3-oss/env-nextjs':
-        specifier: 0.13.10
+        specifier: 'catalog:'
         version: 0.13.10(arktype@2.1.20)(typescript@5.9.3)(zod@3.25.76)
       dotenv:
-        specifier: 17.2.3
+        specifier: 'catalog:'
         version: 17.2.3
       zod:
-        specifier: 3.25.76
+        specifier: 'catalog:'
         version: 3.25.76
 
   apps/hire:
@@ -453,7 +513,7 @@ importers:
         specifier: 'catalog:'
         version: 0.1.111(@standard-schema/spec@1.1.0)(convex@1.31.5(@clerk/clerk-react@5.59.4(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3))(hono@4.11.4)(react@19.2.3)(typescript@5.9.3)(zod@3.25.76)
       dayjs:
-        specifier: 1.11.19
+        specifier: 'catalog:'
         version: 1.11.19
       next:
         specifier: 'catalog:'
@@ -487,13 +547,13 @@ importers:
         specifier: workspace:*
         version: link:../../libs/playwright
       '@t3-oss/env-core':
-        specifier: 0.13.10
+        specifier: 'catalog:'
         version: 0.13.10(arktype@2.1.20)(typescript@5.9.3)(zod@3.25.76)
       dotenv:
-        specifier: 17.2.3
+        specifier: 'catalog:'
         version: 17.2.3
       zod:
-        specifier: 3.25.76
+        specifier: 'catalog:'
         version: 3.25.76
 
   apps/packing-list:
@@ -545,13 +605,13 @@ importers:
         specifier: workspace:*
         version: link:../../libs/playwright
       '@t3-oss/env-core':
-        specifier: 0.13.10
+        specifier: 'catalog:'
         version: 0.13.10(arktype@2.1.20)(typescript@5.9.3)(zod@3.25.76)
       dotenv:
-        specifier: 17.2.3
+        specifier: 'catalog:'
         version: 17.2.3
       zod:
-        specifier: 3.25.76
+        specifier: 'catalog:'
         version: 3.25.76
 
   apps/todo:
@@ -566,19 +626,19 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       '@radix-ui/react-separator':
-        specifier: 1.1.8
+        specifier: 'catalog:'
         version: 1.1.8(@types/react-dom@19.2.3(@types/react@19.2.8))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@sentry/nextjs':
-        specifier: 10.34.0
+        specifier: 'catalog:'
         version: 10.34.0(@opentelemetry/context-async-hooks@2.4.0(@opentelemetry/api@1.9.0))(@opentelemetry/core@2.4.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@2.4.0(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@16.1.3(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(babel-plugin-macros@3.1.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.89.2))(react@19.2.3)(webpack@5.101.3(@swc/core@1.15.8(@swc/helpers@0.5.18))(esbuild@0.27.2))
       '@t3-oss/env-nextjs':
         specifier: 'catalog:'
         version: 0.13.10(arktype@2.1.20)(typescript@5.9.3)(zod@3.25.76)
       class-variance-authority:
-        specifier: 0.7.1
+        specifier: 'catalog:'
         version: 0.7.1
       clsx:
-        specifier: 2.1.1
+        specifier: 'catalog:'
         version: 2.1.1
       convex:
         specifier: 'catalog:'
@@ -587,16 +647,16 @@ importers:
         specifier: 'catalog:'
         version: 0.1.111(@standard-schema/spec@1.1.0)(convex@1.31.5(@clerk/clerk-react@5.59.4(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3))(hono@4.11.4)(react@19.2.3)(typescript@5.9.3)(zod@3.25.76)
       dayjs:
-        specifier: 1.11.19
+        specifier: 'catalog:'
         version: 1.11.19
       geist:
-        specifier: 1.5.1
+        specifier: 'catalog:'
         version: 1.5.1(next@16.1.3(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(babel-plugin-macros@3.1.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.89.2))
       lucide-react:
-        specifier: 0.562.0
+        specifier: 'catalog:'
         version: 0.562.0(react@19.2.3)
       neverthrow:
-        specifier: 8.2.0
+        specifier: 'catalog:'
         version: 8.2.0
       next:
         specifier: 'catalog:'
@@ -608,10 +668,10 @@ importers:
         specifier: 'catalog:'
         version: 19.2.3(react@19.2.3)
       tailwind-merge:
-        specifier: 3.4.0
+        specifier: 'catalog:'
         version: 3.4.0
       tailwindcss-animate:
-        specifier: 1.0.7
+        specifier: 'catalog:'
         version: 1.0.7(tailwindcss@4.1.18)
       zod:
         specifier: 'catalog:'
@@ -642,16 +702,16 @@ importers:
         specifier: workspace:*
         version: link:../../libs/playwright
       '@playwright/test':
-        specifier: 1.57.0
+        specifier: 'catalog:'
         version: 1.57.0
       '@t3-oss/env-core':
-        specifier: 0.13.10
+        specifier: 'catalog:'
         version: 0.13.10(arktype@2.1.20)(typescript@5.9.3)(zod@3.25.76)
       dotenv:
-        specifier: 17.2.3
+        specifier: 'catalog:'
         version: 17.2.3
       zod:
-        specifier: 3.25.76
+        specifier: 'catalog:'
         version: 3.25.76
 
   libs/chromatic:
@@ -660,19 +720,19 @@ importers:
         specifier: workspace:*
         version: link:../component-library
       '@storybook/nextjs-vite':
-        specifier: 10.1.11
+        specifier: 'catalog:'
         version: 10.1.11(@babel/core@7.28.6)(babel-plugin-macros@3.1.0)(esbuild@0.27.2)(next@16.1.3(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(babel-plugin-macros@3.1.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.89.2))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(rollup@4.55.1)(storybook@10.1.11(@testing-library/dom@10.4.1)(prettier@3.8.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.9)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(sass-embedded@1.89.2)(sass@1.89.2)(stylus@0.64.0)(terser@5.43.1)(tsx@4.21.0)(yaml@2.8.0))(webpack@5.101.3(@swc/core@1.15.8(@swc/helpers@0.5.18))(esbuild@0.27.2))
       '@tailwindcss/vite':
-        specifier: 4.1.18
+        specifier: 'catalog:'
         version: 4.1.18(vite@7.3.1(@types/node@25.0.9)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(sass-embedded@1.89.2)(sass@1.89.2)(stylus@0.64.0)(terser@5.43.1)(tsx@4.21.0)(yaml@2.8.0))
       eslint-plugin-storybook:
-        specifier: 10.1.11
+        specifier: 'catalog:'
         version: 10.1.11(eslint@9.39.2(jiti@2.6.1))(storybook@10.1.11(@testing-library/dom@10.4.1)(prettier@3.8.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)
       storybook:
-        specifier: 10.1.11
+        specifier: 'catalog:'
         version: 10.1.11(@testing-library/dom@10.4.1)(prettier@3.8.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       tailwindcss:
-        specifier: 4.1.18
+        specifier: 'catalog:'
         version: 4.1.18
 
   libs/component-library:
@@ -708,7 +768,7 @@ importers:
         specifier: 2.2.6
         version: 2.2.6(@types/react-dom@19.2.3(@types/react@19.2.8))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@radix-ui/react-separator':
-        specifier: 1.1.8
+        specifier: 'catalog:'
         version: 1.1.8(@types/react-dom@19.2.3(@types/react@19.2.8))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@radix-ui/react-slot':
         specifier: 1.2.4
@@ -720,31 +780,31 @@ importers:
         specifier: 1.2.8
         version: 1.2.8(@types/react-dom@19.2.3(@types/react@19.2.8))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@tailwindcss/vite':
-        specifier: 4.1.18
+        specifier: 'catalog:'
         version: 4.1.18(vite@7.3.1(@types/node@25.0.9)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(sass-embedded@1.89.2)(sass@1.89.2)(stylus@0.64.0)(terser@5.43.1)(tsx@4.21.0)(yaml@2.8.0))
       '@tanstack/react-form':
         specifier: 1.27.7
         version: 1.27.7(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       class-variance-authority:
-        specifier: 0.7.1
+        specifier: 'catalog:'
         version: 0.7.1
       clsx:
-        specifier: 2.1.1
+        specifier: 'catalog:'
         version: 2.1.1
       date-fns:
         specifier: 4.1.0
         version: 4.1.0
       lucide-react:
-        specifier: 0.562.0
+        specifier: 'catalog:'
         version: 0.562.0(react@19.2.3)
       next-themes:
         specifier: 0.4.6
         version: 0.4.6(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       posthog-js:
-        specifier: 1.328.0
+        specifier: 'catalog:'
         version: 1.328.0
       react:
-        specifier: 19.2.3
+        specifier: 'catalog:'
         version: 19.2.3
       react-day-picker:
         specifier: 8.10.1
@@ -753,26 +813,26 @@ importers:
         specifier: 2.0.7
         version: 2.0.7(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       tailwind-merge:
-        specifier: 3.4.0
+        specifier: 'catalog:'
         version: 3.4.0
       tslib:
-        specifier: 2.8.1
+        specifier: 'catalog:'
         version: 2.8.1
       vite:
-        specifier: 7.3.1
+        specifier: 'catalog:'
         version: 7.3.1(@types/node@25.0.9)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(sass-embedded@1.89.2)(sass@1.89.2)(stylus@0.64.0)(terser@5.43.1)(tsx@4.21.0)(yaml@2.8.0)
       vite-tsconfig-paths:
-        specifier: 6.0.4
+        specifier: 'catalog:'
         version: 6.0.4(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.9)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(sass-embedded@1.89.2)(sass@1.89.2)(stylus@0.64.0)(terser@5.43.1)(tsx@4.21.0)(yaml@2.8.0))
     devDependencies:
       '@storybook/nextjs-vite':
-        specifier: 10.1.11
+        specifier: 'catalog:'
         version: 10.1.11(@babel/core@7.28.6)(babel-plugin-macros@3.1.0)(esbuild@0.27.2)(next@16.1.3(@babel/core@7.28.6)(@opentelemetry/api@1.9.0)(@playwright/test@1.57.0)(babel-plugin-macros@3.1.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.89.2))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(rollup@4.55.1)(storybook@10.1.11(@testing-library/dom@10.4.1)(prettier@3.8.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(typescript@5.9.3)(vite@7.3.1(@types/node@25.0.9)(jiti@2.6.1)(less@4.1.3)(lightningcss@1.30.2)(sass-embedded@1.89.2)(sass@1.89.2)(stylus@0.64.0)(terser@5.43.1)(tsx@4.21.0)(yaml@2.8.0))(webpack@5.101.3(@swc/core@1.15.8(@swc/helpers@0.5.18))(esbuild@0.27.2))
       storybook:
-        specifier: 10.1.11
+        specifier: 'catalog:'
         version: 10.1.11(@testing-library/dom@10.4.1)(prettier@3.8.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       tailwindcss:
-        specifier: 4.1.18
+        specifier: 'catalog:'
         version: 4.1.18
       tw-animate-css:
         specifier: 1.4.0
@@ -781,17 +841,17 @@ importers:
   libs/playwright:
     dependencies:
       tslib:
-        specifier: 2.8.1
+        specifier: 'catalog:'
         version: 2.8.1
     devDependencies:
       '@playwright/test':
-        specifier: 1.57.0
+        specifier: 'catalog:'
         version: 1.57.0
 
   libs/scripts:
     dependencies:
       tslib:
-        specifier: 2.8.1
+        specifier: 'catalog:'
         version: 2.8.1
 
   tools/convex:
@@ -803,49 +863,49 @@ importers:
         specifier: 21.5.2
         version: 21.5.2(nx@22.3.3(@swc-node/register@1.11.1(@swc/core@1.15.8(@swc/helpers@0.5.18))(@swc/types@0.1.25)(typescript@5.9.3))(@swc/core@1.15.8(@swc/helpers@0.5.18)))
       '@t3-oss/env-core':
-        specifier: 0.13.10
+        specifier: 'catalog:'
         version: 0.13.10(arktype@2.1.20)(typescript@5.9.3)(zod@3.25.76)
       tslib:
-        specifier: 2.8.1
+        specifier: 'catalog:'
         version: 2.8.1
       zod:
-        specifier: 3.25.76
+        specifier: 'catalog:'
         version: 3.25.76
 
   tools/playwright-env:
     dependencies:
       '@dopplerhq/node-sdk':
-        specifier: 1.3.0
+        specifier: 'catalog:'
         version: 1.3.0
       '@nx/devkit':
         specifier: 21.4.1
         version: 21.4.1(nx@22.3.3(@swc-node/register@1.11.1(@swc/core@1.15.8(@swc/helpers@0.5.18))(@swc/types@0.1.25)(typescript@5.9.3))(@swc/core@1.15.8(@swc/helpers@0.5.18)))
       '@t3-oss/env-core':
-        specifier: 0.13.10
+        specifier: 'catalog:'
         version: 0.13.10(arktype@2.1.20)(typescript@5.9.3)(zod@3.25.76)
       simple-git:
-        specifier: 3.30.0
+        specifier: 'catalog:'
         version: 3.30.0
       tslib:
-        specifier: 2.8.1
+        specifier: 'catalog:'
         version: 2.8.1
       zod:
-        specifier: 3.25.76
+        specifier: 'catalog:'
         version: 3.25.76
 
   tools/shared:
     dependencies:
       '@dopplerhq/node-sdk':
-        specifier: 1.3.0
+        specifier: 'catalog:'
         version: 1.3.0
       '@nx/devkit':
         specifier: 22.3.3
         version: 22.3.3(nx@22.3.3(@swc-node/register@1.11.1(@swc/core@1.15.8(@swc/helpers@0.5.18))(@swc/types@0.1.25)(typescript@5.9.3))(@swc/core@1.15.8(@swc/helpers@0.5.18)))
       simple-git:
-        specifier: 3.30.0
+        specifier: 'catalog:'
         version: 3.30.0
       tslib:
-        specifier: 2.8.1
+        specifier: 'catalog:'
         version: 2.8.1
 
   tools/vercel:
@@ -857,16 +917,16 @@ importers:
         specifier: 21.5.2
         version: 21.5.2(nx@22.3.3(@swc-node/register@1.11.1(@swc/core@1.15.8(@swc/helpers@0.5.18))(@swc/types@0.1.25)(typescript@5.9.3))(@swc/core@1.15.8(@swc/helpers@0.5.18)))
       '@t3-oss/env-core':
-        specifier: 0.13.10
+        specifier: 'catalog:'
         version: 0.13.10(arktype@2.1.20)(typescript@5.9.3)(zod@3.25.76)
       '@vercel/sdk':
         specifier: 1.18.7
         version: 1.18.7(hono@4.11.4)
       tslib:
-        specifier: 2.8.1
+        specifier: 'catalog:'
         version: 2.8.1
       zod:
-        specifier: 3.25.76
+        specifier: 'catalog:'
         version: 3.25.76
 
 packages:

@@ -13,7 +13,7 @@
     "@tanstack/zod-form-adapter": "0.42.1",
     "convex": "catalog:",
     "convex-helpers": "catalog:",
-    "dayjs": "1.11.19",
+    "dayjs": "catalog:",
     "next": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",

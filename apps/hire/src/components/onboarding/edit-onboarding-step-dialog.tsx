@@ -48,8 +48,15 @@ export function EditOnboardingStepDialog({
   // Filter to only show steps that could be parents (for the dropdown)
   const potentialParentSteps = steps.filter((s) => !s.parentStepId);
 
+  const resetForm = () => {
+    setStepName("");
+    setStepDetails("");
+    setParentStepId("");
+  };
+
   useEffect(() => {
     if (step) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- Syncing prop to state is intentional here
       setStepName(step.name);
       setStepDetails(step.details || "");
       setParentStepId(step.parentStepId || "");
@@ -57,12 +64,6 @@ export function EditOnboardingStepDialog({
       resetForm();
     }
   }, [step]);
-
-  const resetForm = () => {
-    setStepName("");
-    setStepDetails("");
-    setParentStepId("");
-  };
 
   const handleClose = () => {
     onOpenChange(false);

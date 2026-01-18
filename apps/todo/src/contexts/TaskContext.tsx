@@ -122,6 +122,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
     (localStore, args) => {
       const tasksData = getTasksFromLocalStore(localStore);
       if (tasksData) {
+        // eslint-disable-next-line react-hooks/purity -- Optimistic update callbacks are not called during render
         const now = Date.now();
         const newTask = {
           _id: crypto.randomUUID() as Id<"tasks">,

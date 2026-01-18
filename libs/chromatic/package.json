@@ -7,11 +7,11 @@
   },
   "devDependencies": {
     "@j5/component-library": "workspace:*",
-    "@tailwindcss/vite": "4.1.18",
-    "eslint-plugin-storybook": "10.1.11",
-    "storybook": "10.1.11",
-    "tailwindcss": "4.1.18",
-    "@storybook/nextjs-vite": "10.1.11"
+    "@storybook/nextjs-vite": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "eslint-plugin-storybook": "catalog:",
+    "storybook": "catalog:",
+    "tailwindcss": "catalog:"
   },
   "nx": {
     "implicitDependencies": [

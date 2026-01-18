@@ -6,9 +6,9 @@
   "devDependencies": {
     "@clerk/testing": "1.13.29",
     "@j5/playwright": "workspace:*",
-    "@t3-oss/env-core": "0.13.10",
-    "dotenv": "17.2.3",
-    "zod": "3.25.76"
+    "@t3-oss/env-core": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
   },
   "nx": {
     "implicitDependencies": [

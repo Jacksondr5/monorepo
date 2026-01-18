@@ -1,23 +1,13 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import js from "@eslint/js";
+import nx from "@nx/eslint-plugin";
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
 import baseConfig from "../../eslint.config.mjs";
 
-const compat = new FlatCompat({
-  baseDirectory: dirname(fileURLToPath(import.meta.url)),
-  recommendedConfig: js.configs.recommended,
-});
-
 const config = [
+  ...nextCoreWebVitals,
+  // TODO: enable: https://github.com/mdbetancourt/eslint-plugin-neverthrow/issues/21 (JAC-79)
+  // "plugin:neverthrow/recommended",
   ...baseConfig,
-  ...compat.extends(
-    "plugin:@nx/react-typescript",
-    "next",
-    "next/core-web-vitals",
-    // TODO: enable: https://github.com/mdbetancourt/eslint-plugin-neverthrow/issues/21 (JAC-79)
-    // "plugin:neverthrow/recommended",
-  ),
+  ...nx.configs["flat/react-typescript"],
   {
     files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
     rules: {
