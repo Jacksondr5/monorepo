@@ -67,6 +67,7 @@ export default async function buildExecutor(
   if (buildResult.code !== 0) {
     throw logAndCreateError("vercel build failed");
   }
+  console.info("Build successful, deploying");
 
   // Run deploy command
   const deployResult = await run(

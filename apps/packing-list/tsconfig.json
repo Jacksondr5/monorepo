@@ -46,9 +46,5 @@
     "eslint.config.cjs",
     "eslint.config.mjs"
   ],
-  "references": [
-    {
-      "path": "../../libs/component-library"
-    }
-  ]
+  "references": []
 }
