@@ -1,6 +1,6 @@
 import { ExecutorContext } from "@nx/devkit";
 import { env } from "../../env";
-// import { Vercel } from "@vercel/sdk";
+import { Vercel } from "@vercel/sdk";
 import {
   // getCurrentCommitSha,
   logAndCreateError,
@@ -15,6 +15,9 @@ import { run } from "../../../../shared/src/run";
 export interface VercelBuildExecutorOptions {
   hasConvex: boolean;
 }
+
+// TODO: remove this.  its just to make eslint shut up
+export const thing = new Vercel({ bearerToken: "123" });
 
 export default async function buildExecutor(
   options: VercelBuildExecutorOptions,
