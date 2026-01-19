@@ -17,5 +17,8 @@
     "tailwindcss": "4.1.13",
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.2.4"
+  },
+  "scripts": {
+    "vercel-build": "next build"
   }
 }
