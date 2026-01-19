@@ -12,8 +12,9 @@ export interface ConvexPluginOptions {
 }
 
 export const createNodesV2: CreateNodesV2<ConvexPluginOptions> = [
-  "**/convex/*.ts",
+  "**/convex/schema.ts",
   async (configFiles, options, context) => {
+    console.log(`Creating convex nodes for ${configFiles}`);
     return await createNodesFromFiles(
       (configFile, options, context) =>
         createNodesInternal(configFile, options, context),
@@ -29,6 +30,7 @@ async function createNodesInternal(
   _: ConvexPluginOptions | undefined,
   context: CreateNodesContextV2,
 ) {
+  console.log(`Creating convex nodes 2 for ${matchingFile}`);
   const convexDir = dirname(matchingFile);
   const projectRoot = dirname(convexDir);
 
