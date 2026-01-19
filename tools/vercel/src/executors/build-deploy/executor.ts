@@ -1,15 +1,15 @@
 import { ExecutorContext } from "@nx/devkit";
 import { env } from "../../env";
-import { Vercel } from "@vercel/sdk";
+// import { Vercel } from "@vercel/sdk";
 import {
-  getCurrentCommitSha,
+  // getCurrentCommitSha,
   logAndCreateError,
 } from "../../../../shared/src/index";
 import { createSecretsReader } from "../../../../shared/src/doppler";
 import { getProjectRoot, getProjectSlug } from "../../../../shared/src/nx";
 import {
   readConvexUrl,
-  writeWorkspaceVercelUrl,
+  // writeWorkspaceVercelUrl,
 } from "../../../../shared/src/urls";
 import { run } from "../../../../shared/src/run";
 export interface VercelBuildExecutorOptions {
@@ -28,7 +28,7 @@ export default async function buildExecutor(
   const vercelKeyName = "VERCEL_CLI_TOKEN";
   console.info(`Vercel key name: ${vercelKeyName}`);
 
-  const commitSha = await getCurrentCommitSha(projectRoot);
+  // const commitSha = await getCurrentCommitSha(projectRoot);
 
   const secrets = await createSecretsReader(projectRoot, env.DOPPLER_TOKEN);
   const vercelKey = secrets.get(vercelKeyName);
