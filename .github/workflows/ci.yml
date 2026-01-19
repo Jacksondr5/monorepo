@@ -47,7 +47,7 @@ jobs:
       # Learn more at https://nx.dev/ci/reference/nx-cloud-cli#npx-nxcloud-startcirun
       # Uncomment this line to enable task distribution
       - name: Enable Task Distribution
-        run: pnpm dlx nx-cloud start-ci-run --distribute-on="4 linux-medium-js" --stop-agents-after="e2e-ci" --with-env-vars="CHROMATIC_PROJECT_TOKEN,CHROMATIC_BRANCH,CHROMATIC_SHA,CHROMATIC_SLUG,GITHUB_HEAD_REF,DOPPLER_TOKEN"
+        run: pnpm dlx nx-cloud start-ci-run --distribute-on="4 linux-medium-js" --stop-agents-after="vercel-build-deploy" --with-env-vars="CHROMATIC_PROJECT_TOKEN,CHROMATIC_BRANCH,CHROMATIC_SHA,CHROMATIC_SLUG,GITHUB_HEAD_REF,DOPPLER_TOKEN"
 
       # Install dependencies
       - name: Install Dependencies
