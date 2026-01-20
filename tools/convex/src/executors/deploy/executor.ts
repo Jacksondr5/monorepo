@@ -32,7 +32,7 @@ export default async function deployExecutor(
   const branch = await getCurrentBranch(projectRoot);
   const previewCreate = branch === "main" ? "" : `--preview-create "${branch}"`;
   console.info(`Project Root: ${projectRoot}`);
-  
+
   const maxRetries = 5;
   let result;
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -51,13 +51,17 @@ export default async function deployExecutor(
       break;
     }
     if (attempt < maxRetries) {
-      console.warn(`Convex deploy attempt ${attempt} failed, retrying in 10 seconds...`);
+      console.warn(
+        `Convex deploy attempt ${attempt} failed, retrying in 10 seconds...`,
+      );
       await new Promise((resolve) => setTimeout(resolve, 10000));
     }
   }
-  
+
   if (!result || result.code !== 0) {
-    throw logAndCreateError(`convex deploy failed after ${maxRetries} attempts`);
+    throw logAndCreateError(
+      `convex deploy failed after ${maxRetries} attempts`,
+    );
   }
 
   // Get the convex url from the .convex-url file
