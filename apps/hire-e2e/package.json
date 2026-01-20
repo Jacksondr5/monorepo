@@ -6,7 +6,7 @@
   "devDependencies": {
     "@clerk/testing": "1.12.6",
     "@j5/playwright": "workspace:*",
-    "@t3-oss/env-core": "0.13.8",
+    "@t3-oss/env-core": "0.13.10",
     "dotenv": "17.2.2",
     "zod": "3.25.76"
   },
