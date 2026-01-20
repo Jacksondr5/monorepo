@@ -16,7 +16,6 @@ export interface VercelBuildExecutorOptions {
   hasConvex: boolean;
 }
 
-
 export default async function buildExecutor(
   options: VercelBuildExecutorOptions,
   context: ExecutorContext,
