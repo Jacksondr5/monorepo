@@ -1,4 +1,4 @@
-# @jacksondr5/component-library
+# @j5/component-library
 
 A React component library built with TypeScript, Tailwind CSS, and Radix UI primitives. This library provides both standalone UI components and form-integrated field components for building modern web applications. It was built to meet my personal needs when building React apps.
 
@@ -59,7 +59,7 @@ This library offers two types of components:
 ## Installation
 
 ```bash
-pnpm add @jacksondr5/component-library
+pnpm add @j5/component-library
 ```
 
 ## Usage
@@ -67,7 +67,7 @@ pnpm add @jacksondr5/component-library
 ### Basic Components
 
 ```tsx
-import { Button, Input, Card } from "@jacksondr5/component-library";
+import { Button, Input, Card } from "@j5/component-library";
 
 function MyComponent() {
   return (
@@ -90,7 +90,7 @@ function MyComponent() {
 
 ```tsx
 import { useForm } from "@tanstack/react-form";
-import { FieldInput, FieldSelect } from "@jacksondr5/component-library";
+import { FieldInput, FieldSelect } from "@j5/component-library";
 
 function MyForm() {
   const form = useForm({

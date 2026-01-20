@@ -12,7 +12,7 @@ export interface ConvexPluginOptions {
 }
 
 export const createNodesV2: CreateNodesV2<ConvexPluginOptions> = [
-  "**/convex/*.ts",
+  "**/convex/schema.ts",
   async (configFiles, options, context) => {
     return await createNodesFromFiles(
       (configFile, options, context) =>

@@ -9,6 +9,9 @@ import { Toaster } from "@j5/component-library";
 import { PostHogIdentify } from "./posthog-identify";
 import { SignedOutUI } from "~/components/SignedOutUI";
 
+// Force dynamic rendering because preloadQuery uses no-store fetch for real-time Convex data
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Welcome to hackathon",
   description: "This app is used to coordinate hackathons",
