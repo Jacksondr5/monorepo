@@ -98,9 +98,7 @@ export default async function buildExecutor(
   if (recentDeployments.length === 0) {
     throw logAndCreateError("No deployments found");
   }
-  if (recentDeployments.length > 1) {
-    throw logAndCreateError("Multiple deployments found");
-  }
+
   const deployment = recentDeployments[0];
   console.info(`Deployment: ${JSON.stringify(deployment)}`);
   const deploymentUrl = deployment.url;
