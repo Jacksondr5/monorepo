@@ -16,6 +16,6 @@ export default defineSchema({
     .index("by_project", ["project"])
     .index("by_task", ["task"])
     .index("by_taskKey", ["taskKey"])
-    .index("by_taskKey_granted", ["taskKey", "wasGranted"])
+    .index("by_taskKey_and_wasGranted", ["taskKey", "wasGranted"])
     .index("by_wasGranted", ["wasGranted"]),
 });

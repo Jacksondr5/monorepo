@@ -20,9 +20,11 @@ A lightweight coordination service that prevents duplicate execution of Nx tasks
 ## User Stories
 
 ### US-001: Create Next.js app with Convex backend
+
 **Description:** As a developer, I need a Next.js application with Convex backend to host the coordination API and dashboard.
 
 **Acceptance Criteria:**
+
 - [ ] Create new Next.js app in `apps/nx-coordinator/`
 - [ ] Initialize Convex backend in `apps/nx-coordinator/convex/`
 - [ ] Define `claimAttempts` table with fields:
@@ -36,9 +38,11 @@ A lightweight coordination service that prevents duplicate execution of Nx tasks
 - [ ] Typecheck passes
 
 ### US-002: Implement lock acquisition mutation
+
 **Description:** As a CI task, I want to attempt to acquire a lock so I know whether to proceed with execution.
 
 **Acceptance Criteria:**
+
 - [ ] Create `claimTask` mutation that accepts `{ project, task, gitSha, agentId }`
 - [ ] Build `taskKey` from `{project}:{task}:{gitSha}`
 - [ ] Query `claimAttempts` for existing record with matching `taskKey` and `wasGranted: true`
@@ -48,9 +52,11 @@ A lightweight coordination service that prevents duplicate execution of Nx tasks
 - [ ] Typecheck passes
 
 ### US-003: Create API route for task check-in
+
 **Description:** As a CI task, I need an HTTP endpoint to call for coordination so I don't need direct Convex client setup in executors.
 
 **Acceptance Criteria:**
+
 - [ ] Create `POST /api/claim` route in `apps/nx-coordinator/src/app/api/claim/`
 - [ ] Accepts JSON body: `{ project, task, gitSha, agentId }`
 - [ ] Calls Convex `claimTask` mutation
@@ -59,9 +65,11 @@ A lightweight coordination service that prevents duplicate execution of Nx tasks
 - [ ] Typecheck passes
 
 ### US-004: Create shared check-in utility for Nx executors
+
 **Description:** As a developer, I want a reusable utility for task check-in so both convex and vercel executors can use it consistently.
 
 **Acceptance Criteria:**
+
 - [ ] Create `tools/shared/src/taskCoordinator.ts`
 - [ ] Export `checkInAndProceed(options: { project, task, gitSha, agentId, coordinatorUrl })` function
 - [ ] Function makes HTTP POST to coordinator service
@@ -71,18 +79,22 @@ A lightweight coordination service that prevents duplicate execution of Nx tasks
 - [ ] Typecheck passes
 
 ### US-005: Fetch coordinator URL from Doppler
+
 **Description:** As a developer, I need to fetch the coordinator service URL from Doppler so executors know where to check in.
 
 **Acceptance Criteria:**
+
 - [ ] Add `NX_COORDINATOR_URL` key to Doppler project secrets
 - [ ] Update `tools/shared/src/doppler.ts` to fetch `NX_COORDINATOR_URL`
 - [ ] Update `checkInAndProceed` to accept Doppler secrets and extract the URL
 - [ ] Typecheck passes
 
 ### US-006: Integrate coordinator into Convex executor
+
 **Description:** As a CI pipeline, I want the convex-deploy task to check in with the coordinator before deploying.
 
 **Acceptance Criteria:**
+
 - [ ] Modify `tools/convex/src/executors/deploy/executor.ts`
 - [ ] After getting project info, before deployment: call `checkInAndProceed()`
 - [ ] If `shouldProceed: false`, log message and return `{ success: true }` immediately
@@ -91,9 +103,11 @@ A lightweight coordination service that prevents duplicate execution of Nx tasks
 - [ ] Typecheck passes
 
 ### US-007: Integrate coordinator into Vercel executor
+
 **Description:** As a CI pipeline, I want the vercel-build-deploy task to check in with the coordinator before deploying.
 
 **Acceptance Criteria:**
+
 - [ ] Modify `tools/vercel/src/executors/build-deploy/executor.ts`
 - [ ] After getting project info, before link step: call `checkInAndProceed()`
 - [ ] If `shouldProceed: false`, log message and return `{ success: true }` immediately
@@ -102,9 +116,11 @@ A lightweight coordination service that prevents duplicate execution of Nx tasks
 - [ ] Typecheck passes
 
 ### US-008: Create health check endpoint
+
 **Description:** As a CI pipeline, I want to verify the coordinator service is healthy before starting tasks.
 
 **Acceptance Criteria:**
+
 - [ ] Create `GET /api/health` endpoint in `apps/nx-coordinator/src/app/api/health/route.ts`
 - [ ] Endpoint pings Convex to verify database connectivity
 - [ ] Returns `{ status: "healthy", timestamp: ... }` on success
@@ -113,9 +129,11 @@ A lightweight coordination service that prevents duplicate execution of Nx tasks
 - [ ] Typecheck passes
 
 ### US-009: Add Clerk authentication to dashboard
+
 **Description:** As a user, I need to sign in to access the dashboard so only authorized team members can view CI coordination data.
 
 **Acceptance Criteria:**
+
 - [ ] Install `@clerk/nextjs` package in `apps/nx-coordinator`
 - [ ] Create `apps/nx-coordinator/src/middleware.ts` with Clerk auth middleware:
   - Protect all routes except `/api/claim` and `/api/health` (these are called by CI)
@@ -139,9 +157,11 @@ A lightweight coordination service that prevents duplicate execution of Nx tasks
 - [ ] Typecheck passes
 
 ### US-010: Implement Convex queries for dashboard analytics
+
 **Description:** As a developer, I need queries to fetch coordination data for the dashboard UI.
 
 **Acceptance Criteria:**
+
 - [ ] Create `apps/nx-coordinator/convex/queries.ts` with the following queries:
 - [ ] `getRecentAttempts` query:
   - Args: `{ limit: v.optional(v.number()), cursor: v.optional(v.string()) }`
@@ -166,9 +186,11 @@ A lightweight coordination service that prevents duplicate execution of Nx tasks
 - [ ] Typecheck passes
 
 ### US-011: Build dashboard page with stats cards
+
 **Description:** As a user, I want a dashboard page showing summary statistics about task coordination.
 
 **Acceptance Criteria:**
+
 - [ ] Create `apps/nx-coordinator/src/app/page.tsx` as the main dashboard
 - [ ] Create `apps/nx-coordinator/src/components/StatsCards.tsx` component
 - [ ] Use `useQuery` from `convex/react` to subscribe to `getStats` query
@@ -185,9 +207,11 @@ A lightweight coordination service that prevents duplicate execution of Nx tasks
 - [ ] Typecheck passes
 
 ### US-012: Build recent activity table
+
 **Description:** As a user, I want to see a table of recent claim attempts with real-time updates.
 
 **Acceptance Criteria:**
+
 - [ ] Create `apps/nx-coordinator/src/components/ActivityTable.tsx` component
 - [ ] Use `useQuery` from `convex/react` to subscribe to `getRecentAttempts` query
 - [ ] Render HTML `<table>` with columns: Time, Project, Task, Git SHA, Agent, Result
@@ -210,9 +234,11 @@ A lightweight coordination service that prevents duplicate execution of Nx tasks
 - [ ] Typecheck passes
 
 ### US-013: Build project and task breakdown charts
+
 **Description:** As a user, I want to see breakdowns of claims by project and task type.
 
 **Acceptance Criteria:**
+
 - [ ] Create `apps/nx-coordinator/src/components/BreakdownSection.tsx` component
 - [ ] Use the `byProject` and `byTask` arrays from `getStats` query (already subscribed in page)
 - [ ] Display two side-by-side sections: "By Project" and "By Task"
@@ -236,9 +262,11 @@ A lightweight coordination service that prevents duplicate execution of Nx tasks
 - [ ] Typecheck passes
 
 ### US-014: Add filtering to activity table
+
 **Description:** As a user, I want to filter the activity table to find specific events.
 
 **Acceptance Criteria:**
+
 - [ ] Create `apps/nx-coordinator/src/components/ActivityFilters.tsx` component
 - [ ] Add filter state using `useSearchParams` from `next/navigation` for URL persistence
 - [ ] Filter controls in a horizontal row above the activity table:
@@ -286,6 +314,7 @@ A lightweight coordination service that prevents duplicate execution of Nx tasks
 ## Technical Considerations
 
 ### Architecture
+
 ```
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │  CI Agent 1     │     │  CI Agent 2     │     │  CI Agent N     │
@@ -312,17 +341,18 @@ A lightweight coordination service that prevents duplicate execution of Nx tasks
 ```
 
 ### Convex Schema
+
 ```typescript
 // apps/nx-coordinator/convex/schema.ts
 export default defineSchema({
   claimAttempts: defineTable({
-    taskKey: v.string(),      // "hire:convex-deploy:abc123"
-    project: v.string(),      // "hire"
-    task: v.string(),         // "convex-deploy"
-    gitSha: v.string(),       // "abc123def456"
-    agentId: v.string(),      // Agent identifier
-    attemptedAt: v.number(),  // Date.now()
-    wasGranted: v.boolean(),  // true = this agent won the lock
+    taskKey: v.string(), // "hire:convex-deploy:abc123"
+    project: v.string(), // "hire"
+    task: v.string(), // "convex-deploy"
+    gitSha: v.string(), // "abc123def456"
+    agentId: v.string(), // Agent identifier
+    attemptedAt: v.number(), // Date.now()
+    wasGranted: v.boolean(), // true = this agent won the lock
   })
     .index("by_taskKey", ["taskKey"])
     .index("by_taskKey_granted", ["taskKey", "wasGranted"])
@@ -336,6 +366,7 @@ export default defineSchema({
 **Lock check query:** To determine if a lock exists, query `claimAttempts` with index `by_taskKey_granted` where `taskKey = X` and `wasGranted = true`.
 
 ### API Contract
+
 ```typescript
 // POST /api/claim
 // Request
@@ -354,13 +385,16 @@ export default defineSchema({
 ```
 
 ### Agent ID Generation
+
 Use environment-based identifier for debugging:
+
 ```typescript
-const agentId = process.env.NX_CLOUD_AGENT_ID
-  ?? `${os.hostname()}-${process.pid}`;
+const agentId =
+  process.env.NX_CLOUD_AGENT_ID ?? `${os.hostname()}-${process.pid}`;
 ```
 
 ### Dependencies
+
 - Convex SDK (already in monorepo)
 - No new dependencies needed for shared utility (uses native fetch)
 
