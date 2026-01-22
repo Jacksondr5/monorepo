@@ -33,3 +33,21 @@
   - Next.js apps don't have an inferred typecheck target from Nx plugins - use `npx tsc --noEmit` directly
   - The `by_gitSha` index was added in addition to the required indexes for future query needs
 ---
+
+## 2026-01-21 - US-002
+- **What was implemented**: Lock acquisition mutation for CI task coordination
+- **Files created**:
+  - `apps/nx-coordinator/convex/mutations.ts` - `claimTask` mutation
+- **Implementation details**:
+  - Accepts { project, task, gitSha, agentId } arguments
+  - Builds taskKey as `{project}:{task}:{gitSha}`
+  - Uses `by_taskKey_and_wasGranted` compound index to check for existing grants
+  - Returns `{ acquired: true }` when first to claim
+  - Returns `{ acquired: false, claimedBy, claimedAt }` when already claimed
+  - Records all attempts (both granted and denied) for analytics
+  - Uses native Convex validators with `args` and `returns` for type safety
+- **Learnings for future iterations:**
+  - Use `v.union()` with `v.literal()` for discriminated union return types in Convex
+  - The `as const` assertion helps TypeScript narrow the literal type in return values
+  - Convex compound indexes work well for queries needing exact matches on multiple fields
+---
