@@ -1,0 +1,35 @@
+## Codebase Patterns
+- Next.js apps use `@j5/app-name` naming convention in package.json and project.json
+- Convex `_generated` folder must be committed (not gitignored) for TypeScript to compile
+- Use `pnpm nx format` from root to format code, but may need to use prettier directly on specific files
+- Apps are permanently in dark mode - use `text-slate-11`, `text-slate-12` for text colors
+- Path alias `~/*` maps to `./src/*` in Next.js apps
+- Convex schema uses alphabetized field names and indexes
+- ClerkProvider wraps ConvexProviderWithClerk for authentication integration
+
+---
+
+## 2026-01-21 - US-001
+- **What was implemented**: Created new Next.js app with Convex backend for the Nx Task Coordinator service
+- **Files created**:
+  - `apps/nx-coordinator/project.json` - Nx project configuration
+  - `apps/nx-coordinator/package.json` - Dependencies including Next.js, Convex, Clerk
+  - `apps/nx-coordinator/tsconfig.json` - TypeScript configuration with ~/src path alias
+  - `apps/nx-coordinator/next.config.ts` - Next.js config with Nx plugin
+  - `apps/nx-coordinator/tailwind.config.ts` - Tailwind CSS configuration
+  - `apps/nx-coordinator/postcss.config.cjs` - PostCSS configuration
+  - `apps/nx-coordinator/src/env.ts` - Environment variable validation with @t3-oss/env-nextjs
+  - `apps/nx-coordinator/src/app/layout.tsx` - Root layout with Providers
+  - `apps/nx-coordinator/src/app/page.tsx` - Placeholder homepage
+  - `apps/nx-coordinator/src/app/Providers.tsx` - Clerk + Convex providers
+  - `apps/nx-coordinator/src/styles/global.css` - Global styles importing component library
+  - `apps/nx-coordinator/convex/schema.ts` - claimAttempts table with all required indexes
+  - `apps/nx-coordinator/convex/auth.config.ts` - Clerk integration for Convex
+  - `apps/nx-coordinator/convex/tsconfig.json` - Convex TypeScript config
+  - `apps/nx-coordinator/convex/_generated/*` - Generated Convex types
+- **Learnings for future iterations:**
+  - The Convex _generated files must be created manually when `npx convex dev` isn't available (no deployment URL)
+  - Files follow a standard structure that can be copied from other apps in the monorepo
+  - Next.js apps don't have an inferred typecheck target from Nx plugins - use `npx tsc --noEmit` directly
+  - The `by_gitSha` index was added in addition to the required indexes for future query needs
+---
