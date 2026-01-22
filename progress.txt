@@ -6,6 +6,7 @@
 - Path alias `~/*` maps to `./src/*` in Next.js apps
 - Convex schema uses alphabetized field names and indexes
 - ClerkProvider wraps ConvexProviderWithClerk for authentication integration
+- `tools/shared` has no project.json - run `npx tsc --noEmit` directly for typecheck
 
 ---
 
@@ -67,4 +68,23 @@
   - Use `ConvexHttpClient` from 'convex/browser' for server-side HTTP calls in Next.js API routes
   - The API route imports from relative path `../../../../convex/_generated/api` due to convex folder being outside src
   - Environment variable `NEXT_PUBLIC_CONVEX_URL` is used server-side (public prefix works because it's accessed via process.env)
+---
+
+## 2026-01-21 - US-004
+- **What was implemented**: Shared check-in utility for Nx executors
+- **Files created**:
+  - `tools/shared/src/taskCoordinator.ts` - checkInAndProceed function
+- **Files modified**:
+  - `tools/shared/src/index.ts` - Added export for taskCoordinator
+- **Implementation details**:
+  - `checkInAndProceed(options: { project, task, gitSha, agentId, coordinatorUrl })` function
+  - Makes HTTP POST to coordinator service `/api/claim` endpoint
+  - Returns `{ shouldProceed: boolean, message?: string }`
+  - Logs decision for CI visibility using descriptive messages
+  - Implements retry with exponential backoff (3 attempts with 1s/2s/4s delays) on network errors
+  - Throws error after retries exhausted to fail CI
+- **Learnings for future iterations:**
+  - `tools/shared` doesn't have a project.json, use `npx tsc --noEmit` directly for typecheck
+  - Keep exports alphabetically sorted in index.ts
+  - Use `isNetworkError()` helper to distinguish retryable errors from non-retryable API errors
 ---
