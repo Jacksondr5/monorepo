@@ -158,3 +158,24 @@
   - Health check queries should be simple and just verify connectivity - no complex logic needed
   - The 503 status code is appropriate for "Service Unavailable" health check failures
 ---
+
+## 2026-01-21 - US-009
+- **What was implemented**: Added Clerk authentication to protect the coordinator dashboard
+- **Files created**:
+  - `apps/nx-coordinator/src/middleware.ts` - Clerk middleware with public route configuration
+  - `apps/nx-coordinator/src/app/sign-in/[[...sign-in]]/page.tsx` - Sign-in page with centered SignIn component
+  - `apps/nx-coordinator/src/app/sign-up/[[...sign-up]]/page.tsx` - Sign-up page with centered SignUp component
+- **Implementation details**:
+  - Middleware uses `clerkMiddleware()` with `createRouteMatcher()` for public routes
+  - Public routes include: /api/claim, /api/health, /sign-in(.*)
+, /sign-up(.*) as specified
+  - Protected routes require authentication via `await auth.protect()`
+  - ClerkProvider was already set up in Providers.tsx from US-001 (wrapping ConvexProviderWithClerk)
+  - Sign-in and sign-up pages use catch-all routes `[[...sign-in]]` and `[[...sign-up]]` for Clerk's routing
+  - Both auth pages have centered layout with `flex min-h-screen items-center justify-center` and dark mode background
+- **Learnings for future iterations:**
+  - Clerk middleware requires `createRouteMatcher()` for defining public routes instead of a simple string array
+  - The middleware matcher config is standard and should exclude Next.js internals and static files
+  - Clerk's SignIn and SignUp components handle all auth UI and flow automatically
+  - The `[[...param]]` catch-all route syntax is required for Clerk's multi-step auth flows
+---
