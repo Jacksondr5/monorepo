@@ -1,0 +1,21 @@
+{
+  "name": "@j5/nx-coordinator",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@clerk/nextjs": "6.32.0",
+    "@j5/component-library": "workspace:*",
+    "@t3-oss/env-nextjs": "0.13.8",
+    "convex": "1.31.5",
+    "convex-helpers": "0.1.111",
+    "next": "15.5.9",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.13",
+    "postcss": "8.5.6",
+    "tailwindcss": "4.1.13"
+  }
+}
