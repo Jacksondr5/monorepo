@@ -179,3 +179,30 @@
   - Clerk's SignIn and SignUp components handle all auth UI and flow automatically
   - The `[[...param]]` catch-all route syntax is required for Clerk's multi-step auth flows
 ---
+## 2026-01-21 - US-010
+- **What was implemented**: Implemented Convex queries for dashboard analytics
+- **Files modified**:
+  - `apps/nx-coordinator/convex/queries.ts` - Added three analytics queries
+- **Implementation details**:
+  - **getRecentAttempts** query with pagination support using Convex's paginate API
+    - Accepts optional `limit` (default 50, max 100) and `cursor` parameters
+    - Uses `by_attemptedAt` index with descending order
+    - Returns `{ attempts, nextCursor }` for pagination
+  - **getStats** query for dashboard summary statistics
+    - Returns total attempts and 24h counts
+    - Returns duplicates blocked overall and last 24h
+    - Groups by project and task with total/blocked counts per group
+    - Uses in-memory aggregation with Map for grouping
+  - **getAttemptsForSha** query to fetch all attempts for a specific Git SHA
+    - Uses `by_gitSha` index with descending order by attemptedAt
+    - Returns full array of ClaimAttempt documents
+  - All queries include full `returns` validators with proper object/array structure
+  - Object keys are alphabetically sorted per codebase convention
+- **Learnings for future iterations:**
+  - Convex's `paginate()` API is the standard way to implement cursor-based pagination on queries
+  - The `paginate()` method returns `{ page, continueCursor }` which can be null when no more results
+  - For in-memory aggregation in Convex queries, use Map for grouping and Array.from() to convert back
+  - Return validators must include system fields like `_id` and `_creationTime` when returning full documents
+  - Use `v.union(v.string(), v.null())` for nullable cursor values in pagination
+---
+
