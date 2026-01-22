@@ -51,3 +51,20 @@
   - The `as const` assertion helps TypeScript narrow the literal type in return values
   - Convex compound indexes work well for queries needing exact matches on multiple fields
 ---
+
+## 2026-01-21 - US-003
+- **What was implemented**: API route for CI tasks to check in with the coordinator
+- **Files created**:
+  - `apps/nx-coordinator/src/app/api/claim/route.ts` - POST endpoint for task claims
+- **Implementation details**:
+  - Created POST /api/claim route accepting JSON body { project, task, gitSha, agentId }
+  - Uses `ConvexHttpClient` from 'convex/browser' for server-side mutation calls
+  - Returns `{ proceed: true }` when task is acquired
+  - Returns `{ proceed: false, message: 'Task already claimed by {agentId}' }` when already claimed
+  - Includes validation for required fields with 400 error response
+  - Handles errors gracefully with 500 error response
+- **Learnings for future iterations:**
+  - Use `ConvexHttpClient` from 'convex/browser' for server-side HTTP calls in Next.js API routes
+  - The API route imports from relative path `../../../../convex/_generated/api` due to convex folder being outside src
+  - Environment variable `NEXT_PUBLIC_CONVEX_URL` is used server-side (public prefix works because it's accessed via process.env)
+---
