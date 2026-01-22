@@ -16,7 +16,7 @@
       ],
       "priority": 1,
       "passes": true,
-      "notes": ""
+      "notes": "Try using the nx and convex MCP servers in the future.  Report back what does and doesn't work."
     },
     {
       "id": "US-002",
