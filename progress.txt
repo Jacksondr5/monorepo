@@ -140,3 +140,21 @@
   - Task names for coordinator are descriptive: "convex-deploy" and "vercel-build-deploy" to clearly identify which executor is checking in
   - Consolidating imports from `../../../../shared/src/index` helps reduce import statement count and keeps code cleaner
 ---
+
+## 2026-01-21 - US-008
+- **What was implemented**: Created health check endpoint for coordinator service
+- **Files created**:
+  - `apps/nx-coordinator/convex/queries.ts` - healthCheck query
+  - `apps/nx-coordinator/src/app/api/health/route.ts` - GET /api/health endpoint
+- **Implementation details**:
+  - Created `healthCheck` query in Convex that returns `{ status: "ok", timestamp: Date.now() }`
+  - Query has no args and uses validators with `returns` for type safety
+  - Created GET endpoint at `/api/health` that calls the Convex health check query
+  - Returns `{ status: "healthy", timestamp: Date.now() }` with 200 on success
+  - Returns `{ status: "unhealthy", error: errorMessage }` with 503 on failure
+  - Uses same ConvexHttpClient pattern as /api/claim endpoint
+- **Learnings for future iterations:**
+  - When returning literal types in Convex queries, use `as const` assertion to ensure TypeScript narrows the type correctly (e.g., `"ok" as const`)
+  - Health check queries should be simple and just verify connectivity - no complex logic needed
+  - The 503 status code is appropriate for "Service Unavailable" health check failures
+---
