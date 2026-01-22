@@ -88,3 +88,18 @@
   - Keep exports alphabetically sorted in index.ts
   - Use `isNetworkError()` helper to distinguish retryable errors from non-retryable API errors
 ---
+
+## 2026-01-21 - US-005
+- **What was implemented**: Integration with Doppler for coordinator URL retrieval
+- **Files modified**:
+  - `tools/shared/src/taskCoordinator.ts` - Updated `CheckInOptions` interface and `checkInAndProceed` function
+- **Implementation details**:
+  - Changed `checkInAndProceed` to accept `SecretsReader` instead of plain `coordinatorUrl` string
+  - Function now extracts `NX_COORDINATOR_URL` from Doppler secrets using `secrets.get("NX_COORDINATOR_URL")`
+  - No changes needed to `doppler.ts` - it already fetches all secrets and provides `SecretsReader` interface
+  - Updated `CheckInOptions` interface: replaced `coordinatorUrl: string` with `secrets: SecretsReader`
+- **Learnings for future iterations:**
+  - The `SecretsReader` interface from doppler.ts provides type-safe access to all Doppler secrets
+  - Use `secrets.get(keyName)` for string secrets - it throws if the secret is not found
+  - The doppler module already fetches all secrets, so new secret keys don't require code changes
+---

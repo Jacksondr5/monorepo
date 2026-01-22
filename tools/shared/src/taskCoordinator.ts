@@ -1,10 +1,11 @@
+import { SecretsReader } from "./doppler";
 import { logAndCreateError } from "./logAndCreateError";
 
 export interface CheckInOptions {
   agentId: string;
-  coordinatorUrl: string;
   gitSha: string;
   project: string;
+  secrets: SecretsReader;
   task: string;
 }
 
@@ -43,7 +44,8 @@ const isNetworkError = (error: unknown): boolean => {
 export const checkInAndProceed = async (
   options: CheckInOptions,
 ): Promise<CheckInResult> => {
-  const { agentId, coordinatorUrl, gitSha, project, task } = options;
+  const { agentId, gitSha, project, secrets, task } = options;
+  const coordinatorUrl = secrets.get("NX_COORDINATOR_URL");
   const taskKey = `${project}:${task}`;
   const url = `${coordinatorUrl}/api/claim`;
 

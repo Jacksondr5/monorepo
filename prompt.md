@@ -86,8 +86,8 @@ Only update AGENTS.md if you have **genuinely reusable knowledge** that would he
 
 For any story that changes UI, you MUST verify it works in the browser:
 
-1. Load the `dev-browser` skill
-2. Navigate to the relevant page
+1. Ensure that you have browser access through the Playwright MCP server.  STOP IF YOU DON'T HAVE THIS OR IT IS NOT WORKING
+2. Navigate to the relevant page.  Assume that the user has started the dev server and the app is running at `http://localhost:3000`
 3. Verify the UI changes work as expected
 4. Take a screenshot if helpful for the progress log
 
