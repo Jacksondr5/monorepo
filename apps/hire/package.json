@@ -11,7 +11,7 @@
     "@t3-oss/env-nextjs": "0.13.10",
     "@tanstack/react-form": "1.27.7",
     "@tanstack/zod-form-adapter": "0.42.1",
-    "convex": "1.31.5",
+    "convex": "1.31.6",
     "convex-helpers": "0.1.111",
     "dayjs": "1.11.19",
     "next": "15.5.9",
