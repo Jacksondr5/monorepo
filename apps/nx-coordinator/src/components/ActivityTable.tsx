@@ -17,8 +17,17 @@ function formatRelativeTime(timestamp: number): string {
   return `${days}d ago`;
 }
 
-export function ActivityTable() {
-  const data = useQuery(api.queries.getRecentAttempts, {});
+interface ActivityTableProps {
+  filters?: {
+    gitShaPrefix?: string;
+    project?: string;
+    task?: string;
+    wasGranted?: boolean;
+  };
+}
+
+export function ActivityTable({ filters }: ActivityTableProps) {
+  const data = useQuery(api.queries.getRecentAttempts, filters ?? {});
 
   if (!data) {
     // Loading skeleton

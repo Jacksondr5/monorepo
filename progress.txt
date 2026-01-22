@@ -277,3 +277,29 @@
   - toFixed(1) provides clean percentage formatting with one decimal place
 ---
 
+## 2026-01-21 - US-014
+- **What was implemented**: Added filtering functionality to the activity table with URL-persisted state
+- **Files created**:
+  - `apps/nx-coordinator/src/components/ActivityFilters.tsx` - Filter component with URL state management
+- **Files modified**:
+  - `apps/nx-coordinator/convex/queries.ts` - Updated getRecentAttempts query to accept filter parameters
+  - `apps/nx-coordinator/src/components/ActivityTable.tsx` - Added filters prop to accept and apply filters
+  - `apps/nx-coordinator/src/app/page.tsx` - Integrated ActivityFilters component and wired up search params
+- **Implementation details**:
+  - ActivityFilters component uses `useSearchParams` and `useRouter` from next/navigation for URL-persisted filter state
+  - Renders 4 filter controls: Project dropdown, Task dropdown, Result dropdown (Granted/Blocked), SHA prefix input
+  - Clear filters button appears conditionally when any filters are active
+  - getRecentAttempts query accepts optional filter args: project, task, wasGranted, gitShaPrefix
+  - Filters applied in memory after pagination query (since multiple indexes can't be used together)
+  - Page.tsx fetches all attempts with limit: 100 to extract unique projects/tasks for dropdowns
+  - Filter state extracted from URL search params and passed to ActivityTable
+  - Result filter converts "granted"/"blocked" string params to boolean wasGranted values
+- **Learnings for future iterations**:
+  - URL state management in Next.js 14+ uses `useSearchParams()` hook for reading and `router.push()` for updating
+  - When creating filter interfaces, URLSearchParams works well but requires string-to-type conversions for non-string values
+  - Filtering in memory is acceptable when dealing with paginated data where multiple index conditions aren't supported
+  - Extracting unique values for dropdowns requires a separate query - consider caching if performance becomes an issue
+  - The "Clear filters" button improves UX by providing quick reset without manually clearing each filter
+  - Browser verification not performed due to missing Playwright MCP server - recommend manual testing after dev server start
+---
+

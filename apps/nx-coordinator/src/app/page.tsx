@@ -2,13 +2,39 @@
 
 import { UserButton } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
+import { useSearchParams } from "next/navigation";
 import { api } from "../../convex/_generated/api";
+import { ActivityFilters } from "~/components/ActivityFilters";
 import { ActivityTable } from "~/components/ActivityTable";
 import { BreakdownSection } from "~/components/BreakdownSection";
 import { StatsCards } from "~/components/StatsCards";
 
 export default function HomePage() {
+  const searchParams = useSearchParams();
   const stats = useQuery(api.queries.getStats);
+  const allAttempts = useQuery(api.queries.getRecentAttempts, { limit: 100 });
+
+  // Extract unique projects and tasks for filter dropdowns
+  const availableProjects = Array.from(
+    new Set(allAttempts?.attempts.map((a) => a.project) ?? [])
+  ).sort();
+  const availableTasks = Array.from(
+    new Set(allAttempts?.attempts.map((a) => a.task) ?? [])
+  ).sort();
+
+  // Build filters from search params
+  const project = searchParams.get("project") ?? undefined;
+  const task = searchParams.get("task") ?? undefined;
+  const resultParam = searchParams.get("result");
+  const wasGranted =
+    resultParam === "granted"
+      ? true
+      : resultParam === "blocked"
+        ? false
+        : undefined;
+  const gitShaPrefix = searchParams.get("sha") ?? undefined;
+
+  const filters = { gitShaPrefix, project, task, wasGranted };
 
   return (
     <div className="min-h-screen bg-slate-900">
@@ -33,7 +59,11 @@ export default function HomePage() {
           <h2 className="mb-4 text-xl font-semibold text-slate-200">
             Recent Activity
           </h2>
-          <ActivityTable />
+          <ActivityFilters
+            availableProjects={availableProjects}
+            availableTasks={availableTasks}
+          />
+          <ActivityTable filters={filters} />
         </div>
 
         {/* Project and Task Breakdown */}
