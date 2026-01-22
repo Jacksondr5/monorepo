@@ -1,6 +1,7 @@
 "use client";
 
 import { UserButton } from "@clerk/nextjs";
+import { ActivityTable } from "~/components/ActivityTable";
 import { StatsCards } from "~/components/StatsCards";
 
 export default function HomePage() {
@@ -21,6 +22,14 @@ export default function HomePage() {
       {/* Main Content */}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <StatsCards />
+
+        {/* Recent Activity */}
+        <div className="mt-8">
+          <h2 className="mb-4 text-xl font-semibold text-slate-200">
+            Recent Activity
+          </h2>
+          <ActivityTable />
+        </div>
       </main>
     </div>
   );

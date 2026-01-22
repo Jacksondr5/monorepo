@@ -230,3 +230,27 @@
   - Without Playwright MCP server, browser verification is limited - recommend manual testing after dev server restart
 ---
 
+## 2026-01-21 - US-012
+- **What was implemented**: Created recent activity table with real-time updates showing all claim attempts
+- **Files created**:
+  - `apps/nx-coordinator/src/components/ActivityTable.tsx` - Activity table component with real-time subscriptions
+- **Files modified**:
+  - `apps/nx-coordinator/src/app/page.tsx` - Added ActivityTable below StatsCards with "Recent Activity" heading
+- **Implementation details**:
+  - ActivityTable uses `useQuery(api.queries.getRecentAttempts, {})` for real-time subscription to claim attempts
+  - Table displays 6 columns: Time, Project, Task, Git SHA, Agent, Result
+  - Time column uses `formatRelativeTime()` helper: <60s shows "Xs ago", <60m shows "Xm ago", <24h shows "Xh ago", else "Xd ago"
+  - Git SHA truncated to first 7 characters with monospace font
+  - Result column shows green "Granted" badge (bg-green-900/50 text-green-400) or red "Blocked" badge (bg-red-900/50 text-red-400)
+  - Loading state shows 5 animated skeleton rows
+  - Empty state shows "No activity yet" message in centered card
+  - Table styling matches requirements: bg-slate-800 header, border-b border-slate-800 rows, hover:bg-slate-800/50 on rows
+  - Added to page with mt-8 spacing and h2 heading "Recent Activity"
+- **Learnings for future iterations:**
+  - Real-time subscriptions in Convex automatically update components when data changes
+  - Using `attempt._id` as React key ensures proper rendering when new attempts are added
+  - Formatting relative timestamps requires handling multiple time units (seconds, minutes, hours, days)
+  - Badge components can be inline spans with rounded-full and appropriate padding
+  - Empty state handling improves UX when there's no data to display yet
+---
+
