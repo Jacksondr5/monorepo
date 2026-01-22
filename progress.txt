@@ -122,3 +122,21 @@
   - The coordinator check happens after secrets are retrieved (since checkInAndProceed needs the SecretsReader)
   - Returning `{ success: true }` for skipped tasks ensures CI doesn't fail when a duplicate is blocked
 ---
+
+## 2026-01-21 - US-007
+- **What was implemented**: Integrated coordinator check-in into Vercel deploy executor
+- **Files modified**:
+  - `tools/vercel/src/executors/build-deploy/executor.ts` - Added coordinator check-in before Vercel deployment
+- **Implementation details**:
+  - Imported `checkInAndProceed` and `os` module
+  - Generated `agentId` from `NX_CLOUD_AGENT_ID` env var or fallback to `${os.hostname()}-${process.pid}` (same pattern as Convex executor)
+  - Added check-in call after secrets retrieval but before the Vercel link step
+  - Returns early with `{ success: true }` if task already claimed by another agent
+  - Continues with normal Vercel deployment logic (link → build → deploy) if task was successfully claimed
+  - Alphabetized all imports following codebase convention
+- **Learnings for future iterations:**
+  - The integration pattern for coordinators is now consistent across both Convex and Vercel executors
+  - Both executors now use identical agent ID generation: `process.env.NX_CLOUD_AGENT_ID || ${os.hostname()}-${process.pid}`
+  - Task names for coordinator are descriptive: "convex-deploy" and "vercel-build-deploy" to clearly identify which executor is checking in
+  - Consolidating imports from `../../../../shared/src/index` helps reduce import statement count and keeps code cleaner
+---
