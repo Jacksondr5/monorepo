@@ -254,3 +254,26 @@
   - Empty state handling improves UX when there's no data to display yet
 ---
 
+## 2026-01-21 - US-013
+- **What was implemented**: Created project and task breakdown charts showing claim distribution
+- **Files created**:
+  - `apps/nx-coordinator/src/components/BreakdownSection.tsx` - Breakdown component with bar charts
+- **Files modified**:
+  - `apps/nx-coordinator/src/app/page.tsx` - Added stats query and BreakdownSection rendering below activity table
+- **Implementation details**:
+  - BreakdownSection component accepts `byProject` and `byTask` arrays as props from getStats query
+  - Displays two side-by-side sections in grid grid-cols-2 gap-6 layout
+  - Each section shows bar list items with: label, "X blocked / Y total" text, progress bar, "XX% blocked" text
+  - Progress bar uses h-2 bg-slate-700 container with bg-red-500 fill based on blocked percentage
+  - Items sorted by total count descending to show most active projects/tasks first
+  - Includes empty state showing "No data yet" when no breakdown data available
+  - Page.tsx now fetches stats with useQuery and passes to BreakdownSection (conditional render when stats available)
+  - Added section heading "Breakdown by Project and Task" with mt-8 spacing below activity table
+- **Learnings for future iterations**:
+  - When multiple components need the same data, fetch it in the parent and pass as props to avoid duplicate queries
+  - Inline styles are appropriate for dynamic widths (like progress bars) where CSS classes can't express the value
+  - The stats query was already providing byProject and byTask arrays, so no backend changes were needed
+  - Empty state handling should be done at the component level for reusability
+  - toFixed(1) provides clean percentage formatting with one decimal place
+---
+

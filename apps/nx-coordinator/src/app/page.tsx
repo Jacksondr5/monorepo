@@ -1,10 +1,15 @@
 "use client";
 
 import { UserButton } from "@clerk/nextjs";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 import { ActivityTable } from "~/components/ActivityTable";
+import { BreakdownSection } from "~/components/BreakdownSection";
 import { StatsCards } from "~/components/StatsCards";
 
 export default function HomePage() {
+  const stats = useQuery(api.queries.getStats);
+
   return (
     <div className="min-h-screen bg-slate-900">
       {/* Header */}
@@ -30,6 +35,16 @@ export default function HomePage() {
           </h2>
           <ActivityTable />
         </div>
+
+        {/* Project and Task Breakdown */}
+        {stats && (
+          <div className="mt-8">
+            <h2 className="mb-4 text-xl font-semibold text-slate-200">
+              Breakdown by Project and Task
+            </h2>
+            <BreakdownSection byProject={stats.byProject} byTask={stats.byTask} />
+          </div>
+        )}
       </main>
     </div>
   );
