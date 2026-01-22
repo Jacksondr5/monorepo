@@ -206,3 +206,27 @@
   - Use `v.union(v.string(), v.null())` for nullable cursor values in pagination
 ---
 
+## 2026-01-21 - US-011
+- **What was implemented**: Created dashboard page with stats cards showing coordination analytics
+- **Files created**:
+  - `apps/nx-coordinator/src/components/StatsCards.tsx` - Stats cards component with real-time data
+- **Files modified**:
+  - `apps/nx-coordinator/src/app/page.tsx` - Updated to render full dashboard with header and stats
+- **Implementation details**:
+  - StatsCards component uses `useQuery(api.queries.getStats)` to subscribe to real-time stats
+  - Displays 4 stat cards in responsive grid: Total Claims, Duplicates Blocked, Block Rate (%), Active Projects
+  - Loading state shows 4 animated skeleton cards while data loads
+  - Card styling matches acceptance criteria: bg-slate-800, border-slate-700, proper text colors (slate-400, slate-100, slate-500)
+  - Block Rate calculated as percentage: `(duplicatesBlocked / totalAttempts) * 100`
+  - Page includes header with app title and UserButton for sign-out
+  - Page uses "use client" directive for Convex real-time subscriptions
+  - Full responsive layout with max-w-7xl container and proper padding
+- **Learnings for future iterations:**
+  - ConvexProviderWithClerk is already set up in Providers.tsx, so client components can directly use `useQuery` hooks
+  - Page components that use Convex hooks need "use client" directive at the top
+  - Skeleton loading states should match the final layout structure (same number and arrangement of cards)
+  - Use `.toLocaleString()` on numbers for better readability (adds thousand separators)
+  - UserButton from @clerk/nextjs handles all sign-out UI automatically
+  - Without Playwright MCP server, browser verification is limited - recommend manual testing after dev server restart
+---
+
