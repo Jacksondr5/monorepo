@@ -53,6 +53,9 @@
     },
     {
       "path": "./apps/todo-e2e"
+    },
+    {
+      "path": "./apps/nx-coordinator"
     }
   ],
   "ts-node": {

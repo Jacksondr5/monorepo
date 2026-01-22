@@ -1,0 +1,19 @@
+{
+  "name": "@j5/nx-coordinator",
+  "projectType": "application",
+  "sourceRoot": "apps/nx-coordinator/src",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["next dev --turbo"],
+        "cwd": "apps/nx-coordinator"
+      }
+    },
+    "vercel-build-deploy": {
+      "options": {
+        "hasConvex": true
+      }
+    }
+  }
+}
