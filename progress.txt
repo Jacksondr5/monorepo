@@ -103,3 +103,22 @@
   - Use `secrets.get(keyName)` for string secrets - it throws if the secret is not found
   - The doppler module already fetches all secrets, so new secret keys don't require code changes
 ---
+
+## 2026-01-21 - US-006
+- **What was implemented**: Integrated coordinator check-in into Convex deploy executor
+- **Files modified**:
+  - `tools/convex/src/executors/deploy/executor.ts` - Added coordinator check-in before deployment
+- **Implementation details**:
+  - Imported `checkInAndProceed`, `getCurrentCommitSha`, and `os` module
+  - Generated `agentId` from `NX_CLOUD_AGENT_ID` env var or fallback to `${os.hostname()}-${process.pid}`
+  - Called `getCurrentCommitSha()` to get git SHA
+  - Added check-in call after secrets retrieval but before deployment logic
+  - Returns early with `{ success: true }` if task already claimed by another agent
+  - Continues with normal deployment if task was successfully claimed
+  - Alphabetized imports following codebase convention
+- **Learnings for future iterations:**
+  - The pattern for integrating coordinator into executors is consistent: get project info → check in → early return if not acquired → continue with normal logic
+  - Agent ID generation should follow the same pattern across all executors for consistency
+  - The coordinator check happens after secrets are retrieved (since checkInAndProceed needs the SecretsReader)
+  - Returning `{ success: true }` for skipped tasks ensures CI doesn't fail when a duplicate is blocked
+---
