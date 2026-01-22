@@ -1,6 +1,6 @@
 {
   "project": "Nx Task Coordinator",
-  "branchName": "ralph/nx-task-coordinator",
+  "branchName": "feature/nx-help",
   "description": "A coordination service that prevents duplicate execution of Nx tasks when Nx Cloud distributes the same task to multiple CI agents. Includes a dashboard UI for monitoring.",
   "userStories": [
     {
