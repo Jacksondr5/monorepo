@@ -4,6 +4,7 @@ import { Vercel } from "@vercel/sdk";
 import {
   getCurrentCommitSha,
   logAndCreateError,
+  getCurrentBranch,
 } from "../../../../shared/src/index";
 import { createSecretsReader } from "../../../../shared/src/doppler";
 import { getProjectRoot, getProjectSlug } from "../../../../shared/src/nx";
@@ -29,6 +30,7 @@ export default async function buildExecutor(
   console.info(`Vercel key name: ${vercelKeyName}`);
 
   const commitSha = await getCurrentCommitSha(projectRoot);
+  const branch = await getCurrentBranch(projectRoot);
 
   const secrets = await createSecretsReader(projectRoot, env.DOPPLER_TOKEN);
   const vercelKey = secrets.get(vercelKeyName);
@@ -54,6 +56,7 @@ export default async function buildExecutor(
 
   // Run build command
   console.info(`Building project ${project} with Vercel`);
+  console.info(`Convex URL: ${convexUrl ?? "not set"}`);
   const buildResult = await run(
     `pnpm vercel build --yes --token ${vercelKey}`,
     {
@@ -70,7 +73,7 @@ export default async function buildExecutor(
 
   // Run deploy command
   const deployResult = await run(
-    `pnpm vercel --prebuilt --archive=tgz --yes --token ${vercelKey}`,
+    `pnpm vercel --prebuilt --archive=tgz --yes ${branch === "main" ? "--prod" : ""} --token ${vercelKey}`,
     {
       cwd: context.root,
       env: {
