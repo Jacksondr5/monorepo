@@ -2,6 +2,9 @@ import { clerkMiddleware } from "@clerk/nextjs/server";
 
 export default clerkMiddleware();
 
+console.log("CHECK ENV");
+console.log(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
+
 export const config = {
   matcher: [
     // Skip Next.js internals and all static files, unless found in search params

@@ -6,6 +6,8 @@ const isPublicRoute = createRouteMatcher([
   "/sign-in(.*)",
   "/sign-up(.*)",
 ]);
+console.log("CHECK ENV");
+console.log(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 export default clerkMiddleware(async (auth, request) => {
   if (!isPublicRoute(request)) {
