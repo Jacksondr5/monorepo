@@ -16,10 +16,10 @@ export default function HomePage() {
 
   // Extract unique projects and tasks for filter dropdowns
   const availableProjects = Array.from(
-    new Set(allAttempts?.attempts.map((a) => a.project) ?? [])
+    new Set(allAttempts?.attempts.map((a) => a.project) ?? []),
   ).sort();
   const availableTasks = Array.from(
-    new Set(allAttempts?.attempts.map((a) => a.task) ?? [])
+    new Set(allAttempts?.attempts.map((a) => a.task) ?? []),
   ).sort();
 
   // Build filters from search params
@@ -42,7 +42,7 @@ export default function HomePage() {
       <header className="border-b border-slate-800 bg-slate-900">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-slate-100">
+            <h1 className="text-slate-12 text-2xl font-bold">
               Nx Task Coordinator
             </h1>
             <UserButton />
@@ -56,7 +56,7 @@ export default function HomePage() {
 
         {/* Recent Activity */}
         <div className="mt-8">
-          <h2 className="mb-4 text-xl font-semibold text-slate-200">
+          <h2 className="text-slate-11 mb-4 text-xl font-semibold">
             Recent Activity
           </h2>
           <ActivityFilters
@@ -69,10 +69,13 @@ export default function HomePage() {
         {/* Project and Task Breakdown */}
         {stats && (
           <div className="mt-8">
-            <h2 className="mb-4 text-xl font-semibold text-slate-200">
+            <h2 className="text-slate-11 mb-4 text-xl font-semibold">
               Breakdown by Project and Task
             </h2>
-            <BreakdownSection byProject={stats.byProject} byTask={stats.byTask} />
+            <BreakdownSection
+              byProject={stats.byProject}
+              byTask={stats.byTask}
+            />
           </div>
         )}
       </main>

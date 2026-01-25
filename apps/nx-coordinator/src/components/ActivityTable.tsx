@@ -5,7 +5,8 @@ import { api } from "../../convex/_generated/api";
 
 function formatRelativeTime(timestamp: number): string {
   const now = Date.now();
-  const diff = now - timestamp;
+  // Clamp to non-negative to avoid negative "ago" strings for future timestamps
+  const diff = Math.max(0, now - timestamp);
   const seconds = Math.floor(diff / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
@@ -36,22 +37,22 @@ export function ActivityTable({ filters }: ActivityTableProps) {
         <table className="w-full border-collapse">
           <thead className="bg-slate-800">
             <tr>
-              <th className="px-4 py-3 text-left text-sm text-slate-400">
+              <th className="text-slate-11 px-4 py-3 text-left text-sm">
                 Time
               </th>
-              <th className="px-4 py-3 text-left text-sm text-slate-400">
+              <th className="text-slate-11 px-4 py-3 text-left text-sm">
                 Project
               </th>
-              <th className="px-4 py-3 text-left text-sm text-slate-400">
+              <th className="text-slate-11 px-4 py-3 text-left text-sm">
                 Task
               </th>
-              <th className="px-4 py-3 text-left text-sm text-slate-400">
+              <th className="text-slate-11 px-4 py-3 text-left text-sm">
                 Git SHA
               </th>
-              <th className="px-4 py-3 text-left text-sm text-slate-400">
+              <th className="text-slate-11 px-4 py-3 text-left text-sm">
                 Agent
               </th>
-              <th className="px-4 py-3 text-left text-sm text-slate-400">
+              <th className="text-slate-11 px-4 py-3 text-left text-sm">
                 Result
               </th>
             </tr>
@@ -88,7 +89,7 @@ export function ActivityTable({ filters }: ActivityTableProps) {
   if (data.attempts.length === 0) {
     return (
       <div className="rounded-lg border border-slate-700 bg-slate-800 p-8 text-center">
-        <p className="text-slate-400">No activity yet</p>
+        <p className="text-slate-11">No activity yet</p>
       </div>
     );
   }
@@ -98,18 +99,16 @@ export function ActivityTable({ filters }: ActivityTableProps) {
       <table className="w-full border-collapse">
         <thead className="bg-slate-800">
           <tr>
-            <th className="px-4 py-3 text-left text-sm text-slate-400">Time</th>
-            <th className="px-4 py-3 text-left text-sm text-slate-400">
+            <th className="text-slate-11 px-4 py-3 text-left text-sm">Time</th>
+            <th className="text-slate-11 px-4 py-3 text-left text-sm">
               Project
             </th>
-            <th className="px-4 py-3 text-left text-sm text-slate-400">Task</th>
-            <th className="px-4 py-3 text-left text-sm text-slate-400">
+            <th className="text-slate-11 px-4 py-3 text-left text-sm">Task</th>
+            <th className="text-slate-11 px-4 py-3 text-left text-sm">
               Git SHA
             </th>
-            <th className="px-4 py-3 text-left text-sm text-slate-400">
-              Agent
-            </th>
-            <th className="px-4 py-3 text-left text-sm text-slate-400">
+            <th className="text-slate-11 px-4 py-3 text-left text-sm">Agent</th>
+            <th className="text-slate-11 px-4 py-3 text-left text-sm">
               Result
             </th>
           </tr>
@@ -120,15 +119,15 @@ export function ActivityTable({ filters }: ActivityTableProps) {
               key={attempt._id}
               className="border-b border-slate-800 hover:bg-slate-800/50"
             >
-              <td className="px-4 py-3 text-slate-300">
+              <td className="text-slate-11 px-4 py-3">
                 {formatRelativeTime(attempt.attemptedAt)}
               </td>
-              <td className="px-4 py-3 text-slate-300">{attempt.project}</td>
-              <td className="px-4 py-3 text-slate-300">{attempt.task}</td>
-              <td className="px-4 py-3 font-mono text-sm text-slate-300">
+              <td className="text-slate-11 px-4 py-3">{attempt.project}</td>
+              <td className="text-slate-11 px-4 py-3">{attempt.task}</td>
+              <td className="text-slate-11 px-4 py-3 font-mono text-sm">
                 {attempt.gitSha.substring(0, 7)}
               </td>
-              <td className="px-4 py-3 text-slate-300">{attempt.agentId}</td>
+              <td className="text-slate-11 px-4 py-3">{attempt.agentId}</td>
               <td className="px-4 py-3">
                 {attempt.wasGranted ? (
                   <span className="inline-flex rounded-full bg-green-900/50 px-3 py-1 text-xs font-medium text-green-400">

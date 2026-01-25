@@ -3,12 +3,24 @@ import { NextResponse } from "next/server";
 
 import { api } from "../../../../convex/_generated/api";
 
-// Initialize Convex client for server-side queries
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
-
 export async function GET() {
   try {
+    // Validate CONVEX_URL at runtime to avoid import-time failures
+    const convexUrl = process.env.CONVEX_URL;
+    if (!convexUrl) {
+      console.error("CONVEX_URL environment variable is not configured");
+      return NextResponse.json(
+        {
+          error: "Server configuration error",
+          status: "unhealthy",
+        },
+        { status: 503 },
+      );
+    }
+
+    // Create Convex client lazily inside handler
+    const convex = new ConvexHttpClient(convexUrl);
+
     // Call the Convex health check query to verify database connectivity
     await convex.query(api.queries.healthCheck, {});
 

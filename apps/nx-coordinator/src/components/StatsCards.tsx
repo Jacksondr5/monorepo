@@ -34,46 +34,44 @@ export const StatsCards = () => {
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
       {/* Total Claims */}
       <div className="rounded-lg border border-slate-700 bg-slate-800 p-6">
-        <div className="text-sm font-medium text-slate-400">Total Claims</div>
-        <div className="mt-2 text-3xl font-bold text-slate-100">
+        <div className="text-slate-11 text-sm font-medium">Total Claims</div>
+        <div className="text-slate-12 mt-2 text-3xl font-bold">
           {stats.totalAttempts.toLocaleString()}
         </div>
-        <div className="mt-1 text-sm text-slate-500">
+        <div className="text-slate-11 mt-1 text-sm">
           {stats.attemptsLast24h.toLocaleString()} in last 24h
         </div>
       </div>
 
       {/* Duplicates Blocked */}
       <div className="rounded-lg border border-slate-700 bg-slate-800 p-6">
-        <div className="text-sm font-medium text-slate-400">
+        <div className="text-slate-11 text-sm font-medium">
           Duplicates Blocked
         </div>
-        <div className="mt-2 text-3xl font-bold text-slate-100">
+        <div className="text-slate-12 mt-2 text-3xl font-bold">
           {stats.duplicatesBlocked.toLocaleString()}
         </div>
-        <div className="mt-1 text-sm text-slate-500">
+        <div className="text-slate-11 mt-1 text-sm">
           {stats.duplicatesBlockedLast24h.toLocaleString()} in last 24h
         </div>
       </div>
 
       {/* Block Rate */}
       <div className="rounded-lg border border-slate-700 bg-slate-800 p-6">
-        <div className="text-sm font-medium text-slate-400">Block Rate</div>
-        <div className="mt-2 text-3xl font-bold text-slate-100">
+        <div className="text-slate-11 text-sm font-medium">Block Rate</div>
+        <div className="text-slate-12 mt-2 text-3xl font-bold">
           {blockRate}%
         </div>
-        <div className="mt-1 text-sm text-slate-500">Overall efficiency</div>
+        <div className="text-slate-11 mt-1 text-sm">Overall efficiency</div>
       </div>
 
       {/* Active Projects */}
       <div className="rounded-lg border border-slate-700 bg-slate-800 p-6">
-        <div className="text-sm font-medium text-slate-400">
-          Active Projects
-        </div>
-        <div className="mt-2 text-3xl font-bold text-slate-100">
+        <div className="text-slate-11 text-sm font-medium">Active Projects</div>
+        <div className="text-slate-12 mt-2 text-3xl font-bold">
           {activeProjects}
         </div>
-        <div className="mt-1 text-sm text-slate-500">Using coordinator</div>
+        <div className="text-slate-11 mt-1 text-sm">Using coordinator</div>
       </div>
     </div>
   );
