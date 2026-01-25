@@ -1,6 +1,5 @@
 "use client";
 
-import { UserButton } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
@@ -76,7 +75,6 @@ export default function HomePage() {
             <h1 className="text-slate-12 text-2xl font-bold">
               Nx Task Coordinator
             </h1>
-            <UserButton />
           </div>
         </div>
       </header>
