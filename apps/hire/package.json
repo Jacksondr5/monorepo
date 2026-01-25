@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@clerk/nextjs": "6.32.0",
+    "@clerk/nextjs": "6.36.10",
     "@dnd-kit/core": "6.3.1",
     "@dnd-kit/sortable": "10.0.0",
     "@dnd-kit/utilities": "3.2.2",
@@ -15,8 +15,8 @@
     "convex-helpers": "0.1.111",
     "dayjs": "1.11.18",
     "next": "15.5.9",
-    "react": "19.1.1",
-    "react-dom": "19.1.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
     "zod": "3.25.76"
   },
   "devDependencies": {
