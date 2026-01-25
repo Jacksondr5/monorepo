@@ -48,7 +48,7 @@ async function createNodesInternal(
     // Cannot be cached because cache will trigger on a new branch, which
     // should get a new preview environment and thus be re-run.
     cache: false,
-    inputs: ["{projectRoot}/convex/**"],
+    inputs: ["{projectRoot}/convex/**", "convexPlugin"],
     outputs: [`{projectRoot}/.convex-url`],
   };
 

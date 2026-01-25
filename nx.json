@@ -19,6 +19,18 @@
       "{workspaceRoot}/.github/workflows/ci.yml",
       "{workspaceRoot}/nx.json",
       "{workspaceRoot}/.nvmrc"
+    ],
+    "convexPlugin": [
+      "{projectRoot}/tools/convex/**/*",
+      "{projectRoot}/tools/shared/**/*"
+    ],
+    "playwrightEnvPlugin": [
+      "{projectRoot}/tools/playwright-env/**/*",
+      "{projectRoot}/tools/shared/**/*"
+    ],
+    "vercelPlugin": [
+      "{projectRoot}/tools/shared/**/*",
+      "{projectRoot}/tools/vercel/**/*"
     ]
   },
   "nxCloudId": "67d238cb2d1875519e778ba9",
