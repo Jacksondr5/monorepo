@@ -34,8 +34,7 @@ export default async function deployExecutor(
   // Check in with coordinator to prevent duplicate deployments
   const gitSha = await getCurrentCommitSha(projectRoot);
   const agentId =
-    process.env.NX_CLOUD_AGENT_ID ||
-    `${os.hostname()}-${process.pid}`;
+    process.env.NX_CLOUD_AGENT_ID || `${os.hostname()}-${process.pid}`;
   console.info(`Agent ID: ${agentId}, Git SHA: ${gitSha}`);
 
   const { shouldProceed, message } = await checkInAndProceed({

@@ -18,4 +18,3 @@ export const unwrapSerializableResult = <T, E extends J5BaseError<string>>(
   }
   return result.value;
 };
-

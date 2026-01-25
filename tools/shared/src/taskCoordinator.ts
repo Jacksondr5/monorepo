@@ -105,4 +105,8 @@ export const checkInAndProceed = async (
       );
     }
   }
+
+  throw logAndCreateError(
+    `Task ${taskKey} - coordinator request failed after ${RETRY_DELAYS_MS.length + 1} attempts: ${lastError?.message ?? "Unknown error"}`,
+  );
 };
