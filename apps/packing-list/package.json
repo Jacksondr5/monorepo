@@ -3,12 +3,12 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@clerk/nextjs": "6.32.0",
+    "@clerk/nextjs": "6.36.10",
     "@j5/component-library": "workspace:*",
     "@t3-oss/env-nextjs": "0.13.8",
     "next": "15.5.9",
-    "react": "19.1.1",
-    "react-dom": "19.1.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
     "zod": "3.25.76"
   },
   "devDependencies": {
