@@ -58,7 +58,7 @@ export default async function buildExecutor(
   console.info(`Building project ${project} with Vercel`);
   console.info(`Convex URL: ${convexUrl ?? "not set"}`);
   const buildResult = await run(
-    `pnpm vercel build --yes --token ${vercelKey}`,
+    `pnpm vercel build --yes ${branch === "main" ? "--prod" : ""} --token ${vercelKey}`,
     {
       cwd: context.root,
       env: {
