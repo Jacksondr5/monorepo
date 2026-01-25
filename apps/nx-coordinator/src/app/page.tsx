@@ -59,10 +59,7 @@ function DashboardContent() {
           <h2 className="text-slate-11 mb-4 text-xl font-semibold">
             Breakdown by Project and Task
           </h2>
-          <BreakdownSection
-            byProject={stats.byProject}
-            byTask={stats.byTask}
-          />
+          <BreakdownSection byProject={stats.byProject} byTask={stats.byTask} />
         </div>
       )}
     </>
