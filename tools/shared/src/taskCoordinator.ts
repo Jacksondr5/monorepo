@@ -24,11 +24,16 @@ const RETRY_DELAYS_MS = [1000, 2000, 4000];
 const sleep = (ms: number): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
+const FETCH_TIMEOUT_MS = 10000;
+
 const isNetworkError = (error: unknown): boolean => {
   if (error instanceof TypeError) {
     return true;
   }
   if (error instanceof Error) {
+    if (error.name === "AbortError") {
+      return true;
+    }
     const message = error.message.toLowerCase();
     return (
       message.includes("network") ||
@@ -52,13 +57,18 @@ export const checkInAndProceed = async (
   let lastError: Error | undefined;
 
   for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
     try {
       console.log(`Checking in with coordinator at ${url}`);
       const response = await fetch(url, {
         body: JSON.stringify({ agentId, gitSha, project, task }),
         headers: { "Content-Type": "application/json" },
         method: "POST",
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -78,6 +88,7 @@ export const checkInAndProceed = async (
         return { message, shouldProceed: false };
       }
     } catch (error) {
+      clearTimeout(timeoutId);
       lastError = error instanceof Error ? error : new Error(String(error));
 
       if (isNetworkError(error) && attempt < RETRY_DELAYS_MS.length) {
@@ -89,11 +100,9 @@ export const checkInAndProceed = async (
         continue;
       }
 
-      throw lastError;
+      throw logAndCreateError(
+        `Task ${taskKey} - coordinator request failed after ${attempt + 1} attempts: ${lastError.message}`,
+      );
     }
   }
-
-  throw logAndCreateError(
-    `Task ${taskKey} - coordinator request failed after ${RETRY_DELAYS_MS.length + 1} attempts: ${lastError?.message ?? "Unknown error"}`,
-  );
 };

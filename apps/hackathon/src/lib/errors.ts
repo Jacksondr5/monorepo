@@ -1,4 +1,4 @@
-\"use client\";
+"use client";
 
 import { toast } from "@j5/component-library";
 import { J5BaseError, SerializableResult } from "../../convex/model/error";

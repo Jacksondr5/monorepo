@@ -5,7 +5,7 @@
 set -e
 
 # Parse arguments
-TOOL="claude"  # Default to amp for backwards compatibility
+TOOL="claude"
 MAX_ITERATIONS=10
 
 while [[ $# -gt 0 ]]; do
