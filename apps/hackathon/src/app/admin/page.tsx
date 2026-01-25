@@ -3,7 +3,7 @@ import { api } from "../../../convex/_generated/api";
 import NoHackathon from "../no-hackathon";
 import { getAuthToken } from "../auth";
 import { AdminClientPage } from "./admin-client-page";
-import { processError } from "~/lib/errors";
+import { processError } from "~/lib/errors.server";
 import { redirect } from "next/navigation";
 
 export default async function AdminPage() {

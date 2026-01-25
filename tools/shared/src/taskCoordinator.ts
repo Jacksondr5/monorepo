@@ -53,6 +53,7 @@ export const checkInAndProceed = async (
 
   for (let attempt = 0; attempt <= RETRY_DELAYS_MS.length; attempt++) {
     try {
+      console.log(`Checking in with coordinator at ${url}`);
       const response = await fetch(url, {
         body: JSON.stringify({ agentId, gitSha, project, task }),
         headers: { "Content-Type": "application/json" },
