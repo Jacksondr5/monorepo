@@ -25,7 +25,7 @@ export const getAttemptsForSha = query({
       task: v.string(),
       taskKey: v.string(),
       wasGranted: v.boolean(),
-    })
+    }),
   ),
 });
 
@@ -52,7 +52,7 @@ export const getRecentAttempts = query({
 
     if (args.project) {
       filteredAttempts = filteredAttempts.filter(
-        (a) => a.project === args.project
+        (a) => a.project === args.project,
       );
     }
 
@@ -62,13 +62,13 @@ export const getRecentAttempts = query({
 
     if (args.wasGranted !== undefined) {
       filteredAttempts = filteredAttempts.filter(
-        (a) => a.wasGranted === args.wasGranted
+        (a) => a.wasGranted === args.wasGranted,
       );
     }
 
     if (args.gitShaPrefix) {
       filteredAttempts = filteredAttempts.filter((a) =>
-        a.gitSha.startsWith(args.gitShaPrefix!)
+        a.gitSha.startsWith(args.gitShaPrefix!),
       );
     }
 
@@ -89,7 +89,7 @@ export const getRecentAttempts = query({
         task: v.string(),
         taskKey: v.string(),
         wasGranted: v.boolean(),
-      })
+      }),
     ),
     nextCursor: v.union(v.string(), v.null()),
   }),
@@ -101,53 +101,62 @@ export const getStats = query({
     const now = Date.now();
     const twentyFourHoursAgo = now - 24 * 60 * 60 * 1000;
 
-    // Get all attempts
-    const allAttempts = await ctx.db.query("claimAttempts").collect();
-
-    const totalAttempts = allAttempts.length;
-    const attemptsLast24h = allAttempts.filter(
-      (a) => a.attemptedAt >= twentyFourHoursAgo
-    ).length;
-
-    const duplicatesBlocked = allAttempts.filter((a) => !a.wasGranted).length;
-    const duplicatesBlockedLast24h = allAttempts.filter(
-      (a) => !a.wasGranted && a.attemptedAt >= twentyFourHoursAgo
-    ).length;
+    // Stream results to avoid loading all rows into memory
+    let totalAttempts = 0;
+    let attemptsLast24h = 0;
+    let duplicatesBlocked = 0;
+    let duplicatesBlockedLast24h = 0;
 
     // Group by project
     const byProjectMap = new Map<
       string,
-      { project: string; total: number; blocked: number }
+      { blocked: number; project: string; total: number }
     >();
-    for (const attempt of allAttempts) {
-      const existing = byProjectMap.get(attempt.project) ?? {
-        blocked: 0,
-        project: attempt.project,
-        total: 0,
-      };
-      existing.total++;
-      if (!attempt.wasGranted) {
-        existing.blocked++;
-      }
-      byProjectMap.set(attempt.project, existing);
-    }
 
     // Group by task
     const byTaskMap = new Map<
       string,
-      { task: string; total: number; blocked: number }
+      { blocked: number; task: string; total: number }
     >();
-    for (const attempt of allAttempts) {
-      const existing = byTaskMap.get(attempt.task) ?? {
+
+    // Stream through all attempts without loading into memory
+    for await (const attempt of ctx.db.query("claimAttempts")) {
+      totalAttempts++;
+
+      if (attempt.attemptedAt >= twentyFourHoursAgo) {
+        attemptsLast24h++;
+      }
+
+      if (!attempt.wasGranted) {
+        duplicatesBlocked++;
+        if (attempt.attemptedAt >= twentyFourHoursAgo) {
+          duplicatesBlockedLast24h++;
+        }
+      }
+
+      // Group by project
+      const projectEntry = byProjectMap.get(attempt.project) ?? {
+        blocked: 0,
+        project: attempt.project,
+        total: 0,
+      };
+      projectEntry.total++;
+      if (!attempt.wasGranted) {
+        projectEntry.blocked++;
+      }
+      byProjectMap.set(attempt.project, projectEntry);
+
+      // Group by task
+      const taskEntry = byTaskMap.get(attempt.task) ?? {
         blocked: 0,
         task: attempt.task,
         total: 0,
       };
-      existing.total++;
+      taskEntry.total++;
       if (!attempt.wasGranted) {
-        existing.blocked++;
+        taskEntry.blocked++;
       }
-      byTaskMap.set(attempt.task, existing);
+      byTaskMap.set(attempt.task, taskEntry);
     }
 
     return {
@@ -166,14 +175,14 @@ export const getStats = query({
         blocked: v.number(),
         project: v.string(),
         total: v.number(),
-      })
+      }),
     ),
     byTask: v.array(
       v.object({
         blocked: v.number(),
         task: v.string(),
         total: v.number(),
-      })
+      }),
     ),
     duplicatesBlocked: v.number(),
     duplicatesBlockedLast24h: v.number(),

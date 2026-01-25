@@ -43,7 +43,7 @@ export function ActivityFilters({
       <select
         value={currentProject}
         onChange={(e) => updateFilters("project", e.target.value)}
-        className="rounded border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-200"
+        className="text-slate-11 rounded border border-slate-700 bg-slate-800 px-3 py-2 text-sm"
       >
         <option value="">All Projects</option>
         {availableProjects.map((project) => (
@@ -56,7 +56,7 @@ export function ActivityFilters({
       <select
         value={currentTask}
         onChange={(e) => updateFilters("task", e.target.value)}
-        className="rounded border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-200"
+        className="text-slate-11 rounded border border-slate-700 bg-slate-800 px-3 py-2 text-sm"
       >
         <option value="">All Tasks</option>
         {availableTasks.map((task) => (
@@ -69,7 +69,7 @@ export function ActivityFilters({
       <select
         value={currentResult}
         onChange={(e) => updateFilters("result", e.target.value)}
-        className="rounded border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-200"
+        className="text-slate-11 rounded border border-slate-700 bg-slate-800 px-3 py-2 text-sm"
       >
         <option value="">All Results</option>
         <option value="granted">Granted</option>
@@ -81,13 +81,13 @@ export function ActivityFilters({
         value={currentSha}
         onChange={(e) => updateFilters("sha", e.target.value)}
         placeholder="Filter by SHA..."
-        className="w-48 rounded border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-200 placeholder-slate-500"
+        className="text-slate-11 placeholder-slate-11 w-48 rounded border border-slate-700 bg-slate-800 px-3 py-2 text-sm"
       />
 
       {hasActiveFilters && (
         <button
           onClick={clearFilters}
-          className="rounded border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-300 hover:bg-slate-700"
+          className="text-slate-11 rounded border border-slate-700 bg-slate-800 px-3 py-2 text-sm hover:bg-slate-700"
         >
           Clear filters
         </button>

@@ -10,35 +10,42 @@ interface BreakdownSectionProps {
   byTask: Array<{ blocked: number; task: string; total: number }>;
 }
 
-function BreakdownList({ items, label }: { items: BreakdownItem[]; label: string }) {
+function BreakdownList({
+  items,
+  label,
+}: {
+  items: BreakdownItem[];
+  label: string;
+}) {
   // Sort by total count descending
   const sortedItems = [...items].sort((a, b) => b.total - a.total);
 
   if (sortedItems.length === 0) {
-    return <p className="text-slate-500 text-sm">No data yet</p>;
+    return <p className="text-slate-11 text-sm">No data yet</p>;
   }
 
   return (
     <div className="space-y-4">
       {sortedItems.map((item) => {
-        const itemLabel = item.project || item.task || 'Unknown';
-        const blockedPercentage = item.total > 0 ? (item.blocked / item.total) * 100 : 0;
+        const itemLabel = item.project || item.task || "Unknown";
+        const blockedPercentage =
+          item.total > 0 ? (item.blocked / item.total) * 100 : 0;
 
         return (
           <div key={itemLabel}>
-            <div className="flex justify-between text-sm text-slate-400 mb-1">
+            <div className="text-slate-11 mb-1 flex justify-between text-sm">
               <span>{itemLabel}</span>
               <span>
                 {item.blocked} blocked / {item.total} total
               </span>
             </div>
-            <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+            <div className="h-2 overflow-hidden rounded-full bg-slate-700">
               <div
                 className="h-full bg-red-500"
                 style={{ width: `${blockedPercentage}%` }}
               />
             </div>
-            <div className="text-right text-sm text-slate-400 mt-1">
+            <div className="text-slate-11 mt-1 text-right text-sm">
               {blockedPercentage.toFixed(1)}% blocked
             </div>
           </div>
@@ -52,11 +59,11 @@ export function BreakdownSection({ byProject, byTask }: BreakdownSectionProps) {
   return (
     <div className="grid grid-cols-2 gap-6">
       <div>
-        <h3 className="text-lg font-semibold text-slate-200 mb-4">By Project</h3>
+        <h3 className="text-slate-12 mb-4 text-lg font-semibold">By Project</h3>
         <BreakdownList items={byProject} label="project" />
       </div>
       <div>
-        <h3 className="text-lg font-semibold text-slate-200 mb-4">By Task</h3>
+        <h3 className="text-slate-12 mb-4 text-lg font-semibold">By Task</h3>
         <BreakdownList items={byTask} label="task" />
       </div>
     </div>

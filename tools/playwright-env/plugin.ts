@@ -30,7 +30,6 @@ async function createNodesInternal(
   // Call the official plugin createNodesV2 for this file
   const [, handler] = playwrightCreateNodesV2;
   const baseArray = await handler([matchingFile], undefined, context);
-  // console.info("baseArray", JSON.stringify(baseArray, null, 2));
   const resultArray = baseArray.map(([_, result]) => result);
   // This is an assumption that there is only 1 Playwright config file
   const base = resultArray[0];
@@ -55,10 +54,7 @@ async function createNodesInternal(
       base.projects[projectName].targets![targetName] = {
         ...target,
         command: undefined,
-        dependsOn: [
-          // ...(target.dependsOn ?? []),
-          { projects: [appProject], target: "vercel-build-deploy" },
-        ],
+        dependsOn: [{ projects: [appProject], target: "vercel-build-deploy" }],
         executor: "@j5/playwright-env:e2e-ci",
         options: {
           ...options,
@@ -67,6 +63,5 @@ async function createNodesInternal(
       };
     }
   }
-  // console.info("new base", JSON.stringify(base, null, 2));
   return base;
 }

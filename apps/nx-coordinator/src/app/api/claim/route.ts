@@ -3,10 +3,6 @@ import { NextResponse } from "next/server";
 
 import { api } from "../../../../convex/_generated/api";
 
-// Initialize Convex client for server-side mutations
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
-
 interface ClaimRequestBody {
   agentId: string;
   gitSha: string;
@@ -16,6 +12,16 @@ interface ClaimRequestBody {
 
 export async function POST(request: Request) {
   try {
+    // Validate CONVEX_URL at runtime to avoid import-time failures
+    const convexUrl = process.env.CONVEX_URL;
+    if (!convexUrl) {
+      console.error("CONVEX_URL environment variable is not configured");
+      return NextResponse.json(
+        { error: "Server configuration error" },
+        { status: 500 },
+      );
+    }
+
     const body = (await request.json()) as ClaimRequestBody;
     const { agentId, gitSha, project, task } = body;
 
@@ -26,6 +32,9 @@ export async function POST(request: Request) {
         { status: 400 },
       );
     }
+
+    // Create Convex client lazily inside handler
+    const convex = new ConvexHttpClient(convexUrl);
 
     // Call the Convex mutation
     const result = await convex.mutation(api.mutations.claimTask, {

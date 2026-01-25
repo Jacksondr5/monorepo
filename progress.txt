@@ -302,4 +302,7 @@
   - The "Clear filters" button improves UX by providing quick reset without manually clearing each filter
   - Browser verification not performed due to missing Playwright MCP server - recommend manual testing after dev server start
 ---
+<<<<<<< HEAD
 
+=======
+>>>>>>> main

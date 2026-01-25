@@ -47,7 +47,7 @@ async function createNodesInternal(
     cache: false,
     dependsOn: ["convex-deploy", "^build"],
     executor: "@j5/vercel:build-deploy",
-    inputs: ["default", "^production"],
+    inputs: ["default", "^production", "vercelPlugin"],
     outputs: [`{workspaceRoot}/vercel-urls/${project}.vercel-url`],
     parallelism: false,
   };
