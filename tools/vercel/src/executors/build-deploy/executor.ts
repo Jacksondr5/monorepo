@@ -38,6 +38,10 @@ export default async function buildExecutor(
   // Run link command
   console.info(`Linking project ${project} to Vercel`);
   const linkResult = await run(
+    // TODO: explore the repo flag.  It may fix the issue of the link command
+    // only linking to 1 project in the monorepo.  Fixing this could simplify
+    // the vercel setup, meaning I can reintegrate git
+    // https://vercel.com/docs/cli/link#repo-alpha
     `pnpm vercel link --yes --project ${project} --token ${vercelKey}`,
     {
       cwd: context.root,
