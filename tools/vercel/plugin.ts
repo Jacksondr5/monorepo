@@ -45,7 +45,7 @@ async function createNodesInternal(
     // Cannot be cached because cache will trigger on a new branch, which
     // should get a new preview environment and thus be re-run.
     cache: false,
-    dependsOn: ["convex-deploy", "^build"],
+    dependsOn: ["convex-deploy", "^build", "@j5/shared-tools:build"],
     executor: "@j5/vercel:build-deploy",
     inputs: ["default", "^production"],
     outputs: [`{workspaceRoot}/vercel-urls/${project}.vercel-url`],
