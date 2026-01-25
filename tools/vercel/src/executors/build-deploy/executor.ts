@@ -1,18 +1,21 @@
 import { ExecutorContext } from "@nx/devkit";
-import { env } from "../../env";
+import * as os from "os";
 import { Vercel } from "@vercel/sdk";
+import { env } from "../../env";
 import {
+  checkInAndProceed,
+  createSecretsReader,
   getCurrentCommitSha,
+  getProjectRoot,
+  getProjectSlug,
   logAndCreateError,
   getCurrentBranch,
 } from "../../../../shared/src/index";
-import { createSecretsReader } from "../../../../shared/src/doppler";
-import { getProjectRoot, getProjectSlug } from "../../../../shared/src/nx";
 import {
   readConvexUrl,
+  run,
   writeWorkspaceVercelUrl,
-} from "../../../../shared/src/urls";
-import { run } from "../../../../shared/src/run";
+} from "../../../../shared/src/index";
 export interface VercelBuildExecutorOptions {
   hasConvex: boolean;
 }
@@ -34,6 +37,24 @@ export default async function buildExecutor(
 
   const secrets = await createSecretsReader(projectRoot, env.DOPPLER_TOKEN);
   const vercelKey = secrets.get(vercelKeyName);
+
+  // Check in with coordinator to prevent duplicate deployments
+  const agentId =
+    process.env.NX_CLOUD_AGENT_ID || `${os.hostname()}-${process.pid}`;
+  console.info(`Agent ID: ${agentId}, Git SHA: ${commitSha}`);
+
+  const { shouldProceed, message } = await checkInAndProceed({
+    agentId,
+    gitSha: commitSha,
+    project,
+    secrets,
+    task: "vercel-build-deploy",
+  });
+
+  if (!shouldProceed) {
+    console.info(message || "Task already claimed by another agent");
+    return { success: true };
+  }
 
   // Run link command
   console.info(`Linking project ${project} to Vercel`);

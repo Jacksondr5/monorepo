@@ -2,7 +2,7 @@ import { preloadedQueryResult, preloadQuery } from "convex/nextjs";
 import { api } from "../../convex/_generated/api";
 import NoHackathon from "./no-hackathon";
 import { getAuthToken } from "./auth";
-import { processError } from "~/lib/errors";
+import { processError } from "~/lib/errors.server";
 import { ProjectSubmissionServerPage } from "./phases/project-submission-server-page";
 import { ProjectVotingServerPage } from "./phases/project-voting-server-page";
 import { EventInProgressServerPage } from "./phases/event-in-progress-server-page";
