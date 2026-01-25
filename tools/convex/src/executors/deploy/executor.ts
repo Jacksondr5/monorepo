@@ -1,17 +1,14 @@
 import { ExecutorContext } from "@nx/devkit";
-import * as os from "os";
 import { env } from "../../env";
 import {
-  buildProjectScopedKey,
-  checkInAndProceed,
+  getProjectSlug,
+  getProjectRoot,
+  run,
   createSecretsReader,
   getCurrentBranch,
-  getCurrentCommitSha,
-  getProjectRoot,
-  getProjectSlug,
-  logAndCreateError,
   readConvexUrl,
-  run,
+  logAndCreateError,
+  buildProjectScopedKey,
 } from "../../../../shared/src/index";
 
 export default async function deployExecutor(
@@ -30,26 +27,6 @@ export default async function deployExecutor(
 
   const secrets = await createSecretsReader(projectRoot, env.DOPPLER_TOKEN);
   const convexDeployKey = secrets.get(convexDeployKeyName);
-
-  // Check in with coordinator to prevent duplicate deployments
-  const gitSha = await getCurrentCommitSha(projectRoot);
-  const agentId =
-    process.env.NX_CLOUD_AGENT_ID ||
-    `${os.hostname()}-${process.pid}`;
-  console.info(`Agent ID: ${agentId}, Git SHA: ${gitSha}`);
-
-  const { shouldProceed, message } = await checkInAndProceed({
-    agentId,
-    gitSha,
-    project,
-    secrets,
-    task: "convex-deploy",
-  });
-
-  if (!shouldProceed) {
-    console.info(message || "Task already claimed by another agent");
-    return { success: true };
-  }
 
   // Run deploy command with retry logic
   const branch = await getCurrentBranch(projectRoot);
