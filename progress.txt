@@ -154,3 +154,24 @@ Started: Sun Jan 25 19:41:36 EST 2026
 - All side/direction combinations are valid: buy/sell can combine with long/short for different trade types
 
 ---
+
+## 2026-01-25 - US-007
+- Added trade queries to apps/trade-tracker/convex/trades.ts
+- Implemented listTrades query returning all trades sorted by date descending using by_date index
+- Implemented getTrade query accepting tradeId, returns trade or null
+- Implemented getTradesByCampaign query accepting campaignId, sorts results by date descending in memory
+- Created tradeValidator for return type validation (includes _id and _creationTime from Convex)
+- TypeScript and lint checks pass
+
+**Files changed:**
+- apps/trade-tracker/convex/trades.ts (added listTrades, getTrade, getTradesByCampaign queries)
+- prd.json (marked US-007 as passes: true)
+
+**Learnings for future iterations:**
+- Convex query pattern: query({ args: {...}, returns: v.xxx(), handler: async (ctx, args) => {...} })
+- Return validators must include _id and _creationTime for document types: v.object({ _id: v.id("table"), _creationTime: v.number(), ...fields })
+- Use v.union(validator, v.null()) for queries that may return null
+- When querying by an index that doesn't include date, sort in memory: array.sort((a, b) => b.date - a.date)
+- Use withIndex("indexName", (q) => q.eq("field", value)) for filtered queries
+
+---

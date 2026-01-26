@@ -1,5 +1,20 @@
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+
+// Validator for trade document returned from queries
+const tradeValidator = v.object({
+  _creationTime: v.number(),
+  _id: v.id("trades"),
+  assetType: v.union(v.literal("crypto"), v.literal("stock")),
+  campaignId: v.optional(v.id("campaigns")),
+  date: v.number(),
+  direction: v.union(v.literal("long"), v.literal("short")),
+  notes: v.optional(v.string()),
+  price: v.number(),
+  quantity: v.number(),
+  side: v.union(v.literal("buy"), v.literal("sell")),
+  ticker: v.string(),
+});
 
 // Valid side/direction combinations:
 // - buy + long: Opening a long position
@@ -128,5 +143,55 @@ export const deleteTrade = mutation({
     await ctx.db.delete(tradeId);
 
     return null;
+  },
+});
+
+/**
+ * List all trades sorted by date descending (newest first).
+ */
+export const listTrades = query({
+  args: {},
+  returns: v.array(tradeValidator),
+  handler: async (ctx) => {
+    const trades = await ctx.db
+      .query("trades")
+      .withIndex("by_date")
+      .order("desc")
+      .collect();
+
+    return trades;
+  },
+});
+
+/**
+ * Get a single trade by ID.
+ */
+export const getTrade = query({
+  args: {
+    tradeId: v.id("trades"),
+  },
+  returns: v.union(tradeValidator, v.null()),
+  handler: async (ctx, args) => {
+    const trade = await ctx.db.get(args.tradeId);
+    return trade;
+  },
+});
+
+/**
+ * Get all trades for a specific campaign, sorted by date descending.
+ */
+export const getTradesByCampaign = query({
+  args: {
+    campaignId: v.id("campaigns"),
+  },
+  returns: v.array(tradeValidator),
+  handler: async (ctx, args) => {
+    const trades = await ctx.db
+      .query("trades")
+      .withIndex("by_campaignId", (q) => q.eq("campaignId", args.campaignId))
+      .collect();
+
+    // Sort by date descending since we can't use two indexes
+    return trades.sort((a, b) => b.date - a.date);
   },
 });
