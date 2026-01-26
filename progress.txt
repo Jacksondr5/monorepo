@@ -112,3 +112,20 @@ Started: Sun Jan 25 19:41:36 EST 2026
 - Outcome field is optional and only set when campaign is closed
 
 ---
+
+## 2026-01-25 - US-005
+- Added campaignNotes table to apps/trade-tracker/convex/schema.ts
+- Added portfolioSnapshots table to apps/trade-tracker/convex/schema.ts
+- campaignNotes has fields: campaignId (Id<'campaigns'>), content (string), with by_campaignId index
+- portfolioSnapshots has fields: date (number), totalValue (number), cashBalance (optional number), source (string union: 'manual'|'calculated'|'api'), with by_date index
+- TypeScript and lint checks pass
+
+**Files changed:**
+- apps/trade-tracker/convex/schema.ts (added campaignNotes and portfolioSnapshots tables)
+
+**Learnings for future iterations:**
+- Tables in Convex schema should be alphabetized (campaignNotes before campaigns)
+- The typecheck target doesn't exist for this project yet; use `npx tsc --noEmit -p convex/tsconfig.json` to validate Convex schema types
+- Reference tables (like campaignNotes → campaigns) use v.id("tableName") for the foreign key
+
+---

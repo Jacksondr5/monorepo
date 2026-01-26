@@ -25,6 +25,11 @@ const stopLossValidator = v.object({
 });
 
 export default defineSchema({
+  campaignNotes: defineTable({
+    campaignId: v.id("campaigns"),
+    content: v.string(),
+  }).index("by_campaignId", ["campaignId"]),
+
   campaigns: defineTable({
     closedAt: v.optional(v.number()),
     entryTargets: v.array(targetValidator),
@@ -62,4 +67,15 @@ export default defineSchema({
     .index("by_campaignId", ["campaignId"])
     .index("by_date", ["date"])
     .index("by_ticker", ["ticker"]),
+
+  portfolioSnapshots: defineTable({
+    cashBalance: v.optional(v.number()),
+    date: v.number(),
+    source: v.union(
+      v.literal("api"),
+      v.literal("calculated"),
+      v.literal("manual")
+    ),
+    totalValue: v.number(),
+  }).index("by_date", ["date"]),
 });
