@@ -127,5 +127,30 @@ Started: Sun Jan 25 19:41:36 EST 2026
 - Tables in Convex schema should be alphabetized (campaignNotes before campaigns)
 - The typecheck target doesn't exist for this project yet; use `npx tsc --noEmit -p convex/tsconfig.json` to validate Convex schema types
 - Reference tables (like campaignNotes → campaigns) use v.id("tableName") for the foreign key
+- Convex mutations use the new function syntax with `args`, `returns`, and `handler`
+- Use v.null() as return validator for mutations that don't return a value
+- Trade side/direction combinations: buy+long (open), sell+long (close), sell+short (open), buy+short (cover)
+
+---
+
+## 2026-01-25 - US-006
+- Created apps/trade-tracker/convex/trades.ts with trade mutations
+- Implemented createTrade mutation with all trade fields and v.id("trades") return validator
+- Implemented updateTrade mutation accepting tradeId and partial trade fields
+- Implemented deleteTrade mutation accepting tradeId
+- Added validation helper for side/direction combinations (all combinations are valid in trading)
+- TypeScript checks pass
+
+**Files created:**
+- apps/trade-tracker/convex/trades.ts (new)
+
+**Files changed:**
+- prd.json (marked US-006 as passes: true)
+
+**Learnings for future iterations:**
+- Convex mutation pattern: mutation({ args: {...}, returns: v.xxx(), handler: async (ctx, args) => {...} })
+- Use v.null() for mutations that don't return a value
+- Build patch objects dynamically to only include defined values when updating
+- All side/direction combinations are valid: buy/sell can combine with long/short for different trade types
 
 ---
