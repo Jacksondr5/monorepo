@@ -15,7 +15,7 @@
         "Typecheck passes"
       ],
       "priority": 1,
-      "passes": true,
+      "passes": false,
       "notes": ""
     },
     {
@@ -28,12 +28,10 @@
         "Wrap app with <ClerkProvider> in layout.tsx",
         "Create sign-in and sign-up pages with centered Clerk components",
         "Add <UserButton /> to header for sign-out",
-        "Create .env.example with Clerk variables (NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY, CLERK_SECRET_KEY, NEXT_PUBLIC_CLERK_FRONTEND_API_URL)",
-        "Create README.md documenting Clerk setup steps, environment variables, and how to start the app locally",
         "Typecheck passes"
       ],
       "priority": 2,
-      "passes": true,
+      "passes": false,
       "notes": ""
     },
     {
@@ -47,7 +45,7 @@
         "Typecheck passes"
       ],
       "priority": 3,
-      "passes": true,
+      "passes": false,
       "notes": ""
     },
     {
@@ -62,7 +60,7 @@
         "Typecheck passes"
       ],
       "priority": 4,
-      "passes": true,
+      "passes": false,
       "notes": ""
     },
     {
@@ -77,7 +75,7 @@
         "Typecheck passes"
       ],
       "priority": 5,
-      "passes": true,
+      "passes": false,
       "notes": ""
     },
     {
@@ -93,7 +91,7 @@
         "Typecheck passes"
       ],
       "priority": 6,
-      "passes": true,
+      "passes": false,
       "notes": ""
     },
     {
@@ -109,7 +107,7 @@
         "Typecheck passes"
       ],
       "priority": 7,
-      "passes": true,
+      "passes": false,
       "notes": ""
     },
     {
@@ -126,8 +124,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 8,
-      "passes": true,
-      "notes": "Browser verification blocked by missing Clerk environment variables (NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY, CLERK_SECRET_KEY). Code passes typecheck and lint."
+      "passes": false,
+      "notes": ""
     },
     {
       "id": "US-009",
@@ -143,8 +141,8 @@
         "Verify in browser using dev-browser skill"
       ],
       "priority": 9,
-      "passes": true,
-      "notes": "Browser verification blocked by Clerk authentication. Code passes typecheck and lint. Routing verified to work correctly (redirect to /trades path detected)."
+      "passes": false,
+      "notes": ""
     },
     {
       "id": "US-010",
@@ -160,35 +158,7 @@
         "Typecheck passes"
       ],
       "priority": 10,
-      "passes": true,
-      "notes": ""
-    },
-    {
-      "id": "US-040",
-      "title": "Add error feedback to trade creation form",
-      "description": "As a trader, I need to see error messages when trade creation fails so I know what went wrong.",
-      "acceptanceCriteria": [
-        "Display error message to user when createTrade mutation fails",
-        "Error message styled consistently with success message (red background instead of green)",
-        "Error message is dismissible or clears on retry",
-        "Typecheck passes"
-      ],
-      "priority": 10.1,
       "passes": false,
-      "notes": ""
-    },
-    {
-      "id": "US-041",
-      "title": "Add backend validation for trade campaign association",
-      "description": "As a developer, I need backend validation to prevent trades from being linked to closed campaigns.",
-      "acceptanceCriteria": [
-        "createTrade mutation validates campaignId exists if provided",
-        "createTrade mutation rejects trades linked to closed campaigns with clear error message",
-        "updateTrade mutation validates campaignId if being changed",
-        "Typecheck passes"
-      ],
-      "priority": 10.2,
-      "passes": true,
       "notes": ""
     },
     {

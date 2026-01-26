@@ -13,12 +13,8 @@ This is a pnpm monorepo using Nx as the build orchestrator. It contains multiple
 ## Common Commands
 
 ```bash
-# Development
-pnpm nx dev <app>                    # Run Next.js dev server
-pnpm nx storybook component-library  # Run component library Storybook
-
 # Building
-pnpm nx build <project>              # Build a project
+pnpm nx build-next <project>         # Run the NextJS build on a project
 pnpm nx build-storybook <project>    # Build Storybook
 
 # Testing
@@ -48,7 +44,7 @@ pnpm nx affected -t lint test build-storybook chromatic vercel-build-deploy e2e-
 ### Technology Stack
 
 - **Framework**: Next.js with React
-- **Styling**: Tailwind CSS (dark mode only - use `text-slate-11` or `text-slate-12` for text)
+- **Styling**: Tailwind CSS with Radix color scales (see Text Colors below)
 - **Forms**: TanStack React Form with Zod validation
 - **Backend**: Convex (serverless with real-time sync and offline support)
 - **Auth**: Clerk
@@ -66,9 +62,38 @@ pnpm nx affected -t lint test build-storybook chromatic vercel-build-deploy e2e-
 ### General Rules
 
 - Alphabetize object keys
-- For long-running processes (dev servers), ask the user to start them instead of running them yourself
+- NEVER start a long-running process (like a NextJS dev server or Convex dev server). The user will start it for you.
 - Use Tailwind for all styling
-- Apps are permanently in dark mode - use light text colors (`text-slate-11`, `text-slate-12`)
+- Apps are permanently in dark mode - see Text Colors section below
+
+### Text Colors (IMPORTANT)
+
+This monorepo uses **Radix color scales** for text colors, NOT standard Tailwind text colors.
+
+**Text color rules (Radix scales only):**
+
+- `text-slate-12` - Primary text (headings, body text, important content)
+- `text-slate-11` - Secondary text (labels, hints, less prominent content)
+
+**NEVER use these for text:**
+
+- `text-slate-100`, `text-slate-200`, `text-slate-300`, etc.
+- `text-gray-*`, `text-white`, `text-black`
+- `text-green-*`, `text-red-*` for emphasis
+
+**Backgrounds and borders:** Standard Tailwind colors ARE allowed for backgrounds (`bg-*`) and borders (`border-*`). Only text colors must use Radix scales.
+
+**For visual emphasis (buy/sell, success/error):**
+
+```jsx
+// WRONG - colored text
+<span className="text-green-400">BUY</span>
+
+// CORRECT - Tailwind background/border + Radix text
+<span className="bg-green-900/50 border border-green-700 text-slate-12">BUY</span>
+```
+
+The Radix text scales provide consistent contrast in dark mode. Standard Tailwind text colors will appear inconsistent.
 
 ### TypeScript Path Aliases
 
@@ -109,6 +134,22 @@ Use `storybook/test` imports (Vitest methods), not Jest. Stories should use `dat
 - All selectors must be `data-testid` attributes
 - Combine related assertions into single tests to reduce page loads
 - POMs go in `apps/<app>-e2e/src/pages/*.page.ts`
+
+### Browser Verification with Playwright MCP
+
+When using the Playwright MCP plugin to verify UI changes in apps with Clerk authentication:
+
+1. **Navigate to the app** (e.g., `http://localhost:3000`) - you may be redirected to Clerk sign-in. If not, look for a way to log in.
+2. **Sign in using test credentials** from `apps/hackathon-e2e/.env`:
+   - Email: `PLAYWRIGHT_USER_EMAIL`
+   - Password: `PLAYWRIGHT_USER_PASSWORD`
+3. **Fill the login form** using Playwright tools:
+   ```javascript
+   // Use browser_run_code to fill both fields and submit
+   await page.getByRole("textbox", { name: "Email address" }).fill("email");
+   await page.getByRole("textbox", { name: "Password" }).fill("password");
+   await page.getByRole("button", { name: "Continue", exact: true }).click();
+   ```
 
 ## PR Workflow
 
