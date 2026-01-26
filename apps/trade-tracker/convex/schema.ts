@@ -39,19 +39,30 @@ export default defineSchema({
       v.union(
         v.literal("manual"),
         v.literal("profit_target"),
-        v.literal("stop_loss")
-      )
+        v.literal("stop_loss"),
+      ),
     ),
     profitTargets: v.array(targetValidator),
     retrospective: v.optional(v.string()),
     status: v.union(
       v.literal("active"),
       v.literal("closed"),
-      v.literal("planning")
+      v.literal("planning"),
     ),
     stopLossHistory: v.array(stopLossValidator),
     thesis: v.string(),
   }).index("by_status", ["status"]),
+
+  portfolioSnapshots: defineTable({
+    cashBalance: v.optional(v.number()),
+    date: v.number(),
+    source: v.union(
+      v.literal("api"),
+      v.literal("calculated"),
+      v.literal("manual"),
+    ),
+    totalValue: v.number(),
+  }).index("by_date", ["date"]),
 
   trades: defineTable({
     assetType: v.union(v.literal("crypto"), v.literal("stock")),
@@ -67,15 +78,4 @@ export default defineSchema({
     .index("by_campaignId", ["campaignId"])
     .index("by_date", ["date"])
     .index("by_ticker", ["ticker"]),
-
-  portfolioSnapshots: defineTable({
-    cashBalance: v.optional(v.number()),
-    date: v.number(),
-    source: v.union(
-      v.literal("api"),
-      v.literal("calculated"),
-      v.literal("manual")
-    ),
-    totalValue: v.number(),
-  }).index("by_date", ["date"]),
 });

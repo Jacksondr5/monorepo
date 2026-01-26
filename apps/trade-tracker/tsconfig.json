@@ -9,11 +9,13 @@
     "incremental": true,
     "jsx": "preserve",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "esnext",
+    "module": "preserve",
+    "moduleDetection": "force",
     "noEmit": true,
     "outDir": "dist",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "~/convex/*": ["./convex/*"]
     },
     "plugins": [
       {

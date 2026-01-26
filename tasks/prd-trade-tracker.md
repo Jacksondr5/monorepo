@@ -22,105 +22,115 @@ A personal trading journal and analytics application for tracking stock and cryp
 ### Core Entities
 
 #### Trade
+
 The atomic unit - a single buy/sell/short/cover execution.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| id | string | Unique identifier |
-| date | datetime | Execution timestamp |
-| ticker | string | Symbol (e.g., AAPL, BTC-USD) |
-| assetType | enum | 'stock' \| 'crypto' |
-| side | enum | 'buy' \| 'sell' |
-| direction | enum | 'long' \| 'short' |
-| price | decimal | Execution price |
-| quantity | decimal | Number of shares/units |
-| campaignId | string? | Optional link to a campaign |
-| notes | string? | Free-form text notes |
-| createdAt | datetime | Record creation time |
+| Field      | Type     | Description                  |
+| ---------- | -------- | ---------------------------- |
+| id         | string   | Unique identifier            |
+| date       | datetime | Execution timestamp          |
+| ticker     | string   | Symbol (e.g., AAPL, BTC-USD) |
+| assetType  | enum     | 'stock' \| 'crypto'          |
+| side       | enum     | 'buy' \| 'sell'              |
+| direction  | enum     | 'long' \| 'short'            |
+| price      | decimal  | Execution price              |
+| quantity   | decimal  | Number of shares/units       |
+| campaignId | string?  | Optional link to a campaign  |
+| notes      | string?  | Free-form text notes         |
+| createdAt  | datetime | Record creation time         |
 
 **Derived from trades:**
+
 - `total`: price × quantity
 - Position calculations (quantity, avg cost) derived by aggregating trades
 
 #### Campaign
+
 A thesis-based grouping representing a complete trading idea.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| id | string | Unique identifier |
-| name | string | Short descriptive name |
-| status | enum | 'planning' \| 'active' \| 'closed' |
-| thesis | string | The trading rationale/idea |
-| instruments | Instrument[] | Tradeable instruments and their underlying assets |
-| entryTargets | Target[] | Price levels to enter positions |
-| profitTargets | Target[] | Price levels to take profits |
-| stopLossHistory | StopLoss[] | History of stop loss adjustments |
-| outcome | enum? | 'profit_target' \| 'stop_loss' \| 'manual' \| null |
-| retrospective | string? | Post-close analysis and lessons learned |
-| createdAt | datetime | Record creation time |
-| closedAt | datetime? | When campaign was closed |
+| Field           | Type         | Description                                        |
+| --------------- | ------------ | -------------------------------------------------- |
+| id              | string       | Unique identifier                                  |
+| name            | string       | Short descriptive name                             |
+| status          | enum         | 'planning' \| 'active' \| 'closed'                 |
+| thesis          | string       | The trading rationale/idea                         |
+| instruments     | Instrument[] | Tradeable instruments and their underlying assets  |
+| entryTargets    | Target[]     | Price levels to enter positions                    |
+| profitTargets   | Target[]     | Price levels to take profits                       |
+| stopLossHistory | StopLoss[]   | History of stop loss adjustments                   |
+| outcome         | enum?        | 'profit_target' \| 'stop_loss' \| 'manual' \| null |
+| retrospective   | string?      | Post-close analysis and lessons learned            |
+| createdAt       | datetime     | Record creation time                               |
+| closedAt        | datetime?    | When campaign was closed                           |
 
 #### Instrument
+
 Maps a tradeable ticker to its underlying asset (for proxies/ETFs).
 
-| Field | Type | Description |
-|-------|------|-------------|
-| ticker | string | Actual traded symbol (e.g., GLDM) |
+| Field      | Type    | Description                                |
+| ---------- | ------- | ------------------------------------------ |
+| ticker     | string  | Actual traded symbol (e.g., GLDM)          |
 | underlying | string? | Underlying asset if different (e.g., GOLD) |
-| notes | string? | Why using this instrument |
+| notes      | string? | Why using this instrument                  |
 
 **Example:** Trading gold via GLDM ETF:
+
 - `ticker`: "GLDM"
 - `underlying`: "GOLD"
 - `notes`: "Lower expense ratio than GLD"
 
 #### StopLoss
+
 A point-in-time stop loss record for tracking adjustments.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| ticker | string | Symbol this stop applies to |
-| price | decimal | Stop loss price level |
-| reason | string? | Why stop was set/adjusted here |
-| setAt | datetime | When this stop was set |
+| Field  | Type     | Description                    |
+| ------ | -------- | ------------------------------ |
+| ticker | string   | Symbol this stop applies to    |
+| price  | decimal  | Stop loss price level          |
+| reason | string?  | Why stop was set/adjusted here |
+| setAt  | datetime | When this stop was set         |
 
 #### Target
+
 Reusable structure for price targets.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| ticker | string | Symbol this target applies to |
-| price | decimal | Target price level |
+| Field      | Type     | Description                        |
+| ---------- | -------- | ---------------------------------- |
+| ticker     | string   | Symbol this target applies to      |
+| price      | decimal  | Target price level                 |
 | percentage | decimal? | % of position (for scaling in/out) |
-| notes | string? | Rationale for this level |
+| notes      | string?  | Rationale for this level           |
 
 #### CampaignNote
+
 Timestamped notes attached to a campaign (separate from thesis and retrospective).
 
-| Field | Type | Description |
-|-------|------|-------------|
-| id | string | Unique identifier |
-| campaignId | string | Parent campaign |
-| content | string | Note text |
-| createdAt | datetime | When note was added |
+| Field      | Type     | Description         |
+| ---------- | -------- | ------------------- |
+| id         | string   | Unique identifier   |
+| campaignId | string   | Parent campaign     |
+| content    | string   | Note text           |
+| createdAt  | datetime | When note was added |
 
 #### PortfolioSnapshot
+
 Point-in-time portfolio value for calculating percentages and performance.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| id | string | Unique identifier |
-| date | date | Snapshot date |
-| totalValue | decimal | Total portfolio value |
-| cashBalance | decimal? | Cash portion (optional) |
-| source | enum | 'manual' \| 'calculated' \| 'api' |
-| createdAt | datetime | Record creation time |
+| Field       | Type     | Description                       |
+| ----------- | -------- | --------------------------------- |
+| id          | string   | Unique identifier                 |
+| date        | date     | Snapshot date                     |
+| totalValue  | decimal  | Total portfolio value             |
+| cashBalance | decimal? | Cash portion (optional)           |
+| source      | enum     | 'manual' \| 'calculated' \| 'api' |
+| createdAt   | datetime | Record creation time              |
 
 ### Derived/Calculated Data
 
 These are computed on-demand, not stored:
 
 #### Position (per ticker)
+
 - `ticker`: Symbol
 - `quantity`: Net shares held (sum of buys - sells, accounting for direction)
 - `averageCost`: Weighted average entry price
@@ -128,6 +138,7 @@ These are computed on-demand, not stored:
 - `unrealizedPL`: currentValue - (averageCost × quantity)
 
 #### Campaign Analytics
+
 - `realizedPL`: Sum of closed trade P&L within campaign
 - `unrealizedPL`: Current value of open positions in campaign
 - `totalPL`: realized + unrealized
@@ -137,6 +148,7 @@ These are computed on-demand, not stored:
 - `stopLossAdjustments`: Number of times stop was moved
 
 #### Portfolio Analytics
+
 - `totalRealizedPL`: Sum across all closed trades (filterable by period)
 - `winRate`: % of closed campaigns that were profitable
 - `avgWin`: Average P&L of winning campaigns
@@ -152,6 +164,7 @@ These are computed on-demand, not stored:
 **Description:** As a developer, I need the database schema implemented so trade data can be persisted.
 
 **Acceptance Criteria:**
+
 - [ ] Create Convex schema with tables: trades, campaigns, campaignNotes, portfolioSnapshots
 - [ ] All fields from data architecture are defined with proper types
 - [ ] Indexes created for common queries (trades by campaignId, trades by ticker, trades by date)
@@ -162,6 +175,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want to log a trade so I have a record of my execution.
 
 **Acceptance Criteria:**
+
 - [ ] Form to enter: date, ticker, asset type, side, direction, price, quantity, notes
 - [ ] Ticker input supports both stocks and crypto symbols
 - [ ] Date defaults to current date/time
@@ -176,6 +190,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want to see all my trades so I can review my history.
 
 **Acceptance Criteria:**
+
 - [ ] Table/list showing all trades sorted by date (newest first)
 - [ ] Columns: date, ticker, side, direction, price, quantity, total, campaign (if linked)
 - [ ] Total column calculated as price × quantity
@@ -188,6 +203,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want to create a campaign to document my trading thesis before executing trades.
 
 **Acceptance Criteria:**
+
 - [ ] Form to enter: name, thesis
 - [ ] Status defaults to 'planning'
 - [ ] Campaign saved to database on submit
@@ -200,6 +216,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want to specify which instruments I'll trade, including mapping to underlying assets.
 
 **Acceptance Criteria:**
+
 - [ ] UI to add instruments to a campaign
 - [ ] Each instrument has: ticker (required), underlying (optional), notes (optional)
 - [ ] Example: ticker "GLDM", underlying "GOLD", notes "Gold ETF proxy"
@@ -213,6 +230,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want to define entry and profit targets so I have a clear plan.
 
 **Acceptance Criteria:**
+
 - [ ] UI to add/edit/remove entry targets (ticker, price, percentage, notes)
 - [ ] UI to add/edit/remove profit targets (ticker, price, percentage, notes)
 - [ ] Targets saved to campaign document
@@ -225,6 +243,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want to record stop loss changes over time so I can review my risk management.
 
 **Acceptance Criteria:**
+
 - [ ] UI to add a new stop loss (ticker, price, reason)
 - [ ] Each stop loss automatically timestamped when added
 - [ ] Stop loss history displayed chronologically (newest first)
@@ -238,6 +257,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want to add timestamped notes to a campaign so I can track my thinking over time.
 
 **Acceptance Criteria:**
+
 - [ ] Text input to add a note to a campaign
 - [ ] Notes displayed in chronological order with timestamps
 - [ ] Notes persist across page reloads
@@ -250,6 +270,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want to associate trades with a campaign so they're grouped under my thesis.
 
 **Acceptance Criteria:**
+
 - [ ] When creating a trade, optional dropdown to select existing campaign
 - [ ] Campaign dropdown filters to show only planning/active campaigns
 - [ ] Can edit existing trade to add/change/remove campaign link
@@ -262,6 +283,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want to change campaign status to track its lifecycle.
 
 **Acceptance Criteria:**
+
 - [ ] Status can be changed: planning → active → closed
 - [ ] When closing, prompt for outcome (profit_target, stop_loss, manual)
 - [ ] Closed campaign shows closedAt timestamp
@@ -274,6 +296,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want the system to detect when my position is fully closed so I can finalize the campaign.
 
 **Acceptance Criteria:**
+
 - [ ] System detects when net position for all campaign instruments reaches zero
 - [ ] Shows prompt/notification suggesting to close the campaign
 - [ ] User can dismiss the prompt if they plan to re-enter
@@ -286,6 +309,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want to write a retrospective after closing a campaign so I can capture lessons learned.
 
 **Acceptance Criteria:**
+
 - [ ] Text area to write retrospective on campaign detail page
 - [ ] Only editable when campaign status is 'closed'
 - [ ] Retrospective saved to campaign document
@@ -298,6 +322,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want to see all details of a campaign including trades and P&L.
 
 **Acceptance Criteria:**
+
 - [ ] Shows campaign name, status, thesis
 - [ ] Shows instruments with underlying asset mapping
 - [ ] Shows all targets (entry, profit)
@@ -314,6 +339,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want to record my portfolio value so analytics can calculate percentages.
 
 **Acceptance Criteria:**
+
 - [ ] Form to enter: date, total value, cash balance (optional)
 - [ ] Source marked as 'manual'
 - [ ] Date defaults to today
@@ -327,6 +353,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want a dashboard showing my key metrics so I can assess my performance.
 
 **Acceptance Criteria:**
+
 - [ ] Shows total realized P&L (YTD with option for all-time)
 - [ ] Shows win rate (% of closed profitable campaigns)
 - [ ] Shows average win vs average loss
@@ -340,6 +367,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want to see my current positions so I know my exposure.
 
 **Acceptance Criteria:**
+
 - [ ] List of all tickers with open positions
 - [ ] Shows: ticker, quantity, average cost, current value (if price available), unrealized P&L
 - [ ] Position calculated from aggregating all trades for that ticker
@@ -352,6 +380,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want to see all my campaigns so I can manage my trading ideas.
 
 **Acceptance Criteria:**
+
 - [ ] Table showing all campaigns
 - [ ] Columns: name, status, instruments (with underlying), P&L, created date
 - [ ] Filterable by status (planning, active, closed, all)
@@ -365,6 +394,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want each trade's P&L calculated so I can see individual performance.
 
 **Acceptance Criteria:**
+
 - [ ] Closing trades (sells for longs, covers for shorts) show realized P&L
 - [ ] P&L calculated as: (exit price - entry price) × quantity for longs
 - [ ] P&L calculated as: (entry price - exit price) × quantity for shorts
@@ -377,6 +407,7 @@ These are computed on-demand, not stored:
 **Description:** As a trader, I want to filter trades by date so I can focus on specific periods.
 
 **Acceptance Criteria:**
+
 - [ ] Date range picker (start date, end date)
 - [ ] Quick filters: Today, This Week, This Month, This Year, All Time
 - [ ] Trade list updates to show only trades in range
@@ -420,6 +451,7 @@ These are computed on-demand, not stored:
 ## Technical Considerations
 
 ### Stack (per monorepo conventions)
+
 - **Framework:** Next.js with React
 - **Backend:** Convex (serverless with real-time sync)
 - **Auth:** Clerk
@@ -428,6 +460,7 @@ These are computed on-demand, not stored:
 - **UI:** Radix primitives, component library
 
 ### Convex Schema Design
+
 - Use indexes for: trades by ticker, trades by date, trades by campaignId
 - Instruments stored as array within campaign (supports underlying mapping)
 - Targets stored as nested objects within campaign document
@@ -435,12 +468,14 @@ These are computed on-demand, not stored:
 - Notes stored in separate table with campaignId foreign key for efficient querying
 
 ### Data Integrity
+
 - Trades should validate side/direction combinations
 - Campaign status transitions should be enforced (no backwards movement)
 - Portfolio snapshots should prevent duplicate dates
 - Trade tickers should match campaign instruments when linked
 
 ### Future API Integration Points
+
 - PortfolioSnapshot.source field ready for 'api' value
 - Trade schema extensible for additional brokerage metadata
 - Consider storing brokerage-specific IDs for deduplication

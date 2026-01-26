@@ -162,6 +162,34 @@
       "notes": ""
     },
     {
+      "id": "US-040",
+      "title": "Add error feedback to trade creation form",
+      "description": "As a trader, I need to see error messages when trade creation fails so I know what went wrong.",
+      "acceptanceCriteria": [
+        "Display error message to user when createTrade mutation fails",
+        "Error message styled consistently with success message (red background instead of green)",
+        "Error message is dismissible or clears on retry",
+        "Typecheck passes"
+      ],
+      "priority": 10.1,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-041",
+      "title": "Add backend validation for trade campaign association",
+      "description": "As a developer, I need backend validation to prevent trades from being linked to closed campaigns.",
+      "acceptanceCriteria": [
+        "createTrade mutation validates campaignId exists if provided",
+        "createTrade mutation rejects trades linked to closed campaigns with clear error message",
+        "updateTrade mutation validates campaignId if being changed",
+        "Typecheck passes"
+      ],
+      "priority": 10.2,
+      "passes": false,
+      "notes": ""
+    },
+    {
       "id": "US-011",
       "title": "Create campaign queries",
       "description": "As a developer, I need queries to fetch campaigns.",

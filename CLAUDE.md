@@ -106,6 +106,22 @@ Use `storybook/test` imports (Vitest methods), not Jest. Stories should use `dat
 - Combine related assertions into single tests to reduce page loads
 - POMs go in `apps/<app>-e2e/src/pages/*.page.ts`
 
+### Browser Verification with Playwright MCP
+
+When using the Playwright MCP plugin to verify UI changes in apps with Clerk authentication:
+
+1. **Navigate to the app** (e.g., `http://localhost:3000`) - you may be redirected to Clerk sign-in. If not, look for a way to log in.
+2. **Sign in using test credentials** from `apps/hackathon-e2e/.env`:
+   - Email: `PLAYWRIGHT_USER_EMAIL`
+   - Password: `PLAYWRIGHT_USER_PASSWORD`
+3. **Fill the login form** using Playwright tools:
+   ```javascript
+   // Use browser_run_code to fill both fields and submit
+   await page.getByRole("textbox", { name: "Email address" }).fill("email");
+   await page.getByRole("textbox", { name: "Password" }).fill("password");
+   await page.getByRole("button", { name: "Continue", exact: true }).click();
+   ```
+
 ## PR Workflow
 
 1. Create branch (use Linear issue name if available: `jackson/jac-XX-description`)

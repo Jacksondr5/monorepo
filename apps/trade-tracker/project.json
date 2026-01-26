@@ -10,6 +10,19 @@
         "cwd": "apps/trade-tracker"
       }
     },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "tsc --noEmit -p tsconfig.json",
+          "tsc --noEmit -p convex/tsconfig.json"
+        ],
+        "cwd": "apps/trade-tracker"
+      },
+      "cache": true,
+      "inputs": ["production", "^production"],
+      "dependsOn": ["^typecheck"]
+    },
     "vercel-build-deploy": {
       "options": {
         "hasConvex": true

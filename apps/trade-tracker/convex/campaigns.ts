@@ -71,13 +71,13 @@ export const updateCampaignStatus = mutation({
       v.union(
         v.literal("manual"),
         v.literal("profit_target"),
-        v.literal("stop_loss")
-      )
+        v.literal("stop_loss"),
+      ),
     ),
     status: v.union(
       v.literal("active"),
       v.literal("closed"),
-      v.literal("planning")
+      v.literal("planning"),
     ),
   },
   returns: v.null(),

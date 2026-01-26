@@ -16,21 +16,6 @@ const tradeValidator = v.object({
   ticker: v.string(),
 });
 
-// Valid side/direction combinations:
-// - buy + long: Opening a long position
-// - sell + long: Closing a long position
-// - sell + short: Opening a short position (selling to open)
-// - buy + short: Closing a short position (buying to cover)
-function validateSideDirection(
-  side: "buy" | "sell",
-  direction: "long" | "short"
-): boolean {
-  // All combinations are valid in trading:
-  // buy+long = open long, sell+long = close long
-  // sell+short = open short, buy+short = close short (cover)
-  return true;
-}
-
 /**
  * Create a new trade record.
  */
@@ -48,12 +33,17 @@ export const createTrade = mutation({
   },
   returns: v.id("trades"),
   handler: async (ctx, args) => {
-    const { assetType, campaignId, date, direction, notes, price, quantity, side, ticker } = args;
-
-    // Validate side/direction combination
-    if (!validateSideDirection(side, direction)) {
-      throw new Error(`Invalid side/direction combination: ${side}/${direction}`);
-    }
+    const {
+      assetType,
+      campaignId,
+      date,
+      direction,
+      notes,
+      price,
+      quantity,
+      side,
+      ticker,
+    } = args;
 
     const tradeId = await ctx.db.insert("trades", {
       assetType,
@@ -91,19 +81,9 @@ export const updateTrade = mutation({
   handler: async (ctx, args) => {
     const { tradeId, ...updates } = args;
 
-    // Get existing trade to validate combination
     const existingTrade = await ctx.db.get(tradeId);
     if (!existingTrade) {
       throw new Error("Trade not found");
-    }
-
-    // Determine final values for side/direction
-    const finalSide = updates.side ?? existingTrade.side;
-    const finalDirection = updates.direction ?? existingTrade.direction;
-
-    // Validate side/direction combination
-    if (!validateSideDirection(finalSide, finalDirection)) {
-      throw new Error(`Invalid side/direction combination: ${finalSide}/${finalDirection}`);
     }
 
     // Build patch object with only defined values

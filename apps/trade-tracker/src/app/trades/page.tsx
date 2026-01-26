@@ -88,9 +88,7 @@ export default function TradesPage() {
                   <td className="whitespace-nowrap px-4 py-3 text-sm">
                     <span
                       className={
-                        trade.side === "buy"
-                          ? "text-green-400"
-                          : "text-red-400"
+                        trade.side === "buy" ? "text-green-400" : "text-red-400"
                       }
                     >
                       {trade.side.toUpperCase()}
