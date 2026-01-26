@@ -9,6 +9,9 @@ Started: Sun Jan 25 19:41:36 EST 2026
 - Styles: create src/styles/global.css importing tailwindcss and component-library globals
 - PostCSS: use @tailwindcss/postcss plugin
 - next.config.ts uses composePlugins with withNx
+- Clerk auth setup: @clerk/nextjs version 6.32.0, middleware.ts uses clerkMiddleware() with createRouteMatcher, layout wraps with ClerkProvider via providers.tsx
+- Sign-in/sign-up pages use catch-all routes [[...sign-in]] and [[...sign-up]] for Clerk's multi-step flows
+- Environment validation: use @t3-oss/env-nextjs with zod for type-safe env vars
 
 ---
 
@@ -42,5 +45,32 @@ Started: Sun Jan 25 19:41:36 EST 2026
 - tsconfig.json needs to include convex/**/*.ts in the include array
 - Reference the component-library in tsconfig.json references array
 - The schema.ts can be empty initially (defineSchema({})) - it will be populated in later stories
+
+---
+
+## 2026-01-25 - US-002
+- Added Clerk authentication to trade-tracker app
+- Installed @clerk/nextjs, @t3-oss/env-nextjs, and zod packages
+- Created middleware.ts protecting all routes except /sign-in and /sign-up
+- Created providers.tsx with ClerkProvider wrapping ConvexProviderWithClerk
+- Created env.ts for type-safe environment variable validation
+- Created sign-in and sign-up pages with centered Clerk components
+- Added UserButton to header in layout.tsx
+- TypeScript and lint checks pass
+
+**Files created/changed:**
+- apps/trade-tracker/package.json (added dependencies)
+- apps/trade-tracker/src/middleware.ts (new)
+- apps/trade-tracker/src/env.ts (new)
+- apps/trade-tracker/src/app/providers.tsx (new)
+- apps/trade-tracker/src/app/layout.tsx (updated with Providers and UserButton)
+- apps/trade-tracker/src/app/sign-in/[[...sign-in]]/page.tsx (new)
+- apps/trade-tracker/src/app/sign-up/[[...sign-up]]/page.tsx (new)
+
+**Learnings for future iterations:**
+- Clerk middleware uses createRouteMatcher for route protection, not string arrays
+- Catch-all routes [[...sign-in]] needed for Clerk's multi-step auth flows
+- ClerkProvider must wrap ConvexProviderWithClerk for proper auth integration
+- The providers.tsx pattern separates client components from server layout
 
 ---
