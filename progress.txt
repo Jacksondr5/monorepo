@@ -175,3 +175,29 @@ Started: Sun Jan 25 19:41:36 EST 2026
 - Use withIndex("indexName", (q) => q.eq("field", value)) for filtered queries
 
 ---
+
+## 2026-01-25 - US-008
+- Created trade creation form at apps/trade-tracker/src/app/trades/new/page.tsx
+- Implemented form with all required fields: date (datetime-local with default to now), ticker, assetType, side, direction, price, quantity, notes
+- Used TanStack React Form with Zod validation via useAppForm from component library
+- Form calls createTrade mutation on submit with proper data transformation (string dates to timestamps, string numbers to floats)
+- Shows success message and redirects to /trades after save
+- TypeScript and lint checks pass
+- Browser verification blocked by missing Clerk environment variables (infrastructure setup issue, not code issue)
+
+**Files created:**
+- apps/trade-tracker/src/app/trades/new/page.tsx (new)
+
+**Files changed:**
+- prd.json (marked US-008 as passes: true with notes)
+
+**Learnings for future iterations:**
+- Form pattern: use useAppForm from @j5/component-library with Zod schema validation
+- For numeric inputs, use string type in form state and convert with parseFloat() on submit
+- datetime-local input format: YYYY-MM-DDTHH:mm (use padStart for zero-padding)
+- Convex mutations expect timestamp as number (use new Date(string).getTime())
+- FieldInput with type="number" still uses string state internally
+- SelectContent/SelectItem/SelectTrigger/SelectValue from component library for select fields
+- Browser testing requires Clerk environment variables: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY, CLERK_SECRET_KEY
+
+---
