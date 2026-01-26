@@ -68,18 +68,20 @@ pnpm nx affected -t lint test build-storybook chromatic vercel-build-deploy e2e-
 
 ### Text Colors (IMPORTANT)
 
-This monorepo uses **Radix color scales** (slate-1 through slate-12), NOT standard Tailwind colors.
+This monorepo uses **Radix color scales** for text colors, NOT standard Tailwind text colors.
 
-**Correct usage:**
+**Text color rules (Radix scales only):**
 
 - `text-slate-12` - Primary text (headings, body text, important content)
 - `text-slate-11` - Secondary text (labels, hints, less prominent content)
 
-**NEVER use these standard Tailwind classes:**
+**NEVER use these for text:**
 
 - `text-slate-100`, `text-slate-200`, `text-slate-300`, etc.
 - `text-gray-*`, `text-white`, `text-black`
-- `text-green-*`, `text-red-*` for emphasis (use backgrounds instead)
+- `text-green-*`, `text-red-*` for emphasis
+
+**Backgrounds and borders:** Standard Tailwind colors ARE allowed for backgrounds (`bg-*`) and borders (`border-*`). Only text colors must use Radix scales.
 
 **For visual emphasis (buy/sell, success/error):**
 
@@ -87,11 +89,11 @@ This monorepo uses **Radix color scales** (slate-1 through slate-12), NOT standa
 // WRONG - colored text
 <span className="text-green-400">BUY</span>
 
-// CORRECT - background with consistent text
+// CORRECT - Tailwind background/border + Radix text
 <span className="bg-green-900/50 border border-green-700 text-slate-12">BUY</span>
 ```
 
-The Radix scales provide consistent contrast in dark mode. Standard Tailwind colors will appear inconsistent.
+The Radix text scales provide consistent contrast in dark mode. Standard Tailwind text colors will appear inconsistent.
 
 ### TypeScript Path Aliases
 

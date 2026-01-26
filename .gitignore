@@ -60,6 +60,7 @@ out
 test-output
 test-results
 playwright-report
+.playwright-mcp
 
 storybook-static
 .env*

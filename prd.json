@@ -28,6 +28,8 @@
         "Wrap app with <ClerkProvider> in layout.tsx",
         "Create sign-in and sign-up pages with centered Clerk components",
         "Add <UserButton /> to header for sign-out",
+        "Create .env.example with Clerk variables (NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY, CLERK_SECRET_KEY, NEXT_PUBLIC_CLERK_FRONTEND_API_URL)",
+        "Create README.md documenting Clerk setup steps, environment variables, and how to start the app locally",
         "Typecheck passes"
       ],
       "priority": 2,

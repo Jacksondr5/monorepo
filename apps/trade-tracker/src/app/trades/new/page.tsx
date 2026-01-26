@@ -7,10 +7,9 @@ import { z } from "zod";
 import {
   Button,
   Card,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Label,
+  RadioGroup,
+  RadioGroupItem,
   useAppForm,
 } from "@j5/component-library";
 import { api } from "../../../../convex/_generated/api";
@@ -47,13 +46,13 @@ export default function NewTradePage() {
 
   const form = useAppForm({
     defaultValues: {
-      assetType: "stock" as const,
+      assetType: "stock" as "stock" | "crypto",
       date: getDefaultDateTime(),
-      direction: "long" as const,
+      direction: "long" as "long" | "short",
       notes: "",
       price: "",
       quantity: "",
-      side: "buy" as const,
+      side: "buy" as "buy" | "sell",
       ticker: "",
     } satisfies TradeFormData,
     validators: {
@@ -138,49 +137,118 @@ export default function NewTradePage() {
               )}
             </form.AppField>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-6">
               <form.AppField name="assetType">
                 {(field) => (
-                  <field.FieldSelect label="Asset Type">
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select asset type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="stock">Stock</SelectItem>
-                      <SelectItem value="crypto">Crypto</SelectItem>
-                    </SelectContent>
-                  </field.FieldSelect>
+                  <div className="space-y-2">
+                    <Label
+                      className="text-slate-12 text-sm font-medium"
+                      dataTestId={`${field.name}-label`}
+                    >
+                      Asset Type
+                    </Label>
+                    <RadioGroup
+                      dataTestId={`${field.name}-radio`}
+                      value={field.state.value}
+                      onValueChange={(value) =>
+                        field.handleChange(value as "stock" | "crypto")
+                      }
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="stock" id="asset-stock" />
+                        <Label
+                          htmlFor="asset-stock"
+                          dataTestId="asset-stock-label"
+                        >
+                          Stock
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="crypto" id="asset-crypto" />
+                        <Label
+                          htmlFor="asset-crypto"
+                          dataTestId="asset-crypto-label"
+                        >
+                          Crypto
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
                 )}
               </form.AppField>
 
               <form.AppField name="side">
                 {(field) => (
-                  <field.FieldSelect label="Side">
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select side" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="buy">Buy</SelectItem>
-                      <SelectItem value="sell">Sell</SelectItem>
-                    </SelectContent>
-                  </field.FieldSelect>
+                  <div className="space-y-2">
+                    <Label
+                      className="text-slate-12 text-sm font-medium"
+                      dataTestId={`${field.name}-label`}
+                    >
+                      Side
+                    </Label>
+                    <RadioGroup
+                      dataTestId={`${field.name}-radio`}
+                      value={field.state.value}
+                      onValueChange={(value) =>
+                        field.handleChange(value as "buy" | "sell")
+                      }
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="buy" id="side-buy" />
+                        <Label htmlFor="side-buy" dataTestId="side-buy-label">
+                          Buy
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="sell" id="side-sell" />
+                        <Label htmlFor="side-sell" dataTestId="side-sell-label">
+                          Sell
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                )}
+              </form.AppField>
+
+              <form.AppField name="direction">
+                {(field) => (
+                  <div className="space-y-2">
+                    <Label
+                      className="text-slate-12 text-sm font-medium"
+                      dataTestId={`${field.name}-label`}
+                    >
+                      Direction
+                    </Label>
+                    <RadioGroup
+                      dataTestId={`${field.name}-radio`}
+                      value={field.state.value}
+                      onValueChange={(value) =>
+                        field.handleChange(value as "long" | "short")
+                      }
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="long" id="direction-long" />
+                        <Label
+                          htmlFor="direction-long"
+                          dataTestId="direction-long-label"
+                        >
+                          Long
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="short" id="direction-short" />
+                        <Label
+                          htmlFor="direction-short"
+                          dataTestId="direction-short-label"
+                        >
+                          Short
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
                 )}
               </form.AppField>
             </div>
-
-            <form.AppField name="direction">
-              {(field) => (
-                <field.FieldSelect label="Direction">
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select direction" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="long">Long</SelectItem>
-                    <SelectItem value="short">Short</SelectItem>
-                  </SelectContent>
-                </field.FieldSelect>
-              )}
-            </form.AppField>
 
             <div className="grid grid-cols-2 gap-4">
               <form.AppField name="price">
