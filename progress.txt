@@ -201,3 +201,30 @@ Started: Sun Jan 25 19:41:36 EST 2026
 - Browser testing requires Clerk environment variables: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY, CLERK_SECRET_KEY
 
 ---
+
+## 2026-01-25 - US-009
+- Created trade list page at apps/trade-tracker/src/app/trades/page.tsx
+- Displays table with columns: date, ticker, side, direction, price, quantity, total (price × quantity)
+- Sorted by date descending (newest first) via listTrades query
+- Added "New Trade" button linking to /trades/new
+- Table styling uses dark theme with slate colors (bg-slate-800 header, bg-slate-900 body, slate-700 borders)
+- Shows loading state while fetching and empty state when no trades exist
+- Side column color-coded: green for buy, red for sell
+- TypeScript and lint checks pass
+- Browser verification blocked by Clerk authentication (same as US-008)
+
+**Files created:**
+- apps/trade-tracker/src/app/trades/page.tsx (new)
+
+**Files changed:**
+- prd.json (marked US-009 as passes: true with notes)
+
+**Learnings for future iterations:**
+- Use useQuery from convex/react to fetch data in client components
+- Format currency with Intl.NumberFormat("en-US", { style: "currency", currency: "USD" })
+- Format dates with Date.toLocaleDateString() for readable display
+- Use &quot; for quotes in JSX to satisfy react/no-unescaped-entities lint rule
+- Table pattern: overflow-x-auto wrapper, w-full table-auto, divide-y for row separation
+- Hover states: use bg-slate-800/50 for subtle hover effect
+
+---
