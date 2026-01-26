@@ -228,3 +228,27 @@ Started: Sun Jan 25 19:41:36 EST 2026
 - Hover states: use bg-slate-800/50 for subtle hover effect
 
 ---
+
+## 2026-01-25 - US-010
+- Created apps/trade-tracker/convex/campaigns.ts with campaign mutations
+- Implemented createCampaign mutation accepting name and thesis, sets status to 'planning'
+- Initializes empty arrays for instruments, entryTargets, profitTargets, stopLossHistory
+- Implemented updateCampaign mutation for updating name, thesis, and retrospective fields
+- Implemented updateCampaignStatus mutation with status transition logic
+- When closing a campaign: validates outcome is required, sets closedAt timestamp
+- All mutations have args and returns validators
+- TypeScript and lint checks pass
+
+**Files created:**
+- apps/trade-tracker/convex/campaigns.ts (new)
+
+**Files changed:**
+- prd.json (marked US-010 as passes: true)
+
+**Learnings for future iterations:**
+- Campaign creation initializes all array fields as empty arrays []
+- Status transitions are validated (outcome required when closing)
+- Use Date.now() for timestamps in Convex mutations
+- The trade-tracker project doesn't have a typecheck nx target; use `npx tsc --noEmit -p convex/tsconfig.json` directly
+
+---
