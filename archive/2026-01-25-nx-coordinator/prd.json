@@ -1,0 +1,245 @@
+{
+  "project": "Nx Task Coordinator",
+  "branchName": "feature/nx-coordinator",
+  "description": "A coordination service that prevents duplicate execution of Nx tasks when Nx Cloud distributes the same task to multiple CI agents. Includes a dashboard UI for monitoring.",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Create Next.js app with Convex backend",
+      "description": "As a developer, I need a Next.js application with Convex backend to host the coordination API and dashboard.",
+      "acceptanceCriteria": [
+        "Create new Next.js app in `apps/nx-coordinator/`",
+        "Initialize Convex backend in `apps/nx-coordinator/convex/`",
+        "Define `claimAttempts` table with fields: taskKey (string, indexed), project (string, indexed), task (string, indexed), gitSha (string, indexed), agentId (string), attemptedAt (number), wasGranted (boolean, indexed)",
+        "Add indexes: by_taskKey, by_taskKey_granted (compound), by_project, by_task, by_wasGranted, by_attemptedAt",
+        "Typecheck passes"
+      ],
+      "priority": 1,
+      "passes": true,
+      "notes": "Try using the nx and convex MCP servers in the future.  Report back what does and doesn't work."
+    },
+    {
+      "id": "US-002",
+      "title": "Implement lock acquisition mutation",
+      "description": "As a CI task, I want to attempt to acquire a lock so I know whether to proceed with execution.",
+      "acceptanceCriteria": [
+        "Create `claimTask` mutation in `apps/nx-coordinator/convex/mutations.ts` that accepts { project, task, gitSha, agentId }",
+        "Build taskKey from {project}:{task}:{gitSha}",
+        "Query claimAttempts for existing record with matching taskKey and wasGranted: true using by_taskKey_granted index",
+        "If no granted attempt exists: insert record with wasGranted: true, return { acquired: true }",
+        "If granted attempt exists: insert record with wasGranted: false, return { acquired: false, claimedBy, claimedAt }",
+        "Include args and returns validators",
+        "Typecheck passes"
+      ],
+      "priority": 2,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-003",
+      "title": "Create API route for task check-in",
+      "description": "As a CI task, I need an HTTP endpoint to call for coordination so I don't need direct Convex client setup in executors.",
+      "acceptanceCriteria": [
+        "Create POST /api/claim route in `apps/nx-coordinator/src/app/api/claim/route.ts`",
+        "Accepts JSON body: { project, task, gitSha, agentId }",
+        "Calls Convex claimTask mutation using ConvexHttpClient",
+        "Returns { proceed: true } when acquired",
+        "Returns { proceed: false, message: 'Task already claimed by {agentId}' } when not acquired",
+        "Typecheck passes"
+      ],
+      "priority": 3,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-004",
+      "title": "Create shared check-in utility for Nx executors",
+      "description": "As a developer, I want a reusable utility for task check-in so both convex and vercel executors can use it consistently.",
+      "acceptanceCriteria": [
+        "Create `tools/shared/src/taskCoordinator.ts`",
+        "Export checkInAndProceed(options: { project, task, gitSha, agentId, coordinatorUrl }) function",
+        "Function makes HTTP POST to coordinator service with JSON body",
+        "Returns { shouldProceed: boolean, message?: string }",
+        "Logs decision for CI visibility: 'Task {project}:{task} - proceeding as first instance' or 'Task {project}:{task} - skipping, already claimed by {agentId}'",
+        "Implements retry with exponential backoff (3 attempts, 1s/2s/4s delays) on network errors",
+        "Throws error after retries exhausted to fail CI",
+        "Typecheck passes"
+      ],
+      "priority": 4,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-005",
+      "title": "Fetch coordinator URL from Doppler",
+      "description": "As a developer, I need to fetch the coordinator service URL from Doppler so executors know where to check in.",
+      "acceptanceCriteria": [
+        "Update `tools/shared/src/doppler.ts` to include NX_COORDINATOR_URL in the secrets fetched",
+        "Update checkInAndProceed to accept Doppler secrets Map and extract coordinatorUrl from it",
+        "Typecheck passes"
+      ],
+      "priority": 5,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-006",
+      "title": "Integrate coordinator into Convex executor",
+      "description": "As a CI pipeline, I want the convex-deploy task to check in with the coordinator before deploying.",
+      "acceptanceCriteria": [
+        "Modify `tools/convex/src/executors/deploy/executor.ts`",
+        "After getting project info and before deployment: call checkInAndProceed()",
+        "Generate agentId from process.env.NX_CLOUD_AGENT_ID or fallback to `${os.hostname()}-${process.pid}`",
+        "Get gitSha using existing git utilities",
+        "If shouldProceed is false: log message and return { success: true } immediately",
+        "If shouldProceed is true: continue with existing deployment logic",
+        "Typecheck passes"
+      ],
+      "priority": 6,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-007",
+      "title": "Integrate coordinator into Vercel executor",
+      "description": "As a CI pipeline, I want the vercel-build-deploy task to check in with the coordinator before deploying.",
+      "acceptanceCriteria": [
+        "Modify `tools/vercel/src/executors/build-deploy/executor.ts`",
+        "After getting project info and before link step: call checkInAndProceed()",
+        "Use same agentId generation as Convex executor (NX_CLOUD_AGENT_ID or hostname-pid)",
+        "If shouldProceed is false: log message and return { success: true } immediately",
+        "If shouldProceed is true: continue with existing deployment logic",
+        "Typecheck passes"
+      ],
+      "priority": 7,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-008",
+      "title": "Create health check endpoint",
+      "description": "As a CI pipeline, I want to verify the coordinator service is healthy before starting tasks.",
+      "acceptanceCriteria": [
+        "Create GET /api/health endpoint in `apps/nx-coordinator/src/app/api/health/route.ts`",
+        "Endpoint pings Convex to verify database connectivity by calling a simple query",
+        "Returns JSON { status: 'healthy', timestamp: Date.now() } with 200 status on success",
+        "Returns JSON { status: 'unhealthy', error: errorMessage } with 503 status on failure",
+        "Typecheck passes"
+      ],
+      "priority": 8,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-009",
+      "title": "Add Clerk authentication to dashboard",
+      "description": "As a user, I need to sign in to access the dashboard so only authorized team members can view CI coordination data.",
+      "acceptanceCriteria": [
+        "Install @clerk/nextjs package in apps/nx-coordinator",
+        "Create `apps/nx-coordinator/src/middleware.ts` with clerkMiddleware() from @clerk/nextjs/server",
+        "Configure public routes in middleware: ['/api/claim', '/api/health', '/sign-in(.*)', '/sign-up(.*)']",
+        "Create `apps/nx-coordinator/src/app/layout.tsx` wrapping app with <ClerkProvider>",
+        "Create `apps/nx-coordinator/src/app/sign-in/[[...sign-in]]/page.tsx` with centered <SignIn /> component",
+        "Create `apps/nx-coordinator/src/app/sign-up/[[...sign-up]]/page.tsx` with centered <SignUp /> component",
+        "Typecheck passes"
+      ],
+      "priority": 9,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-010",
+      "title": "Implement Convex queries for dashboard analytics",
+      "description": "As a developer, I need queries to fetch coordination data for the dashboard UI.",
+      "acceptanceCriteria": [
+        "Create `apps/nx-coordinator/convex/queries.ts`",
+        "Implement getRecentAttempts query with args { limit?: number, cursor?: string }, returns { attempts, nextCursor }, uses by_attemptedAt index descending, default limit 50 max 100",
+        "Implement getStats query with no args, returns { totalAttempts, attemptsLast24h, duplicatesBlocked, duplicatesBlockedLast24h, byProject: Array<{project, total, blocked}>, byTask: Array<{task, total, blocked}> }",
+        "Implement getAttemptsForSha query with args { gitSha: string }, returns ClaimAttempt[] ordered by attemptedAt descending",
+        "All queries must have returns validators",
+        "Typecheck passes"
+      ],
+      "priority": 10,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-011",
+      "title": "Build dashboard page with stats cards",
+      "description": "As a user, I want a dashboard page showing summary statistics about task coordination.",
+      "acceptanceCriteria": [
+        "Create `apps/nx-coordinator/src/app/page.tsx` as main dashboard with ConvexClientProvider wrapper",
+        "Create `apps/nx-coordinator/src/components/StatsCards.tsx` component",
+        "Use useQuery from convex/react to subscribe to getStats query",
+        "Display 4 stat cards in 2x2 grid: Total Claims (with 24h subtitle), Duplicates Blocked (with 24h subtitle), Block Rate (percentage), Active Projects (count from byProject)",
+        "Card styling: bg-slate-800 rounded-lg p-6 border border-slate-700",
+        "Title: text-slate-400 text-sm font-medium, Value: text-3xl font-bold text-slate-100 mt-2, Subtitle: text-slate-500 text-sm mt-1",
+        "Show animate-pulse skeleton divs while loading",
+        "Add <UserButton /> from @clerk/nextjs in header for sign-out",
+        "Typecheck passes"
+      ],
+      "priority": 11,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-012",
+      "title": "Build recent activity table",
+      "description": "As a user, I want to see a table of recent claim attempts with real-time updates.",
+      "acceptanceCriteria": [
+        "Create `apps/nx-coordinator/src/components/ActivityTable.tsx` component",
+        "Use useQuery from convex/react to subscribe to getRecentAttempts query",
+        "Render HTML table with columns: Time, Project, Task, Git SHA, Agent, Result",
+        "Table styling: w-full border-collapse, Header: bg-slate-800 text-slate-400 text-left text-sm, Body rows: border-b border-slate-800 hover:bg-slate-800/50, Cells: px-4 py-3",
+        "Time column: relative format (<60s: 'Xs ago', <60m: 'Xm ago', <24h: 'Xh ago', else: 'Xd ago')",
+        "Git SHA: truncate to 7 chars, font-mono text-sm",
+        "Result column: wasGranted true = green badge 'Granted' (bg-green-900/50 text-green-400), false = red badge 'Blocked' (bg-red-900/50 text-red-400)",
+        "Show 'No activity yet' when empty, show 5-row animate-pulse skeleton while loading",
+        "Add to page.tsx below stats cards with 'Recent Activity' heading",
+        "Typecheck passes"
+      ],
+      "priority": 12,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-013",
+      "title": "Build project and task breakdown charts",
+      "description": "As a user, I want to see breakdowns of claims by project and task type.",
+      "acceptanceCriteria": [
+        "Create `apps/nx-coordinator/src/components/BreakdownSection.tsx` component",
+        "Accept byProject and byTask arrays as props (from getStats query already subscribed in page)",
+        "Display two side-by-side sections: 'By Project' and 'By Task' in grid grid-cols-2 gap-6",
+        "Each section renders bar list items showing: label, 'X blocked / Y total' text, progress bar (blocked percentage), 'XX% blocked' text",
+        "Progress bar: container h-2 bg-slate-700 rounded-full overflow-hidden, fill h-full bg-red-500 with width as percentage",
+        "Section title: text-lg font-semibold text-slate-200 mb-4, Label row: flex justify-between text-sm text-slate-400 mb-1",
+        "Sort items by total count descending",
+        "Add to page.tsx below activity table",
+        "Typecheck passes"
+      ],
+      "priority": 13,
+      "passes": true,
+      "notes": ""
+    },
+    {
+      "id": "US-014",
+      "title": "Add filtering to activity table",
+      "description": "As a user, I want to filter the activity table to find specific events.",
+      "acceptanceCriteria": [
+        "Create `apps/nx-coordinator/src/components/ActivityFilters.tsx` component",
+        "Use useSearchParams from next/navigation for URL-persisted filter state",
+        "Render horizontal row of filters: Project dropdown (All Projects + unique projects), Task dropdown (All Tasks + unique tasks), Result dropdown (All Results/Granted/Blocked), SHA search input",
+        "Select styling: bg-slate-800 border border-slate-700 rounded px-3 py-2 text-slate-200 text-sm",
+        "Input styling: bg-slate-800 border border-slate-700 rounded px-3 py-2 text-slate-200 text-sm w-48",
+        "Filter container: flex gap-4 mb-4 items-center",
+        "Update getRecentAttempts query to accept optional filter args: project, task, wasGranted, gitShaPrefix",
+        "Apply filters in query using conditional filtering",
+        "Add 'Clear filters' button that resets URL params (only visible when filters active)",
+        "Typecheck passes"
+      ],
+      "priority": 14,
+      "passes": true,
+      "notes": ""
+    }
+  ]
+}
