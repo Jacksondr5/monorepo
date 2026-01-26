@@ -13,12 +13,8 @@ This is a pnpm monorepo using Nx as the build orchestrator. It contains multiple
 ## Common Commands
 
 ```bash
-# Development
-pnpm nx dev <app>                    # Run Next.js dev server
-pnpm nx storybook component-library  # Run component library Storybook
-
 # Building
-pnpm nx build <project>              # Build a project
+pnpm nx build-next <project>         # Run the NextJS build on a project
 pnpm nx build-storybook <project>    # Build Storybook
 
 # Testing
@@ -66,7 +62,7 @@ pnpm nx affected -t lint test build-storybook chromatic vercel-build-deploy e2e-
 ### General Rules
 
 - Alphabetize object keys
-- For long-running processes (dev servers), ask the user to start them instead of running them yourself
+- NEVER start a long-running process (like a NextJS dev server or Convex dev server). The user will start it for you.
 - Use Tailwind for all styling
 - Apps are permanently in dark mode - use light text colors (`text-slate-11`, `text-slate-12`)
 
