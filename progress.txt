@@ -74,3 +74,22 @@ Started: Sun Jan 25 19:41:36 EST 2026
 - The providers.tsx pattern separates client components from server layout
 
 ---
+
+## 2026-01-25 - US-003
+- Defined trades table schema in apps/trade-tracker/convex/schema.ts
+- Added all required fields: date, ticker, assetType, side, direction, price, quantity, campaignId, notes
+- Added three indexes: by_campaignId, by_ticker, by_date
+- Fields use alphabetized object keys per monorepo conventions
+- TypeScript and lint checks pass
+
+**Files changed:**
+- apps/trade-tracker/convex/schema.ts (updated with trades table definition)
+- apps/trade-tracker/convex/tsconfig.json (restored after accidental deletion)
+
+**Learnings for future iterations:**
+- Convex schema uses v.union(v.literal("value1"), v.literal("value2")) for string union types
+- Optional fields use v.optional(v.id("tableName")) or v.optional(v.string())
+- Indexes are chained with .index("name", ["field"]) after defineTable()
+- Always alphabetize object keys in schema definitions
+
+---
