@@ -93,10 +93,10 @@ export default function NewTradePage() {
 
   return (
     <div className="container mx-auto max-w-2xl px-4 py-8">
-      <h1 className="mb-6 text-2xl font-bold text-slate-100">New Trade</h1>
+      <h1 className="text-slate-12 mb-6 text-2xl font-bold">New Trade</h1>
 
       {successMessage && (
-        <div className="mb-4 rounded-md bg-green-900/50 p-4 text-green-100">
+        <div className="text-slate-12 mb-4 rounded-md bg-green-900/50 p-4">
           {successMessage}
         </div>
       )}
@@ -115,7 +115,7 @@ export default function NewTradePage() {
                 <div className="grid w-full items-center gap-1.5">
                   <label
                     htmlFor={field.name}
-                    className="text-sm font-medium text-slate-100"
+                    className="text-slate-12 text-sm font-medium"
                   >
                     Date & Time
                   </label>
@@ -126,7 +126,7 @@ export default function NewTradePage() {
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                     onBlur={field.handleBlur}
-                    className="h-9 w-full rounded-md border border-slate-600 bg-slate-700 px-3 py-1 text-slate-100 focus:outline-none focus:ring-1 focus:ring-slate-500"
+                    className="text-slate-12 h-9 w-full rounded-md border border-slate-600 bg-slate-700 px-3 py-1 focus:outline-none focus:ring-1 focus:ring-slate-500"
                   />
                 </div>
               )}

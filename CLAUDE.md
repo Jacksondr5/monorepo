@@ -44,7 +44,7 @@ pnpm nx affected -t lint test build-storybook chromatic vercel-build-deploy e2e-
 ### Technology Stack
 
 - **Framework**: Next.js with React
-- **Styling**: Tailwind CSS (dark mode only - use `text-slate-11` or `text-slate-12` for text)
+- **Styling**: Tailwind CSS with Radix color scales (see Text Colors below)
 - **Forms**: TanStack React Form with Zod validation
 - **Backend**: Convex (serverless with real-time sync and offline support)
 - **Auth**: Clerk
@@ -64,7 +64,34 @@ pnpm nx affected -t lint test build-storybook chromatic vercel-build-deploy e2e-
 - Alphabetize object keys
 - NEVER start a long-running process (like a NextJS dev server or Convex dev server). The user will start it for you.
 - Use Tailwind for all styling
-- Apps are permanently in dark mode - use light text colors (`text-slate-11`, `text-slate-12`)
+- Apps are permanently in dark mode - see Text Colors section below
+
+### Text Colors (IMPORTANT)
+
+This monorepo uses **Radix color scales** (slate-1 through slate-12), NOT standard Tailwind colors.
+
+**Correct usage:**
+
+- `text-slate-12` - Primary text (headings, body text, important content)
+- `text-slate-11` - Secondary text (labels, hints, less prominent content)
+
+**NEVER use these standard Tailwind classes:**
+
+- `text-slate-100`, `text-slate-200`, `text-slate-300`, etc.
+- `text-gray-*`, `text-white`, `text-black`
+- `text-green-*`, `text-red-*` for emphasis (use backgrounds instead)
+
+**For visual emphasis (buy/sell, success/error):**
+
+```jsx
+// WRONG - colored text
+<span className="text-green-400">BUY</span>
+
+// CORRECT - background with consistent text
+<span className="bg-green-900/50 border border-green-700 text-slate-12">BUY</span>
+```
+
+The Radix scales provide consistent contrast in dark mode. Standard Tailwind colors will appear inconsistent.
 
 ### TypeScript Path Aliases
 

@@ -45,6 +45,17 @@ export const createTrade = mutation({
       ticker,
     } = args;
 
+    // Validate campaign exists and is not closed if campaignId is provided
+    if (campaignId) {
+      const campaign = await ctx.db.get(campaignId);
+      if (!campaign) {
+        throw new Error("Campaign not found");
+      }
+      if (campaign.status === "closed") {
+        throw new Error("Cannot add trades to a closed campaign");
+      }
+    }
+
     const tradeId = await ctx.db.insert("trades", {
       assetType,
       campaignId,
@@ -84,6 +95,17 @@ export const updateTrade = mutation({
     const existingTrade = await ctx.db.get(tradeId);
     if (!existingTrade) {
       throw new Error("Trade not found");
+    }
+
+    // Validate campaign exists and is not closed if campaignId is being changed
+    if (updates.campaignId !== undefined && updates.campaignId !== null) {
+      const campaign = await ctx.db.get(updates.campaignId);
+      if (!campaign) {
+        throw new Error("Campaign not found");
+      }
+      if (campaign.status === "closed") {
+        throw new Error("Cannot add trades to a closed campaign");
+      }
     }
 
     // Build patch object with only defined values

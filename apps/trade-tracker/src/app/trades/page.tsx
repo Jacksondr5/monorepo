@@ -29,18 +29,18 @@ export default function TradesPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-100">Trades</h1>
+        <h1 className="text-slate-12 text-2xl font-bold">Trades</h1>
         <Link href="/trades/new">
           <Button dataTestId="new-trade-button">New Trade</Button>
         </Link>
       </div>
 
       {trades === undefined ? (
-        <div className="text-slate-400">Loading trades...</div>
+        <div className="text-slate-11">Loading trades...</div>
       ) : trades.length === 0 ? (
         <div className="rounded-lg border border-slate-700 bg-slate-800 p-8 text-center">
-          <p className="text-slate-400">No trades yet.</p>
-          <p className="mt-2 text-sm text-slate-500">
+          <p className="text-slate-11">No trades yet.</p>
+          <p className="text-slate-11 mt-2 text-sm">
             Click &quot;New Trade&quot; to record your first trade.
           </p>
         </div>
@@ -49,25 +49,25 @@ export default function TradesPage() {
           <table className="w-full table-auto">
             <thead className="bg-slate-800">
               <tr>
-                <th className="px-4 py-3 text-left text-sm font-medium text-slate-300">
+                <th className="text-slate-11 px-4 py-3 text-left text-sm font-medium">
                   Date
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-slate-300">
+                <th className="text-slate-11 px-4 py-3 text-left text-sm font-medium">
                   Ticker
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-slate-300">
+                <th className="text-slate-11 px-4 py-3 text-left text-sm font-medium">
                   Side
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-slate-300">
+                <th className="text-slate-11 px-4 py-3 text-left text-sm font-medium">
                   Direction
                 </th>
-                <th className="px-4 py-3 text-right text-sm font-medium text-slate-300">
+                <th className="text-slate-11 px-4 py-3 text-right text-sm font-medium">
                   Price
                 </th>
-                <th className="px-4 py-3 text-right text-sm font-medium text-slate-300">
+                <th className="text-slate-11 px-4 py-3 text-right text-sm font-medium">
                   Quantity
                 </th>
-                <th className="px-4 py-3 text-right text-sm font-medium text-slate-300">
+                <th className="text-slate-11 px-4 py-3 text-right text-sm font-medium">
                   Total
                 </th>
               </tr>
@@ -79,31 +79,33 @@ export default function TradesPage() {
                   className="hover:bg-slate-800/50"
                   data-testid={`trade-row-${trade._id}`}
                 >
-                  <td className="whitespace-nowrap px-4 py-3 text-sm text-slate-100">
+                  <td className="text-slate-12 whitespace-nowrap px-4 py-3 text-sm">
                     {formatDate(trade.date)}
                   </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-slate-100">
+                  <td className="text-slate-12 whitespace-nowrap px-4 py-3 text-sm font-medium">
                     {trade.ticker}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 text-sm">
                     <span
-                      className={
-                        trade.side === "buy" ? "text-green-400" : "text-red-400"
-                      }
+                      className={`text-slate-12 rounded px-2 py-0.5 ${
+                        trade.side === "buy"
+                          ? "border border-green-700 bg-green-900/50"
+                          : "border border-red-700 bg-red-900/50"
+                      }`}
                     >
                       {trade.side.toUpperCase()}
                     </span>
                   </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm text-slate-300">
+                  <td className="text-slate-11 whitespace-nowrap px-4 py-3 text-sm">
                     {trade.direction}
                   </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-right text-sm text-slate-100">
+                  <td className="text-slate-12 whitespace-nowrap px-4 py-3 text-right text-sm">
                     {formatCurrency(trade.price)}
                   </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-right text-sm text-slate-100">
+                  <td className="text-slate-12 whitespace-nowrap px-4 py-3 text-right text-sm">
                     {trade.quantity}
                   </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-right text-sm font-medium text-slate-100">
+                  <td className="text-slate-12 whitespace-nowrap px-4 py-3 text-right text-sm font-medium">
                     {formatCurrency(trade.price * trade.quantity)}
                   </td>
                 </tr>
