@@ -1,0 +1,46 @@
+# Ralph Progress Log
+Started: Sun Jan 25 19:41:36 EST 2026
+
+## Codebase Patterns
+- Use `pnpm nx generate @nx/next:application` to create new Next.js apps
+- Apps follow the pattern of: package.json (with workspace deps), tsconfig.json (with ~/\* paths), project.json (with dev and vercel targets)
+- Dark mode styling uses bg-slate-900 text-slate-100
+- Convex backend lives in apps/<app>/convex/ with its own tsconfig.json
+- Styles: create src/styles/global.css importing tailwindcss and component-library globals
+- PostCSS: use @tailwindcss/postcss plugin
+- next.config.ts uses composePlugins with withNx
+
+---
+
+## 2026-01-25 - US-001
+- Created Next.js application at apps/trade-tracker/
+- Initialized Convex backend at apps/trade-tracker/convex/ with empty schema
+- Created dark mode layout.tsx with bg-slate-900 text-slate-100
+- Created placeholder home page at src/app/page.tsx
+- Build and lint pass successfully
+
+**Files created/changed:**
+- apps/trade-tracker/package.json
+- apps/trade-tracker/project.json
+- apps/trade-tracker/tsconfig.json
+- apps/trade-tracker/next.config.ts
+- apps/trade-tracker/postcss.config.mjs
+- apps/trade-tracker/.swcrc
+- apps/trade-tracker/eslint.config.mjs
+- apps/trade-tracker/index.d.ts
+- apps/trade-tracker/next-env.d.ts
+- apps/trade-tracker/public/.gitkeep
+- apps/trade-tracker/public/favicon.ico
+- apps/trade-tracker/src/app/layout.tsx
+- apps/trade-tracker/src/app/page.tsx
+- apps/trade-tracker/src/styles/global.css
+- apps/trade-tracker/convex/schema.ts
+- apps/trade-tracker/convex/tsconfig.json
+
+**Learnings for future iterations:**
+- The nx generator creates next.config.js by default; convert it to next.config.ts for consistency
+- tsconfig.json needs to include convex/**/*.ts in the include array
+- Reference the component-library in tsconfig.json references array
+- The schema.ts can be empty initially (defineSchema({})) - it will be populated in later stories
+
+---

@@ -1,0 +1,19 @@
+{
+  "name": "@j5/trade-tracker",
+  "projectType": "application",
+  "sourceRoot": "apps/trade-tracker/src",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["next dev --turbo"],
+        "cwd": "apps/trade-tracker"
+      }
+    },
+    "vercel-build-deploy": {
+      "options": {
+        "hasConvex": true
+      }
+    }
+  }
+}
