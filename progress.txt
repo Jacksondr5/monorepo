@@ -93,3 +93,22 @@ Started: Sun Jan 25 19:41:36 EST 2026
 - Always alphabetize object keys in schema definitions
 
 ---
+
+## 2026-01-25 - US-004
+- Added campaigns table to apps/trade-tracker/convex/schema.ts
+- Defined all campaign fields: name, status, thesis, instruments, entryTargets, profitTargets, stopLossHistory, outcome, retrospective, closedAt
+- Created reusable validators for nested objects: instrumentValidator, targetValidator, stopLossValidator
+- Added by_status index for filtering campaigns
+- TypeScript and lint checks pass
+
+**Files changed:**
+- apps/trade-tracker/convex/schema.ts (added campaigns table with nested object validators)
+
+**Learnings for future iterations:**
+- Define reusable validators for nested object structures to improve readability
+- v.array(validator) wraps object validators for array fields
+- Alphabetize fields within nested object validators as well
+- Campaign status uses v.union for 'planning', 'active', 'closed' states
+- Outcome field is optional and only set when campaign is closed
+
+---
