@@ -18,7 +18,7 @@
     "tslib": "2.8.1"
   },
   "devDependencies": {
-    "@playwright/test": "1.55.0"
+    "@playwright/test": "1.57.0"
   },
   "peerDependencies": {
     "@playwright/test": ">=1.44.0 <2"
